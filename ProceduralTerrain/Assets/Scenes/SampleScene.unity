@@ -166,8 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92030391816d6e4483729d630581bc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 40
-  zSize: 40
+  xSize: 100
+  zSize: 100
   mapSize: 1000
   mapHeight: 2
   roadXSize: 1
@@ -311,8 +311,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11fe4933bbe4d844994236b7f3e2cb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xSize: 40
-  zSize: 40
+  xSize: 100
+  zSize: 100
   mapSize: 1000
   mapHeight: 2
 --- !u!1 &705507993

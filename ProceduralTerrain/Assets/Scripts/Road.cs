@@ -37,7 +37,7 @@ public class Road : MeshGenerator
         GetComponent<MeshFilter>().mesh = roadMesh;
 
         GenerateRoad();
-        CreateRoad();
+        CreateRootRoad();
 
         UpdateLine();
     }
@@ -55,35 +55,38 @@ public class Road : MeshGenerator
                 ++i;
             }
         }
+        
     }
 
-    void CreateRoad()
+    void CreateRootRoad()
     {
         roadTriangles = new int[xSize * zSize * 6];
 
-        v = Random.Range(5, xSize - 5);
+        v = Random.Range(xSize/3, xSize - xSize/3);
         int rootV = v;
 
         for (int z = 0; z < zSize; ++z)
         {
-            for (int x = 0; x < roadXSize; ++x)
-            {
-                roadTriangles[t + 0] = v + 0;
-                roadTriangles[t + 1] = v + xSize + 1;
-                roadTriangles[t + 2] = v + 1;
-                roadTriangles[t + 3] = v + 1;
-                roadTriangles[t + 4] = v + xSize + 1;
-                roadTriangles[t + 5] = v + xSize + 2;
+            roadTriangles[t + 0] = v + 0;
+            roadTriangles[t + 1] = v + xSize + 1;
+            roadTriangles[t + 2] = v + 1;
+            roadTriangles[t + 3] = v + 1;
+            roadTriangles[t + 4] = v + xSize + 1;
+            roadTriangles[t + 5] = v + xSize + 2;
 
-                v++;
-                t += 6;
-            }
-            v += xSize - roadXSize + 1;
+            t += 6;
+            v += xSize + roadXSize;
         }
 
+        CreateRoad(rootV, 0, xSize, 0, zSize);
+    }
+
+    void CreateRoad(int root, int minXSize, int maxXSize, int minZSize, int maxZsize)
+    {
+        int rootV = root;
         // 가로 왼쪽
         v = 0;
-        int roadZ = Random.Range(15, zSize - 15);
+        int roadZ = Random.Range(zSize / 3, zSize - zSize / 3);
         int leftZ = roadZ;
 
         roadZ *= zSize + 1;
@@ -101,9 +104,8 @@ public class Road : MeshGenerator
             t += 6;
         }
 
-
         //가로 오른쪽
-        roadZ = Random.Range(5, zSize - 5);
+        roadZ = Random.Range(zSize / 3, zSize - zSize / 3);
         int rightZ = roadZ;
 
         roadZ *= zSize + 1;
@@ -122,7 +124,7 @@ public class Road : MeshGenerator
         }
 
         //왼 아래
-        v = Random.Range(1, rootV - 2);
+        v = Random.Range(rootV / 3, rootV - rootV / 3);
         for (int z = 0; z < leftZ; ++z)
         {
             roadTriangles[t + 0] = v + 0;
@@ -133,12 +135,14 @@ public class Road : MeshGenerator
             roadTriangles[t + 5] = v + xSize + 2;
 
             t += 6;
-            v += xSize +1;
+            v += xSize + 1;
         }
+        //if (v > 5)
+        //    CreateRoad(v, 0, leftZ);
 
         // 왼 위
-        v = Random.Range(1, rootV - 2) + v + xSize - 3;
-        for (int z = leftZ; z < zSize -1; ++z)
+        v = Random.Range(rootV / 3, rootV - rootV / 3) + (leftZ + 1) * (zSize + 1);
+        for (int z = leftZ; z < zSize - 1; ++z)
         {
             roadTriangles[t + 0] = v + 0;
             roadTriangles[t + 1] = v + xSize + 1;
@@ -152,7 +156,7 @@ public class Road : MeshGenerator
         }
 
         // 오른 아래
-        v = Random.Range(rootV, xSize - 2);
+        v = Random.Range(rootV + rootV / 4, xSize - rootV / 4);
         for (int z = 0; z < rightZ; ++z)
         {
             roadTriangles[t + 0] = v + 0;
@@ -166,20 +170,20 @@ public class Road : MeshGenerator
             v += xSize + 1;
         }
 
-        // 왼 위
-        //v = Random.Range(rootV, xSize - 1) + v + xSize - 1;
-        //for (int z = rightZ; z < zSize - 1; ++z)
-        //{
-        //    roadTriangles[t + 0] = v + 0;
-        //    roadTriangles[t + 1] = v + xSize + 1;
-        //    roadTriangles[t + 2] = v + 1;
-        //    roadTriangles[t + 3] = v + 1;
-        //    roadTriangles[t + 4] = v + xSize + 1;
-        //    roadTriangles[t + 5] = v + xSize + 2;
+        // 오른 위
+        v = Random.Range(rootV + rootV / 4, xSize - rootV / 4) + (rightZ + 1) * (zSize + 1);
+        for (int z = rightZ; z < zSize - 1; ++z)
+        {
+            roadTriangles[t + 0] = v + 0;
+            roadTriangles[t + 1] = v + xSize + 1;
+            roadTriangles[t + 2] = v + 1;
+            roadTriangles[t + 3] = v + 1;
+            roadTriangles[t + 4] = v + xSize + 1;
+            roadTriangles[t + 5] = v + xSize + 2;
 
-        //    t += 6;
-        //    v += xSize + 1;
-        //}
+            t += 6;
+            v += xSize + 1;
+        }
     }
 
     void UpdateLine()
