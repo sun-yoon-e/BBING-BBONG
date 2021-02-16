@@ -6,6 +6,7 @@ class Server
 {
 private:
 	SOCKET server_socket;
+	HANDLE client_thread[MAX_CLIENT];
 
 	//Client game_clients[MAX_CLIENT];
 	unordered_map<int, Client> game_clients;
@@ -18,9 +19,7 @@ public:
 	void StartServer();
 	void Send_ID(int);
 
-	void CreateThread();
-	void Worker_Thread();
-	void Accept_Thread();
+	void LoginServer();
 
 	void err_quit(const char* msg)
 	{

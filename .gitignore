@@ -23,6 +23,8 @@ Library/
 ExportedObj/
 
 Debug/
+
+x64/
  
 *.svd
  
@@ -33,8 +35,6 @@ Debug/
 *.pidb
  
 *.suo
- 
-*.sln
  
 *.user
  
@@ -61,8 +61,6 @@ Debug/
 *.tlog
 
 *.lastbuildstate
-
-*.suo
 
 *.db
 

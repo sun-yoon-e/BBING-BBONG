@@ -96,6 +96,8 @@ void Server::StartServer()
 		game_clients[new_client_id].SetPos(1, 2, 3);
 		game_clients[new_client_id].SetScore(10);
 		Send_ID(new_client_id);
+
+		LoginServer();
 	}
 }
 
@@ -104,29 +106,7 @@ void Server::Send_ID(int id)
 	send(game_clients[id].GetSocket(), (char*)&id, sizeof(int), 0);
 }
 
-void Server::CreateThread()
+void Server::LoginServer()
 {
-	/*vector<thread> worker_threads;
-	for (int i = 0; i < 6; ++i)
-		worker_threads.emplace_back(new thread{ &Server::Worker_Thread });
 
-	thread accept_thread{ &Server::Accept_Thread };
-	accept_thread.join();
-
-	for (auto& p : worker_threads)
-		p.join();
-
-	worker_threads.clear();*/
-}
-
-void Server::Worker_Thread()
-{
-	while (true) {
-
-	}
-}
-
-void Server::Accept_Thread()
-{
-	
 }

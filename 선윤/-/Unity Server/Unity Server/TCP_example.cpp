@@ -9,7 +9,7 @@ struct packet {
 	int  score;
 	float xyz;
 	bool connect;
-	string name;
+	//string name;
 };
 #define LOGIN 1
 
@@ -128,23 +128,38 @@ int main()
 			}
 			cout << buf << endl;*/
 
-			//packet p;
-			//p.connect = true;
+			packet p;
+			ZeroMemory(&p, sizeof(packet));
+			p.connect = true;
 			//p.name = "hello";
-			//p.score = 10000;
-			//p.xyz = 3.5f;
-			////p.type = LOGIN;
-			////p.size = sizeof(packet);
-			//send(client_sock, (char*)&p, sizeof(p), 0);
+			p.score = 10000;
+			p.xyz = 3.5f;
+			//p.type = LOGIN;
+			//p.size = sizeof(packet);
+			retval = send(client_sock, (char*)&p, sizeof(packet), 0);
+			if (retval == SOCKET_ERROR) {
+				int err_no = WSAGetLastError();
+				if (ERROR_IO_PENDING != err_no)
+					err_display("recv() : ", err_no);
+				break;
+			}
 
 			packet t;
-			recv(client_sock, (char*)&t, sizeof(t), 0);
+			ZeroMemory(&t, sizeof(packet));
+			retval = recv(client_sock, (char*)&t, sizeof(packet), 0);
+			if (retval == SOCKET_ERROR) {
+				int err_no = WSAGetLastError();
+				if (ERROR_IO_PENDING != err_no)
+					err_display("recv() : ", err_no);
+				break;
+			}
 			cout << boolalpha << t.connect << endl;
-			cout << t.name << endl;
+			//cout << t.name << endl;
 			cout << t.score << endl;
 			//cout << t.size << endl;
 			//cout << t.type << endl;
 			cout << t.xyz << endl;
+		
 		}
 
 		// closesocket()
