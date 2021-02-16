@@ -1,4 +1,0 @@
-﻿  TCP_example.cpp
-C:\Users\shine\source\repos\Unity Server\Unity Server\TCP_example.cpp(109,64): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-C:\Users\shine\source\repos\Unity Server\Unity Server\TCP_example.cpp(143,64): warning C4996: 'inet_ntoa': Use inet_ntop() or InetNtop() instead or define _WINSOCK_DEPRECATED_NO_WARNINGS to disable deprecated API warnings
-  Unity Server.vcxproj -> C:\Users\shine\source\repos\Unity Server\Debug\Unity Server.exe
