@@ -2,13 +2,14 @@
 #include "Server.h"
 #include "Client.h"
 
+Client Server::game_clients[MAX_CLIENT];
+
 Server::Server()
 {
 	std::wcout.imbue(std::locale("korean"));
 
 	InitServer();
 	StartServer();
-	//CreateThread();
 }
 
 Server::~Server()
@@ -18,7 +19,7 @@ Server::~Server()
 
 void Server::InitServer()
 {
-	std::wcout.imbue(std::locale("korean"));
+	std::wcout.imbue(std::locale("korean"));	// 한글
 
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) return;
@@ -70,9 +71,9 @@ void Server::StartServer()
 		int new_client_id = -1;
 		for (int i = 0; i < MAX_CLIENT; ++i) {
 			if (game_clients[i].GetConnect() == false) {
-#if (Debug == TRUE)
 				game_clients[i].SetConnect(true);
 				new_client_id = i;
+#if (Debug == TRUE)
 				cout << "New Client : " << new_client_id << endl;
 #endif
 				break;
@@ -95,18 +96,47 @@ void Server::StartServer()
 		game_clients[new_client_id].SetPW("NONE");
 		game_clients[new_client_id].SetPos(1, 2, 3);
 		game_clients[new_client_id].SetScore(10);
-		Send_ID(new_client_id);
+		Send_Enter_Packet(new_client_id);
 
-		LoginServer();
+		client_thread[new_client_id] = CreateThread(NULL, 0, this->LoginServer, (LPVOID)game_clients[new_client_id].GetID(), 0, NULL);
+		if (client_thread[new_client_id] == NULL) closesocket(game_clients[new_client_id].GetSocket());
+		else CloseHandle(client_thread[new_client_id]);
 	}
 }
 
-void Server::Send_ID(int id)
+void Server::Send_Enter_Packet(int id)
 {
-	send(game_clients[id].GetSocket(), (char*)&id, sizeof(int), 0);
+	sc_packet_enter enter_packet;
+	ZeroMemory(&enter_packet, sizeof(sc_packet_enter));
+
+	enter_packet.id = id;
+	enter_packet.type = SC_ENTER;
+	enter_packet.size = sizeof(sc_packet_enter);
+
+	int ret = send(game_clients[id].GetSocket(), (char*)&enter_packet, sizeof(sc_packet_enter), 0);
+	if (ret == SOCKET_ERROR) {
+		int err_no = WSAGetLastError();
+		if (ERROR_IO_PENDING != err_no)
+			err_display("Send_Enter_Packet() -> send()", err_no);
+	}
 }
 
-void Server::LoginServer()
+DWORD __stdcall Server::LoginServer(LPVOID arg)
 {
+	int id = reinterpret_cast<int>(arg);
 
+	SOCKADDR_IN addr;
+	int addrlen = sizeof(addr);
+	getpeername(game_clients[id].GetSocket(), (SOCKADDR*)&addr, &addrlen);
+
+	bool Login = false;
+	while (!Login) {
+		// 아이디 패스워드 클라이언트와 패킷 주고받기
+
+		// 추가할 것 : DB서버 연동해서 정보 확인하기
+
+		// 로그인 완료하면 빠져나가기
+	}
+
+	return 0;
 }

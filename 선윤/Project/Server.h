@@ -8,8 +8,8 @@ private:
 	SOCKET server_socket;
 	HANDLE client_thread[MAX_CLIENT];
 
-	//Client game_clients[MAX_CLIENT];
-	unordered_map<int, Client> game_clients;
+	static Client game_clients[MAX_CLIENT];
+	//static unordered_map<int, Client> game_clients;
 
 public:
 	Server();
@@ -17,9 +17,14 @@ public:
 
 	void InitServer();
 	void StartServer();
-	void Send_ID(int);
+	void Send_Enter_Packet(int);
+	void Send_Login_Packet();
+	void Send_Logout_Packet();
+	void Send_Move_Packet();
+	void Send_Chat_Packet();
+	void Send_Item_Packet();
 
-	void LoginServer();
+	static DWORD WINAPI LoginServer(LPVOID);
 
 	void err_quit(const char* msg)
 	{

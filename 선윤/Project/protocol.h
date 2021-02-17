@@ -1,63 +1,78 @@
 #pragma once
 
+#pragma pack (push, 1)
+
+#define SC_ENTER	0
 #define SC_LOGIN	1
 #define SC_LOGOUT	2
-#define SC_POS		3
+//#define SC_MOVE		3
 #define SC_CHAT		4
 #define SC_ITEM		5
 
-#define CS_UP		1
-#define	CS_DOWN		2
-#define CS_LEFT		3
-#define CS_RIGHT	4
-#define CS_CHAT		5
-#define CS_CLICK	6
-#define	CS_MOVE		7
+#define CS_LOGIN	0
+#define CS_LOGOUT	1
+#define CS_MOVE		2
+#define CS_CHAT		3
+#define CS_CLICK	4
 
-#pragma pack (push)
-#pragma pack(1)
+struct sc_packet_enter {
+	BYTE size;
+	BYTE type;
+	int id;
+};
 
 struct sc_packet_login {
-	char size;
-	char type;
-
+	BYTE size;
+	BYTE type;
 	int id;
+
+	string nick;
+	string pw;
 };
 
 struct sc_packet_logout {
-	char size;
-	char type;
-
+	BYTE size;
+	BYTE type;
 	int id;
 };
 
-struct sc_packet_pos {
-	char size;
-	char type;
-	
+struct sc_packet_move {
+	BYTE size;
+	BYTE type;
+	int id;
+
 	float x;
 	float y;
 	float z;
 };
 
 struct sc_packet_chat {
-	char size;
-	char type;
-
+	BYTE size;
+	BYTE type;
 	int id;
+
 	string message;
 };
 
 struct sc_packet_item {
-	char size;
-	char type;
-
+	BYTE size;
+	BYTE type;
 	int id;
 };
 
+struct cs_packet_login {
+	BYTE size;
+	BYTE type;
+	int id;
+
+	string nick;
+	string pw;
+};
+
 struct cs_packet_move {
-	char size;
-	char type;
+	BYTE size;
+	BYTE type;
+	int id;
 
 	float x;
 	float y;
