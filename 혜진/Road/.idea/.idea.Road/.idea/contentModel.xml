@@ -8,6 +8,7 @@
       <e p="Assets" t="Include">
         <e p="Scripts" t="Include">
           <e p="AgentParameters.cs" t="Include" />
+          <e p="ChangeTerrainHeight.cs" t="Include" />
           <e p="Direction.cs" t="Include" />
           <e p="LSystemGenerator.cs" t="Include" />
           <e p="PlacementHelper.cs" t="Include" />

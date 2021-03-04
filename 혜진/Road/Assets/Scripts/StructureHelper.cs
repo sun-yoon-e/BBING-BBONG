@@ -10,8 +10,6 @@ public class StructureHelper : MonoBehaviour
     public GameObject prefab;
     public Dictionary<Vector3Int, GameObject> StructureDictionary = new Dictionary<Vector3Int, GameObject>();
 
-    public Terrain terrain;
-    
     public void PlaceStructuresAroundRoad(List<Vector3Int> roadPositions)
     {
         Dictionary<Vector3Int, Direction> freeEstateSpots = FindFreeSpacesAroundRoad(roadPositions);
@@ -21,23 +19,11 @@ public class StructureHelper : MonoBehaviour
         }
     }
 
-    private int roadx;
-    private int roady;
-
     private Dictionary<Vector3Int, Direction> FindFreeSpacesAroundRoad(List<Vector3Int> roadPositions)
     {
         Dictionary<Vector3Int, Direction> freeSpaces = new Dictionary<Vector3Int, Direction>();
         foreach (var position in roadPositions)
         {
-            roadx = position.x;
-            roady = position.y;
-
-            float[,] heights = terrain.terrainData.GetHeights(roadx, roady, 256, 256);
-
-            heights[roadx, roady] = 1f;
-            
-            terrain.terrainData.SetHeights(roadx, roady, heights);
-
             var neighbourDirections = PlacementHelper.FindNeighbour(position, roadPositions);
             foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
@@ -52,7 +38,6 @@ public class StructureHelper : MonoBehaviour
                 }
             }
         }
-
         return freeSpaces;
     }
 }

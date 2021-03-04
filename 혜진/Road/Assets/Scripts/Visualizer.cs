@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static SVS.SimpleVisualizer;
@@ -12,7 +13,9 @@ namespace SVS
 
     public RoadHelper roadHelper;
     public StructureHelper structureHelper;
-    
+    public ChangeTerrainHeight changeTerrainHeight;
+    public TerrainGenerator terrainGenerator;
+
     private int length = 8;
     private float angle = 90;
     
@@ -36,6 +39,8 @@ namespace SVS
     {
         var sequence = lsystem.GenerateSentence();
         VisualizeSequence(sequence);
+        Terrain terrain = GetComponent<Terrain>();
+        terrain.terrainData = terrainGenerator.GenerateTerrain(terrain.terrainData);
     }
 
     private void VisualizeSequence(string sequence)
@@ -90,7 +95,8 @@ namespace SVS
             }
         }
         roadHelper.FixRoad();
-        structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
+        //structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
+        changeTerrainHeight.FixTerrainHeight(roadHelper.GetRoadPositions());
     }
 }
 }

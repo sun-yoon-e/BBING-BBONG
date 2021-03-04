@@ -18,15 +18,17 @@
       <option value="$PROJECT_DIR$/Assets/TerrainGenerator.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Rules/Rule.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/SimpleVisualizer.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/Direction.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/FallTween.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/HouseType.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/AgentParameters.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/PlacementHelper.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/RoadHelper.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/LSystemGenerator.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/Visualizer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Direction.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/StructureHelper.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Visualizer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/TerrainGenerator.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/ChangeTerrainHeight.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1p9w6DYuRqMNy2h9dHNxJmxSAsV" />
@@ -74,6 +76,7 @@
       <workItem from="1614608484378" duration="7137000" />
       <workItem from="1614767917636" duration="15860000" />
       <workItem from="1614842084145" duration="10355000" />
+      <workItem from="1614873582215" duration="8563000" />
     </task>
     <servers />
   </component>

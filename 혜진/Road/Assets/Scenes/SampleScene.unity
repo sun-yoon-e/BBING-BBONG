@@ -121,6 +121,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &71417346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 71417348}
+  - component: {fileID: 71417347}
+  m_Layer: 0
+  m_Name: ChangeTerrainHeight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &71417347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71417346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5c085564b32ce042bc77dbd79df6fce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TerrainMain: {fileID: 699825002}
+--- !u!4 &71417348
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71417346}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.8230696, y: -29.753128, z: -49.853863}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &90663219
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,6 +246,8 @@ MonoBehaviour:
   lsystem: {fileID: 90663220}
   roadHelper: {fileID: 1609550410}
   structureHelper: {fileID: 2003316685}
+  changeTerrainHeight: {fileID: 71417347}
+  terrainGenerator: {fileID: 0}
 --- !u!4 &175787460
 Transform:
   m_ObjectHideFlags: 0
@@ -250,7 +296,7 @@ MonoBehaviour:
   depth: 20
   width: 256
   height: 256
-  scale: 18
+  scale: 7
   offsetX: 100
   offsetY: 100
 --- !u!154 &699825001
@@ -614,7 +660,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 67420479669189361, guid: 4c099baf7d14d8346857dfe94c854e04, type: 3}
-  terrain: {fileID: 0}
 --- !u!4 &2003316686
 Transform:
   m_ObjectHideFlags: 0
