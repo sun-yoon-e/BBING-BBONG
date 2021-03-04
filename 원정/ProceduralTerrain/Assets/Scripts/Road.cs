@@ -50,21 +50,29 @@ public class Road : MeshGenerator
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight * mapSize;
+                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight * mapSize;
                 roadVertices[i] = new Vector3(x * mapSize, y + 1f, z * mapSize);
                 ++i;
             }
         }
-        
     }
+
+    int Root = 0;
+
+    int leftDown = 0;
+    int rightDown = 0;
+    int leftUp = 0;
+    int rightUp = 0;
+    
+    int leftZ = 0;
+    int rightZ = 0;
 
     void CreateRootRoad()
     {
         roadTriangles = new int[xSize * zSize * 6];
 
-        v = Random.Range(xSize/3, xSize - xSize/3);
+        v = Random.Range(xSize / 3, xSize - xSize / 3);
         int rootV = v;
-
         for (int z = 0; z < zSize; ++z)
         {
             roadTriangles[t + 0] = v + 0;
@@ -79,19 +87,31 @@ public class Road : MeshGenerator
         }
 
         CreateRoad(rootV, 0, xSize, 0, zSize);
+        CreateRoad(leftDown, 0, Root, 0, leftZ);
+        //CreateRoad(leftUp, 0, Root, leftZ, zSize);
     }
 
-    void CreateRoad(int root, int minXSize, int maxXSize, int minZSize, int maxZsize)
+    int num = 0;
+    void CreateRoad(int root, int minXSize, int maxXSize, int minZSize, int maxZSize)
     {
-        int rootV = root;
-        // 가로 왼쪽
+        if (num % 3 == 0)
+            Root = root;
+        ++num;
+
         v = 0;
-        int roadZ = Random.Range(zSize / 3, zSize - zSize / 3);
-        int leftZ = roadZ;
 
-        roadZ *= zSize + 1;
+        int xRoot = root;
+        int zRoot = 0;
+        while(xRoot > xSize)
+        {
+            xRoot /= xSize;
+            ++zRoot;
+        }
 
-        for (int x = 0; x < rootV; ++x)
+        // 가로 왼쪽
+        leftZ = Random.Range(minZSize, maxZSize);
+        int roadZ = leftZ * (zSize + 1);
+        for (int x = minXSize; x < xRoot; ++x)
         {
             roadTriangles[t + 0] = roadZ + 0 + v;
             roadTriangles[t + 1] = roadZ + zSize + 1 + v;
@@ -105,12 +125,9 @@ public class Road : MeshGenerator
         }
 
         //가로 오른쪽
-        roadZ = Random.Range(zSize / 3, zSize - zSize / 3);
-        int rightZ = roadZ;
-
-        roadZ *= zSize + 1;
-
-        for (int x = rootV; x < xSize; ++x)
+        rightZ = Random.Range(minZSize, maxZSize);
+        roadZ = rightZ * (zSize + 1);
+        for (int x = xRoot; x < maxXSize; ++x)
         {
             roadTriangles[t + 0] = roadZ + 0 + v;
             roadTriangles[t + 1] = roadZ + zSize + 1 + v;
@@ -124,8 +141,10 @@ public class Road : MeshGenerator
         }
 
         //왼 아래
-        v = Random.Range(rootV / 3, rootV - rootV / 3);
-        for (int z = 0; z < leftZ; ++z)
+        v = Random.Range(minXSize, xRoot);
+        leftDown = v;
+        v += zSize * zRoot;
+        for (int z = minZSize; z < leftZ; ++z)
         {
             roadTriangles[t + 0] = v + 0;
             roadTriangles[t + 1] = v + xSize + 1;
@@ -135,14 +154,14 @@ public class Road : MeshGenerator
             roadTriangles[t + 5] = v + xSize + 2;
 
             t += 6;
-            v += xSize + 1;
+            v += xSize + 1 ;
         }
-        //if (v > 5)
-        //    CreateRoad(v, 0, leftZ);
 
         // 왼 위
-        v = Random.Range(rootV / 3, rootV - rootV / 3) + (leftZ + 1) * (zSize + 1);
-        for (int z = leftZ; z < zSize - 1; ++z)
+        v = Random.Range(minXSize, xRoot);
+        v += (leftZ + 1) * (zSize + 1);
+        leftUp = v;
+        for (int z = leftZ; z < maxZSize - 1; ++z)
         {
             roadTriangles[t + 0] = v + 0;
             roadTriangles[t + 1] = v + xSize + 1;
@@ -156,8 +175,9 @@ public class Road : MeshGenerator
         }
 
         // 오른 아래
-        v = Random.Range(rootV + rootV / 4, xSize - rootV / 4);
-        for (int z = 0; z < rightZ; ++z)
+        v = Random.Range(xRoot, maxXSize);
+        rightDown = v;
+        for (int z = minZSize; z < rightZ; ++z)
         {
             roadTriangles[t + 0] = v + 0;
             roadTriangles[t + 1] = v + xSize + 1;
@@ -171,8 +191,9 @@ public class Road : MeshGenerator
         }
 
         // 오른 위
-        v = Random.Range(rootV + rootV / 4, xSize - rootV / 4) + (rightZ + 1) * (zSize + 1);
-        for (int z = rightZ; z < zSize - 1; ++z)
+        v = Random.Range(xRoot, maxXSize) + (rightZ + 1) * (zSize + 1);
+        rightUp = v;
+        for (int z = rightZ; z < maxZSize - 1; ++z)
         {
             roadTriangles[t + 0] = v + 0;
             roadTriangles[t + 1] = v + xSize + 1;
