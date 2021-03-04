@@ -20,7 +20,7 @@ public class ChangeTerrainHeight : MonoBehaviour
 
             float[,] heights = TerrainMain.terrainData.GetHeights(0, 0, 256, 256);
 
-            heights[roadX+128, roadZ+128] = 1f;
+            heights[roadZ+128, roadX+128] = 1f;
             // 음수여서 오류남
 
             TerrainMain.terrainData.SetHeights(0, 0, heights);
