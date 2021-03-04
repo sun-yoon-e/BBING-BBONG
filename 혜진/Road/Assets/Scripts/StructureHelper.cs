@@ -1,0 +1,58 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.Experimental;
+using UnityEngine;
+
+public class StructureHelper : MonoBehaviour
+{
+    public GameObject prefab;
+    public Dictionary<Vector3Int, GameObject> StructureDictionary = new Dictionary<Vector3Int, GameObject>();
+
+    public Terrain terrain;
+    
+    public void PlaceStructuresAroundRoad(List<Vector3Int> roadPositions)
+    {
+        Dictionary<Vector3Int, Direction> freeEstateSpots = FindFreeSpacesAroundRoad(roadPositions);
+        foreach (var position in freeEstateSpots.Keys)
+        {
+            Instantiate(prefab, position, Quaternion.identity, transform);
+        }
+    }
+
+    private int roadx;
+    private int roady;
+
+    private Dictionary<Vector3Int, Direction> FindFreeSpacesAroundRoad(List<Vector3Int> roadPositions)
+    {
+        Dictionary<Vector3Int, Direction> freeSpaces = new Dictionary<Vector3Int, Direction>();
+        foreach (var position in roadPositions)
+        {
+            roadx = position.x;
+            roady = position.y;
+
+            float[,] heights = terrain.terrainData.GetHeights(roadx, roady, 256, 256);
+
+            heights[roadx, roady] = 1f;
+            
+            terrain.terrainData.SetHeights(roadx, roady, heights);
+
+            var neighbourDirections = PlacementHelper.FindNeighbour(position, roadPositions);
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
+            {
+                if (neighbourDirections.Contains(direction) == false)
+                {
+                    var newPosition = position + PlacementHelper.GetOffsetFromDirection(direction);
+                    if (freeSpaces.ContainsKey(newPosition))
+                    {
+                        continue;
+                    }
+                    freeSpaces.Add(newPosition, Direction.Right);
+                }
+            }
+        }
+
+        return freeSpaces;
+    }
+}

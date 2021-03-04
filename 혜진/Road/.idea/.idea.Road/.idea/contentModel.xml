@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\전혜진\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\전혜진\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_Road.2010176398.00" t="ExcludeRecursive" />
+    <e p="D:\2PM\BBING-BBONG\혜진\Road" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="Scripts" t="Include">
+          <e p="AgentParameters.cs" t="Include" />
+          <e p="Direction.cs" t="Include" />
+          <e p="LSystemGenerator.cs" t="Include" />
+          <e p="PlacementHelper.cs" t="Include" />
+          <e p="RoadHelper.cs" t="Include" />
+          <e p="Rules" t="Include">
+            <e p="Rule.cs" t="Include" />
+          </e>
+          <e p="SimpleVisualizer.cs" t="Include" />
+          <e p="StructureHelper.cs" t="Include" />
+          <e p="TerrainGenerator.cs" t="Include" />
+          <e p="Visualizer.cs" t="Include" />
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Road.sln" t="IncludeFlat" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
