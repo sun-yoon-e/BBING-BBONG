@@ -96,7 +96,7 @@ namespace SVS
                 }
             }
             roadHelper.FixRoad();
-            //structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
+            structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
 
             terrain.terrainData = terrainGenerator.GenerateTerrain(terrain.terrainData);
 

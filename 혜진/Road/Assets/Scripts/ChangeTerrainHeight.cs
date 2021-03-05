@@ -20,7 +20,7 @@ public class ChangeTerrainHeight : MonoBehaviour
 
         foreach (var position in roadPositions)
         {
-            if (position.x > -128 && position.x < 128 && position.z > -128 && position.z < 128)
+            if (position.x > -120 && position.x < 120 && position.z > -120 && position.z < 120)
             {
                 Debug.Log(position.ToString());
                 roadX = position.x;
@@ -28,14 +28,10 @@ public class ChangeTerrainHeight : MonoBehaviour
 
                 float[,] heights = TerrainMain.terrainData.GetHeights(0, 0, terrainSizeX, terrainSizeZ);
 
-                for (int i = -5; i < 5; i++)
+                for (int i = -3; i < 3; i++)
                 {
-                    for (int j = -5; j < 5; j++)
+                    for (int j = -3; j < 3; j++)
                     {
-                        if (Mathf.Abs(i) == Mathf.Abs(j))
-                        {
-                            terrainHeight = 0.4f + Mathf.Abs(i) * 0.01f;
-                        }
                         heights[roadZ + i + terrainSizeX / 2, roadX + j + terrainSizeZ / 2] = terrainHeight;
                         // 음수여서 오류남
                     }
