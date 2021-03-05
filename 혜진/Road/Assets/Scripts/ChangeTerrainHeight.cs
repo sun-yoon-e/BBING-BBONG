@@ -7,8 +7,14 @@ public class ChangeTerrainHeight : MonoBehaviour
 {
     public Terrain TerrainMain;
 
+    public float terrainHeight = 0.4f;
+    
     public void FixTerrainHeight(List<Vector3Int> roadPositions)
     {
+        Vector3 terrainSize = TerrainMain.terrainData.size;
+        int terrainSizeX = (int)terrainSize.x;
+        int terrainSizeZ = (int) terrainSize.z;
+        
         int roadX; 
         int roadZ;
 
@@ -20,13 +26,21 @@ public class ChangeTerrainHeight : MonoBehaviour
                 roadX = position.x;
                 roadZ = position.z;
 
-                float[,] heights = TerrainMain.terrainData.GetHeights(0, 0, 256, 256);
+            float[,] heights = TerrainMain.terrainData.GetHeights(0, 0, terrainSizeX, terrainSizeZ);
 
-                heights[roadZ + 128, roadX + 128] = 1f;
-                // 음수여서 오류남
-
-                TerrainMain.terrainData.SetHeights(0, 0, heights);
+            for (int i = -5; i < 5; i++)
+            {
+                for (int j = -5; j < 5; j++)
+                {
+                    if (Mathf.Abs(i) == Mathf.Abs(j))
+                    {
+                        terrainHeight = 0.4f + Mathf.Abs(i) * 0.01f;
+                    }
+                    heights[roadZ + i + terrainSizeX/2, roadX + j + terrainSizeZ/2] = terrainHeight;
+                    // 음수여서 오류남
+                }
             }
+            TerrainMain.terrainData.SetHeights(0, 0, heights);
         }
     }
 }
