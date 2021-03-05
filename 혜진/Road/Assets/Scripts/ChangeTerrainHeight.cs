@@ -11,19 +11,22 @@ public class ChangeTerrainHeight : MonoBehaviour
     {
         int roadX; 
         int roadZ;
-        
+
         foreach (var position in roadPositions)
         {
-            Debug.Log(position.ToString());
-            roadX = position.x;
-            roadZ = position.z;
+            if (position.x > -128 && position.x < 128 && position.z > -128 && position.z < 128)
+            {
+                Debug.Log(position.ToString());
+                roadX = position.x;
+                roadZ = position.z;
 
-            float[,] heights = TerrainMain.terrainData.GetHeights(0, 0, 256, 256);
+                float[,] heights = TerrainMain.terrainData.GetHeights(0, 0, 256, 256);
 
-            heights[roadZ+128, roadX+128] = 1f;
-            // 음수여서 오류남
+                heights[roadZ + 128, roadX + 128] = 1f;
+                // 음수여서 오류남
 
-            TerrainMain.terrainData.SetHeights(0, 0, heights);
+                TerrainMain.terrainData.SetHeights(0, 0, heights);
+            }
         }
     }
 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letter: F
   results:
-  - '[+F][-F]'
+  - F[+F][-F]
   - '[+F]F[-F]'
-  - '[-F]F[+F]'
+  - F[+F][--F]
   randomResult: 1

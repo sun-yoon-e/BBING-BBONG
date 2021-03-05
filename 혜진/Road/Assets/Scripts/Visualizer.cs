@@ -17,20 +17,20 @@ namespace SVS
         public ChangeTerrainHeight changeTerrainHeight;
         public TerrainGenerator terrainGenerator;
 
-        private int length = 8;
+        private int length = 15;
         private float angle = 90;
 
         public int Length
         {
             get
             {
-                if (length > 0)
+                if (length > 5)
                 {
                     return length;
                 }
                 else
                 {
-                    return 1;
+                    return 5;
                 }
             }
             set => length = value;
@@ -84,7 +84,7 @@ namespace SVS
                         tempPosition = currentPosition;
                         currentPosition += direction * length;
                         roadHelper.PlaceStreetPositions(tempPosition, Vector3Int.RoundToInt(direction), length);
-                        Length -= 2;
+                        //Length -= 1;
                         positions.Add(currentPosition);
                         break;
                     case EncodingLetters.turnRight:

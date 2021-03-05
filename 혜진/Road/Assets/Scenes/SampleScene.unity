@@ -196,8 +196,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rules:
   - {fileID: 11400000, guid: 1a4b8dea9d2b19245a96a35e9d2a4034, type: 2}
-  rootSentence: '[F]--F'
-  iterationLimit: 2
+  rootSentence: '[--F]F[+F][-F]'
+  iterationLimit: 5
   randomIgnoreRuleModifier: 1
   chanceToIgnoreRule: 0.3
 --- !u!4 &90663221

@@ -48,7 +48,7 @@ public class RoadHelper : MonoBehaviour
         foreach (var position in fixRoadCandidates)
         {
             List<Direction> neighbourDirections = PlacementHelper.FindNeighbour(position, roadDictionary.Keys);
-            
+
             Quaternion rotation = Quaternion.identity;
 
             if (neighbourDirections.Count == 1)
@@ -58,14 +58,15 @@ public class RoadHelper : MonoBehaviour
                 {
                     rotation = Quaternion.Euler(0, 90, 0);
                 }
-                else if(neighbourDirections.Contains(Direction.Left))
+                else if (neighbourDirections.Contains(Direction.Left))
                 {
                     rotation = Quaternion.Euler(0, 180, 0);
                 }
-                else if(neighbourDirections.Contains(Direction.Up))
+                else if (neighbourDirections.Contains(Direction.Up))
                 {
                     rotation = Quaternion.Euler(0, -90, 0);
                 }
+
                 roadDictionary[position] = Instantiate(roadEnd, position, rotation, transform);
             }
             else if (neighbourDirections.Count == 2)
@@ -80,11 +81,11 @@ public class RoadHelper : MonoBehaviour
                 {
                     rotation = Quaternion.Euler(0, 90, 0);
                 }
-                else if(neighbourDirections.Contains(Direction.Right) && neighbourDirections.Contains(Direction.Down))
+                else if (neighbourDirections.Contains(Direction.Right) && neighbourDirections.Contains(Direction.Down))
                 {
                     rotation = Quaternion.Euler(0, 180, 0);
                 }
-                else if(neighbourDirections.Contains(Direction.Down) && neighbourDirections.Contains(Direction.Left))
+                else if (neighbourDirections.Contains(Direction.Down) && neighbourDirections.Contains(Direction.Left))
                 {
                     rotation = Quaternion.Euler(0, -90, 0);
                 }
@@ -99,13 +100,13 @@ public class RoadHelper : MonoBehaviour
                 {
                     rotation = Quaternion.Euler(0, 90, 0);
                 }
-                else if(neighbourDirections.Contains(Direction.Down)
+                else if (neighbourDirections.Contains(Direction.Down)
                         && neighbourDirections.Contains(Direction.Left)
                         && neighbourDirections.Contains(Direction.Up))
                 {
                     rotation = Quaternion.Euler(0, 180, 0);
                 }
-                else if(neighbourDirections.Contains(Direction.Left)
+                else if (neighbourDirections.Contains(Direction.Left)
                         && neighbourDirections.Contains(Direction.Up)
                         && neighbourDirections.Contains(Direction.Right))
                 {
