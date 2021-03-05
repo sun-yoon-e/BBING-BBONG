@@ -29,16 +29,4 @@ public class ChangeTerrainHeight : MonoBehaviour
             }
         }
     }
-
-    //public void ConvertWordCor2TerrCor(List<Vector3Int> roadPositions)
-    //{
-    //    foreach (var wordCor in roadPositions)
-    //    {
-    //        Vector3 vecRet = new Vector3();
-    //        Terrain ter = Terrain.activeTerrain;
-    //        Vector3 terPosition = ter.transform.position;
-    //        vecRet.x = ((wordCor.x - terPosition.x) / ter.terrainData.size.x) * ter.terrainData.alphamapWidth;
-    //        vecRet.z = ((wordCor.z - terPosition.z) / ter.terrainData.size.z) * ter.terrainData.alphamapHeight;
-    //    }
-    //}
 }
