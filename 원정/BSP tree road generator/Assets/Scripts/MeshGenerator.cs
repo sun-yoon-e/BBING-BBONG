@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,25 +11,28 @@ public class MeshGenerator : MonoBehaviour
     Vector3[] vertices;
     int[] triangles;
 
-    public int xSize = 20;
-    public int zSize = 20;
+    public int xSize;
+    public int zSize;
 
-    //public float mapSize = 1000.0f;
     public float mapHeight = 2.0f;
+    public Vector3 mapPosition;
 
     private void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+
+        mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
     }
 
     void Start()
     {
         CreateShape();
+        CreateTriangle();
         UpdateMesh();
     }
 
-    void CreateShape()
+    public void CreateShape()
     {
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 
@@ -37,11 +41,14 @@ public class MeshGenerator : MonoBehaviour
             for (int x = 0; x <= xSize; ++x)
             {
                 float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight;
-                vertices[i] = new Vector3(x, y, z);
+                vertices[i] = new Vector3(x * 10, y, z * 10);
                 ++i;
             }
         }
+    }
 
+    public void CreateTriangle()
+    {
         triangles = new int[xSize * zSize * 6];
 
         int v = 0;
@@ -73,16 +80,5 @@ public class MeshGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (vertices == null)
-            return;
-
-        for (int i = 0; i < vertices.Length; ++i)
-        {
-            Gizmos.DrawSphere(vertices[i], .1f);
-        }
     }
 }

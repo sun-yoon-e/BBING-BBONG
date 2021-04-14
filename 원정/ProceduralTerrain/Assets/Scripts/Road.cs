@@ -50,8 +50,8 @@ public class Road : MeshGenerator
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight * mapSize;
-                roadVertices[i] = new Vector3(x * mapSize, y + 1f, z * mapSize);
+                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight;
+                roadVertices[i] = new Vector3(x, y + 1f, z);
                 ++i;
             }
         }

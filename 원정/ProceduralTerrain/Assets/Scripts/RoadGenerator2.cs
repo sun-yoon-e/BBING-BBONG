@@ -50,7 +50,7 @@ public class RoadGenerator2 : MeshGenerator
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                position = new Vector3(x, mapHeight*mapSize, z);
+                position = new Vector3(x, mapHeight, z);
 
                 // 레이캐스팅으로 지형의 y좌표 얻기
                 RaycastHit hit;
