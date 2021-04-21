@@ -4,91 +4,102 @@ using UnityEngine;
 
 public class Node
 {
-    MeshGenerator mapMesh;
+    public MapMesh mapMesh;
     Node parentNode;
     Node leftNode;
     Node rightNode;
 
-    void splitX(MeshGenerator map, float minX)
+    void splitX(MapMesh map, float minX)
     {
-        //float split = Random.Range(minX, map.transform.localScale.x - minX);
         float split = Random.Range(minX, map.xSize - minX);
-
+        
         if (split > minX)
         {
-            MeshGenerator leftPlace = new MeshGenerator();
+            MapMesh leftPlace = new MapMesh();
+            leftPlace.mesh = new Mesh();
+
             leftPlace.xSize = (int)split;
             leftPlace.zSize = map.zSize;
             leftPlace.mapPosition = map.mapPosition;
 
             leftPlace.CreateShape();
-            leftPlace.tag = "GenSection";
+            leftPlace.UpdateMesh();
+            //leftPlace.tag = "GenSection";
 
             leftNode = new Node();
             leftNode.setMesh(leftPlace);
             leftNode.setParentNode(this);
 
 
-            MeshGenerator rightPlace = new MeshGenerator();
+            MapMesh rightPlace = new MapMesh();
+            rightPlace.mesh = new Mesh();
+
             rightPlace.xSize = map.xSize - (int)split;
             rightPlace.zSize = map.zSize;
             rightPlace.mapPosition.x = map.mapPosition.x + split;
             rightPlace.mapPosition.z = map.mapPosition.z;
 
             rightPlace.CreateShape();
-            rightPlace.tag = "GenSection";
+            rightPlace.UpdateMesh();
+            //rightPlace.tag = "GenSection";
 
             rightNode = new Node();
             rightNode.setMesh(rightPlace);
             rightNode.setParentNode(this);
 
-            GameObject.Destroy(map);
+            Mesh.Destroy(map.mesh);
         }
     }
 
-    void splitZ(MeshGenerator map, float minZ)
+    void splitZ(MapMesh map, float minZ)
     {
         //float split = Random.Range(minZ, map.transform.localScale.z - minZ);
         float split = Random.Range(minZ, map.zSize - minZ);
 
         if (split > minZ)
         {
-            MeshGenerator upPlace = new MeshGenerator();
+            MapMesh upPlace = new MapMesh();
+            upPlace.mesh = new Mesh();
+
             upPlace.xSize = map.xSize;
             upPlace.zSize = map.zSize - (int)split;
             upPlace.mapPosition.x = map.mapPosition.x;
             upPlace.mapPosition.z = map.mapPosition.z + split;
 
             upPlace.CreateShape();
-            upPlace.tag = "GenSection";
+            upPlace.UpdateMesh();
+            //upPlace.tag = "GenSection";
 
             leftNode = new Node();
             leftNode.setMesh(upPlace);
             leftNode.setParentNode(this);
 
 
-            MeshGenerator downPlace = new MeshGenerator();
+            MapMesh downPlace = new MapMesh();
+            downPlace.mesh = new Mesh();
+
             downPlace.xSize = map.xSize;
             downPlace.zSize = (int)split;
             downPlace.mapPosition.x = map.mapPosition.x;
             downPlace.mapPosition.z = map.mapPosition.z;
 
             downPlace.CreateShape();
-            downPlace.tag = "GenSection";
+            downPlace.UpdateMesh();
+            //downPlace.tag = "GenSection";
 
             rightNode = new Node();
             rightNode.setMesh(downPlace);
             rightNode.setParentNode(this);
-
-            GameObject.Destroy(map);
+            
+            Mesh.Destroy(map.mesh);
         }
     }
 
-    public void setMesh(MeshGenerator mesh)
+    public void setMesh(MapMesh mesh)
     {
         mapMesh = mesh;
     }
-    public MeshGenerator getMesh()
+    public MapMesh getMesh()
     {
         return mapMesh;
     }

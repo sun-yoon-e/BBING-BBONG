@@ -44,4 +44,22 @@ public static class PlacementHelper
         }
         throw new System.Exception("No direction such as " + direction);
     }
+
+    //public static Direction GetReverseDirection(Direction direction)
+    //{
+    //    switch(direction)
+    //    {
+    //        case Direction.Up:
+    //            return Direction.Down;
+    //        case Direction.Down:
+    //            return Direction.Up;
+    //        case Direction.Left:
+    //            return Direction.Right;
+    //        case Direction.Right:
+    //            return Direction.Left;
+    //        default:
+    //            break;
+    //    }
+    //    throw new System.Exception("No direction such as" + direction);
+    //}
 }

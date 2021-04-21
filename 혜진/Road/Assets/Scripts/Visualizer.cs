@@ -36,6 +36,7 @@ namespace SVS
             set => length = value;
         }
 
+        float timer = 0;
         private void Start()
         {
             terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
@@ -95,13 +96,15 @@ namespace SVS
                         break;
                 }
             }
+            
             roadHelper.FixRoad();
-            structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
 
             terrain.terrainData = terrainGenerator.GenerateTerrain(terrain.terrainData);
-
-            //changeTerrainHeight.ConvertWordCor2TerrCor(roadHelper.GetRoadPositions());
             changeTerrainHeight.FixTerrainHeight(roadHelper.GetRoadPositions());
+
+
+            structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
+            //changeTerrainHeight.ConvertWordCor2TerrCor(roadHelper.GetRoadPositions());
         }
     }
 }

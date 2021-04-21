@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class Tree : MonoBehaviour
 {
-    public Node parentNode;
+    Node parentNode;
 
     void Start()
     {
-        MeshGenerator startMesh = new MeshGenerator();
-        startMesh.xSize = 100;
-        startMesh.zSize = 100;
-        startMesh.tag = "GenSection";
+        MapMesh startMesh = new MapMesh();
+
+        GetComponent<MeshFilter>().mesh = startMesh.mesh;
+        startMesh.CreateShape();
+        startMesh.UpdateMesh();
+        //startMesh.tag = "GenSection";
 
         parentNode = new Node();
         parentNode.setMesh(startMesh);
 
-        for(int i=0;i < 9; ++i)
-        {
-            split(parentNode);
-        }
+        //for (int i = 0; i < 9; ++i)
+        //{
+        //    split(parentNode);
+        //}
+
+        Instantiate(parentNode.mapMesh.mesh, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity);
+        
+        GetComponent<MeshFilter>().mesh = parentNode.mapMesh.mesh;
+        parentNode.mapMesh.CreateShape();
+        parentNode.mapMesh.UpdateMesh();
+        
+
+        Destroy(startMesh.mesh);
     }
 
     public void split(Node node)
