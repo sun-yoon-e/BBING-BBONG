@@ -16,7 +16,10 @@ namespace SVS
         public StructureHelper structureHelper;
         public ChangeTerrainHeight changeTerrainHeight;
         public TerrainGenerator terrainGenerator;
+        
+        private bool waitingForTheRoad = false;
 
+        public int roadLength = 8;
         private int length = 15;
         private float angle = 90;
 
@@ -24,13 +27,13 @@ namespace SVS
         {
             get
             {
-                if (length > 5)
+                if (length > 0)
                 {
                     return length;
                 }
                 else
                 {
-                    return 5;
+                    return 1;
                 }
             }
             set => length = value;
@@ -38,13 +41,20 @@ namespace SVS
 
         private void Start()
         {
-            terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
-
-            var sequence = lsystem.GenerateSentence();
-            VisualizeSequence(sequence);
+            roadHelper.finishedCoroutine += () => waitingForTheRoad = false;
+            CreateTown();
         }
 
-        private void VisualizeSequence(string sequence)
+        public void CreateTown()
+        {
+            length = roadLength;
+            roadHelper.Reset();
+            structureHelper.Reset();
+            var sequence = lsystem.GenerateSentence();
+            StartCoroutine(VisualizeSequence(sequence));
+        }
+
+        private IEnumerator VisualizeSequence(string sequence)
         {
             Stack<AgentParameters> savePoints = new Stack<AgentParameters>();
             var currentPosition = Vector3.zero;
@@ -52,10 +62,13 @@ namespace SVS
             Vector3 direction = Vector3.forward;
             Vector3 tempPosition = Vector3.zero;
 
-            positions.Add(currentPosition);
 
             foreach (var letter in sequence)
             {
+                if (waitingForTheRoad)
+                {
+                    yield return new WaitForEndOfFrame();
+                }
                 EncodingLetters encoding = (EncodingLetters)letter;
                 switch (encoding)
                 {
@@ -83,9 +96,11 @@ namespace SVS
                     case EncodingLetters.draw:
                         tempPosition = currentPosition;
                         currentPosition += direction * length;
-                        roadHelper.PlaceStreetPositions(tempPosition, Vector3Int.RoundToInt(direction), length);
-                        //Length -= 1;
-                        positions.Add(currentPosition);
+                        StartCoroutine(roadHelper.PlaceStreetPositions(tempPosition, Vector3Int.RoundToInt(direction), length));
+                        waitingForTheRoad = true;
+                        yield return new WaitForEndOfFrame();
+
+                        Length -= 2;
                         break;
                     case EncodingLetters.turnRight:
                         direction = Quaternion.AngleAxis(angle, Vector3.up) * direction;
@@ -93,15 +108,20 @@ namespace SVS
                     case EncodingLetters.turnLeft:
                         direction = Quaternion.AngleAxis(-angle, Vector3.up) * direction;
                         break;
+                    default:
+                        break;
                 }
             }
+            yield return new WaitForSeconds(0.1f);
             roadHelper.FixRoad();
-            structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions());
-
+            yield return new WaitForSeconds(0.8f);
+            StartCoroutine(structureHelper.PlaceStructuresAroundRoad(roadHelper.GetRoadPositions()));
+            
             terrain.terrainData = terrainGenerator.GenerateTerrain(terrain.terrainData);
 
             //changeTerrainHeight.ConvertWordCor2TerrCor(roadHelper.GetRoadPositions());
             changeTerrainHeight.FixTerrainHeight(roadHelper.GetRoadPositions());
+
         }
     }
 }

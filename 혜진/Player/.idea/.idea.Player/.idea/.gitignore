@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/.idea.Player.iml
+/projectSettingsUpdater.xml
+/contentModel.xml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../../../:\Users\전혜진\BBING-BBONG\혜진\Player\.idea\.idea.Player\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
