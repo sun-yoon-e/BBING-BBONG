@@ -13,7 +13,7 @@ public class MeshGenerator : MonoBehaviour
     public int xSize = 20;
     public int zSize = 20;
 
-    public float mapSize = 1000.0f;
+    //public float mapSize = 1000.0f;
     public float mapHeight = 2.0f;
 
     private void Awake()
@@ -36,8 +36,8 @@ public class MeshGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight * mapSize;
-                vertices[i] = new Vector3(x * mapSize, y, z * mapSize);
+                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight;
+                vertices[i] = new Vector3(x, y, z);
                 ++i;
             }
         }

@@ -22,7 +22,7 @@ public class ChangeTerrainHeight : MonoBehaviour
         {
             if (position.x > -120 && position.x < 120 && position.z > -120 && position.z < 120)
             {
-                Debug.Log(position.ToString());
+                //Debug.Log(position.ToString());
                 roadX = position.x;
                 roadZ = position.z;
 
