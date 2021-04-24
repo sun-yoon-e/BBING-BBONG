@@ -17,7 +17,7 @@ using namespace std;
 
 #define Debug			TRUE
 
-#define SERVERIP		"115.143.1.236"
+#define SERVERIP		"115.143.1.171"
 #define SERVERPORT		13531
 
 #define BUF_SIZE		1024

@@ -17,6 +17,8 @@ public:
 
 	void InitServer();
 	void StartServer();
+	void LoginServer(int);
+
 	void Send_Enter_Packet(int);
 	void Send_Login_Packet();
 	void Send_Logout_Packet();
@@ -24,7 +26,7 @@ public:
 	void Send_Chat_Packet();
 	void Send_Item_Packet();
 
-	static DWORD WINAPI LoginServer(LPVOID);
+	static DWORD WINAPI LobbyServer(LPVOID);
 
 	void err_quit(const char* msg)
 	{

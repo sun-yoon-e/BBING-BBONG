@@ -26,8 +26,8 @@ struct sc_packet_login {
 	BYTE type;
 	int id;
 
-	string nick;
-	string pw;
+	char nick[16];
+	char pw[16];
 };
 
 struct sc_packet_logout {
@@ -60,13 +60,18 @@ struct sc_packet_item {
 	int id;
 };
 
-struct cs_packet_login {
+struct cs_packet_login_nk {
+	int id;
+	char nick[16];
 	BYTE size;
 	BYTE type;
-	int id;
+};
 
-	string nick;
-	string pw;
+struct cs_packet_login_pw {
+	int id;
+	char pw[16];
+	BYTE size;
+	BYTE type;
 };
 
 struct cs_packet_move {

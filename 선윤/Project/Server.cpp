@@ -92,16 +92,37 @@ void Server::StartServer()
 		game_clients[new_client_id].SetID(new_client_id);
 		game_clients[new_client_id].SetConnect(true);
 		game_clients[new_client_id].SetSocket(new_client_socket);
-		game_clients[new_client_id].SetNick("NONE");
+		/*game_clients[new_client_id].SetNick("NONE");
 		game_clients[new_client_id].SetPW("NONE");
-		game_clients[new_client_id].SetPos(1, 2, 3);
-		game_clients[new_client_id].SetScore(10);
+		game_clients[new_client_id].SetPos(0, 0, 0);
+		game_clients[new_client_id].SetScore(0);*/
 		Send_Enter_Packet(new_client_id);
 
-		client_thread[new_client_id] = CreateThread(NULL, 0, this->LoginServer, (LPVOID)game_clients[new_client_id].GetID(), 0, NULL);
+		LoginServer(new_client_id);
+
+		// 스레드
+		/*client_thread[new_client_id] = CreateThread(NULL, 0, this->LobbyServer, (LPVOID)game_clients[new_client_id].GetID(), 0, NULL);
 		if (client_thread[new_client_id] == NULL) closesocket(game_clients[new_client_id].GetSocket());
-		else CloseHandle(client_thread[new_client_id]);
+		else CloseHandle(client_thread[new_client_id]);*/
 	}
+}
+
+void Server::LoginServer(int id)
+{
+	// 아이디 패스워드 클라이언트와 패킷 주고받기
+	cs_packet_login_nk login_packet_nk;
+	ZeroMemory(&login_packet_nk, sizeof(cs_packet_login_nk));
+	recv(game_clients[id].GetSocket(), (char*)&login_packet_nk, sizeof(cs_packet_login_nk), 0);
+	cout << "id : " << login_packet_nk.id << ", nick : " << login_packet_nk.nick << endl;
+
+	cs_packet_login_pw login_packet_pw;
+	ZeroMemory(&login_packet_pw, sizeof(cs_packet_login_pw));
+	recv(game_clients[id].GetSocket(), (char*)&login_packet_pw, sizeof(cs_packet_login_pw), 0);
+	cout << "id : " << login_packet_pw.id << ", pw : " << login_packet_pw.pw << endl;
+
+	// 추가할 것 : DB서버 연동해서 정보 확인하기
+
+	// 로그인 완료하면 빠져나가기
 }
 
 void Server::Send_Enter_Packet(int id)
@@ -119,9 +140,10 @@ void Server::Send_Enter_Packet(int id)
 		if (ERROR_IO_PENDING != err_no)
 			err_display("Send_Enter_Packet() -> send()", err_no);
 	}
+	//cout << "send_enter_packet OK" << endl;
 }
 
-DWORD __stdcall Server::LoginServer(LPVOID arg)
+DWORD __stdcall Server::LobbyServer(LPVOID arg)
 {
 	int id = reinterpret_cast<int>(arg);
 
@@ -131,11 +153,7 @@ DWORD __stdcall Server::LoginServer(LPVOID arg)
 
 	bool Login = false;
 	while (!Login) {
-		// 아이디 패스워드 클라이언트와 패킷 주고받기
 
-		// 추가할 것 : DB서버 연동해서 정보 확인하기
-
-		// 로그인 완료하면 빠져나가기
 	}
 
 	return 0;
