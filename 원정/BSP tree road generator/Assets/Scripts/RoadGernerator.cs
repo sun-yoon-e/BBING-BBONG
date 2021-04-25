@@ -52,7 +52,6 @@ public class RoadGernerator : MonoBehaviour
     int[] leftZSplit = { };
     int[] rightZSplit = { };
 
-
     public void CreateTriangle()
     {
         rightZSplit = new int[100];
@@ -263,7 +262,7 @@ public class RoadGernerator : MonoBehaviour
 
         int v = (xSize + 1) * (leftZSplit[num]) + minX;
         
-        for (int x = minX; x < maxX + 1; ++x)
+        for (int x = minX+1; x < maxX + 1; ++x)
         {
             triangles[t + 0] = v + 0;
             triangles[t + 1] = v + xSize + 1;
@@ -282,7 +281,7 @@ public class RoadGernerator : MonoBehaviour
 
         int v = (xSize + 1) * (rightZSplit[num]) + minX;
 
-        for (int x = minX; x < maxX + 1; ++x)
+        for (int x = minX + 1; x < maxX + 1; ++x)
         {
             triangles[t + 0] = v + 0;
             triangles[t + 1] = v + xSize + 1;
