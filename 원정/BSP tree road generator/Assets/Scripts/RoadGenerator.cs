@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
-public class RoadGernerator : MonoBehaviour
+public class RoadGenerator : MonoBehaviour
 {
     Mesh mesh;
 
-    Vector3[] vertices;
-    int[] triangles;
+    public Vector3[] vertices;
+    public int[] triangles;
 
     public int xSize;
     public int zSize;
@@ -15,6 +15,15 @@ public class RoadGernerator : MonoBehaviour
     public Vector3 mapPosition;
 
     int t = 0;
+
+    int xSplit = 0;
+    int[] upXSplit = { };
+    int[] downXSplit = { };
+    int[] leftZSplit = { };
+    int[] rightZSplit = { };
+
+    public bool[] isRoad = { };
+    public bool[] isBuildingPlace = { };
 
     private void Awake()
     {
@@ -46,12 +55,6 @@ public class RoadGernerator : MonoBehaviour
         }
     }
 
-    int xSplit = 0;
-    int[] upXSplit = { };
-    int[] downXSplit = { };
-    int[] leftZSplit = { };
-    int[] rightZSplit = { };
-
     public void CreateTriangle()
     {
         rightZSplit = new int[100];
@@ -60,10 +63,12 @@ public class RoadGernerator : MonoBehaviour
         downXSplit = new int[100];
 
         triangles = new int[xSize * zSize * 6];
+        isBuildingPlace = new bool[(xSize + 1) * (zSize + 1)];
+        isRoad = new bool[(xSize + 1) * (zSize + 1)];
 
         splitX(40, 0, zSize);
 
-        leftSplitZ(40, zSize-40, 0, xSplit, 0);
+        leftSplitZ(40, zSize - 40, 0, xSplit, 0);
         {
             downSplitX(20, xSplit - 20, 0, leftZSplit[0], 0);
             {
@@ -193,8 +198,16 @@ public class RoadGernerator : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < isRoad.Length; ++i)
+        {
+            if (isRoad[i] == true)
+            {
+                isBuildingPlace[i] = false;
+            }
+        }
     }
-    
+
     void splitX(int minX, int minZ, int maxZ)
     {
         xSplit = Random.Range(minX, xSize - minX);
@@ -210,13 +223,21 @@ public class RoadGernerator : MonoBehaviour
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
 
+            isRoad[v] = true;
+            isRoad[v + 1] = true;
+
+            if (z > minZ)
+            {
+                isBuildingPlace[v + 2] = true;
+                isBuildingPlace[v - 1] = true;
+            }
             v += xSize + 1;
             t += 6;
         }
     }
     void upSplitX(int minX, int maxX, int minZ, int maxZ, int num)
     {
-        upXSplit[num] = Random.Range(minX, maxX);
+        upXSplit[num] = Random.Range(minX + 4, maxX - 4);
 
         int v = ((xSize + 1) * minZ) + upXSplit[num];
 
@@ -228,14 +249,21 @@ public class RoadGernerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+            isRoad[v] = true;
+            isRoad[v + 1] = true;
 
+            if (z > minZ + 1)
+            {
+                isBuildingPlace[v + 2] = true;
+                isBuildingPlace[v - 1] = true;
+            }
             v += xSize + 1;
             t += 6;
         }
     }
     void downSplitX(int minX, int maxX, int minZ, int maxZ, int num)
     {
-        downXSplit[num] = Random.Range(minX, maxX);
+        downXSplit[num] = Random.Range(minX + 4, maxX - 4);
 
         int v;
         if (num - 1 < 0)
@@ -251,6 +279,14 @@ public class RoadGernerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+            isRoad[v] = true;
+            isRoad[v + 1] = true;
+
+            if (z > minZ + 1)
+            {
+                isBuildingPlace[v + 2] = true;
+                isBuildingPlace[v - 1] = true;
+            }
 
             v += xSize + 1;
             t += 6;
@@ -258,11 +294,11 @@ public class RoadGernerator : MonoBehaviour
     }
     void leftSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
     {
-        leftZSplit[num] = Random.Range(minZ, maxZ);
+        leftZSplit[num] = Random.Range(minZ + 4, maxZ - 4);
 
         int v = (xSize + 1) * (leftZSplit[num]) + minX;
-        
-        for (int x = minX+1; x < maxX + 1; ++x)
+
+        for (int x = minX + 1; x < maxX + 1; ++x)
         {
             triangles[t + 0] = v + 0;
             triangles[t + 1] = v + xSize + 1;
@@ -270,14 +306,21 @@ public class RoadGernerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+            isRoad[v] = true;
+            isRoad[v + xSize + 1] = true;
 
+            if (minX + 1 < x && x < maxX - 1)
+            {
+                isBuildingPlace[v + (xSize * 2) + 3] = true;
+                isBuildingPlace[v - xSize] = true;
+            }
             v++;
             t += 6;
         }
     }
     void rightSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
     {
-        rightZSplit[num] = Random.Range(minZ, maxZ);
+        rightZSplit[num] = Random.Range(minZ + 4, maxZ - 4);
 
         int v = (xSize + 1) * (rightZSplit[num]) + minX;
 
@@ -289,7 +332,14 @@ public class RoadGernerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+            isRoad[v] = true;
+            isRoad[v + xSize + 1] = true;
 
+            if (minX + 1 < x && x < maxX - 1)
+            {
+                isBuildingPlace[v + (xSize * 2) + 3] = true;
+                isBuildingPlace[v - xSize] = true;
+            }
             v++;
             t += 6;
         }
