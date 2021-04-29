@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlacementBuilding : MonoBehaviour
 {
-    public GameObject buildingPrefab;
+    public GameObject[] buildingPrefab;
 
     private void Start()
     {
@@ -15,12 +15,22 @@ public class PlacementBuilding : MonoBehaviour
             if (road.isBuildingPlace[i] == false)
                 continue;
 
-            //if (i % (road.xSize + 1) != 0)
+            int prefab = Random.Range(1, buildingPrefab.Length);
+
+            Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
+
+            Vector3 size = buildingPrefab[prefab].GetComponent<MeshRenderer>().bounds.size;
+
+            if (road.isBuildingPlace[i + 1])
             {
-                Instantiate(buildingPrefab, road.vertices[i], Quaternion.identity);
-                
-                Vector3 size = buildingPrefab.GetComponent<Renderer>().bounds.size;
-                //i += (int)size.x;
+                i += ((int)size.x - 1) / 10;
+            }
+
+            if (road.isBuildingPlace[i + road.xSize + 1])
+            {
+                for (int j = 0; j < (int)size.x / 5; ++j)
+                    if (i + (road.xSize + 1) * j < road.xSize * road.zSize)
+                        road.isBuildingPlace[i + (road.xSize + 1) * j] = false;
             }
         }
     }

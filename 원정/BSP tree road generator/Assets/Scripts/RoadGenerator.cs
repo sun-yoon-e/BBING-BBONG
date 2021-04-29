@@ -311,7 +311,8 @@ public class RoadGenerator : MonoBehaviour
 
             if (minX + 1 < x && x < maxX - 1)
             {
-                isBuildingPlace[v + (xSize * 2) + 3] = true;
+                if (v + (xSize * 2) + 3 < (xSize + 1) * (zSize + 1))
+                    isBuildingPlace[v + (xSize * 2) + 3] = true;
                 isBuildingPlace[v - xSize] = true;
             }
             v++;
@@ -337,7 +338,8 @@ public class RoadGenerator : MonoBehaviour
 
             if (minX + 1 < x && x < maxX - 1)
             {
-                isBuildingPlace[v + (xSize * 2) + 3] = true;
+                if (v + (xSize * 2) + 3 < (xSize + 1) * (zSize + 1))
+                    isBuildingPlace[v + (xSize * 2) + 3] = true;
                 isBuildingPlace[v - xSize] = true;
             }
             v++;
