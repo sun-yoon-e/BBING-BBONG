@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class FirePizza : MonoBehaviour
 {
-    public Camera cam;
-
+    public Transform firePos;
+    public Transform targetPos;
     public GameObject pizza;
-    //public Transform firePos;
-
-    public float range = 100f;
-    public float coolTime = 10f;
+    
+    public float coolTime = 20f;
 
     private float nextTimeToFire = 0f;
 
@@ -19,7 +17,7 @@ public class FirePizza : MonoBehaviour
     {
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
-            nextTimeToFire = Time.time + 10f / coolTime;
+            nextTimeToFire = Time.time + 20f / coolTime;
             Fire();
         }
     }
@@ -27,7 +25,8 @@ public class FirePizza : MonoBehaviour
     void Fire()
     {
         GameObject pizzaObject = Instantiate(pizza);
-        pizzaObject.transform.position = cam.transform.position + cam.transform.forward;
-        pizzaObject.transform.forward = cam.transform.forward;
+        pizzaObject.transform.position = firePos.position;
+        var dir = targetPos.position - firePos.position;
+        pizzaObject.transform.forward = dir;
     }
 }

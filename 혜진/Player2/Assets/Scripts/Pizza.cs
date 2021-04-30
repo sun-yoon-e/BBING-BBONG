@@ -1,11 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Pizza : MonoBehaviour
 {
-    public float speed = 8f;
-    public float lifeTime = 2f;
+    public float speed = 20f;
+    public float lifeTime = 10f;
 
     private float lifeTimer;
     
@@ -21,6 +22,17 @@ public class Pizza : MonoBehaviour
         if (lifeTimer <= 0f)
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        Debug.Log("충돌?");
+        if (col.collider.tag == "Obstacle")
+        {
+            Debug.Log("충돌");
+            Destroy(gameObject);
+            Destroy(col.gameObject);
         }
     }
 }
