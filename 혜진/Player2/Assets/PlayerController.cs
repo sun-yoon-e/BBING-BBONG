@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 {
     public Camera cam;
     private Rigidbody rb;
+    private Animator anim;
     
     public float moveSpeed = 10.0f;
     public float rotSpeed = 10.0f;
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -37,18 +39,19 @@ public class PlayerController : MonoBehaviour
     void PlayerMove()
     {
         //플레이어 이동, 회전
-        float keyboardX = Input.GetAxis("Horizontal");
-        float keyboardY = Input.GetAxis("Vertical");
+        float keyboardX = Input.GetAxisRaw("Horizontal");
+        float keyboardY = Input.GetAxisRaw("Vertical");
 
         float movDir = keyboardY * moveSpeed * Time.deltaTime;
         float rotDir = keyboardX * rotSpeed * Time.deltaTime;
-        
+
         rb.MovePosition(rb.position + transform.forward * movDir);
         rb.MoveRotation(rb.rotation * Quaternion.Euler(Vector3.up * rotDir));
     }
 
     void CameraRotate()
     {
+        //카메라 회전 
         float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
