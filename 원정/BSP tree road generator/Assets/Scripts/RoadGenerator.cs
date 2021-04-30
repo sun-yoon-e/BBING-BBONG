@@ -23,7 +23,7 @@ public class RoadGenerator : MonoBehaviour
     int[] rightZSplit = { };
 
     public bool[] isRoad = { };
-    public bool[] isBuildingPlace = { };
+    public int[] isBuildingPlace = { };
 
     private void Awake()
     {
@@ -63,7 +63,7 @@ public class RoadGenerator : MonoBehaviour
         downXSplit = new int[100];
 
         triangles = new int[xSize * zSize * 6];
-        isBuildingPlace = new bool[(xSize + 1) * (zSize + 1)];
+        isBuildingPlace = new int[(xSize + 1) * (zSize + 1)];
         isRoad = new bool[(xSize + 1) * (zSize + 1)];
 
         splitX(40, 0, zSize);
@@ -203,7 +203,7 @@ public class RoadGenerator : MonoBehaviour
         {
             if (isRoad[i] == true)
             {
-                isBuildingPlace[i] = false;
+                isBuildingPlace[i] = 0;
             }
         }
     }
@@ -228,8 +228,8 @@ public class RoadGenerator : MonoBehaviour
 
             if (z > minZ)
             {
-                isBuildingPlace[v + 2] = true;
-                isBuildingPlace[v - 1] = true;
+                isBuildingPlace[v + 2] = (int)buildingDirection.LEFT;
+                isBuildingPlace[v - 1] = (int)buildingDirection.RIGHT;
             }
             v += xSize + 1;
             t += 6;
@@ -254,8 +254,8 @@ public class RoadGenerator : MonoBehaviour
 
             if (z > minZ + 1)
             {
-                isBuildingPlace[v + 2] = true;
-                isBuildingPlace[v - 1] = true;
+                isBuildingPlace[v + 2] = (int)buildingDirection.LEFT;
+                isBuildingPlace[v - 1] = (int)buildingDirection.RIGHT;
             }
             v += xSize + 1;
             t += 6;
@@ -284,8 +284,8 @@ public class RoadGenerator : MonoBehaviour
 
             if (z > minZ + 1)
             {
-                isBuildingPlace[v + 2] = true;
-                isBuildingPlace[v - 1] = true;
+                isBuildingPlace[v + 2] = (int)buildingDirection.LEFT;
+                isBuildingPlace[v - 1] = (int)buildingDirection.RIGHT;
             }
 
             v += xSize + 1;
@@ -311,8 +311,9 @@ public class RoadGenerator : MonoBehaviour
 
             if (minX + 1 < x && x < maxX - 1)
             {
-                isBuildingPlace[v + (xSize * 2) + 3] = true;
-                isBuildingPlace[v - xSize] = true;
+                if (v + (xSize * 2) + 3 < (xSize + 1) * (zSize + 1))
+                    isBuildingPlace[v + (xSize * 2) + 3] = (int)buildingDirection.DOWN;
+                isBuildingPlace[v - xSize] = (int)buildingDirection.UP;
             }
             v++;
             t += 6;
@@ -337,8 +338,9 @@ public class RoadGenerator : MonoBehaviour
 
             if (minX + 1 < x && x < maxX - 1)
             {
-                isBuildingPlace[v + (xSize * 2) + 3] = true;
-                isBuildingPlace[v - xSize] = true;
+                if (v + (xSize * 2) + 3 < (xSize + 1) * (zSize + 1))
+                    isBuildingPlace[v + (xSize * 2) + 3] = (int)buildingDirection.DOWN;
+                isBuildingPlace[v - xSize] = (int)buildingDirection.UP;
             }
             v++;
             t += 6;
@@ -354,4 +356,13 @@ public class RoadGenerator : MonoBehaviour
 
         mesh.RecalculateNormals();
     }
+
+    enum buildingDirection: int
+    {
+        NOTBUILDINGPLACE,
+        DOWN,
+        UP,
+        RIGHT,
+        LEFT
+    };
 }

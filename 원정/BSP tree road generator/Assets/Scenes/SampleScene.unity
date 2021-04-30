@@ -482,7 +482,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 1100
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -509,12 +509,104 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 50, y: 111.1, z: 50}
+  m_LocalPosition: {x: 500, y: 1000, z: 500}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!1 &1535173237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1535173239}
+  - component: {fileID: 1535173238}
+  m_Layer: 0
+  m_Name: Directional Light (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!108 &1535173238
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535173237}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 1
+  m_Shape: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!4 &1535173239
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535173237}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1710524066
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,6 +707,7 @@ MonoBehaviour:
   mapHeight: 10
   mapPosition: {x: 0, y: 0, z: 0}
   isRoad: 
+  isBuildingPlace: 
 --- !u!114 &1710524071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,4 +720,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b21714e5522cc468680e0878e523b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingPrefab: {fileID: 100000, guid: afb1a50d61315a441b22a007d1c0d5a2, type: 3}
+  buildingPrefab:
+  - {fileID: 100000, guid: 74978b6b36516b04b92f6ec6b3b0898d, type: 3}
+  - {fileID: 100000, guid: 2d94dc6eeb30a8b4da06c6ac961039d0, type: 3}
+  - {fileID: 100000, guid: 7170f1a798cad8241b24ac62c357fb16, type: 3}
+  - {fileID: 100000, guid: 52af65d65c7b1fe46bdee95d780157ac, type: 3}
+  - {fileID: 100000, guid: 4da0d0ffaf9076f40a1d00fc7552f70c, type: 3}
+  - {fileID: 100000, guid: 17aee72cfed4c9f4f9ef75fc4cb7d155, type: 3}
+  - {fileID: 100000, guid: 04339706bd57d0e4ca629c1c3ef52dfb, type: 3}
+  - {fileID: 100000, guid: da3aa27e16a60194ea66f90d187a3660, type: 3}
+  - {fileID: 100000, guid: dce40da241e705b4c88a201ac6f01535, type: 3}
+  - {fileID: 100000, guid: 8e1758f591c5b284fac75b39f8d04a50, type: 3}
+  - {fileID: 100000, guid: 6fb06ce08ad6f9b42ae1f5117d1f7944, type: 3}
+  - {fileID: 100000, guid: 30fba1c3c845fdf47b5228bcbf5a62ca, type: 3}
+  - {fileID: 100000, guid: 87fa912de9bd9a143a8a26511cd93987, type: 3}
+  - {fileID: 100000, guid: 5370f88a07aca8a4da7f42470d54c2c7, type: 3}
+  - {fileID: 100000, guid: c2bc3c07e48b6234b8f21751ead01420, type: 3}
+  - {fileID: 100000, guid: 2ef0797da60407348b9b34c8739ce696, type: 3}
+  - {fileID: 100000, guid: 9c7ae3da5a21607439c5b7b1b677f734, type: 3}
+  - {fileID: 100000, guid: 8ccd238123648c94f98a6b61b908ac34, type: 3}
+  - {fileID: 100000, guid: 3e562f66870da7849a59d194175db8e7, type: 3}
+  - {fileID: 100000, guid: f3dfcd08b2af5f94da73865a2d68e630, type: 3}
