@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/.idea.BSP tree road generator.iml
+/projectSettingsUpdater.xml
+/contentModel.xml
+/modules.xml
+# Datasource local storage ignored files
+/../../../../../../../../../:\Users\전혜진\BBING-BBONG\원정\BSP tree road generator\.idea\.idea.BSP tree road generator\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

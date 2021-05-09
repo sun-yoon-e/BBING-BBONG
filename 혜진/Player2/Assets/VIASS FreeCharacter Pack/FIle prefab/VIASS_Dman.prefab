@@ -862,7 +862,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4442292949824776}
-  - component: {fileID: 111863857214503350}
   m_Layer: 0
   m_Name: VIASS_Dman
   m_TagString: Untagged
@@ -886,26 +885,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!111 &111863857214503350
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1893769056011736}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 5c3f63b98162c9342800d2d845a2e7d3, type: 3}
-  m_Animations:
-  - {fileID: 7400000, guid: dd6e6df4cbc9d404487a32f64046edc3, type: 3}
-  - {fileID: 7400000, guid: ff9f545cddc6cca4abddee6cfefe9c00, type: 3}
-  - {fileID: 7400000, guid: b7cf20e3c01b7a54ea8c893226871708, type: 3}
-  - {fileID: 7400000, guid: b18e9ac39b636d84eafbb717c1cb2201, type: 3}
-  - {fileID: 7400000, guid: 5c3f63b98162c9342800d2d845a2e7d3, type: 3}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 1
 --- !u!1 &1894852224704676
 GameObject:
   m_ObjectHideFlags: 0
