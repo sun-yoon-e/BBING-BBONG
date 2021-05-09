@@ -10,8 +10,6 @@ struct xyz {
 class Client
 {
 private:
-	bool		m_connect;
-
 	int			m_id;
 	SOCKET		m_client_socket;
 
@@ -22,10 +20,9 @@ private:
 	int			m_score;
 
 public:
-	Client();
+	Client(SOCKET socket, int id);
 	~Client();
 
-	bool GetConnect() { return m_connect; }
 	int GetID() { return m_id; }
 	SOCKET GetSocket() { return m_client_socket; }
 	string GetNick() { return m_NICK; }
@@ -33,7 +30,6 @@ public:
 	xyz GetPos() { return m_client_pos; }
 	int GetScore() { return m_score; }
 
-	void SetConnect(bool connect) { m_connect = connect; }
 	void SetID(int id) { m_id = id; }
 	void SetSocket(SOCKET socket) { m_client_socket = socket; }
 	void SetNick(string nick) { m_NICK = nick; }

@@ -2,28 +2,51 @@
 
 #pragma pack (push, 1)
 
-#define SC_ENTER	0
-#define SC_LOGIN	1
-#define SC_LOGOUT	2
-//#define SC_MOVE		3
+#define SC_LOGIN	0
+#define SC_LOGOUT	1
+#define SC_SIGNUP   2 
+#define SC_MOVE		3
 #define SC_CHAT		4
 #define SC_ITEM		5
 
 #define CS_LOGIN	0
 #define CS_LOGOUT	1
-#define CS_MOVE		2
-#define CS_CHAT		3
-#define CS_CLICK	4
+#define CS_SIGNUP   2
+#define CS_MOVE		3
+#define CS_CHAT		4
+#define CS_CLICK	5
+
+struct Packet_Login {
+	BYTE type = CS_LOGIN;
+	char username[32];
+	char password[32];
+};
+
+struct Packet_Login_SC {
+	BYTE type = SC_LOGIN;
+	BYTE success;
+};
+
+struct Packet_SignUp {
+	BYTE type = CS_SIGNUP;
+	char username[32];
+	char password[32];
+};
+
+struct Packet_SignUp_SC {
+	BYTE type = SC_SIGNUP;
+	BYTE success;
+};
 
 struct sc_packet_enter {
-	BYTE size;
 	BYTE type;
+	BYTE size;
 	int id;
 };
 
 struct sc_packet_login {
-	BYTE size;
 	BYTE type;
+	BYTE size;
 	int id;
 
 	char nick[16];
@@ -31,14 +54,14 @@ struct sc_packet_login {
 };
 
 struct sc_packet_logout {
-	BYTE size;
 	BYTE type;
+	BYTE size;
 	int id;
 };
 
 struct sc_packet_move {
-	BYTE size;
 	BYTE type;
+	BYTE size;
 	int id;
 
 	float x;
@@ -47,16 +70,16 @@ struct sc_packet_move {
 };
 
 struct sc_packet_chat {
-	BYTE size;
 	BYTE type;
+	BYTE size;
 	int id;
 
 	string message;
 };
 
 struct sc_packet_item {
-	BYTE size;
 	BYTE type;
+	BYTE size;
 	int id;
 };
 

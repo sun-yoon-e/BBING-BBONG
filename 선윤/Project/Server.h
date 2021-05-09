@@ -1,15 +1,28 @@
-#pragma once
+﻿#pragma once
 #include "stdafx.h"
+
+#include "User.h"
 #include "Client.h"
+
+#include "DB.h"
+
+class Server;
+
+class ThreadArgs {
+public:
+	Server* server;
+	Client* client;
+};
 
 class Server 
 {
 private:
+	DB db;
 	SOCKET server_socket;
-	HANDLE client_thread[MAX_CLIENT];
+	vector<Client*> clients;
+	vector<HANDLE> client_threads;
 
-	static Client game_clients[MAX_CLIENT];
-	//static unordered_map<int, Client> game_clients;
+	int client_id_counter = 0;
 
 public:
 	Server();
@@ -17,7 +30,14 @@ public:
 
 	void InitServer();
 	void StartServer();
+
+
 	void LoginServer(int);
+
+	void ClientMain(Client* client);
+
+	User* ClientLogin(Packet_Login* loginPacket);
+	BOOL ClientSignUp(Packet_SignUp* signUpPacket);
 
 	void Send_Enter_Packet(int);
 	void Send_Login_Packet();
@@ -26,26 +46,38 @@ public:
 	void Send_Chat_Packet();
 	void Send_Item_Packet();
 
+	static DWORD WINAPI NewClientThread(LPVOID);
 	static DWORD WINAPI LobbyServer(LPVOID);
 
-	void err_quit(const char* msg)
+	// https://stackoverflow.com/questions/10737644/convert-const-char-to-wstring 를 참고하여 수정함
+	wstring c2ws(const char* cstr)
 	{
-		LPVOID lpMsgBuf;
-		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, WSAGetLastError(),					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
-		MessageBox(NULL, (LPCTSTR)lpMsgBuf, (LPCWSTR)msg, MB_ICONERROR);
-		LocalFree(lpMsgBuf);
+		string str(cstr);
+		int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
+		std::wstring wstrTo(size_needed, 0);
+		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
+		return wstrTo;
+	}
+
+
+
+	void err_quit(const wstring msg)
+	{
+		MessageBox(NULL, (LPCWSTR) msg.c_str(), NULL, MB_ICONERROR);
 		exit(1);
 	}
 
-	void err_display(const char* msg, int err_no)
+	void err_display(const char* msg, int err_no = 0)
 	{
-		WCHAR* lpMsgBuf;
-		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err_no, 
-					  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
 		std::cout << msg;
-		std::wcout << L"���� " << lpMsgBuf << std::endl;
-		while (true);
-		LocalFree(lpMsgBuf);
+
+		if (err_no != 0) {
+			WCHAR* lpMsgBuf;
+			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, err_no,
+				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
+			std::wcout << L"에러 " << lpMsgBuf << std::endl;
+			LocalFree(lpMsgBuf);
+		}
 	}
 
 	int recvn(SOCKET s, char* buf, int len, int flags)

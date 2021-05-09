@@ -3,6 +3,7 @@
 #pragma comment(lib, "ws2_32")
 
 #include <winsock2.h>
+#include <windows.h>
 #include <iostream>
 #include <string>
 #include <thread>
@@ -17,8 +18,10 @@ using namespace std;
 
 #define Debug			TRUE
 
-#define SERVERIP		"115.143.1.171"
 #define SERVERPORT		13531
+#define ODBC_NAME       L"SUN-Pizza"
+#define DBUSER          L"sa"
+#define DBPASSWORD      L"test1234"
 
 #define BUF_SIZE		1024
 #define MAX_BUF_SIZE	4096
