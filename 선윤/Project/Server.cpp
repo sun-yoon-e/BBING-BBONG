@@ -2,9 +2,19 @@
 #include "Server.h"
 #include "Client.h"
 
+#include "protocol.h"
+
 Server::Server() :
 	db(ODBC_NAME, DBUSER, DBPASSWORD)
 {
+	ZeroMemory(meshVertices, sizeof(meshVertices));
+	ZeroMemory(meshTriangles, sizeof(meshTriangles));
+
+	ZeroMemory(roadVertices, sizeof(roadVertices));
+	ZeroMemory(roadTriangles, sizeof(roadTriangles));
+
+	ZeroMemory(isRoad, sizeof(isRoad));
+	ZeroMemory(isBuildingPlace, sizeof(isBuildingPlace));
 }
 
 Server::~Server()
@@ -81,8 +91,7 @@ void Server::StartServer()
 		}
 
 		
-		// 새 클라이언트 ID = 카운터 + 1
-		int new_client_id = ++client_id_counter;
+		int new_client_id = clients.size();
 		cout << "New Client : " << new_client_id << std::endl;
 
 		// 클라이언트 객체 초기화하고 배열에 넣음
@@ -98,31 +107,43 @@ void Server::StartServer()
 			closesocket(new_client_socket);
 			continue;
 		}
+
+		/*
+		game_clients[new_client_id].SetNick("NONE");
+		game_clients[new_client_id].SetPW("NONE");
+		game_clients[new_client_id].SetPos(0, 0, 0);
+		game_clients[new_client_id].SetScore(0);
+		Send_Enter_Packet(new_client_id);
+
+		LoginServer(new_client_id);
+		*/
 	}
 }
 
 void Server::ClientMain(Client* client) 
 {
 	SOCKET socket = client->GetSocket();
-	BYTE buffer[MAX_PACKET_SIZE];
+	BYTE* buffer = new BYTE[MAX_PACKET_SIZE];
 
 	while (TRUE) {
 		int read = recv(socket, (char*) buffer, MAX_PACKET_SIZE, 0);
 
-		if (read == 0) {
+		if (read <= 0) {
 			break;
 		}
 
 		if (buffer[0] == CS_LOGIN) {
 			User* user = ClientLogin(reinterpret_cast<Packet_Login*>(buffer));
 
+			Packet_Login_SC* scPacket = new Packet_Login_SC;
+			scPacket->success = user != NULL;
 			if (user != NULL) {
 				cout << "user logged on: " << user->GetName() << endl;
+				scPacket->clientId = client->GetID();
 			}
 
-			Packet_Login_SC scPacket;
-			scPacket.success = user != NULL;
-			send(socket, (char*) &scPacket, sizeof(scPacket), 0);
+			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			delete scPacket;
 		}
 		if (buffer[0] == CS_SIGNUP) {
 			BOOL success = ClientSignUp(reinterpret_cast<Packet_SignUp*>(buffer));
@@ -132,13 +153,123 @@ void Server::ClientMain(Client* client)
 				cout << "new user created" << endl;
 			}
 
-			Packet_SignUp_SC scPacket;
-			scPacket.success = success;
-			send(socket, (char*) &scPacket, sizeof(scPacket), 0);
+			Packet_SignUp_SC* scPacket = new Packet_SignUp_SC;
+			scPacket->success = success;
+			send(socket, (char*) scPacket, sizeof(scPacket), 0);
+			delete scPacket;
+		}
+		if (buffer[0] == CS_MESH) {
+			Packet_Request_Mesh_SC* scPacket = new Packet_Request_Mesh_SC;
+			scPacket->ready = meshReady;
+			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
+			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
+
+			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			delete scPacket;
+		}
+		if (buffer[0] == CS_SET_MESH) {
+			if (meshReady) {
+				continue;
+			}
+			Packet_Set_Mesh* packet = reinterpret_cast<Packet_Set_Mesh*>(buffer);
+			meshReady = true;
+			memcpy(meshVertices, packet->vertices, sizeof(meshVertices));
+			memcpy(meshTriangles, packet->triangles, sizeof(meshTriangles));
+
+			Packet_Set_Mesh_SC* scPacket = new Packet_Set_Mesh_SC;
+			scPacket->ready = meshReady;
+			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
+			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
+
+			cout << sizeof(*scPacket) << endl;
+			for (int i = 0; i < clients.size(); i++) {
+				send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			}
+			delete scPacket;
+		}
+		if (buffer[0] == CS_ROAD) {
+			Packet_Request_Road_SC* scPacket = new Packet_Request_Road_SC;
+			scPacket->ready = roadReady;
+			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
+			memcpy(scPacket->triangles, roadTriangles, sizeof(roadTriangles));
+			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
+			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
+
+			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			delete scPacket;
+		}
+		if (buffer[0] == CS_SET_ROAD) {
+			if (roadReady) {
+				continue;
+			}
+			Packet_Set_Road* packet = reinterpret_cast<Packet_Set_Road*>(buffer);
+			roadReady = true;
+			memcpy(roadVertices, packet->vertices, sizeof(roadVertices));
+			memcpy(roadTriangles, packet->triangles, sizeof(roadTriangles));
+			memcpy(isRoad, packet->isRoad, sizeof(isRoad));
+			memcpy(isBuildingPlace, packet->isBuildingPlace, sizeof(isBuildingPlace));
+
+			Packet_Set_Road_SC* scPacket = new Packet_Set_Road_SC;
+			scPacket->ready = roadReady;
+			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
+			memcpy(scPacket->triangles, roadTriangles, sizeof(roadTriangles));
+			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
+			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
+
+			cout << sizeof(*scPacket) << endl;
+			for (int i = 0; i < clients.size(); i++) {
+				send(clients[i]->GetSocket(), (char*) scPacket, sizeof(*scPacket), 0);
+			}
+			delete scPacket;
+		}
+		if (buffer[0] == CS_SCORE) {
+			client->SetScore(client->GetScore() + 50);
+
+			Packet_Score_SC* scPacket = new Packet_Score_SC;
+			scPacket->players = MAX_CLIENT;
+			memset(scPacket->scores, -1, sizeof(int32_t) * MAX_CLIENT);
+
+			for (int i = 0; i < clients.size(); i++) {
+				scPacket->scores[i] = clients[i]->GetScore();
+			}
+
+			for (int i = 0; i < clients.size(); i++) {
+				send(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket), 0);
+			}
+		} 
+		if (buffer[0] == CS_MOVE) {
+			Packet_Move* packet = reinterpret_cast<Packet_Move*>(buffer);
+
+			client->SetPos(
+				packet->position.x,
+				packet->position.y,
+				packet->position.z
+			);
+			client->SetRot(
+				packet->rotation.x,
+				packet->rotation.y,
+				packet->rotation.z
+			);
+
+			Packet_Move_SC* scPacket = new Packet_Move_SC;
+			memset(scPacket->position, 0x00, sizeof(scPacket->position));
+			memset(scPacket->rotation, 0x00, sizeof(scPacket->rotation));
+			scPacket->players = MAX_CLIENT;
+
+			for (int i = 0; i < clients.size(); i++) {
+				scPacket->position[i] = clients[i]->GetPos();
+				scPacket->rotation[i] = clients[i]->GetRot();
+				//std::cout << "player " << i << ": " << scPacket->position[i].x << "," << scPacket->position[i].y << "," << scPacket->position[i].z << endl;
+			}
+
+			for (int i = 0; i < clients.size(); i++) {
+				send(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket), 0);
+			}
 		}
 	}
 
 	closesocket(socket);
+	delete buffer;
 
 	for (int i = 0; i < clients.size(); i++) {
 		if (clients[i] == client) {
@@ -149,6 +280,21 @@ void Server::ClientMain(Client* client)
 	}
 
 	cout << "disconnected : " << client->GetID() << std::endl;
+
+	if (clients.size() == 0) {
+		// 클라이언트가 0명이 되면 맵 초기화
+		ZeroMemory(meshVertices, sizeof(meshVertices));
+		ZeroMemory(meshTriangles, sizeof(meshTriangles));
+
+		ZeroMemory(roadVertices, sizeof(roadVertices));
+		ZeroMemory(roadTriangles, sizeof(roadTriangles));
+
+		ZeroMemory(isRoad, sizeof(isRoad));
+		ZeroMemory(isBuildingPlace, sizeof(isBuildingPlace));
+
+		meshReady = false;
+		roadReady = false;
+	}
 }
 
 User* Server::ClientLogin(Packet_Login* loginPacket)

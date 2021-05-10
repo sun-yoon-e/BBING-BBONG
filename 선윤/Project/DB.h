@@ -1,5 +1,6 @@
 #pragma once
 #include "stdafx.h"
+
 // https://docs.microsoft.com/en-us/sql/odbc/reference/install/odbc-header-files?view=sql-server-ver15
 #include <odbcinst.h>
 #include <sql.h>
