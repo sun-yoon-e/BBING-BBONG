@@ -48,7 +48,7 @@ public class RoadGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight;
+                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
                 vertices[i] = new Vector3(x * 10, y, z * 10);
                 ++i;
             }

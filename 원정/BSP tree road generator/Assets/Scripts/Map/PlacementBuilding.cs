@@ -4,25 +4,33 @@ using UnityEngine;
 
 public class PlacementBuilding : MonoBehaviour
 {
+    public RoadGenerator road;
     public GameObject[] buildingPrefab;
+
+    public GameObject buildingParent;
+
+    float tempXSize;
+    float tempZSize;
+
+    private void Awake()
+    {
+        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+    }
 
     private void Start()
     {
-        RoadGenerator road = GetComponent<RoadGenerator>();
+        tempXSize = 0;
+        tempZSize = 0;
 
-        int num = 0;
+        GameObject building;
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
             if (road.isBuildingPlace[i] == (int)buildingDirection.NOTBUILDINGPLACE)
                 continue;
-
             int prefab = Random.Range(0, buildingPrefab.Length);
 
             Vector3 size = buildingPrefab[prefab].GetComponent<MeshRenderer>().bounds.size;
-
-            float tempXSize = 0;
-            float tempZSize = 0;
 
             tempXSize = size.x / 12;
             if (tempXSize < 1)
@@ -32,7 +40,8 @@ public class PlacementBuilding : MonoBehaviour
 
             i += (int)tempXSize;
 
-            if (road.isBuildingPlace[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
+            if (((i+road.xSize + 1) < (road.xSize * road.zSize)) && 
+                road.isBuildingPlace[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
             {
                 tempZSize = size.x / 12;
                 if (tempZSize < 1)
@@ -46,15 +55,18 @@ public class PlacementBuilding : MonoBehaviour
                 }
             }
 
-            ++num;
             if (road.isBuildingPlace[i] == (int)buildingDirection.DOWN)
-                Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
+                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
             else if (road.isBuildingPlace[i] == (int)buildingDirection.UP)
-                Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 180, 0));
+                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 180, 0));
             else if (road.isBuildingPlace[i] == (int)buildingDirection.LEFT)
-                Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 90, 0));
+                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 90, 0));
             else if (road.isBuildingPlace[i] == (int)buildingDirection.RIGHT)
-                Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, -90, 0));
+                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, -90, 0));
+            else
+                continue;
+
+            building.transform.SetParent(buildingParent.transform);
 
             if (road.isBuildingPlace[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
             {
@@ -81,7 +93,6 @@ public class PlacementBuilding : MonoBehaviour
                 }
             }
         }
-        Debug.Log(num);
     }
 
     enum buildingDirection

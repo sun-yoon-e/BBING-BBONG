@@ -1,25 +1,31 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshCollider))]
 public class MeshGenerator : MonoBehaviour
 {
     Mesh mesh;
 
-    Vector3[] vertices;
+    public Vector3[] vertices;
     int[] triangles;
 
     public int xSize;
     public int zSize;
 
-    public float mapHeight = 2.0f;
+    public float mapHeight;
     public Vector3 mapPosition;
+
+    public int[] buildingPlace;
 
     private void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        buildingPlace = new int[(xSize + 1) * (zSize + 1)];
+        buildingPlace = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>().isBuildingPlace;
     }
 
     void Start()
@@ -31,15 +37,43 @@ public class MeshGenerator : MonoBehaviour
 
     public void CreateShape()
     {
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        float y;
 
         for (int i = 0, z = 0; z <= zSize; ++z)
         {
-            for (int x = 0; x <= xSize; ++x)
+            for (int x = 0; x <= xSize; ++x, ++i)
             {
-                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight;
+                y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
+
                 vertices[i] = new Vector3(x * 10, y, z * 10);
-                ++i;
+            }
+        }
+
+        for (int i = 0, z = 0; z <= zSize; ++z)
+        {
+            for (int x = 0; x <= xSize; ++x, ++i)
+            {
+                //if(buildingPlace[i] != 0)
+                //{
+                //    y = 5f;
+                //    vertices[i].y = y;
+                //}
+
+                //if (i > 0 && (buildingPlace[i] == 1 || buildingPlace[i] == 2))
+                //{
+                //    y = vertices[i].y;
+                //    vertices[i - 1].y = y;
+                //    vertices[i + 1].y = y;
+                //    //if (i > xSize + 1)
+                //    //{
+                //    //    vertices[i - xSize + 1].y = y;
+                //    //    vertices[i - xSize].y = y;
+                //    //    vertices[i - xSize - 1].y = y;
+                //    //}
+                //    vertices[i + xSize + 1].y = y;
+                //    vertices[i + xSize].y = y;
+                //    vertices[i + xSize - 1].y = y;
+                //}
             }
         }
     }
@@ -77,5 +111,10 @@ public class MeshGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();
+
+        MeshCollider col = GetComponent<MeshCollider>();
+        if (col == null)
+            col = gameObject.AddComponent<MeshCollider>();
+        col.sharedMesh = mesh;
     }
 }
