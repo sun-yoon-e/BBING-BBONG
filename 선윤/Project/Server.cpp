@@ -1,15 +1,20 @@
-#include "stdafx.h"
+Ôªø#include "stdafx.h"
 #include "Server.h"
 #include "Client.h"
 
-Client Server::game_clients[MAX_CLIENT];
+#include "protocol.h"
 
-Server::Server()
+Server::Server() :
+	db(ODBC_NAME, DBUSER, DBPASSWORD)
 {
-	std::wcout.imbue(std::locale("korean"));
+	ZeroMemory(meshVertices, sizeof(meshVertices));
+	ZeroMemory(meshTriangles, sizeof(meshTriangles));
 
-	InitServer();
-	StartServer();
+	ZeroMemory(roadVertices, sizeof(roadVertices));
+	ZeroMemory(roadTriangles, sizeof(roadTriangles));
+
+	ZeroMemory(isRoad, sizeof(isRoad));
+	ZeroMemory(isBuildingPlace, sizeof(isBuildingPlace));
 }
 
 Server::~Server()
@@ -19,22 +24,27 @@ Server::~Server()
 
 void Server::InitServer()
 {
-	std::wcout.imbue(std::locale("korean"));	// «—±€
+	// UTF8 Ï∂úÎ†• ÏÑ§Ï†ï
+	// http://egloos.zum.com/Lusain/v/3182581
+	SetConsoleOutputCP(CP_UTF8);
 
+	// ÏÜåÏºì Ï¥àÍ∏∞Ìôî
 	WSADATA wsa;
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) return;
 
 	server_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (server_socket == INVALID_SOCKET) err_quit("InitServer() -> socket()");
+	if (server_socket == INVALID_SOCKET) err_quit(L"InitServer() -> socket()");
 
+	// bind - Î™áÎ≤à Ìè¨Ìä∏ ÏÇ¨Ïö©Ìï†ÏßÄ Ï†ïÌï®
 	SOCKADDR_IN server_addr;
 	ZeroMemory(&server_addr, sizeof(SOCKADDR_IN));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	server_addr.sin_port = htons(SERVERPORT);
 	int ret = bind(server_socket, (SOCKADDR*)&server_addr, sizeof(server_addr));
-	if (ret == SOCKET_ERROR) err_quit("InitServer() -> bind()");
+	if (ret == SOCKET_ERROR) err_quit(L"InitServer() -> bind()");
 
+	// listen - ÌÅ¥ÎùºÏù¥Ïñ∏Ìä∏ Ï†ëÏÜç ÏàòÏã†Ìï®
 	ret = listen(server_socket, 5);
 	if (ret == SOCKET_ERROR) {
 		int err_no = WSAGetLastError();
@@ -42,12 +52,16 @@ void Server::InitServer()
 			err_display("InitServer() -> listen()", err_no);
 	}
 
-	// ≥◊¿Ã±€ æÀ∞Ì∏Æ¡Ú
+	// ÎÑ§Ïù¥Í∏Ä ÏïåÍ≥†Î¶¨Ï¶ò
 	int opt = TRUE;
 	setsockopt(server_socket, IPPROTO_TCP, TCP_NODELAY, (const char*)&opt, sizeof(opt));
 
-	for (int i = 0; i < MAX_CLIENT; ++i)
-		game_clients[i].SetConnect(false);
+	std::cout << "Connecting DB..." << std::endl;
+	int dbretcode = db.connect();
+	if (!(dbretcode == SQL_SUCCESS || dbretcode == SQL_SUCCESS_WITH_INFO)) {
+		err_quit(L"DB Connection failure (" + to_wstring(dbretcode) + L")");
+	}
+	std::cout << "DB Connected!" << std::endl;
 
 	std::cout << "Server Init OK!" << std::endl;
 }
@@ -62,99 +76,249 @@ void Server::StartServer()
 	int addrlen = sizeof(client_addr);
 
 	while (true) {
+		// ÌÅ¥ÎùºÏù¥Ïñ∏Ìä∏ÌïúÌÖåÏÑú Ï†ëÏÜçÏùÑ Î∞õÎäîÎã§
 		SOCKET new_client_socket = accept(server_socket, (SOCKADDR*)&client_addr, &addrlen);
 		if (new_client_socket == INVALID_SOCKET) {
 			int err_no = WSAGetLastError();
 			err_display("StartServer() -> accept()", err_no);
 		}
 
-		int new_client_id = -1;
-		for (int i = 0; i < MAX_CLIENT; ++i) {
-			if (game_clients[i].GetConnect() == false) {
-				game_clients[i].SetConnect(true);
-				new_client_id = i;
-#if (Debug == TRUE)
-				cout << "New Client : " << new_client_id << endl;
-#endif
-				break;
-			}
-		}
-
-		if (new_client_id == -1) {
-#if (Debug == TRUE)
-			cout << "Max Client!" << endl;
-#endif
+		// ÌÅ¥ÎùºÏù¥Ïñ∏Ìä∏ ÏàòÍ∞Ä ÎßéÏúºÎ©¥ Ï†ëÏÜçÏùÑ Í±∞Î∂ÄÌïúÎã§
+		if (clients.size() >= MAX_CLIENT) {
+			err_display("Max Client!");
 			closesocket(new_client_socket);
 			continue;
 		}
 
-		// InitClient
-		game_clients[new_client_id].SetID(new_client_id);
-		game_clients[new_client_id].SetConnect(true);
-		game_clients[new_client_id].SetSocket(new_client_socket);
-		/*game_clients[new_client_id].SetNick("NONE");
+		
+		int new_client_id = clients.size();
+		cout << "New Client : " << new_client_id << std::endl;
+
+		// ÌÅ¥ÎùºÏù¥Ïñ∏Ìä∏ Í∞ùÏ≤¥ Ï¥àÍ∏∞ÌôîÌïòÍ≥† Î∞∞Ïó¥Ïóê ÎÑ£Ïùå
+		Client* new_client = new Client(new_client_socket, new_client_id);
+		clients.push_back(new_client);
+
+		ThreadArgs* args = new ThreadArgs;
+		args->server = this;
+		args->client = new_client;
+
+		HANDLE thread = CreateThread(NULL, 0, this->NewClientThread, (LPVOID)args, 0, NULL);
+		if (thread == NULL) {
+			closesocket(new_client_socket);
+			continue;
+		}
+
+		/*
+		game_clients[new_client_id].SetNick("NONE");
 		game_clients[new_client_id].SetPW("NONE");
 		game_clients[new_client_id].SetPos(0, 0, 0);
-		game_clients[new_client_id].SetScore(0);*/
+		game_clients[new_client_id].SetScore(0);
 		Send_Enter_Packet(new_client_id);
 
 		LoginServer(new_client_id);
-
-		// Ω∫∑πµÂ
-		/*client_thread[new_client_id] = CreateThread(NULL, 0, this->LobbyServer, (LPVOID)game_clients[new_client_id].GetID(), 0, NULL);
-		if (client_thread[new_client_id] == NULL) closesocket(game_clients[new_client_id].GetSocket());
-		else CloseHandle(client_thread[new_client_id]);*/
+		*/
 	}
 }
 
-void Server::LoginServer(int id)
+void Server::ClientMain(Client* client) 
 {
-	// æ∆¿Ãµ ∆–Ω∫øˆµÂ ≈¨∂Û¿Ãæ∆ÆøÕ ∆–≈∂ ¡÷∞Ìπﬁ±‚
-	cs_packet_login_nk login_packet_nk;
-	ZeroMemory(&login_packet_nk, sizeof(cs_packet_login_nk));
-	recv(game_clients[id].GetSocket(), (char*)&login_packet_nk, sizeof(cs_packet_login_nk), 0);
-	cout << "id : " << login_packet_nk.id << ", nick : " << login_packet_nk.nick << endl;
+	SOCKET socket = client->GetSocket();
+	BYTE* buffer = new BYTE[MAX_PACKET_SIZE];
 
-	cs_packet_login_pw login_packet_pw;
-	ZeroMemory(&login_packet_pw, sizeof(cs_packet_login_pw));
-	recv(game_clients[id].GetSocket(), (char*)&login_packet_pw, sizeof(cs_packet_login_pw), 0);
-	cout << "id : " << login_packet_pw.id << ", pw : " << login_packet_pw.pw << endl;
+	while (TRUE) {
+		int read = recv(socket, (char*) buffer, MAX_PACKET_SIZE, 0);
 
-	// √ﬂ∞°«“ ∞Õ : DBº≠πˆ ø¨µø«ÿº≠ ¡§∫∏ »Æ¿Œ«œ±‚
+		if (read <= 0) {
+			break;
+		}
 
-	// ∑Œ±◊¿Œ øœ∑·«œ∏È ∫¸¡Æ≥™∞°±‚
+		if (buffer[0] == CS_LOGIN) {
+			User* user = ClientLogin(reinterpret_cast<Packet_Login*>(buffer));
+
+			Packet_Login_SC* scPacket = new Packet_Login_SC;
+			scPacket->success = user != NULL;
+			if (user != NULL) {
+				cout << "user logged on: " << user->GetName() << endl;
+				scPacket->clientId = client->GetID();
+			}
+
+			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			delete scPacket;
+		}
+		if (buffer[0] == CS_SIGNUP) {
+			BOOL success = ClientSignUp(reinterpret_cast<Packet_SignUp*>(buffer));
+
+
+			if (success) {
+				cout << "new user created" << endl;
+			}
+
+			Packet_SignUp_SC* scPacket = new Packet_SignUp_SC;
+			scPacket->success = success;
+			send(socket, (char*) scPacket, sizeof(scPacket), 0);
+			delete scPacket;
+		}
+		if (buffer[0] == CS_MESH) {
+			Packet_Request_Mesh_SC* scPacket = new Packet_Request_Mesh_SC;
+			scPacket->ready = meshReady;
+			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
+			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
+
+			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			delete scPacket;
+		}
+		if (buffer[0] == CS_SET_MESH) {
+			if (meshReady) {
+				continue;
+			}
+			Packet_Set_Mesh* packet = reinterpret_cast<Packet_Set_Mesh*>(buffer);
+			meshReady = true;
+			memcpy(meshVertices, packet->vertices, sizeof(meshVertices));
+			memcpy(meshTriangles, packet->triangles, sizeof(meshTriangles));
+
+			Packet_Set_Mesh_SC* scPacket = new Packet_Set_Mesh_SC;
+			scPacket->ready = meshReady;
+			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
+			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
+
+			cout << sizeof(*scPacket) << endl;
+			for (int i = 0; i < clients.size(); i++) {
+				send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			}
+			delete scPacket;
+		}
+		if (buffer[0] == CS_ROAD) {
+			Packet_Request_Road_SC* scPacket = new Packet_Request_Road_SC;
+			scPacket->ready = roadReady;
+			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
+			memcpy(scPacket->triangles, roadTriangles, sizeof(roadTriangles));
+			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
+			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
+
+			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
+			delete scPacket;
+		}
+		if (buffer[0] == CS_SET_ROAD) {
+			if (roadReady) {
+				continue;
+			}
+			Packet_Set_Road* packet = reinterpret_cast<Packet_Set_Road*>(buffer);
+			roadReady = true;
+			memcpy(roadVertices, packet->vertices, sizeof(roadVertices));
+			memcpy(roadTriangles, packet->triangles, sizeof(roadTriangles));
+			memcpy(isRoad, packet->isRoad, sizeof(isRoad));
+			memcpy(isBuildingPlace, packet->isBuildingPlace, sizeof(isBuildingPlace));
+
+			Packet_Set_Road_SC* scPacket = new Packet_Set_Road_SC;
+			scPacket->ready = roadReady;
+			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
+			memcpy(scPacket->triangles, roadTriangles, sizeof(roadTriangles));
+			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
+			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
+
+			cout << sizeof(*scPacket) << endl;
+			for (int i = 0; i < clients.size(); i++) {
+				send(clients[i]->GetSocket(), (char*) scPacket, sizeof(*scPacket), 0);
+			}
+			delete scPacket;
+		}
+		if (buffer[0] == CS_SCORE) {
+			client->SetScore(client->GetScore() + 50);
+
+			Packet_Score_SC* scPacket = new Packet_Score_SC;
+			scPacket->players = MAX_CLIENT;
+			memset(scPacket->scores, -1, sizeof(int32_t) * MAX_CLIENT);
+
+			for (int i = 0; i < clients.size(); i++) {
+				scPacket->scores[i] = clients[i]->GetScore();
+			}
+
+			for (int i = 0; i < clients.size(); i++) {
+				send(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket), 0);
+			}
+		} 
+		if (buffer[0] == CS_MOVE) {
+			Packet_Move* packet = reinterpret_cast<Packet_Move*>(buffer);
+
+			client->SetPos(
+				packet->position.x,
+				packet->position.y,
+				packet->position.z
+			);
+			client->SetRot(
+				packet->rotation.x,
+				packet->rotation.y,
+				packet->rotation.z
+			);
+
+			Packet_Move_SC* scPacket = new Packet_Move_SC;
+			memset(scPacket->position, 0x00, sizeof(scPacket->position));
+			memset(scPacket->rotation, 0x00, sizeof(scPacket->rotation));
+			scPacket->players = MAX_CLIENT;
+
+			for (int i = 0; i < clients.size(); i++) {
+				scPacket->position[i] = clients[i]->GetPos();
+				scPacket->rotation[i] = clients[i]->GetRot();
+				//std::cout << "player " << i << ": " << scPacket->position[i].x << "," << scPacket->position[i].y << "," << scPacket->position[i].z << endl;
+			}
+
+			for (int i = 0; i < clients.size(); i++) {
+				send(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket), 0);
+			}
+		}
+	}
+
+	closesocket(socket);
+	delete buffer;
+
+	for (int i = 0; i < clients.size(); i++) {
+		if (clients[i] == client) {
+			// ÌÅ¥ÎùºÏù¥Ïñ∏Ìä∏ Î™©Î°ùÏóêÏÑú ÏßÄÏõÅÎãàÎã§
+			// https://www.cplusplus.com/reference/vector/vector/erase/
+			clients.erase(clients.begin() + i);
+		}
+	}
+
+	cout << "disconnected : " << client->GetID() << std::endl;
+
+	if (clients.size() == 0) {
+		// ÌÅ¥ÎùºÏù¥Ïñ∏Ìä∏Í∞Ä 0Î™ÖÏù¥ ÎêòÎ©¥ Îßµ Ï¥àÍ∏∞Ìôî
+		ZeroMemory(meshVertices, sizeof(meshVertices));
+		ZeroMemory(meshTriangles, sizeof(meshTriangles));
+
+		ZeroMemory(roadVertices, sizeof(roadVertices));
+		ZeroMemory(roadTriangles, sizeof(roadTriangles));
+
+		ZeroMemory(isRoad, sizeof(isRoad));
+		ZeroMemory(isBuildingPlace, sizeof(isBuildingPlace));
+
+		meshReady = false;
+		roadReady = false;
+	}
 }
 
-void Server::Send_Enter_Packet(int id)
+User* Server::ClientLogin(Packet_Login* loginPacket)
 {
-	sc_packet_enter enter_packet;
-	ZeroMemory(&enter_packet, sizeof(sc_packet_enter));
-
-	enter_packet.id = id;
-	enter_packet.type = SC_ENTER;
-	enter_packet.size = sizeof(sc_packet_enter);
-
-	int ret = send(game_clients[id].GetSocket(), (char*)&enter_packet, sizeof(sc_packet_enter), 0);
-	if (ret == SOCKET_ERROR) {
-		int err_no = WSAGetLastError();
-		if (ERROR_IO_PENDING != err_no)
-			err_display("Send_Enter_Packet() -> send()", err_no);
-	}
-	//cout << "send_enter_packet OK" << endl;
+	return db.login(c2ws(loginPacket->username), c2ws(loginPacket->password));
 }
 
-DWORD __stdcall Server::LobbyServer(LPVOID arg)
+BOOL Server::ClientSignUp(Packet_SignUp* signUpPacket)
 {
-	int id = reinterpret_cast<int>(arg);
-
-	SOCKADDR_IN addr;
-	int addrlen = sizeof(addr);
-	getpeername(game_clients[id].GetSocket(), (SOCKADDR*)&addr, &addrlen);
-
-	bool Login = false;
-	while (!Login) {
-
+	int retcode = db.signup(c2ws(signUpPacket->username), c2ws(signUpPacket->password));
+	std::cout << retcode << std::endl;
+	if (retcode == SQL_SUCCESS) {
+		return TRUE;
 	}
+	else {
+		std::cout << "signup failed: " << retcode << std::endl;
+		return FALSE;
+	}
+}
+
+DWORD WINAPI Server::NewClientThread(LPVOID args) 
+{
+	ThreadArgs* thread_args = reinterpret_cast<ThreadArgs*>(args);
+	thread_args->server->ClientMain(thread_args->client);
 
 	return 0;
 }
