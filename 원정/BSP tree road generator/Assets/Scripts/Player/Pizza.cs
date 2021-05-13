@@ -24,15 +24,13 @@ public class Pizza : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     private void OnCollisionEnter(Collision col)
     {
-        Debug.Log("충돌?");
-        if (col.collider.tag == "Obstacle")
+        if (col.collider.tag == "Door"
+            || col.collider.tag == "buildingBoxCollider"
+            || col.collider.tag == "map")
         {
-            Debug.Log("충돌");
             Destroy(gameObject);
-            Destroy(col.gameObject);
         }
     }
 }

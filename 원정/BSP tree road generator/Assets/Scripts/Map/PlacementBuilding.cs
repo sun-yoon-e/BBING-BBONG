@@ -78,8 +78,8 @@ public class PlacementBuilding : MonoBehaviour
 
                 i += (int)tempXSize;
             }
-
-            if (road.isBuildingPlace[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
+            if (((i + road.xSize + 1) < (road.xSize * road.zSize)) &&
+                road.isBuildingPlace[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
             {
                 tempZSize = size.x / 12;
                 if (tempZSize < 1)
@@ -92,6 +92,10 @@ public class PlacementBuilding : MonoBehaviour
                     road.isBuildingPlace[i + road.xSize + 1] = (int)buildingDirection.NOTBUILDINGPLACE;
                 }
             }
+            
+            building.AddComponent<BoxCollider>();
+            BoxCollider col = building.GetComponent<BoxCollider>();
+            col.tag = "buildingBoxCollider";
         }
     }
 
@@ -101,6 +105,7 @@ public class PlacementBuilding : MonoBehaviour
         DOWN,
         UP,
         RIGHT,
-        LEFT
+        LEFT,
+        PIZZABUILDING
     };
 }

@@ -8,7 +8,6 @@ public class FirePizza : MonoBehaviour
     public Transform firePos;
     public Transform targetPos;
     public GameObject pizza;
-    Animator anim;
 
     public float coolTime = 20f;
 
@@ -20,8 +19,6 @@ public class FirePizza : MonoBehaviour
         {
             nextTimeToFire = Time.time + 20f / coolTime;
             Fire();
-
-           // anim.SetBool("isFire", true);
         }
     }
 

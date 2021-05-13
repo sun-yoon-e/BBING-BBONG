@@ -210,8 +210,9 @@ public class RoadGenerator : MonoBehaviour
 
     void splitX(int minX, int minZ, int maxZ)
     {
-        xSplit = Random.Range(minX, xSize - minX);
+        //xSplit = Random.Range(minX, xSize - minX);
 
+        xSplit = xSize / 2;
         int v = xSplit;
 
         for (int z = minZ; z < maxZ; ++z)
@@ -363,6 +364,7 @@ public class RoadGenerator : MonoBehaviour
         DOWN,
         UP,
         RIGHT,
-        LEFT
+        LEFT,
+        PIZZABUILDING
     };
 }

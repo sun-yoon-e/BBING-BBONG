@@ -372,7 +372,7 @@ GameObject:
   - component: {fileID: 783582557}
   m_Layer: 0
   m_Name: MapGenerator
-  m_TagString: Untagged
+  m_TagString: map
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -985,8 +985,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
-  m_Center: {x: 0, y: 0.3, z: 0.05}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0.56, z: 0.05}
 --- !u!54 &1711335154
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1055,6 +1055,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1982610959}
   - component: {fileID: 1982610960}
+  - component: {fileID: 1982610961}
+  - component: {fileID: 1982610962}
   m_Layer: 0
   m_Name: BuildingGenerator
   m_TagString: Untagged
@@ -1083,7 +1085,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1982610958}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 25b21714e5522cc468680e0878e523b0, type: 3}
   m_Name: 
@@ -1111,6 +1113,36 @@ MonoBehaviour:
   - {fileID: 100000, guid: 3e562f66870da7849a59d194175db8e7, type: 3}
   - {fileID: 100000, guid: f3dfcd08b2af5f94da73865a2d68e630, type: 3}
   buildingParent: {fileID: 1982610958}
+--- !u!114 &1982610961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982610958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25b21714e5522cc468680e0878e523b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  road: {fileID: 1710524070}
+  buildingPrefab:
+  - {fileID: 100000, guid: 74978b6b36516b04b92f6ec6b3b0898d, type: 3}
+  buildingParent: {fileID: 1982610958}
+--- !u!114 &1982610962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982610958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0865110b69b6e004480d47ba2c63eb50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pizzaBuildingPrefab: {fileID: 100000, guid: 601b00ca0b9de0247beae089ec7e640f, type: 3}
+  road: {fileID: 1710524070}
 --- !u!1 &2000955011
 GameObject:
   m_ObjectHideFlags: 0
