@@ -49,10 +49,7 @@ public class PlacementBuilding : MonoBehaviour
                 else if (tempZSize >= 2)
                     tempZSize = 1.0f;
 
-                for (int j = 0; j < (int)tempZSize; ++j)
-                {
-                    road.isBuildingPlace[i + (road.xSize + 1) * j] = (int)buildingDirection.NOTBUILDINGPLACE;
-                }
+                road.isBuildingPlace[i + (road.xSize + 1)] = (int)buildingDirection.NOTBUILDINGPLACE;
             }
 
             if (road.isBuildingPlace[i] == (int)buildingDirection.DOWN)
