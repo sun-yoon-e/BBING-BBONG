@@ -21,21 +21,25 @@ public class PlacementPizza : MonoBehaviour
         {
             Instantiate(pizzaBuildingPrefab, road.vertices[xSize * zSize / 2 + 2 + xSize], Quaternion.Euler(0, 0, 0));
             road.isBuildingPlace[(xSize * zSize) / 2 + 2 + xSize] = 5;
+            road.isBuildingPlace[(xSize * zSize) / 2 + 1] = 0;
         }
         else if (road.isRoad[(xSize * zSize) / 2 - 1 + xSize] == false)
         {
             Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 1 + xSize], Quaternion.Euler(0, 180, 0));
             road.isBuildingPlace[(xSize * zSize) / 2 - 1 + xSize] = 5;
+            road.isBuildingPlace[(xSize * zSize) / 2 - 2] = 0;
         }
         else if (road.isRoad[(xSize * zSize) / 2 + 1] == false)
         {
             Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 1], Quaternion.Euler(0, 0, 0));
             road.isBuildingPlace[(xSize * zSize) / 2 + 1] = 5;
+            road.isBuildingPlace[(xSize * zSize) / 2 - xSize] = 0;
         }
         else if (road.isRoad[(xSize * zSize) / 2 - 2] == false)
         {
             Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 2], Quaternion.Euler(0, 180, 0));
             road.isBuildingPlace[(xSize * zSize) / 2 - 2] = 5;
+            road.isBuildingPlace[(xSize * zSize) / 2 - 3 - xSize] = 0;
         }
     }
 }
