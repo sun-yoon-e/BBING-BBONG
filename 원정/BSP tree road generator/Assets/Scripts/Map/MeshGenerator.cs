@@ -32,7 +32,7 @@ public class MeshGenerator : MonoBehaviour
     {
         CreateShape();
         CreateTriangle();
-        UpdateMesh();
+        //UpdateMesh();
     }
 
     public void CreateShape()
@@ -103,7 +103,7 @@ public class MeshGenerator : MonoBehaviour
         }
     }
 
-    void UpdateMesh()
+    public void UpdateMesh()
     {
         mesh.Clear();
 

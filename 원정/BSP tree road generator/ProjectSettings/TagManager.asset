@@ -9,6 +9,7 @@ TagManager:
   - Pizza
   - map
   - buildingBoxCollider
+  - PizzaStore
   layers:
   - Default
   - TransparentFX

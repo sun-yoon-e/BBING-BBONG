@@ -25,12 +25,17 @@ public class RoadGenerator : MonoBehaviour
     public bool[] isRoad = { };
     public int[] isBuildingPlace = { };
 
+    MeshGenerator map;
+
     private void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+
     }
 
     void Start()
@@ -348,7 +353,7 @@ public class RoadGenerator : MonoBehaviour
         }
     }
 
-    void UpdateMesh()
+    public void UpdateMesh()
     {
         mesh.Clear();
 
@@ -356,6 +361,11 @@ public class RoadGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();
+    }
+
+    public void RefreshRoadVertices()
+    {
+        vertices = map.vertices;
     }
 
     enum buildingDirection: int

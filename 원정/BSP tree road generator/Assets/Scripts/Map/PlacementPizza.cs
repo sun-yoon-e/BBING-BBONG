@@ -5,11 +5,13 @@ using UnityEngine;
 public class PlacementPizza : MonoBehaviour
 {
     public GameObject pizzaBuildingPrefab;
-    public RoadGenerator road;
+    RoadGenerator road;
+    MeshGenerator map;
 
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
     }
 
     private void Start()
@@ -51,6 +53,8 @@ public class PlacementPizza : MonoBehaviour
         pizzaStore.AddComponent<BoxCollider>();
         BoxCollider col = pizzaStore.GetComponent<BoxCollider>();
         col.tag = "PizzaStore";
+
+        //map.UpdateMesh();
     }
     
     void makeNotBuildingPlace(int place)
@@ -64,8 +68,24 @@ public class PlacementPizza : MonoBehaviour
         road.isBuildingPlace[place - road.xSize] = 0;
         road.isBuildingPlace[place - road.xSize - 2] = 0;
 
+        road.isBuildingPlace[place + road.xSize] = 0;
         road.isBuildingPlace[place + road.xSize + 1] = 0;
         road.isBuildingPlace[place + road.xSize + 2] = 0;
+
+
+        map.vertices[place - 1].y = map.vertices[place].y;
+        map.vertices[place + 1].y = map.vertices[place].y;
+
+        map.vertices[place - road.xSize - 1].y = map.vertices[place].y;
+        map.vertices[place - road.xSize].y = map.vertices[place].y;
+        map.vertices[place - road.xSize - 2].y = map.vertices[place].y;
+
+        map.vertices[place + road.xSize].y = map.vertices[place].y;
+        map.vertices[place + road.xSize + 1].y = map.vertices[place].y;
+        map.vertices[place + road.xSize + 2].y = map.vertices[place].y;
     }
+    
+    
+    
 
 }

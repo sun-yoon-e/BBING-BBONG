@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlacementBuilding : MonoBehaviour
 {
     public RoadGenerator road;
-    public GameObject[] buildingPrefab;
+    public MeshGenerator map;
 
+    public GameObject[] buildingPrefab;
     public GameObject buildingParent;
 
     float tempXSize;
@@ -15,6 +16,7 @@ public class PlacementBuilding : MonoBehaviour
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
     }
 
     private void Start()
@@ -28,8 +30,8 @@ public class PlacementBuilding : MonoBehaviour
         {
             if (road.isBuildingPlace[i] == (int)buildingDirection.NOTBUILDINGPLACE)
                 continue;
-            int prefab = Random.Range(0, buildingPrefab.Length);
 
+            int prefab = Random.Range(0, buildingPrefab.Length);
             Vector3 size = buildingPrefab[prefab].GetComponent<MeshRenderer>().bounds.size;
 
             tempXSize = size.x / 12;
@@ -63,6 +65,8 @@ public class PlacementBuilding : MonoBehaviour
             else
                 continue;
 
+            makeNotBuildingPlace(i);
+
             building.transform.SetParent(buildingParent.transform);
 
             if (road.isBuildingPlace[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
@@ -94,7 +98,40 @@ public class PlacementBuilding : MonoBehaviour
             BoxCollider col = building.GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
         }
+
+        map.UpdateMesh();
+        road.RefreshRoadVertices();
+        road.UpdateMesh();
     }
+
+    void makeNotBuildingPlace(int place)
+    {
+        //road.isBuildingPlace[place] = 5;
+
+        road.isBuildingPlace[place - 1] = 0;
+        road.isBuildingPlace[place + 1] = 0;
+
+        road.isBuildingPlace[place - road.xSize - 1] = 0;
+        road.isBuildingPlace[place - road.xSize] = 0;
+        road.isBuildingPlace[place - road.xSize - 2] = 0;
+
+        road.isBuildingPlace[place + road.xSize] = 0;
+        road.isBuildingPlace[place + road.xSize + 1] = 0;
+        road.isBuildingPlace[place + road.xSize + 2] = 0;
+
+
+        map.vertices[place - 1].y = map.vertices[place].y;
+        map.vertices[place + 1].y = map.vertices[place].y;
+
+        map.vertices[place - road.xSize - 1].y = map.vertices[place].y;
+        map.vertices[place - road.xSize].y = map.vertices[place].y;
+        map.vertices[place - road.xSize - 2].y = map.vertices[place].y;
+
+        map.vertices[place + road.xSize].y = map.vertices[place].y;
+        map.vertices[place + road.xSize + 1].y = map.vertices[place].y;
+        map.vertices[place + road.xSize + 2].y = map.vertices[place].y;
+    }
+
 
     enum buildingDirection
     {
