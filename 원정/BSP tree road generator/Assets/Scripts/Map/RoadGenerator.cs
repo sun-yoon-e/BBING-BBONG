@@ -48,7 +48,7 @@ public class RoadGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight;
+                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
                 vertices[i] = new Vector3(x * 10, y, z * 10);
                 ++i;
             }
@@ -210,8 +210,9 @@ public class RoadGenerator : MonoBehaviour
 
     void splitX(int minX, int minZ, int maxZ)
     {
-        xSplit = Random.Range(minX, xSize - minX);
+        //xSplit = Random.Range(minX, xSize - minX);
 
+        xSplit = xSize / 2;
         int v = xSplit;
 
         for (int z = minZ; z < maxZ; ++z)
@@ -363,6 +364,7 @@ public class RoadGenerator : MonoBehaviour
         DOWN,
         UP,
         RIGHT,
-        LEFT
+        LEFT,
+        PIZZABUILDING
     };
 }
