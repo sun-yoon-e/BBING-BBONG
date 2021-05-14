@@ -42,23 +42,12 @@ public:
 	void InitServer();
 	void StartServer();
 
-
-	void LoginServer(int);
-
 	void ClientMain(Client* client);
 
 	User* ClientLogin(Packet_Login* loginPacket);
 	BOOL ClientSignUp(Packet_SignUp* signUpPacket);
 
-	void Send_Enter_Packet(int);
-	void Send_Login_Packet();
-	void Send_Logout_Packet();
-	void Send_Move_Packet();
-	void Send_Chat_Packet();
-	void Send_Item_Packet();
-
 	static DWORD WINAPI NewClientThread(LPVOID);
-	static DWORD WINAPI LobbyServer(LPVOID);
 
 	// https://stackoverflow.com/questions/10737644/convert-const-char-to-wstring 를 참고하여 수정함
 	wstring c2ws(const char* cstr)
@@ -69,8 +58,6 @@ public:
 		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
 		return wstrTo;
 	}
-
-
 
 	void err_quit(const wstring msg)
 	{

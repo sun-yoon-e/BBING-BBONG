@@ -89,7 +89,6 @@ void Server::StartServer()
 			closesocket(new_client_socket);
 			continue;
 		}
-
 		
 		int new_client_id = clients.size();
 		cout << "New Client : " << new_client_id << std::endl;
@@ -107,16 +106,6 @@ void Server::StartServer()
 			closesocket(new_client_socket);
 			continue;
 		}
-
-		/*
-		game_clients[new_client_id].SetNick("NONE");
-		game_clients[new_client_id].SetPW("NONE");
-		game_clients[new_client_id].SetPos(0, 0, 0);
-		game_clients[new_client_id].SetScore(0);
-		Send_Enter_Packet(new_client_id);
-
-		LoginServer(new_client_id);
-		*/
 	}
 }
 
@@ -147,7 +136,6 @@ void Server::ClientMain(Client* client)
 		}
 		if (buffer[0] == CS_SIGNUP) {
 			BOOL success = ClientSignUp(reinterpret_cast<Packet_SignUp*>(buffer));
-
 
 			if (success) {
 				cout << "new user created" << endl;
@@ -181,7 +169,7 @@ void Server::ClientMain(Client* client)
 			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
 			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
 
-			cout << sizeof(*scPacket) << endl;
+			//cout << sizeof(*scPacket) << endl;
 			for (int i = 0; i < clients.size(); i++) {
 				send(socket, (char*) scPacket, sizeof(*scPacket), 0);
 			}
@@ -216,7 +204,7 @@ void Server::ClientMain(Client* client)
 			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
 			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
 
-			cout << sizeof(*scPacket) << endl;
+			//cout << sizeof(*scPacket) << endl;
 			for (int i = 0; i < clients.size(); i++) {
 				send(clients[i]->GetSocket(), (char*) scPacket, sizeof(*scPacket), 0);
 			}
