@@ -38,7 +38,6 @@ public:
 	/* hType Type of handle (SQL_HANDLE_STMT, SQL_HANDLE_ENV, SQL_HANDLE_DBC)
 	/* RetCode Return code of failing command
 	/************************************************************************/
-
 	void HandleDiagnosticRecord(SQLHANDLE hHandle, SQLSMALLINT hType, RETCODE RetCode)
 	{
 		SQLSMALLINT iRec = 0;

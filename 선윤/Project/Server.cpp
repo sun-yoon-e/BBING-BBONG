@@ -129,6 +129,19 @@ void Server::ClientMain(Client* client)
 			if (user != NULL) {
 				cout << "user logged on: " << user->GetName() << endl;
 				scPacket->clientId = client->GetID();
+				client->SetNick(user->GetName());
+
+				if (CanStartGame()) {
+					isGameStarted = true;
+					gameStartedAt = time(NULL);
+
+					Packet_GameState_SC* packet = new Packet_GameState_SC;
+					packet->state = 1;
+					for (int i = 0; i < clients.size(); i++) {
+						send(clients[i]->GetSocket(), (char*)packet, sizeof(*packet), 0);
+					}
+					delete packet;
+				}
 			}
 
 			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
@@ -143,7 +156,7 @@ void Server::ClientMain(Client* client)
 
 			Packet_SignUp_SC* scPacket = new Packet_SignUp_SC;
 			scPacket->success = success;
-			send(socket, (char*) scPacket, sizeof(scPacket), 0);
+			send(socket, (char*) scPacket, sizeof(*scPacket), 0);
 			delete scPacket;
 		}
 		if (buffer[0] == CS_MESH) {
@@ -169,7 +182,9 @@ void Server::ClientMain(Client* client)
 			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
 			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
 
-			//cout << sizeof(*scPacket) << endl;
+#if (Debug == TRUE)
+				cout << sizeof(*scPacket) << endl;
+#endif
 			for (int i = 0; i < clients.size(); i++) {
 				send(socket, (char*) scPacket, sizeof(*scPacket), 0);
 			}
@@ -204,13 +219,19 @@ void Server::ClientMain(Client* client)
 			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
 			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
 
-			//cout << sizeof(*scPacket) << endl;
+#if (Debug == TRUE)
+			cout << sizeof(*scPacket) << endl;
+#endif
 			for (int i = 0; i < clients.size(); i++) {
 				send(clients[i]->GetSocket(), (char*) scPacket, sizeof(*scPacket), 0);
 			}
 			delete scPacket;
 		}
 		if (buffer[0] == CS_SCORE) {
+			if (!isGameStarted) {
+				continue;
+			}
+
 			client->SetScore(client->GetScore() + 50);
 
 			Packet_Score_SC* scPacket = new Packet_Score_SC;
@@ -247,12 +268,41 @@ void Server::ClientMain(Client* client)
 			for (int i = 0; i < clients.size(); i++) {
 				scPacket->position[i] = clients[i]->GetPos();
 				scPacket->rotation[i] = clients[i]->GetRot();
-				//std::cout << "player " << i << ": " << scPacket->position[i].x << "," << scPacket->position[i].y << "," << scPacket->position[i].z << endl;
+				// std::cout << "player " << i << ": " << scPacket->position[i].x << "," << scPacket->position[i].y << "," << scPacket->position[i].z << endl;
 			}
 
 			for (int i = 0; i < clients.size(); i++) {
 				send(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket), 0);
 			}
+
+			// 타이머 시간에 따라 '180'위치의 숫자 초 단위로 조절
+			if (isGameStarted && (time(NULL) - gameStartedAt >= 180)) {
+				cout << "END GAME" << endl;
+				if (_mutex.try_lock()) {
+					isGameStarted = false;
+
+					Packet_GameState_SC* packet = new Packet_GameState_SC;
+					packet->state = 0;
+					for (int i = 0; i < clients.size(); i++) {
+						send(clients[i]->GetSocket(), (char*)packet, sizeof(*packet), 0);
+					}
+					delete packet;
+
+					_mutex.unlock();
+				}
+			}
+		}
+		if (buffer[0] == CS_FIRE) {
+			Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
+
+			Packet_Fire_SC* scPacket = new Packet_Fire_SC;
+			scPacket->position = packet->position;
+			scPacket->targetPosition = packet->targetPosition;
+
+			for (int i = 0; i < clients.size(); i++) {
+				send(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket), 0);
+			}
+			delete scPacket;
 		}
 	}
 
@@ -301,6 +351,24 @@ BOOL Server::ClientSignUp(Packet_SignUp* signUpPacket)
 		std::cout << "signup failed: " << retcode << std::endl;
 		return FALSE;
 	}
+}
+
+BOOL Server::CanStartGame()
+{
+	if (clients.size() != MAX_CLIENT) {
+		return false;
+	}
+
+	BOOL flag = true;
+
+	for (int i = 0; i < clients.size(); i++) {
+		if (clients[i]->GetNick() == "") {
+			flag = false;
+			break;
+		}
+	}
+
+	return flag;
 }
 
 DWORD WINAPI Server::NewClientThread(LPVOID args) 

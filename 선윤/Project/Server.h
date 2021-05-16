@@ -1,9 +1,10 @@
 ﻿#pragma once
-#include "stdafx.h"
+#include <time.h>
+#include <mutex>
 
+#include "stdafx.h"
 #include "User.h"
 #include "Client.h"
-
 #include "DB.h"
 #include "protocol.h"
 
@@ -35,6 +36,10 @@ private:
 
 	int client_id_counter = 0;
 
+	BOOL isGameStarted = false;
+	time_t gameStartedAt = 0;
+	mutex _mutex;
+
 public:
 	Server();
 	~Server();
@@ -46,6 +51,8 @@ public:
 
 	User* ClientLogin(Packet_Login* loginPacket);
 	BOOL ClientSignUp(Packet_SignUp* signUpPacket);
+
+	BOOL CanStartGame();
 
 	static DWORD WINAPI NewClientThread(LPVOID);
 

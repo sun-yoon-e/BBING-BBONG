@@ -10,6 +10,9 @@
 #define SC_CHAT		4
 #define SC_ITEM		5
 #define SC_SCORE    6
+#define SC_GAMESTATE 7
+#define SC_FIRE     8
+
 #define SC_MESH     10
 #define SC_SET_MESH 11
 #define SC_ROAD     12
@@ -22,6 +25,7 @@
 #define CS_CHAT		4
 #define CS_CLICK	5
 #define CS_SCORE    6
+#define CS_FIRE     8
 #define CS_MESH     10
 #define CS_SET_MESH 11
 #define CS_ROAD     12
@@ -131,6 +135,23 @@ struct Packet_Move_SC {
 	int32_t players;
 	Vector3 position[MAX_CLIENT];
 	Vector3 rotation[MAX_CLIENT];
+};
+
+struct Packet_GameState_SC {
+	BYTE type = SC_GAMESTATE;
+	BYTE state;
+};
+
+struct Packet_Fire {
+	BYTE TYPE = CS_FIRE;
+	Vector3 position;
+	Vector3 targetPosition;
+};
+
+struct Packet_Fire_SC {
+	BYTE TYPE = SC_FIRE;
+	Vector3 position;
+	Vector3 targetPosition;
 };
 
 struct sc_packet_enter {
