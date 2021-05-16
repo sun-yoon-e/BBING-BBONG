@@ -48,34 +48,6 @@ public class MeshGenerator : MonoBehaviour
                 vertices[i] = new Vector3(x * 10, y, z * 10);
             }
         }
-
-        for (int i = 0, z = 0; z <= zSize; ++z)
-        {
-            for (int x = 0; x <= xSize; ++x, ++i)
-            {
-                //if(buildingPlace[i] != 0)
-                //{
-                //    y = 5f;
-                //    vertices[i].y = y;
-                //}
-
-                //if (i > 0 && (buildingPlace[i] == 1 || buildingPlace[i] == 2))
-                //{
-                //    y = vertices[i].y;
-                //    vertices[i - 1].y = y;
-                //    vertices[i + 1].y = y;
-                //    //if (i > xSize + 1)
-                //    //{
-                //    //    vertices[i - xSize + 1].y = y;
-                //    //    vertices[i - xSize].y = y;
-                //    //    vertices[i - xSize - 1].y = y;
-                //    //}
-                //    vertices[i + xSize + 1].y = y;
-                //    vertices[i + xSize].y = y;
-                //    vertices[i + xSize - 1].y = y;
-                //}
-            }
-        }
     }
 
     public void CreateTriangle()
