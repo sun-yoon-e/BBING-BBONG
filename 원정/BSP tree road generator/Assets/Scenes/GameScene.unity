@@ -121,38 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &312747427
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 312747428}
-  m_Layer: 9
-  m_Name: Steer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &312747428
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 312747427}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0.35}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 5212291751268533373}
-  - {fileID: 1476285669}
-  m_Father: {fileID: 1639326274018954603}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &415931382
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,6 +422,38 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!1 &858530937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 858530938}
+  m_Layer: 9
+  m_Name: Steer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &858530938
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858530937}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5212291751268533373}
+  - {fileID: 1476285669}
+  m_Father: {fileID: 1639326274018954603}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1050883277
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +524,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1208282063}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.12, z: -0.03}
+  m_LocalPosition: {x: 0, y: 0.117518, z: -0.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1639326274018954603}
@@ -569,7 +569,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273992061}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.369, z: 0.047}
+  m_LocalPosition: {x: 0, y: 0.297, z: 0.059}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1639326274018954603}
@@ -586,7 +586,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.5, z: 0.7}
+  m_Size: {x: 0.3, y: 0.3, z: 0.6}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1476285668
 GameObject:
@@ -598,7 +598,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1476285669}
   m_Layer: 9
-  m_Name: FrontParent
+  m_Name: AxelFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -612,12 +612,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1476285668}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.010000616}
+  m_LocalPosition: {x: 0, y: 0, z: 0.0600006}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7745614065600507386}
   - {fileID: 1050883278}
-  m_Father: {fileID: 312747428}
+  m_Father: {fileID: 858530938}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1535173237
@@ -1209,25 +1209,23 @@ MonoBehaviour:
       AxleFront: {fileID: 1476285669}
       AxleBack: {fileID: 298483161373978477}
     setting:
-      Radius: 0.2
+      Radius: 0.25
       Weight: 1000
       Distance: 0.2
   bikeSetting:
-    showNormalGizmos: 0
-    cameraSwitchView: []
     MainBody: {fileID: 1639326274018954603}
-    bikeSteer: {fileID: 312747428}
+    bikeSteer: {fileID: 858530938}
     maxWheelie: 40
     speedWheelie: 30
     slipBrake: 3
     springs: 35000
     dampers: 4500
     bikePower: 300
-    shiftPower: 150
+    shiftPower: 250
     brakePower: 12000
     shiftCentre: {x: 0, y: 0, z: 0}
     maxSteerAngle: 40
-    maxTurn: 1.5
+    maxTurn: 0.5
     shiftDownRPM: 1500
     shiftUpRPM: 4000
     idleRPM: 700
@@ -2179,7 +2177,7 @@ Transform:
   - {fileID: 1888062589837703261}
   - {fileID: 7614956504547602952}
   - {fileID: 912935996777358771}
-  - {fileID: 312747428}
+  - {fileID: 858530938}
   - {fileID: 298483161373978477}
   - {fileID: 1273992062}
   - {fileID: 1208282064}
@@ -2285,7 +2283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1639326274018954603}
   m_Layer: 9
-  m_Name: Character
+  m_Name: Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2961,10 +2959,10 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8611367686661999194}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.084746554, z: -0.432016}
-  m_LocalScale: {x: 1.5458441, y: 1.5458442, z: 0.17473099}
+  m_LocalPosition: {x: 0, y: -0.084746554, z: -0.382016}
+  m_LocalScale: {x: 1.5458441, y: 1.5458444, z: 0.17473096}
   m_Children: []
-  m_Father: {fileID: 312747428}
+  m_Father: {fileID: 858530938}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5232890634951340620
@@ -3488,8 +3486,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3771676777961628771}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.0048675537, y: -0.016988471, z: 0.10516417}
-  m_LocalScale: {x: 1.5458441, y: 1.5458444, z: 0.17473096}
+  m_LocalPosition: {x: 0.0048675537, y: -0.016988471, z: 0.105163574}
+  m_LocalScale: {x: 1.5458441, y: 1.5458447, z: 0.17473093}
   m_Children: []
   m_Father: {fileID: 1476285669}
   m_RootOrder: 0
