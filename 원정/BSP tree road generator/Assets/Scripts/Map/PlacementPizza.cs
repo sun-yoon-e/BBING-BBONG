@@ -5,6 +5,11 @@ using UnityEngine;
 public class PlacementPizza : MonoBehaviour
 {
     public GameObject pizzaBuildingPrefab;
+    public Sprite pizzaBuildingSprite;
+
+    public GameObject pizzaSpriteObject;
+    public SpriteRenderer pizzaSpriteRenderer;
+
     RoadGenerator road;
     MeshGenerator map;
 
@@ -50,9 +55,9 @@ public class PlacementPizza : MonoBehaviour
         BoxCollider col = pizzaStore.GetComponent<BoxCollider>();
         col.tag = "PizzaStore";
 
-        //map.UpdateMesh();
+        InitializeSprite(pizzaStore.transform.position);
     }
-    
+
     void makeNotBuildingPlace(int place)
     {
         road.isBuildingPlace[place] = 5;
@@ -85,5 +90,24 @@ public class PlacementPizza : MonoBehaviour
             map.vertices[place + road.xSize + 1].y = map.vertices[place].y;
             map.vertices[place + road.xSize + 2].y = map.vertices[place].y;
         }
+    }
+
+    void InitializeSprite(Vector3 pos)
+    {
+        Quaternion SpriteRotation = Quaternion.Euler(90, 0, 0);
+        Vector3 SpriteScale = new Vector3(25, 25, 25);
+
+        Vector3 destinationPosition =
+            new Vector3(pos.x, pos.y + 20, pos.z);
+
+        pizzaSpriteObject = new GameObject("DestinationSprite");
+        pizzaSpriteObject.transform.position = destinationPosition;
+        pizzaSpriteObject.transform.rotation = SpriteRotation;
+        pizzaSpriteObject.transform.localScale = SpriteScale;
+
+        pizzaSpriteRenderer = pizzaSpriteObject.AddComponent<SpriteRenderer>();
+        pizzaSpriteRenderer.sprite = pizzaBuildingSprite;
+
+        pizzaSpriteObject.layer = 8;
     }
 }

@@ -166,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destinationPrefab: {fileID: 919132149155446097, guid: a9203f08c921e044b8ef7da3cd90bd44,
     type: 3}
-  destinationSprite: {fileID: 21300000, guid: acc1ec3349794f840ab53bf9b97641df, type: 3}
+  destinationSprite: {fileID: 21300000, guid: f802d8d903bbefc478dbf2c0eed5a9d0, type: 3}
   parent: {fileID: 350881557}
   destination: 
   destinationNum: 5
@@ -686,6 +686,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pizzaBuildingPrefab: {fileID: 100000, guid: 601b00ca0b9de0247beae089ec7e640f, type: 3}
+  pizzaBuildingSprite: {fileID: 21300000, guid: a1d04cd1568b1a14f9623a17187bde3d,
+    type: 3}
+  pizzaSpriteObject: {fileID: 0}
+  pizzaSpriteRenderer: {fileID: 0}
 --- !u!1 &2000955011
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,7 +764,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 274606944014094722}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 300, z: 0}
+  m_LocalPosition: {x: 0, y: 400, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3435,8 +3439,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8604153502323357596}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalPosition: {x: 0, y: 100, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 8604153502290622309}
   m_RootOrder: 4
@@ -3636,7 +3640,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8604153503275751975}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 140, z: 0}
+  m_LocalPosition: {x: 0, y: 180, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8604153502290622309}
