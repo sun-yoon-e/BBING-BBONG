@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class PlacementBuilding : MonoBehaviour
 {
-    public RoadGenerator road;
-    public GameObject[] buildingPrefab;
+    RoadGenerator road;
+    MeshGenerator map;
+    //Destination destination;
 
+    public GameObject[] buildingPrefab;
     public GameObject buildingParent;
+
+    public GameObject[] buildingObject;
+
+    public int buildingNum;
 
     float tempXSize;
     float tempZSize;
@@ -15,6 +21,8 @@ public class PlacementBuilding : MonoBehaviour
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+        //destination = GameObject.Find("Destination").GetComponent<Destination>();
     }
 
     private void Start()
@@ -22,14 +30,16 @@ public class PlacementBuilding : MonoBehaviour
         tempXSize = 0;
         tempZSize = 0;
 
-        GameObject building;
+        buildingObject = new GameObject[1500];
+        
+        buildingNum = 0;
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
             if (road.isBuildingPlace[i] == (int)buildingDirection.NOTBUILDINGPLACE)
                 continue;
-            int prefab = Random.Range(0, buildingPrefab.Length);
 
+            int prefab = Random.Range(0, buildingPrefab.Length);
             Vector3 size = buildingPrefab[prefab].GetComponent<MeshRenderer>().bounds.size;
 
             tempXSize = size.x / 12;
@@ -40,7 +50,7 @@ public class PlacementBuilding : MonoBehaviour
 
             i += (int)tempXSize;
 
-            if (((i+road.xSize + 1) < (road.xSize * road.zSize)) && 
+            if (((i + road.xSize + 1) < (road.xSize * road.zSize)) &&
                 road.isBuildingPlace[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
             {
                 tempZSize = size.x / 12;
@@ -49,24 +59,22 @@ public class PlacementBuilding : MonoBehaviour
                 else if (tempZSize >= 2)
                     tempZSize = 1.0f;
 
-                for (int j = 0; j < (int)tempZSize; ++j)
-                {
-                    road.isBuildingPlace[i + (road.xSize + 1) * j] = (int)buildingDirection.NOTBUILDINGPLACE;
-                }
+                road.isBuildingPlace[i + (road.xSize + 1)] = (int)buildingDirection.NOTBUILDINGPLACE;
             }
 
             if (road.isBuildingPlace[i] == (int)buildingDirection.DOWN)
-                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
             else if (road.isBuildingPlace[i] == (int)buildingDirection.UP)
-                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 180, 0));
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 180, 0));
             else if (road.isBuildingPlace[i] == (int)buildingDirection.LEFT)
-                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 90, 0));
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 90, 0));
             else if (road.isBuildingPlace[i] == (int)buildingDirection.RIGHT)
-                building = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, -90, 0));
-            else
-                continue;
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, -90, 0));
+            else continue;
 
-            building.transform.SetParent(buildingParent.transform);
+            makeNotBuildingPlace(i);
+
+            buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
 
             if (road.isBuildingPlace[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
             {
@@ -92,10 +100,48 @@ public class PlacementBuilding : MonoBehaviour
                     road.isBuildingPlace[i + road.xSize + 1] = (int)buildingDirection.NOTBUILDINGPLACE;
                 }
             }
-            
-            building.AddComponent<BoxCollider>();
-            BoxCollider col = building.GetComponent<BoxCollider>();
+
+            buildingObject[buildingNum].AddComponent<BoxCollider>();
+            BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
+
+            ++buildingNum;
+        }
+
+        map.UpdateMesh();
+        road.RefreshRoadVertices();
+        road.UpdateMesh();
+    }
+
+    void makeNotBuildingPlace(int place)
+    {
+        if (place + 1 < road.xSize * road.zSize
+            || place - 1 > 0)
+        {
+            road.isBuildingPlace[place - 1] = 0;
+            road.isBuildingPlace[place + 1] = 0;
+            map.vertices[place - 1].y = map.vertices[place].y;
+            map.vertices[place + 1].y = map.vertices[place].y;
+        }
+
+        if (place - road.xSize - 2 > 0)
+        {
+            road.isBuildingPlace[place - road.xSize - 1] = 0;
+            road.isBuildingPlace[place - road.xSize] = 0;
+            road.isBuildingPlace[place - road.xSize - 2] = 0;
+            map.vertices[place - road.xSize - 1].y = map.vertices[place].y;
+            map.vertices[place - road.xSize].y = map.vertices[place].y;
+            map.vertices[place - road.xSize - 2].y = map.vertices[place].y;
+        }
+
+        if (place + road.xSize + 2 < road.xSize * road.zSize )
+        {
+            road.isBuildingPlace[place + road.xSize] = 0;
+            road.isBuildingPlace[place + road.xSize + 1] = 0;
+            road.isBuildingPlace[place + road.xSize + 2] = 0;
+            map.vertices[place + road.xSize].y = map.vertices[place].y;
+            map.vertices[place + road.xSize + 1].y = map.vertices[place].y;
+            map.vertices[place + road.xSize + 2].y = map.vertices[place].y;
         }
     }
 

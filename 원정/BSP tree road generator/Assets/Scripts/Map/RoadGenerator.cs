@@ -11,19 +11,22 @@ public class RoadGenerator : MonoBehaviour
     public int xSize;
     public int zSize;
 
-    public float mapHeight = 2.0f;
     public Vector3 mapPosition;
 
-    int t = 0;
+    int t;
 
-    int xSplit = 0;
-    int[] upXSplit = { };
-    int[] downXSplit = { };
-    int[] leftZSplit = { };
-    int[] rightZSplit = { };
+    int xSplit;
+    int[] upXSplit;
+    int[] downXSplit;
+    int[] leftZSplit;
+    int[] rightZSplit;
 
-    public bool[] isRoad = { };
-    public int[] isBuildingPlace = { };
+    public bool[] isRoad;
+    public int[] isBuildingPlace;
+    public bool[] isDestination;
+
+    MeshGenerator map;
+    Destination destination;
 
     private void Awake()
     {
@@ -31,13 +34,16 @@ public class RoadGenerator : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
 
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+        //destination = GameObject.Find("Destination").GetComponent<Destination>();
     }
 
     void Start()
     {
         CreateShape();
         CreateTriangle();
-        UpdateMesh();
+        //UpdateMesh();
     }
 
     public void CreateShape()
@@ -48,7 +54,7 @@ public class RoadGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
+                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
                 vertices[i] = new Vector3(x * 10, y, z * 10);
                 ++i;
             }
@@ -65,6 +71,7 @@ public class RoadGenerator : MonoBehaviour
         triangles = new int[xSize * zSize * 6];
         isBuildingPlace = new int[(xSize + 1) * (zSize + 1)];
         isRoad = new bool[(xSize + 1) * (zSize + 1)];
+        isDestination = new bool[(xSize + 1) * (zSize + 1)];
 
         splitX(40, 0, zSize);
 
@@ -348,7 +355,7 @@ public class RoadGenerator : MonoBehaviour
         }
     }
 
-    void UpdateMesh()
+    public void UpdateMesh()
     {
         mesh.Clear();
 
@@ -356,6 +363,11 @@ public class RoadGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();
+    }
+
+    public void RefreshRoadVertices()
+    {
+        vertices = map.vertices;
     }
 
     enum buildingDirection: int

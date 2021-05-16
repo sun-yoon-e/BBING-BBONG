@@ -1,163 +1,244 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class LowPolyClouds : MonoBehaviour
-{
-    private struct Cloud
+public class CloudData{
+	public Vector3 pos;
+    public Vector3 scale;
+    public Quaternion rot;
+    private bool _isActive;
+
+	//This prevents other classes from direcly setting our isActive var
+    public bool isActive
     {
-        public float Scale;
-        public int X;
-        public int Y;
-    }
-
-    private struct Batch
-    {
-        public int Length;
-        public Cloud[] Clouds;
-        public Matrix4x4[] Objects;
-    }
-
-    private struct FrameParams
-    {
-        public float Time;
-        public float DeltaTime;
-        public int BatchIndex;
-    }
-
-    private void Start()
-    {
-        // total count of clouds
-        int count = m_cloudsCount * m_cloudsCount;
-
-        // total count of batches. each size limited by unity to 1023
-        int batchCount = count / BatchSize + 1;
-
-        // initialize data arrays
-        m_batches = new Batch[batchCount];
-        m_tasks = new Task[batchCount];
-
-        for (int i = 0; i < batchCount; i++)
+        get
         {
-            // last array lenght can be less than 1023
-            int length = Mathf.Min(BatchSize, count - i * BatchSize);
-            m_batches[i].Length = length;
-            m_batches[i].Clouds = new Cloud[length];
-            m_batches[i].Objects = new Matrix4x4[length];
+            return _isActive;
         }
+    }
 
-        // pivot of clouds should be at center. so just shift each cloud 
-        var offset = -m_cloudsCount * 0.5f;
-        // initialize data for each cloud
-        for (int cloudY = 0; cloudY < m_cloudsCount; cloudY++)
+	public int x;
+    public int y;
+    public float distFromCam;
+
+	//Returns the Matrix4x4 of our cloud
+    public Matrix4x4 matrix
+    {
+        get
         {
-            for (int cloudX = 0; cloudX < m_cloudsCount; cloudX++)
+            return Matrix4x4.TRS(pos, rot, scale);
+        }
+    }
+
+	//Used to instanciate our cloud
+    public CloudData(Vector3 pos, Vector3 scale, Quaternion rot, int x, int y, float distFromCam){
+		this.pos = pos;
+        this.scale = scale;
+        this.rot = rot;
+        SetActive(true);
+        this.x = x;
+        this.y = y;
+        this.distFromCam = distFromCam;
+	}
+
+	//Sets our private isActive state since other classes can't set it directly
+    public void SetActive(bool desState)
+    {
+        _isActive = desState;
+    }
+}
+
+public class LowPolyClouds : MonoBehaviour {
+	//Meshes
+    public Mesh cloudMesh;
+    public Material cloudMat;
+
+	//Cloud Data
+    public float cloudSize = 5;
+    public float maxScale = 1;
+
+	//Noise Generation
+    public float timeScale = 1;
+    public float texScale = 1;
+
+	//Cloud Scaling Info
+    public float minNoiseSize = 0.5f;
+    public float sizeScale = 0.25f;
+
+	//Culling Data
+    public Camera cam;
+    public int maxDist;
+
+	//Number of batches
+    public int batchesToCreate;
+
+	private Vector3 prevCamPos;
+    private float offsetX = 1;
+    private float offsetY = 1;
+    private List<List<CloudData>> batches = new List<List<CloudData>>();
+    private List<List<CloudData>> batchesToUpdate = new List<List<CloudData>>();
+
+	private void Start(){
+		for(int batchesX = 0; batchesX < batchesToCreate; batchesX++){
+			for(int batchesY = 0; batchesY < batchesToCreate; batchesY++){
+				BuildCloudBatch(batchesX, batchesY);
+			}
+		}
+	}
+
+	//We start by looping though our X and Y values to generate a batch that's 31x31 clouds
+    //Limited due to 1024 max of Graphics.DrawMeshInstanciated
+    private void BuildCloudBatch(int xLoop, int yLoop){
+		//Mark a batch if it's within rage of our camera
+        bool markBatch = false;
+		//This is our current cloud batch that we're brewing
+        List<CloudData> currBatch = new List<CloudData>();
+
+		for (int x = 0; x < 31; x++)
+        {
+            for (int y = 0; y < 31; y++)
             {
-                var cloud = new Cloud
-                {
-                    Scale = 0,
-                    X = cloudX,
-                    Y = cloudY,
-                };
-
-                // position of this cloud in world
-                var position = new Vector3
-                {
-                    x = offset + transform.position.x + cloudX * m_cloudSize,
-                    y = transform.position.y,
-                    z = offset + transform.position.z + cloudY * m_cloudSize,
-                };
-
-                // convert X and Y to batch indices
-                int index = cloudY * m_cloudsCount + cloudX;
-
-                int x = index / BatchSize;
-                int y = index % BatchSize;
-
-                m_batches[x].Clouds[y] = cloud;
-                m_batches[x].Objects[y] = Matrix4x4.TRS(position, Quaternion.identity, Vector3.zero);
+                //Add a cloud for each loop
+                AddCloud(currBatch, x + xLoop * 31, y + yLoop * 31);
             }
         }
+
+		//Check if the batch should be marked
+        markBatch = CheckForActiveBatch(currBatch);
+
+		//Add the newest batch to the batches list
+        batches.Add(currBatch);
+
+		//If the batch is marked add it to the batchesToUpdate list
+        if (markBatch) batchesToUpdate.Add(currBatch);
+	}
+
+	//This method checks to see if the current batch has a cloud that is witin our cameras range
+    //Return true if a cloud is within range
+    //Return false if no clouds are within range
+    private bool CheckForActiveBatch(List<CloudData> batch){
+		foreach (var cloud in batch)
+        {
+            cloud.distFromCam = Vector3.Distance(cloud.pos, cam.transform.position);
+            if (cloud.distFromCam < maxDist) return true;
+        }
+        return false;
+	}
+
+	//This method created our clouds as a CloudData object
+    private void AddCloud(List<CloudData> currBatch, int x, int y){
+		//First we set our new clouds position
+        Vector3 position = new Vector3(transform.position.x + x * cloudSize, transform.position.y, transform.position.z + y * cloudSize);
+
+		//We set our new clouds distance to the camera so we can use it later
+        float disToCam = Vector3.Distance(new Vector3(x, transform.position.y, y), cam.transform.position);
+
+		//Finally we add our new CloudData cloud to the current batch
+        currBatch.Add(new CloudData(position, Vector3.zero, Quaternion.identity, x, y, disToCam));
+	}
+
+	//We need to generate our noise
+    //We update our offsets to the noise 'rolls' through the cloud objects
+	private void Update() {
+        MakeNoise();
+        offsetX += Time.deltaTime * timeScale;
+        offsetY += Time.deltaTime * timeScale;
     }
 
-    private void Update()
-    {
-        // each batch will be updated in separate thread
-        for (int batchIndex = 0; batchIndex < m_batches.Length; batchIndex++)
+	//This method updates our noise/clouds
+    //First we check to see if the camera has moved
+    //If it hasn't we update batches
+    //If it has moved we need to reset the prevCamPos along with updating our batch list before updating our batches
+    //TODO: Set allowed movement range to camera so the player can move a small amount without causing a full batch list reset
+    private void MakeNoise(){
+		if (cam.transform.position == prevCamPos)
         {
-            // to avoid allocations while creating delegates like ()=> UpdateBatch(frameParams)
-            // i'm sending frame params as object and then cast it to FrameParams
-            FrameParams frameParams = new FrameParams
+            UpdateBatches();
+        }
+		else{
+            prevCamPos = cam.transform.position;
+            UpdateBatchList();
+            UpdateBatches();
+        }
+		RenderBatches();
+        prevCamPos = cam.transform.position;
+	}
+
+	//This method updates our clouds
+    //First we loop through all of our batches in the batchesToUpdate list
+    //For each batch we need to get each cloud with another loop
+    private void UpdateBatches(){
+		foreach (var batch in batchesToUpdate)
+        {
+            foreach (var cloud in batch)
             {
-                BatchIndex = batchIndex,
-                DeltaTime = Time.deltaTime,
-                Time = Time.time
-            };
+                //Get noise size based on clouds pos, noise texture scale, and our offset amount
+                float size = Mathf.PerlinNoise(cloud.x * texScale + offsetX, cloud.y * texScale + offsetY);
 
-            // creation of new task allocates some memory but i can't do anythung with it
-            m_tasks[batchIndex] = Task.Factory.StartNew(UpdateBatch, frameParams);
+                //If our cloud has a size that's above our visible cloud threashold we need to show it
+                if (size > minNoiseSize)
+                {
+                    //Get the current scale of the cloud
+                    float localScaleX = cloud.scale.x;
+
+                    //Activate any clouds
+                    if (!cloud.isActive)
+                    {
+                        cloud.SetActive(true);
+                        cloud.scale = Vector3.zero;
+                    }
+                    //If not max size, scale up
+                    if (localScaleX < maxScale)
+                    {
+                        ScaleCloud(cloud, 1);
+
+                        //Limit our max size
+                        if (cloud.scale.x > maxScale)
+                        {
+                            cloud.scale = new Vector3(maxScale, maxScale, maxScale);
+                        }
+                    }
+                }
+                //Active and it shouldn't be, let's scale down
+                else if (size < minNoiseSize) {
+                    float localScaleX = cloud.scale.x;
+                    ScaleCloud(cloud, -1);
+
+                    //When the cloud is reallllly small we can just set it to 0 and hide it
+                    if (localScaleX <= 0.1) {
+                        cloud.SetActive(false);
+                        cloud.scale = Vector3.zero;
+                    }
+                }
+            }
         }
+	}
 
-        // just wait all tasks to be completed
-        Task.WaitAll(m_tasks);
-
-        // and send all objects to render
-        for (int batchIndex = 0; batchIndex < m_batches.Length; batchIndex++)
-        {
-            Graphics.DrawMeshInstanced(m_mesh, 0, m_material, m_batches[batchIndex].Objects);
-        }
+	//This method sets our cloud to a new size
+    private void ScaleCloud(CloudData cloud, int direciton){
+        cloud.scale += new Vector3(sizeScale * Time.deltaTime * direciton * 4, sizeScale * Time.deltaTime * direciton * 4, sizeScale * Time.deltaTime * direciton * 4);
     }
 
-    private void UpdateBatch(object input)
-    {
-        FrameParams frameParams = (FrameParams)input;
-        for (int cloudIndex = 0; cloudIndex < m_batches[frameParams.BatchIndex].Length; cloudIndex++)
+	//This method clears our batchesToUpdate list because we only want visible batches within this list
+    private void UpdateBatchList(){
+		//Clears our list
+        batchesToUpdate.Clear();
+
+		//Loop through all the generated batches
+        foreach (var batch in batches){
+			//If a single cloud is within range we need to add the batch to the update list
+            if (CheckForActiveBatch(batch)){
+                batchesToUpdate.Add(batch);
+            }
+		}
+	}
+
+	//This method loops through all the batches to update and draws their meshes to the screen
+    private void RenderBatches(){
+		foreach (var batch in batchesToUpdate)
         {
-            // just to simplify code below
-            int i = frameParams.BatchIndex; int j = cloudIndex;
-
-            // calculate noise based on coordinates of cloud and current time
-            float x = m_batches[i].Clouds[j].X * m_texScale + frameParams.Time * m_timeScale;
-            float y = m_batches[i].Clouds[j].Y * m_texScale + frameParams.Time * m_timeScale;
-            float noise = Mathf.PerlinNoise(x, y);
-
-            // based on noise we can understand scale direction
-            int dir = noise > m_minNoiseSize ? 1 : -1;
-
-            // calcuate new scale and clamp it
-            float shift = m_scaleSize * frameParams.DeltaTime * dir;
-            float scale = m_batches[i].Clouds[j].Scale + shift;
-            scale = Mathf.Clamp(scale, 0, m_maxScale);
-            m_batches[i].Clouds[j].Scale = scale;
-
-            // set new scale to object matrix
-            m_batches[i].Objects[j].m00 = scale;
-            m_batches[i].Objects[j].m11 = scale;
-            m_batches[i].Objects[j].m22 = scale;
+            Graphics.DrawMeshInstanced(cloudMesh, 0, cloudMat, batch.Select((a) => a.matrix).ToList());
         }
-    }
-
-    [SerializeField]
-    private Mesh m_mesh;
-    [SerializeField]
-    private Material m_material;
-    [SerializeField]
-    private float m_cloudSize = 1;
-    [SerializeField]
-    private float m_maxScale = 1;
-    [SerializeField]
-    private float m_timeScale = 0.05f;
-    [SerializeField]
-    private float m_texScale = 0.1f;
-    [SerializeField]
-    private float m_minNoiseSize = 0.6f;
-    [SerializeField]
-    private float m_scaleSize = 1.5f;
-    [SerializeField]
-    private int m_cloudsCount = 100;
-
-    // maximum size of matrices array that can be passed to Graphics.DrawMeshInstanced
-    private const int BatchSize = 1023;
-
-    private Batch[] m_batches;
-    private Task[] m_tasks;
+	}
 }
