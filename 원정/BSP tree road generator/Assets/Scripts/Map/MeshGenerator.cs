@@ -32,7 +32,6 @@ public class MeshGenerator : MonoBehaviour
     {
         CreateShape();
         CreateTriangle();
-        //UpdateMesh();
     }
 
     public void CreateShape()

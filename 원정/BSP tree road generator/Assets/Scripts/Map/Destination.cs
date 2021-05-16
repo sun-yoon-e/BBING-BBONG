@@ -14,15 +14,30 @@ public class Destination : MonoBehaviour
     public int destinationNum;
 
     bool[] isDestination;
-    
+
+    public GameObject[] destinationPizzaObject;
+    public GameObject[] destinationSpriteObject;
+    public SpriteRenderer[] pizzaSpriteRenderer;
+
+
     private void Start()
     {
         building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
         destination = new int[destinationNum];
         isDestination = new bool[building.buildingNum];
 
+        destinationPizzaObject = new GameObject[destinationNum];
+        destinationSpriteObject = new GameObject[destinationNum];
+        pizzaSpriteRenderer = new SpriteRenderer[destinationNum];
+
         DrawDestination();
         ApplyDestinationToBuilding();
+    }
+
+
+    private void Update()
+    {
+      //  if()
     }
 
     public void DrawDestination()
@@ -31,11 +46,11 @@ public class Destination : MonoBehaviour
         {
             destination[i] = Random.Range(1, building.buildingNum);
             isDestination[destination[i]] = true;
-            
+
             //중복체크
             for (int j = 0; j < destinationNum; ++j)
             {
-                if(destination[i] == destination[j])
+                if (destination[i] == destination[j])
                     destination[i] = Random.Range(1, building.buildingNum);
             }
         }
@@ -43,32 +58,30 @@ public class Destination : MonoBehaviour
 
     void ApplyDestinationToBuilding()
     {
-        Vector3 spriteScale = new Vector3(10, 10, 10);
-
         Quaternion SpriteRotation = Quaternion.Euler(90, 0, 0);
         Vector3 ObjectScale = new Vector3(10, 10, 10);
 
         for (int i = 0; i < destinationNum; ++i)
         {
-            Vector3 destinationPosition = 
+            Vector3 destinationPosition =
                 new Vector3(building.buildingObject[destination[i]].transform.position.x,
                 building.buildingObject[destination[i]].transform.position.y + 20,
                 building.buildingObject[destination[i]].transform.position.z);
 
-            Instantiate(destinationPrefab, destinationPosition,
+            destinationPizzaObject[i] = Instantiate(destinationPrefab, destinationPosition,
                 Quaternion.Euler(0, 0, 0), parent);
+            destinationPizzaObject[i].layer = 9;
 
+            destinationSpriteObject[i] = new GameObject("DestinationSprite");
+            destinationSpriteObject[i].transform.position = destinationPosition;
+            destinationSpriteObject[i].transform.rotation = SpriteRotation;
+            destinationSpriteObject[i].transform.localScale = ObjectScale;
 
-            GameObject spriteObject = new GameObject("DestinationSprite");
-            spriteObject.transform.position = destinationPosition;
-            spriteObject.transform.rotation = SpriteRotation;
-            spriteObject.transform.localScale = ObjectScale;
+            pizzaSpriteRenderer[i] = destinationSpriteObject[i].AddComponent<SpriteRenderer>();
+            pizzaSpriteRenderer[i].sprite = destinationSprite;
+            destinationSpriteObject[i].transform.SetParent(parent);
 
-            SpriteRenderer renderer = spriteObject.AddComponent<SpriteRenderer>();
-            renderer.sprite = destinationSprite;
-            spriteObject.transform.SetParent(parent);
-
-            spriteObject.layer = 8;
+            destinationSpriteObject[i].layer = 8;
         }
     }
 }

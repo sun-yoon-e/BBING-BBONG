@@ -101,6 +101,10 @@ public class PlacementBuilding : MonoBehaviour
                 }
             }
 
+            // 건물 사이즈
+            //Vector3 scale = new Vector3(1.2f, 1.2f, 1.2f);
+            //buildingObject[buildingNum].transform.localScale = scale;
+
             buildingObject[buildingNum].AddComponent<BoxCollider>();
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
