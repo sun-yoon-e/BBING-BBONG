@@ -3,8 +3,17 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
+    //Mathf.LerpAngle(a, b, t) : t시간 동안 a부터 b까지 변경되는 각도를 반환 / t : 회전 감도
+    //Camera
+    public Camera cam;
+    public float mouseSensitivity = 10.0f;
+    private float cameraRotationLimit = 70.0f;
+    private float cameraRotationX;
+    private float cameraRotationY;
+
+    //Motorcycle
     public bool activeControl = false;
-    
+
     public BikeWheels bikeWheels;
     [System.Serializable]
     public class BikeWheels
@@ -12,21 +21,21 @@ public class PlayerController : MonoBehaviour
         public ConnectWheel wheels;
         public WheelSetting setting;
     }
-    
+
     [System.Serializable]
     public class ConnectWheel
     {
         public Transform wheelFront;
         public Transform wheelBack;
-        public Transform AxleFront; 
+        public Transform AxleFront;
         public Transform AxleBack;
     }
-    
+
     [System.Serializable]
     public class WheelSetting
     {
         public float Radius = 0.3f;
-        public float Weight = 1000.0f; 
+        public float Weight = 1000.0f;
         public float Distance = 0.2f;
     }
 
@@ -36,11 +45,11 @@ public class PlayerController : MonoBehaviour
     {
         public Transform MainBody;
         public Transform bikeSteer;
-        
+
         public float maxWheelie = 40.0f;
         public float speedWheelie = 30.0f;
         public float slipBrake = 3.0f;
-        
+
         public float springs = 35000.0f;
         public float dampers = 4000.0f;
 
@@ -48,17 +57,17 @@ public class PlayerController : MonoBehaviour
         public float shiftPower = 150;
         public float brakePower = 8000;
 
-        public Vector3 shiftCentre = new Vector3(0.0f, -0.6f, 0.0f); 
+        public Vector3 shiftCentre = new Vector3(0.0f, -0.6f, 0.0f);
 
-        public float maxSteerAngle = 30.0f; 
+        public float maxSteerAngle = 30.0f;
         public float maxTurn = 1.5f;
 
-        public float shiftDownRPM = 1500.0f; 
-        public float shiftUpRPM = 4000.0f; 
+        public float shiftDownRPM = 1500.0f;
+        public float shiftUpRPM = 4000.0f;
         public float idleRPM = 700.0f;
 
         public float stiffness = 1.0f;
-        
+
         public bool automaticGear = true;
 
         public float[] gears = { -10f, 9f, 6f, 4.5f, 3f, 2.5f };
@@ -76,20 +85,20 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector]
     public bool crash;
-    
+
     [HideInInspector]
-    public float steer = 0; 
+    public float steer = 0;
     [HideInInspector]
     public bool brake;
     private float slip = 0.0f;
-    
+
     [HideInInspector]
     public bool Backward = false;
 
     [HideInInspector]
     public float steer2;
 
-    private float accel = 0.0f; 
+    private float accel = 0.0f;
     public float Z_Rotation = 5;
 
     private bool shifmotor;
@@ -104,7 +113,7 @@ public class PlayerController : MonoBehaviour
     public bool shift;
 
     private float flipRotate = 0.0f;
-    
+
     [HideInInspector]
     public float speed = 0.0f;
 
@@ -114,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
     private float shiftDelay = 0.0f;
     private float shiftTime = 0.0f;
-    
+
     [HideInInspector]
     public int currentGear = 0;
     [HideInInspector]
@@ -153,19 +162,19 @@ public class PlayerController : MonoBehaviour
         public bool drive;
         public float pos_y = 0.0f;
     }
-    
+
     private WheelComponent SetWheelComponent(Transform wheel, Transform axle, bool drive, float maxSteer, float pos_y)
     {
         WheelComponent result = new WheelComponent();
         GameObject wheelCol = new GameObject(wheel.name + "WheelCollider");
-        
+
         wheelCol.transform.parent = transform;
         wheelCol.transform.position = wheel.position;
         wheelCol.transform.eulerAngles = transform.eulerAngles;
         pos_y = wheelCol.transform.localPosition.y;
-        
+
         wheelCol.AddComponent(typeof(WheelCollider));
-        
+
         result.drive = drive;
         result.wheel = wheel;
         result.axle = axle;
@@ -202,9 +211,9 @@ public class PlayerController : MonoBehaviour
             js.spring = bikeSetting.springs;
             js.damper = bikeSetting.dampers;
             col.suspensionSpring = js;
-            
+
             col.radius = bikeWheels.setting.Radius;
-            
+
             col.mass = bikeWheels.setting.Weight;
 
             WheelFrictionCurve fc = col.forwardFriction;
@@ -222,7 +231,7 @@ public class PlayerController : MonoBehaviour
             col.sidewaysFriction = fc;
         }
     }
-    
+
     public void ShiftUp()
     {
         float now = Time.timeSinceLevelLoad;
@@ -280,20 +289,34 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //Mathf.LerpAngle(a, b, t) : t시간 동안 a부터 b까지 변경되는 각도를 반환 / t : 회전 감도
+        if (activeControl)
+        {
+            if (!bikeSetting.automaticGear)
+            {
+                if (Input.GetKeyDown("page up"))
+                {
+                    ShiftUp();
+                }
+                if (Input.GetKeyDown("page down"))
+                {
+                    ShiftDown();
+                }
+            }
+        }
+
         steer2 = Mathf.LerpAngle(steer2, steer * -bikeSetting.maxSteerAngle, Time.deltaTime * 10.0f);
 
         MotorRotation = Mathf.LerpAngle(MotorRotation, steer2 * bikeSetting.maxTurn * (Mathf.Clamp(speed / Z_Rotation, 0.0f, 1.0f)), Time.deltaTime * 5.0f);
 
         if (bikeSetting.bikeSteer)
             bikeSetting.bikeSteer.localRotation = SteerRotation * Quaternion.Euler(0, wheels[0].collider.steerAngle, 0); // this is 90 degrees around y axis
-        
+
         if (!crash)
         {
             flipRotate = (transform.eulerAngles.z > 90 && transform.eulerAngles.z < 270) ? 180.0f : 0.0f;
 
             Wheelie = Mathf.Clamp(Wheelie, 0, bikeSetting.maxWheelie);
-            
+
             if (shifting)
             {
                 Wheelie += bikeSetting.speedWheelie * Time.deltaTime / (speed / 50);
@@ -303,9 +326,9 @@ public class PlayerController : MonoBehaviour
                 Wheelie = Mathf.MoveTowards(Wheelie, 0, (bikeSetting.speedWheelie * 2) * Time.deltaTime * 1.3f);
             }
 
-            deltaRotation1 = Quaternion.Euler(-Wheelie, 0f, flipRotate - transform.localEulerAngles.z + (MotorRotation));
+            deltaRotation1 = Quaternion.Euler(-Wheelie, 0, flipRotate - transform.localEulerAngles.z + (MotorRotation));
             deltaRotation2 = Quaternion.Euler(0, 0, flipRotate - transform.localEulerAngles.z);
-            
+
             myRigidbody.MoveRotation(myRigidbody.rotation * deltaRotation2);
             bikeSetting.MainBody.localRotation = deltaRotation1;
         }
@@ -366,32 +389,32 @@ public class PlayerController : MonoBehaviour
         else if (bikeSetting.automaticGear && (currentGear == 0) && (accel > 0.0f))
         {
             if (speed < 5.0f)
-                ShiftUp(); 
+                ShiftUp();
 
         }
         else if (bikeSetting.automaticGear && (motorRPM > bikeSetting.shiftUpRPM) && (accel > 0.0f) && speed > 10.0f && !brake)
         {
             ShiftUp();
+
         }
         else if (bikeSetting.automaticGear && (motorRPM < bikeSetting.shiftDownRPM) && (currentGear > 1))
         {
-            ShiftDown(); 
+            ShiftDown();
         }
 
         if (speed < 1.0f) Backward = true;
-        
+
         if (currentGear == 0 && Backward == true)
         {
             if (speed < bikeSetting.gears[0] * -10)
-                accel = -accel; 
+                accel = -accel;
         }
         else
         {
             Backward = false;
         }
 
-        //속도 5500->550
-        wantedRPM = (550.0f * accel) * 0.1f + wantedRPM * 0.9f;
+        wantedRPM = (5500.0f * accel) * 0.1f + wantedRPM * 0.9f;
 
         float rpm = 0.0f;
         int motorizedWheels = 0;
@@ -408,7 +431,7 @@ public class PlayerController : MonoBehaviour
                 if (!NeutralGear && brake && currentGear < 2)
                 {
                     rpm += accel * bikeSetting.idleRPM;
-                    
+
                     if (rpm > 1)
                     {
                         bikeSetting.shiftCentre.z = Mathf.PingPong(Time.time * (accel * 10), 0.5f) - 0.25f;
@@ -431,18 +454,18 @@ public class PlayerController : MonoBehaviour
                 }
                 motorizedWheels++;
             }
-            
+
             if (crash)
             {
                 w.collider.enabled = false;
-                w.wheel.GetComponent<Collider>().enabled= true;
+                w.wheel.GetComponent<Collider>().enabled = true;
             }
             else
             {
                 w.collider.enabled = true;
                 w.wheel.GetComponent<Collider>().enabled = false;
             }
-            
+
             if (brake || accel < 0.0f)
             {
                 if ((accel < 0.0f) || (brake && w == wheels[1]))
@@ -471,14 +494,14 @@ public class PlayerController : MonoBehaviour
                 w_rotate = w.rotation;
             }
             WheelFrictionCurve fc = col.forwardFriction;
-            
+
             if (w == wheels[1])
             {
                 fc.stiffness = bikeSetting.stiffness / slip;
                 col.forwardFriction = fc;
                 fc = col.sidewaysFriction;
                 fc.stiffness = bikeSetting.stiffness / slip;
-                col.sidewaysFriction = fc; 
+                col.sidewaysFriction = fc;
             }
 
             if (shift && (currentGear > 1 && speed > 50.0f) && shifmotor)
@@ -501,9 +524,9 @@ public class PlayerController : MonoBehaviour
                 powerShift = Mathf.MoveTowards(powerShift, 100.0f, Time.deltaTime * 5.0f);
                 curTorque = bikeSetting.bikePower;
             }
-            
+
             w.rotation = Mathf.Repeat(w.rotation + Time.deltaTime * col.rpm * 360.0f / 60.0f, 360.0f);
-            w.wheel.localRotation = Quaternion.Euler(w.rotation,0.0f, 0.0f);
+            w.wheel.localRotation = Quaternion.Euler(w.rotation, 0.0f, 0.0f);
 
             Vector3 lp = w.axle.localPosition;
 
@@ -534,7 +557,7 @@ public class PlayerController : MonoBehaviour
                 grounded = false;
 
                 if (w.collider.GetComponent<WheelSkidmarks>())
-                w.collider.GetComponent<WheelSkidmarks>().enabled = false;
+                    w.collider.GetComponent<WheelSkidmarks>().enabled = false;
 
                 lp.y = w.startPos.y - bikeWheels.setting.Distance;
 
@@ -554,10 +577,10 @@ public class PlayerController : MonoBehaviour
         {
             rpm = rpm / motorizedWheels;
         }
-        
+
         motorRPM = 0.95f * motorRPM + 0.05f * Mathf.Abs(rpm * bikeSetting.gears[currentGear]);
         if (motorRPM > 5500.0f) motorRPM = 5200.0f;
-        
+
         int index = (int)(motorRPM / efficiencyTableStep);
         if (index >= efficiencyTable.Length) index = efficiencyTable.Length - 1;
         if (index < 0) index = 0;
@@ -601,5 +624,18 @@ public class PlayerController : MonoBehaviour
             col.steerAngle = steer * (w.maxSteer / SteerAngle);
         }
         shiftTime = Mathf.MoveTowards(shiftTime, 0.0f, 0.1f);
+    }
+    void CameraRotate()
+    {
+        //카메라 회전 
+        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+        cameraRotationX -= mouseY;
+        cameraRotationX = Mathf.Clamp(cameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+        cameraRotationY += mouseX;
+        cameraRotationY = Mathf.Clamp(cameraRotationY, -cameraRotationLimit, cameraRotationLimit);
+
+        cam.transform.localEulerAngles = new Vector3(cameraRotationX, cameraRotationY, 0f);
     }
 }
