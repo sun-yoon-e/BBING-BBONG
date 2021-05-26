@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
+    public Camera cam;
+    public float mouseSensitivity = 1f;
     public bool activeControl = false;
     
     public BikeWheels bikeWheels;
@@ -314,6 +316,7 @@ public class PlayerController : MonoBehaviour
             bikeSetting.MainBody.localRotation = Quaternion.identity;
             Wheelie = 0;
         }
+        CameraRotate();
     }
 
     void FixedUpdate()
@@ -601,5 +604,16 @@ public class PlayerController : MonoBehaviour
             col.steerAngle = steer * (w.maxSteer / SteerAngle);
         }
         shiftTime = Mathf.MoveTowards(shiftTime, 0.0f, 0.1f);
+    }
+    
+    void CameraRotate()
+    {
+        //camera rotation
+        var mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+        var mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        transform.eulerAngles = transform.eulerAngles + new Vector3(0, mouseX, 0);
+
+        cam.transform.eulerAngles = cam.transform.eulerAngles + new Vector3(-mouseY, 0, 0);
     }
 }

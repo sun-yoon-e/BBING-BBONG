@@ -1559,7 +1559,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.7058824}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3248,6 +3248,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66bb79fb3251ea341b5b0b0255b94270, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 8604153502850856027}
+  mouseSensitivity: 1
   activeControl: 1
   bikeWheels:
     wheels:
@@ -3335,9 +3337,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c02c4973c07681a489e7438485239de7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 8604153502850856027}
   firePos: {fileID: 8604153503186767587}
   targetPos: {fileID: 8604153502922025663}
   pizza: {fileID: 8660808437739804389, guid: f149a959c89c06045acdeead329d14dc, type: 3}
+  range: 100
   coolTime: 20
 --- !u!212 &8604153502323357594
 SpriteRenderer:
@@ -3405,7 +3409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8604153502323357597
 Transform:
   m_ObjectHideFlags: 0
