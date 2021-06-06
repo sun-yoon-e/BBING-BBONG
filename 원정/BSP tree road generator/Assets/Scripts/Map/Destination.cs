@@ -19,12 +19,14 @@ public class Destination : MonoBehaviour
     public GameObject[] destinationSpriteObject;
     public SpriteRenderer[] pizzaSpriteRenderer;
 
+    public int DestroyDestination;
 
     private void Start()
     {
         building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
         destination = new int[destinationNum];
         isDestination = new bool[building.buildingNum];
+        DestroyDestination = 0;
 
         destinationPizzaObject = new GameObject[destinationNum];
         destinationSpriteObject = new GameObject[destinationNum];
@@ -37,7 +39,12 @@ public class Destination : MonoBehaviour
 
     private void Update()
     {
-      //  if()
+        if(DestroyDestination == 5)
+        {
+            DestroyDestination = 0;
+            DrawDestination();
+            ApplyDestinationToBuilding();
+        }
     }
 
     public void DrawDestination()

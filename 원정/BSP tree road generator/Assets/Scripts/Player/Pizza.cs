@@ -49,6 +49,8 @@ public class Pizza : MonoBehaviour
                 Destroy(destination.pizzaSpriteRenderer[i]);
 
                 Destroy(destination.destinationPizzaObject[i]);
+
+                destination.DestroyDestination += 1;
             }
         }
     }

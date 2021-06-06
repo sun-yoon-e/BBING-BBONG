@@ -169,10 +169,11 @@ MonoBehaviour:
   destinationSprite: {fileID: 21300000, guid: f802d8d903bbefc478dbf2c0eed5a9d0, type: 3}
   parent: {fileID: 350881557}
   destination: 
-  destinationNum: 10
+  destinationNum: 30
   destinationPizzaObject: []
   destinationSpriteObject: []
   pizzaSpriteRenderer: []
+  DestroyDestination: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
