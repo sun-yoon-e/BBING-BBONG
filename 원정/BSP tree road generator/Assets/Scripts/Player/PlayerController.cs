@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
     //Camera
     public Camera cam;
     public float mouseSensitivity = 10.0f;
-    private float cameraRotationLimit = 70.0f;
+    private float cameraRotationLimitX = 30.0f;
+    private float cameraRotationLimitY = 70.0f;
     private float cameraRotationX;
     private float cameraRotationY;
 
@@ -337,6 +338,8 @@ public class PlayerController : MonoBehaviour
             bikeSetting.MainBody.localRotation = Quaternion.identity;
             Wheelie = 0;
         }
+
+        CameraRotate();
     }
 
     void FixedUpdate()
@@ -632,9 +635,9 @@ public class PlayerController : MonoBehaviour
         float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
         cameraRotationX -= mouseY;
-        cameraRotationX = Mathf.Clamp(cameraRotationX, -cameraRotationLimit, cameraRotationLimit);
+        cameraRotationX = Mathf.Clamp(cameraRotationX, -cameraRotationLimitX, cameraRotationLimitX);
         cameraRotationY += mouseX;
-        cameraRotationY = Mathf.Clamp(cameraRotationY, -cameraRotationLimit, cameraRotationLimit);
+        cameraRotationY = Mathf.Clamp(cameraRotationY, -cameraRotationLimitY, cameraRotationLimitY);
 
         cam.transform.localEulerAngles = new Vector3(cameraRotationX, cameraRotationY, 0f);
     }

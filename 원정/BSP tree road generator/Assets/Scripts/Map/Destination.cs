@@ -24,6 +24,7 @@ public class Destination : MonoBehaviour
     private void Start()
     {
         building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
+        
         destination = new int[destinationNum];
         isDestination = new bool[building.buildingNum];
         DestroyDestination = 0;
@@ -66,7 +67,7 @@ public class Destination : MonoBehaviour
     void ApplyDestinationToBuilding()
     {
         Quaternion SpriteRotation = Quaternion.Euler(90, 0, 0);
-        Vector3 ObjectScale = new Vector3(10, 10, 10);
+        Vector3 ObjectScale = new Vector3(5, 5, 5);
 
         for (int i = 0; i < destinationNum; ++i)
         {
