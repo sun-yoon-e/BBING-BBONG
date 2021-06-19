@@ -10,6 +10,7 @@ TagManager:
   - map
   - buildingBoxCollider
   - PizzaStore
+  - ItemBox
   layers:
   - Default
   - TransparentFX
