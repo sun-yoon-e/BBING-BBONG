@@ -241,23 +241,8 @@ public class PlayerController : MonoBehaviour
 
         if (currentGear < bikeSetting.gears.Length - 1)
         {
-            if (!bikeSetting.automaticGear)
-            {
-                if (currentGear == 0)
-                {
-                    if (NeutralGear) { currentGear++; NeutralGear = false; }
-                    else
-                    { NeutralGear = true; }
-                }
-                else
-                {
-                    currentGear++;
-                }
-            }
-            else
-            {
-                currentGear++;
-            }
+            currentGear++;
+            
             shiftDelay = now + 1.0f;
             shiftTime = 1.0f;
         }
@@ -271,18 +256,8 @@ public class PlayerController : MonoBehaviour
 
         if (currentGear > 0 || NeutralGear)
         {
-            if (!bikeSetting.automaticGear)
-            {
-                if (currentGear == 1)
-                {
-                    if (!NeutralGear) { currentGear--; NeutralGear = true; }
-                }
-                else if (currentGear == 0) { NeutralGear = false; } else { currentGear--; }
-            }
-            else
-            {
-                currentGear--;
-            }
+             currentGear--;
+            
             shiftDelay = now + 0.1f;
             shiftTime = 2.0f;
         }
@@ -290,21 +265,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (activeControl)
-        {
-            if (!bikeSetting.automaticGear)
-            {
-                if (Input.GetKeyDown("page up"))
-                {
-                    ShiftUp();
-                }
-                if (Input.GetKeyDown("page down"))
-                {
-                    ShiftDown();
-                }
-            }
-        }
-
         steer2 = Mathf.LerpAngle(steer2, steer * -bikeSetting.maxSteerAngle, Time.deltaTime * 10.0f);
 
         MotorRotation = Mathf.LerpAngle(MotorRotation, steer2 * bikeSetting.maxTurn * (Mathf.Clamp(speed / Z_Rotation, 0.0f, 1.0f)), Time.deltaTime * 5.0f);
@@ -330,6 +290,7 @@ public class PlayerController : MonoBehaviour
             deltaRotation1 = Quaternion.Euler(-Wheelie, 0, flipRotate - transform.localEulerAngles.z + (MotorRotation));
             deltaRotation2 = Quaternion.Euler(0, 0, flipRotate - transform.localEulerAngles.z);
 
+            //리지드바디 회전
             myRigidbody.MoveRotation(myRigidbody.rotation * deltaRotation2);
             bikeSetting.MainBody.localRotation = deltaRotation1;
         }

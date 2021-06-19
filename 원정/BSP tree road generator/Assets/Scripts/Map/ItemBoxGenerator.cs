@@ -37,7 +37,7 @@ public class ItemBoxGenerator : MonoBehaviour
         for (int i = 0; i < itemBoxNum; ++i)
         {
             itemBoxPlace[i] = Random.Range(1, road.roadPositionNum);
-            //Vector3 ObjectScale = new Vector3(5, 5, 5);
+            Vector3 ObjectScale = new Vector3(2, 2, 2);
 
             //중복체크
             for (int j = 0; j < itemBoxNum; ++j)
@@ -54,11 +54,14 @@ public class ItemBoxGenerator : MonoBehaviour
             GameObject Item = Instantiate(itemBoxPrefab, itemPosition, Quaternion.identity, parent);
             Item.tag = "ItemBox";
             Item.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+
+            Vector3 spritePosition =
+                new Vector3(itemPosition.x, itemPosition.y + 50, itemPosition.z);
             
             itemSpriteObject[i] = new GameObject("DestinationSprite");
-            itemSpriteObject[i].transform.position = itemPosition;
+            itemSpriteObject[i].transform.position = spritePosition;
             itemSpriteObject[i].transform.rotation = SpriteRotation;
-            //itemSpriteObject[i].transform.localScale = ObjectScale;
+            itemSpriteObject[i].transform.localScale = ObjectScale;
 
             itemSpriteRenderer[i] = itemSpriteObject[i].AddComponent<SpriteRenderer>();
             itemSpriteRenderer[i].sprite = itemSprite;
