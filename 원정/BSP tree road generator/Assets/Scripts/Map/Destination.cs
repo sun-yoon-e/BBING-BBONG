@@ -40,7 +40,7 @@ public class Destination : MonoBehaviour
 
     private void Update()
     {
-        if(DestroyDestination == 5)
+        if(DestroyDestination == destinationNum)
         {
             DestroyDestination = 0;
             DrawDestination();
@@ -53,14 +53,17 @@ public class Destination : MonoBehaviour
         for (int i = 0; i < destinationNum; ++i)
         {
             destination[i] = Random.Range(1, building.buildingNum);
-            isDestination[destination[i]] = true;
-
+            
             //중복체크
             for (int j = 0; j < destinationNum; ++j)
             {
                 if (destination[i] == destination[j])
+                {
                     destination[i] = Random.Range(1, building.buildingNum);
+                }
             }
+
+            isDestination[destination[i]] = true;
         }
     }
 

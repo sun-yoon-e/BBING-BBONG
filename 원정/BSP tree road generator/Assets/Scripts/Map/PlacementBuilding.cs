@@ -7,6 +7,7 @@ public class PlacementBuilding : MonoBehaviour
     RoadGenerator road;
     MeshGenerator map;
     //Destination destination;
+    ItemBoxGenerator item;
 
     public GameObject[] buildingPrefab;
     public GameObject buildingParent;
@@ -23,6 +24,7 @@ public class PlacementBuilding : MonoBehaviour
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
         //destination = GameObject.Find("Destination").GetComponent<Destination>();
+        item = GameObject.Find("ItemGenerator").GetComponent<ItemBoxGenerator>();
     }
 
     private void Start()

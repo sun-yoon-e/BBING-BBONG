@@ -21,12 +21,14 @@ public class RoadGenerator : MonoBehaviour
     int[] leftZSplit;
     int[] rightZSplit;
 
+    public Vector3[] roadPosition;
+    public int roadPositionNum;
+
     public bool[] isRoad;
     public int[] isBuildingPlace;
     public bool[] isDestination;
 
     MeshGenerator map;
-    Destination destination;
 
     private void Awake()
     {
@@ -36,14 +38,12 @@ public class RoadGenerator : MonoBehaviour
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
-        //destination = GameObject.Find("Destination").GetComponent<Destination>();
     }
 
     void Start()
     {
         CreateShape();
         CreateTriangle();
-        //UpdateMesh();
     }
 
     public void CreateShape()
@@ -72,6 +72,9 @@ public class RoadGenerator : MonoBehaviour
         isBuildingPlace = new int[(xSize + 1) * (zSize + 1)];
         isRoad = new bool[(xSize + 1) * (zSize + 1)];
         isDestination = new bool[(xSize + 1) * (zSize + 1)];
+
+        roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
+        
 
         splitX(40, 0, zSize);
 
@@ -203,14 +206,6 @@ public class RoadGenerator : MonoBehaviour
                         leftSplitZ(rightZSplit[50], leftZSplit[80], xSplit, downXSplit[80], 82);
                     }
                 }
-            }
-        }
-
-        for (int i = 0; i < isRoad.Length; ++i)
-        {
-            if (isRoad[i] == true)
-            {
-                isBuildingPlace[i] = 0;
             }
         }
     }
@@ -363,6 +358,17 @@ public class RoadGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();
+
+        roadPositionNum = 0;
+        for (int i = 0; i < isRoad.Length; ++i)
+        {
+            if (isRoad[i] == true)
+            {
+                isBuildingPlace[i] = 0;
+                roadPosition[roadPositionNum] = vertices[i];
+                ++roadPositionNum;
+            }
+        }
     }
 
     public void RefreshRoadVertices()
