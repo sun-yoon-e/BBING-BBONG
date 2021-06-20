@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class FirePizza : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+    
     public Camera cam;
     public Transform firePos;
     public Transform targetPos;
@@ -20,7 +22,7 @@ public class FirePizza : MonoBehaviour
     {
         animator = GetComponent<Animator>();
     }
-
+    
     private void Update()
     {
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
@@ -46,5 +48,7 @@ public class FirePizza : MonoBehaviour
             dir = targetPos.position - firePos.position;
         }
         pizzaObject.transform.forward = dir;
+
+        gameClient.FirePizza(firePos.position, targetPos.position);
     }
 }

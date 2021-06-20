@@ -1,8 +1,21 @@
-using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
+using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
+    private Rigidbody rb;
+
+    //public float moveSpeed = 10.0f;
+    //public float rotSpeed = 10.0f;
+
     //Mathf.LerpAngle(a, b, t) : t시간 동안 a부터 b까지 변경되는 각도를 반환 / t : 회전 감도
     //Camera
     public Camera cam;
@@ -265,6 +278,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        gameClient.UpdatePosition(rb.position, rb.rotation.eulerAngles);
+
         steer2 = Mathf.LerpAngle(steer2, steer * -bikeSetting.maxSteerAngle, Time.deltaTime * 10.0f);
 
         MotorRotation = Mathf.LerpAngle(MotorRotation, steer2 * bikeSetting.maxTurn * (Mathf.Clamp(speed / Z_Rotation, 0.0f, 1.0f)), Time.deltaTime * 5.0f);

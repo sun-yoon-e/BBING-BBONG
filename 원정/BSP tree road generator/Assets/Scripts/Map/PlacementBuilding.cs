@@ -33,7 +33,7 @@ public class PlacementBuilding : MonoBehaviour
         tempZSize = 0;
 
         buildingObject = new GameObject[1500];
-        
+
         buildingNum = 0;
 
         for (int i = 0; i < road.vertices.Length; ++i)
@@ -140,7 +140,7 @@ public class PlacementBuilding : MonoBehaviour
             map.vertices[place - road.xSize - 2].y = map.vertices[place].y;
         }
 
-        if (place + road.xSize + 2 < road.xSize * road.zSize )
+        if (place + road.xSize + 2 < road.xSize * road.zSize)
         {
             road.isBuildingPlace[place + road.xSize] = 0;
             road.isBuildingPlace[place + road.xSize + 1] = 0;
