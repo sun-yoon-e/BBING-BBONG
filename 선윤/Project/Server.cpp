@@ -144,7 +144,7 @@ void Server::ClientMain(Client* client)
 		}
         
         if (buffer[0] >= 0 && buffer[0] < PACKET_CMD_MAX) {
-            wprintf(L"[Recv From %d] Cmd: %s, %d bytes\n", socket, PACKET_NAME[(int)buffer[0]], read);
+            //wprintf(L"[Recv From %d] Cmd: %s, %d bytes\n", socket, PACKET_NAME[(int)buffer[0]], read);
         }
         else {
             wprintf(L"[Recv From %d] Cmd: %d(Unknown), %d bytes\n", socket, (int)buffer[0], read);
@@ -190,29 +190,30 @@ void Server::ClientMain(Client* client)
 			delete scPacket;
 		}
 		if (buffer[0] == CS_MESH) {
-            if (!isGameStarted) {
+            /*if (!isGameStarted) {
                 continue;
-            }
+            }*/
 			Packet_Request_Mesh_SC* scPacket = new Packet_Request_Mesh_SC;
 			scPacket->ready = meshReady;
 			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
 			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
-
+            cout << "CS_MESH: " << meshReady << endl;
             SendTo(socket, (char*) scPacket, sizeof(*scPacket));
 			delete scPacket;
 		}
 		if (buffer[0] == CS_SET_MESH) {
-            if (!isGameStarted) {
+            /*if (!isGameStarted) {
                 continue;
-            }
+            }*/
 			if (meshReady) {
+                cout << "CS_SET_MESH: continue "<< endl;
 				continue;
 			}
 			Packet_Set_Mesh* packet = reinterpret_cast<Packet_Set_Mesh*>(buffer);
 			meshReady = true;
 			memcpy(meshVertices, packet->vertices, sizeof(meshVertices));
 			memcpy(meshTriangles, packet->triangles, sizeof(meshTriangles));
-
+            cout << "CS_SET_MESH: meshReady true " << endl;
 			Packet_Set_Mesh_SC* scPacket = new Packet_Set_Mesh_SC;
 			scPacket->ready = meshReady;
 			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
@@ -227,11 +228,12 @@ void Server::ClientMain(Client* client)
 			delete scPacket;
 		}
 		if (buffer[0] == CS_ROAD) {
-            if (!isGameStarted) {
+            /*if (!isGameStarted) {
                 continue;
-            }
+            }*/
 			Packet_Request_Road_SC* scPacket = new Packet_Request_Road_SC;
 			scPacket->ready = roadReady;
+            cout << "CS_ROAD: " << roadReady << endl;
 			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
 			memcpy(scPacket->triangles, roadTriangles, sizeof(roadTriangles));
 			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
@@ -241,10 +243,11 @@ void Server::ClientMain(Client* client)
 			delete scPacket;
 		}
 		if (buffer[0] == CS_SET_ROAD) {
-            if (!isGameStarted) {
+            /*if (!isGameStarted) {
                 continue;
-            }
+            }*/
 			if (roadReady) {
+                cout << "CS_SET_ROAD continue" << endl;
 				continue;
 			}
 			Packet_Set_Road* packet = reinterpret_cast<Packet_Set_Road*>(buffer);
@@ -253,7 +256,7 @@ void Server::ClientMain(Client* client)
 			memcpy(roadTriangles, packet->triangles, sizeof(roadTriangles));
 			memcpy(isRoad, packet->isRoad, sizeof(isRoad));
 			memcpy(isBuildingPlace, packet->isBuildingPlace, sizeof(isBuildingPlace));
-
+            cout << "CS_SET_ROAD roadReady true" << endl;
 			Packet_Set_Road_SC* scPacket = new Packet_Set_Road_SC;
 			scPacket->ready = roadReady;
 			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
@@ -321,10 +324,11 @@ void Server::ClientMain(Client* client)
 			}
 
 			// 타이머 시간에 따라 '180'위치의 숫자 초 단위로 조절
+			// gameTimer.cs의 limitTime 숫자도 함께 조절
 #ifdef TEST
             if (isGameStarted && (time(NULL) - gameStartedAt >= 10)) {
 #else
-			if (isGameStarted && (time(NULL) - gameStartedAt >= 180)) {
+			if (isGameStarted && (time(NULL) - gameStartedAt >= 60)) {
 #endif
 				cout << "-- END GAME --" << endl;
 				if (_mutex.try_lock()) {
@@ -407,6 +411,18 @@ void Server::ServerMain()
                 delete packet;
                 _mutex.unlock();
             }
+
+            ZeroMemory(meshVertices, sizeof(meshVertices));
+            ZeroMemory(meshTriangles, sizeof(meshTriangles));
+
+            ZeroMemory(roadVertices, sizeof(roadVertices));
+            ZeroMemory(roadTriangles, sizeof(roadTriangles));
+
+            ZeroMemory(isRoad, sizeof(isRoad));
+            ZeroMemory(isBuildingPlace, sizeof(isBuildingPlace));
+
+            meshReady = false;
+            roadReady = false;
         }
     }
 }
@@ -414,7 +430,7 @@ void Server::ServerMain()
 int Server::SendTo(SOCKET sock, char * packet, int packetSize)
 {
     int sendLen = send(sock, packet, packetSize, 0);
-    wprintf(L"[Send To   %d] Cmd: %s, %d bytes\n", sock, PACKET_NAME[(int)packet[0]], sendLen);
+    //wprintf(L"[Send To   %d] Cmd: %s, %d bytes\n", sock, PACKET_NAME[(int)packet[0]], sendLen);
     return sendLen;
 }
 
