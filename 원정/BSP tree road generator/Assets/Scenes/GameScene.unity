@@ -3758,6 +3758,8 @@ MonoBehaviour:
   images:
   - {fileID: 5618960221759066338}
   - {fileID: 5618960221988427918}
+  fogParticle: {fileID: 1543837207191096947, guid: 00a487a7191c7ea4ab1e15684e6f476a,
+    type: 3}
 --- !u!212 &8604153502323357594
 SpriteRenderer:
   m_ObjectHideFlags: 0
