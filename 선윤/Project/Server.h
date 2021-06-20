@@ -37,7 +37,9 @@ private:
 	int client_id_counter = 0;
 
 	BOOL isGameStarted = false;
+	BOOL isCountdownStarted = false;
 	time_t gameStartedAt = 0;
+	time_t gameFinishedAt = 0;
 	mutex _mutex;
 
 public:
@@ -48,6 +50,8 @@ public:
 	void StartServer();
 
 	void ClientMain(Client* client);
+	void ServerMain();
+    int SendTo(SOCKET sock, char* packet, int packetSize);
 
 	User* ClientLogin(Packet_Login* loginPacket);
 	BOOL ClientSignUp(Packet_SignUp* signUpPacket);
@@ -55,6 +59,7 @@ public:
 	BOOL CanStartGame();
 
 	static DWORD WINAPI NewClientThread(LPVOID);
+	static DWORD WINAPI ServerThread(LPVOID);
 
 	// https://stackoverflow.com/questions/10737644/convert-const-char-to-wstring 를 참고하여 수정함
 	wstring c2ws(const char* cstr)
