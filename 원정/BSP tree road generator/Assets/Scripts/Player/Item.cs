@@ -10,6 +10,7 @@ public class Item : MonoBehaviour
 {
     public Sprite[] sprites = new Sprite[5];
     public Image[] images = new Image[2];
+    public Sprite nullSprite;
 
     private int ItemCnt = 0;
     private int?[] MyItems = new int?[2];
@@ -55,8 +56,8 @@ public class Item : MonoBehaviour
         
         if (Input.GetButton("Fire1") && Using)
         {
-            UseItem(MyItems[useIndex].Value);
-            MyItems[useIndex] = null;
+            UseItem(MyItems[useIndex].Value); 
+            //MyItems[useIndex] = nullSprite;
             Using = false;
         }
     }
@@ -111,48 +112,45 @@ public class Item : MonoBehaviour
         {
             case 0:
                 Fog();
+                //images[itemIndex].sprite = ;
                 break;
             case 1:
                 Fog();
+                images[itemIndex].sprite = null;
                 break;
             case 2:
                 Debug.Log("슬로우");
                 PlayerController.slowdown = true;
+                images[itemIndex].sprite = null;
                 break;
             case 3:
                 Debug.Log("부스터");
                 PlayerController.booster = true;
+                images[itemIndex].sprite = null;
                 break;
             case 4:
                 Debug.Log("쉴드");
+                images[itemIndex].sprite = null;
                 break;
         } 
     }
     
     void Fog()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range))
-        {
-            if (hit.transform.CompareTag("Player"))
-            {
-                Vector3 fogPosition = new Vector3(mainCamera.transform.position.x,
-                    mainCamera.transform.position.y,
-                    mainCamera.transform.position.z + 3);
+        Vector3 fogPosition = new Vector3(mainCamera.transform.position.x,
+            mainCamera.transform.position.y,
+            mainCamera.transform.position.z + 3);
 
-                GameObject fog = Instantiate(fogParticle, fogPosition, mainCamera.transform.rotation, mainCamera.transform);
-                Destroy(fog, 20f);
+        GameObject fog = Instantiate(fogParticle, fogPosition, mainCamera.transform.rotation, mainCamera.transform);
+        Destroy(fog, 20f);
 
 
-                Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
-                    miniCamera.transform.position.y - 7,
-                    miniCamera.transform.position.z);
+        Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
+            miniCamera.transform.position.y - 7,
+            miniCamera.transform.position.z);
 
-                GameObject miniFog = Instantiate(fogParticle, miniFogPosition, miniCamera.transform.rotation, miniCamera.transform);
-                Destroy(miniFog, 20f);
-            }
-            
-        }
+        GameObject miniFog = Instantiate(fogParticle, miniFogPosition, miniCamera.transform.rotation, miniCamera.transform);
+        Destroy(miniFog, 20f);
     }
 
 
