@@ -48,7 +48,7 @@ public class ItemBoxGenerator : MonoBehaviour
 
             Vector3 itemPosition =
                 new Vector3(road.roadPosition[itemBoxPlace[i]].x,
-                road.roadPosition[itemBoxPlace[i]].y + 1,
+                road.roadPosition[itemBoxPlace[i]].y + 1.5f,
                 road.roadPosition[itemBoxPlace[i]].z);
 
             GameObject Item = Instantiate(itemBoxPrefab, itemPosition, Quaternion.identity, parent);
