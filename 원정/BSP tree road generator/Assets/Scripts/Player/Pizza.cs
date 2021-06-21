@@ -53,6 +53,8 @@ public class Pizza : MonoBehaviour
                 Destroy(destination.destinationPizzaObject[i]);
 
                 destination.DestroyDestination += 1;
+
+                gameClient.UpdateScore();
             }
         }
 

@@ -9,7 +9,7 @@ public class PlacementBuilding : MonoBehaviour
     private GameClient gameClient = GameClient.Instance;
     RoadGenerator road;
     MeshGenerator map;
-    Destination destination;
+    //Destination destination;
     ItemBoxGenerator item;
 
     public GameObject[] buildingPrefab;
@@ -23,6 +23,7 @@ public class PlacementBuilding : MonoBehaviour
     float tempZSize;
 
     public event EventHandler OnBuildingReady;
+    public event EventHandler OnBuildingReady2;
     public bool isBuildingReady = false;
 
     private void Awake()
@@ -34,7 +35,7 @@ public class PlacementBuilding : MonoBehaviour
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
-        destination = GameObject.Find("Destination").GetComponent<Destination>();
+        //destination = GameObject.Find("Destination").GetComponent<Destination>();
         item = GameObject.Find("ItemGenerator").GetComponent<ItemBoxGenerator>();
 
         //road = GetComponent<RoadGenerator>();
@@ -171,10 +172,11 @@ public class PlacementBuilding : MonoBehaviour
         {
             OnBuildingReady(this, EventArgs.Empty);
         }
-        else
+        if (OnBuildingReady2 != null)
         {
-            Debug.Log("OnBuildginReady() is null");
+            OnBuildingReady2(this, EventArgs.Empty);
         }
+
     }
 
     void makeNotBuildingPlace(int place)

@@ -46,9 +46,7 @@ public class Destination : MonoBehaviour
             destinationPizzaObject = new GameObject[destinationNum];
             destinationSpriteObject = new GameObject[destinationNum];
             pizzaSpriteRenderer = new SpriteRenderer[destinationNum];
-        }
-        else
-        {
+
             DrawDestination();
             ApplyDestinationToBuilding();
         }
@@ -56,8 +54,11 @@ public class Destination : MonoBehaviour
 
     private void Update()
     {
-        if (destination == null) return;
-       
+        if (destination == null)
+        {
+            return;
+        }
+
         if (DestroyDestination == destinationNum)
         {
             DestroyDestination = 0;
@@ -68,6 +69,7 @@ public class Destination : MonoBehaviour
 
     public void DrawDestination()
     {
+        Debug.Log("DrawDestination()");
         for (int i = 0; i < destinationNum; ++i)
         {
             destination[i] = Random.Range(1, building.buildingNum);
