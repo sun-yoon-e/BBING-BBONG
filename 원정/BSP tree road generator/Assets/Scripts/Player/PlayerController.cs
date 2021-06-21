@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour
     private float cameraRotationX;
     private float cameraRotationY;
 
+    //Item
+    public static bool booster;
+    public static bool slowdown;
+    
     //Motorcycle
     public bool activeControl = false;
 
@@ -305,7 +309,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        speed = myRigidbody.velocity.magnitude * 2.7f;
+        speed = myRigidbody.velocity.magnitude;
 
         if (crash)
         {
