@@ -39,7 +39,7 @@ using namespace std;
 #define BUF_SIZE		1024
 #define MAX_BUF_SIZE	4096
 #define MAX_PACKET_SIZE 512000
-#define MAX_CLIENT		2					// 클라이언트 수
+#define MAX_CLIENT		3					// 클라이언트 수
 #endif
 #define XSIZE			100
 #define ZSIZE			100

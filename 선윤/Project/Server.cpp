@@ -328,7 +328,7 @@ void Server::ClientMain(Client* client)
 #ifdef TEST
             if (isGameStarted && (time(NULL) - gameStartedAt >= 10)) {
 #else
-			if (isGameStarted && (time(NULL) - gameStartedAt >= 60)) {
+			if (isGameStarted && (time(NULL) - gameStartedAt >= 100)) {
 #endif
 				cout << "-- END GAME --" << endl;
 				if (_mutex.try_lock()) {
