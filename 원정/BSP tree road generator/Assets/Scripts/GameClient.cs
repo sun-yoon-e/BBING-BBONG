@@ -48,6 +48,11 @@ public class GameStateChangedEventArgs : EventArgs
     public bool gameState;
 }
 
+public class GameSceneChangedEventArgs : EventArgs
+{
+    public int scene;
+}
+
 public class FireEventArgs : EventArgs
 {
     public Vector3 position;
@@ -69,7 +74,8 @@ public class GameClient
     public const byte SC_SET_MESH = 11;
     public const byte SC_ROAD     = 12;
     public const byte SC_SET_ROAD = 13;
-    
+    public const byte SC_INIT = 14;
+
     public const byte CS_LOGIN  = 0;
     public const byte CS_LOGOUT = 1;
     public const byte CS_SIGNUP = 2;
@@ -82,17 +88,17 @@ public class GameClient
     public const byte CS_SET_MESH = 11;
     public const byte CS_ROAD     = 12;
     public const byte CS_SET_ROAD = 13;
-    
-    public const string SERVER_IP = "";
+
+    public const string SERVER_IP = "14.35.11.69";
     public const int SERVER_PORT = 13531;
-    
 
     // 싱글톤 패턴
     // https://tech.lonpeach.com/2017/02/04/unity3d-singleton-pattern-example/
-    // :wishket: 씬이 변경될 때 소켓이 끊기고 재접속하는 것을 방지하기 위해 GameClient를 하나만 만들어놓고 여기저기서 가져다 씁니다.
+    // 씬이 변경될 때 소켓이 끊기고 재접속하는 것을 방지하기 위해 GameClient를 하나만 만들어놓고 여기저기서 가져다 씁니다.
     private static GameClient _instance = null;
     private static readonly object padlock = new object();
-    
+    private static UnityMainThreadDispatcher dispinstance = null;
+
     public static GameClient Instance {
         get
         {
@@ -112,10 +118,10 @@ public class GameClient
     private Thread recvThread = null;
 
     // 이벤트 핸들러
-    // :wishket: 소켓을 접속하고 처리하는 부분은 이 GameClient.cs에 포함되어 있습니다.
-    //           그런데, 문제가 발생했을 때 '오류가 발생했습니다' 같은 메시지를 사용자에게 보여주는
-    //           부분은 각 씬의 스크립트에서 처리해야 합니다. 
-    //           각 씬의 스크립트에서 GameClient에 있는 소켓에 오류가 생겼는지 등의 정보를 받기 위해 이벤트 핸들러를 씁니다.
+    // 소켓을 접속하고 처리하는 부분은 이 GameClient.cs에 포함되어 있습니다.
+    // 그런데, 문제가 발생했을 때 '오류가 발생했습니다' 같은 메시지를 사용자에게 보여주는
+    // 부분은 각 씬의 스크립트에서 처리해야 합니다. 
+    // 각 씬의 스크립트에서 GameClient에 있는 소켓에 오류가 생겼는지 등의 정보를 받기 위해 이벤트 핸들러를 씁니다.
     public event EventHandler OnSocketError; // 소켓 오류 발생 시
     public event EventHandler<LoginEventArgs> OnLogin;
     public event EventHandler<SignupEventArgs> OnSignup;
@@ -124,12 +130,13 @@ public class GameClient
     public event EventHandler<ScoreUpdateEventArgs> OnScoreUpdated;
     public event EventHandler<PositionUpdateEventArgs> OnPositionUpdated;
     public event EventHandler<GameStateChangedEventArgs> OnGameStateChanged;
+    public event EventHandler<GameSceneChangedEventArgs> OnGameSceneChanged;
     public event EventHandler<FireEventArgs> OnFired;
-    
     
     public int clientId { get; private set; } = -1;
 
     public bool isGameStarted = false;
+    public bool isReadyToControl = false;
 
     private GameClient() 
     {
@@ -173,15 +180,20 @@ public class GameClient
                             {
                                 break;
                             }
-                            Debug.Log(read + " bytes read");
+                            //Debug.Log(read + " bytes read");
 
-                            UnityMainThreadDispatcher.Instance().Enqueue(
+                            if(dispinstance == null)
+                            {
+                                dispinstance = UnityMainThreadDispatcher.Instance();
+                            }
+                            dispinstance.Enqueue(
                                 () => ProcessPacket(buffer)
                             );
                         }
                     }
                     catch (SocketException e)
                     {
+                        Debug.Log(e);
                         if (OnSocketError != null)
                         {
                             OnSocketError(this, EventArgs.Empty);
@@ -198,6 +210,7 @@ public class GameClient
         }
         catch (SocketException e)
         {
+            Debug.Log(e);
             if (OnSocketError != null)
                 OnSocketError(this, EventArgs.Empty);
         }
@@ -208,10 +221,18 @@ public class GameClient
         
     }
 
+    public bool IsConnect()
+    {
+        if (socket == null || !socket.Connected) return false;
+        return true;
+    }
+
     private void ProcessPacket(byte[] buffer)
     {
         var reader = new BinaryReader(new MemoryStream(buffer));
         var header = reader.ReadByte();
+
+        Debug.Log(header + " ProcessPacket");
 
         if (header == SC_LOGIN)
         {
@@ -261,6 +282,10 @@ public class GameClient
                 eventArgs.vertices = vertices;
                 eventArgs.triangles = triangles;
                 OnMeshChanged(this, eventArgs);
+            }
+            else
+            {
+                Debug.Log("OnMeshChanged() is null");
             }
         } else if (header == SC_ROAD || header == SC_SET_ROAD)
         {
@@ -352,13 +377,17 @@ public class GameClient
         {
             bool state = reader.ReadBoolean();
             isGameStarted = state;
-            
+            Debug.Log("게임시작여부? " + state);
             if (OnGameStateChanged != null)
             {
                 var eventArgs = new GameStateChangedEventArgs();
                 eventArgs.gameState = state;
                 
                 OnGameStateChanged(this, eventArgs);
+            }
+            else
+            {
+                Debug.Log("OnGameStateChanged is null");
             }
         } else if (header == SC_FIRE)
         {
@@ -380,6 +409,24 @@ public class GameClient
                 eventArgs.targetPosition = targetPosition;
 
                 OnFired(this, eventArgs);
+            }
+        } else if (header == SC_INIT)
+        {
+            isGameStarted = false;
+            int scene = reader.ReadInt32();
+            Debug.Log("초기화");
+            //SceneManager.LoadScene("Scenes/LoginScene");
+
+            if (OnGameSceneChanged != null)
+            {
+                var eventArgs = new GameSceneChangedEventArgs();
+                eventArgs.scene = scene;
+
+                OnGameSceneChanged(this, eventArgs);
+            }
+            else
+            {
+                Debug.Log("OnGameSceneChanged is null");
             }
         }
     }

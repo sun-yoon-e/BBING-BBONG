@@ -1,8 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(MeshFilter))]
 public class RoadGenerator : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     Mesh mesh;
 
     public Vector3[] vertices;
@@ -28,22 +32,71 @@ public class RoadGenerator : MonoBehaviour
     public int[] isBuildingPlace;
     public bool[] isDestination;
 
+    public event EventHandler OnRoadReady;
+    public event EventHandler OnRoadReady2;
+    public bool isRoadReady = false;
+
     MeshGenerator map;
 
     private void Awake()
     {
+        gameClient.OnRoadChanged += SetRoadEvent;
+
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
 
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+
+        isDestination = new bool[(xSize + 1) * (zSize + 1)];
+
+        roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
     }
 
     void Start()
     {
-        CreateShape();
-        CreateTriangle();
+        gameClient.GetRoad();
+    }
+
+    public void SetRoadEvent(object sender, RoadEventArgs args)
+    {
+        if (!args.ready)
+        {
+            Debug.Log("SetRoadEvent() 처음!!");
+            CreateShape();
+            CreateTriangle();
+            gameClient.SetRoad(vertices, triangles, isRoad, isBuildingPlace);
+        }
+        else
+        {
+            Debug.Log("SetRoadEvent() 업뎃");
+            vertices = args.vertices;
+            triangles = args.triangles;
+            isRoad = args.isRoad;
+            isBuildingPlace = args.isBuildingPlace;
+
+            UpdateMesh();
+            isRoadReady = true;
+
+            if (OnRoadReady != null)
+            {
+                OnRoadReady(this, EventArgs.Empty);
+            }
+            else
+            {
+                Debug.Log("OnRoadReady() is null");
+            }
+
+            if (OnRoadReady2 != null)
+            {
+                OnRoadReady2(this, EventArgs.Empty);
+            }
+            else
+            {
+                Debug.Log("OnRoadReady2() is null");
+            }
+        }
     }
 
     public void CreateShape()
@@ -54,7 +107,10 @@ public class RoadGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
+                // 맵 생성
+                // 지형->도로->건물 순서로 생성 후 지형 높이 수정 &도로도 다시 update
+                // float y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
+                float y = map.vertices[i].y;
                 vertices[i] = new Vector3(x * 10, y, z * 10);
                 ++i;
             }
@@ -71,9 +127,7 @@ public class RoadGenerator : MonoBehaviour
         triangles = new int[xSize * zSize * 6];
         isBuildingPlace = new int[(xSize + 1) * (zSize + 1)];
         isRoad = new bool[(xSize + 1) * (zSize + 1)];
-        isDestination = new bool[(xSize + 1) * (zSize + 1)];
-
-        roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
+        
         
 
         splitX(40, 0, zSize);

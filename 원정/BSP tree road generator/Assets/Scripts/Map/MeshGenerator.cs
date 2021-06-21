@@ -4,6 +4,8 @@
 [RequireComponent(typeof(MeshCollider))]
 public class MeshGenerator : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     Mesh mesh;
 
     public Vector3[] vertices;
@@ -19,6 +21,12 @@ public class MeshGenerator : MonoBehaviour
 
     private void Awake()
     {
+        
+    }
+
+    void Start()
+    {
+        gameClient.OnMeshChanged += SetMeshEvent;
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
@@ -26,12 +34,27 @@ public class MeshGenerator : MonoBehaviour
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
         buildingPlace = new int[(xSize + 1) * (zSize + 1)];
         buildingPlace = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>().isBuildingPlace;
+
+        gameClient.GetMesh();
     }
 
-    void Start()
+    public void SetMeshEvent(object sender, MeshEventArgs args)
     {
-        CreateShape();
-        CreateTriangle();
+        if (!args.ready)
+        {
+            Debug.Log("SetMeshEvent() 처음!!");
+            CreateShape();
+            CreateTriangle();
+            gameClient.SetMesh(vertices, triangles);
+        }
+        else
+        {
+            Debug.Log("SetMeshEvent() 업뎃");
+            vertices = args.vertices;
+            triangles = args.triangles;
+
+            UpdateMesh();
+        }
     }
 
     public void CreateShape()
@@ -43,6 +66,7 @@ public class MeshGenerator : MonoBehaviour
             for (int x = 0; x <= xSize; ++x, ++i)
             {
                 y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
+                //y = 1;
 
                 vertices[i] = new Vector3(x * 10, y, z * 10);
             }

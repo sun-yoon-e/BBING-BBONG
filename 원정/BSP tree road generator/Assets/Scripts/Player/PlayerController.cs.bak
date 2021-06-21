@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
 
+    private Rigidbody rb;
+
     //public float moveSpeed = 10.0f;
     //public float rotSpeed = 10.0f;
 
@@ -22,9 +24,6 @@ public class PlayerController : MonoBehaviour
     private float cameraRotationLimitY = 70.0f;
     private float cameraRotationX;
     private float cameraRotationY;
-
-    public Vector3 myPrevPosition;
-    public Vector3 myPrevEulerAngles;
 
     //Motorcycle
     public bool activeControl = false;
@@ -279,6 +278,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        gameClient.UpdatePosition(rb.position, rb.rotation.eulerAngles);
+
         steer2 = Mathf.LerpAngle(steer2, steer * -bikeSetting.maxSteerAngle, Time.deltaTime * 10.0f);
 
         MotorRotation = Mathf.LerpAngle(MotorRotation, steer2 * bikeSetting.maxTurn * (Mathf.Clamp(speed / Z_Rotation, 0.0f, 1.0f)), Time.deltaTime * 5.0f);
@@ -602,16 +603,7 @@ public class PlayerController : MonoBehaviour
             col.steerAngle = steer * (w.maxSteer / SteerAngle);
         }
         shiftTime = Mathf.MoveTowards(shiftTime, 0.0f, 0.1f);
-        if (gameClient.isGameStarted == false) return;
-
-        if (myPrevPosition != myRigidbody.position || myPrevEulerAngles != myRigidbody.rotation.eulerAngles)
-        {
-            gameClient.UpdatePosition(myRigidbody.position, myRigidbody.rotation.eulerAngles);
-            myPrevPosition = myRigidbody.position;
-            myPrevEulerAngles = myRigidbody.rotation.eulerAngles;
-        }
     }
-
     void CameraRotate()
     {
         //카메라 회전 

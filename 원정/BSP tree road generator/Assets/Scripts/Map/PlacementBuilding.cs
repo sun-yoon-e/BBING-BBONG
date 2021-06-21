@@ -1,12 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlacementBuilding : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
     RoadGenerator road;
     MeshGenerator map;
-    //Destination destination;
+    Destination destination;
     ItemBoxGenerator item;
 
     public GameObject[] buildingPrefab;
@@ -19,16 +22,33 @@ public class PlacementBuilding : MonoBehaviour
     float tempXSize;
     float tempZSize;
 
+    public event EventHandler OnBuildingReady;
+    public bool isBuildingReady = false;
+
     private void Awake()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
-        //destination = GameObject.Find("Destination").GetComponent<Destination>();
-        item = GameObject.Find("ItemGenerator").GetComponent<ItemBoxGenerator>();
+        
     }
 
     private void Start()
     {
+        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+        destination = GameObject.Find("Destination").GetComponent<Destination>();
+        item = GameObject.Find("ItemGenerator").GetComponent<ItemBoxGenerator>();
+
+        //road = GetComponent<RoadGenerator>();
+
+        road.OnRoadReady += OnRoadReady;
+        if (road.isRoadReady)
+        {
+            OnRoadReady(this, EventArgs.Empty);
+        }
+    }
+
+    private void OnRoadReady(object sender, EventArgs args)
+    {
+        Debug.Log("OnRoadReady() 동작");
         tempXSize = 0;
         tempZSize = 0;
 
@@ -107,6 +127,33 @@ public class PlacementBuilding : MonoBehaviour
             //Vector3 scale = new Vector3(1.2f, 1.2f, 1.2f);
             //buildingObject[buildingNum].transform.localScale = scale;
 
+            // 건물 위치
+            Vector3 pos = buildingObject[buildingNum].transform.position;
+            Vector3 buildingSize = buildingObject[buildingNum].GetComponent<MeshRenderer>().bounds.size;
+            Debug.Log("빌딩 위치 #" + buildingNum + " -> " + pos + ", " + buildingSize);
+
+            //// 높이 업데이트
+
+            //float zstart = (pos.z / 10.0f) - (buildingSize.z / 2.0f);
+            //if (zstart < 0) zstart = 0;
+            //float zend = (pos.z / 10.0f) + (buildingSize.z / 2.0f);
+            //if (zend > map.zSize) zend = map.zSize;
+
+            //float xstart = (pos.x / 10.0f) - (buildingSize.x / 2.0f);
+            //if (xstart < 0) xstart = 0;
+            //float xend = (pos.x / 10.0f) + (buildingSize.x / 2.0f);
+            //if (xend > map.xSize) xend = map.xSize;
+
+            //int l = (int)zstart;
+            //for (int j = (int)zstart; j < (int)zend; j++)
+            //{
+            //    for (int k = (int)xstart; k < (int)xend ; k++)
+            //    {
+            //        map.vertices[l] = new Vector3(map.vertices[l].x, buildingSize.y, map.vertices[l].z);
+            //        l++;
+            //    }
+            //}
+
             buildingObject[buildingNum].AddComponent<BoxCollider>();
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
@@ -117,6 +164,17 @@ public class PlacementBuilding : MonoBehaviour
         map.UpdateMesh();
         road.RefreshRoadVertices();
         road.UpdateMesh();
+
+        isBuildingReady = true;
+        gameClient.isReadyToControl = true;
+        if (OnBuildingReady != null)
+        {
+            OnBuildingReady(this, EventArgs.Empty);
+        }
+        else
+        {
+            Debug.Log("OnBuildginReady() is null");
+        }
     }
 
     void makeNotBuildingPlace(int place)

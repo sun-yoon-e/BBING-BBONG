@@ -28,7 +28,7 @@ public class ItemBoxGenerator : MonoBehaviour
         itemSpriteObject = new GameObject[itemBoxNum];
         itemSpriteRenderer = new SpriteRenderer[itemBoxNum];
         
-        DrawItemBox();
+        //DrawItemBox();
     }
 
     public void DrawItemBox()

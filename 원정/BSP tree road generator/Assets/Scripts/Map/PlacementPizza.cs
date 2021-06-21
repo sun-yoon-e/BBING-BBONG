@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlacementPizza : MonoBehaviour
 {
@@ -15,11 +17,22 @@ public class PlacementPizza : MonoBehaviour
 
     private void Awake()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+        
     }
 
     private void Start()
+    {
+        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+
+        road.OnRoadReady2 += OnRoadReady;
+        if (road.isRoadReady)
+        {
+            OnRoadReady(this, EventArgs.Empty);
+        }
+    }
+
+    private void OnRoadReady(object sender, EventArgs args)
     {
         int xSize = road.xSize;
         int zSize = road.zSize;
@@ -50,6 +63,11 @@ public class PlacementPizza : MonoBehaviour
             pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 3 + (xSize * 2)], Quaternion.Euler(0, 0, 0));
             makeNotBuildingPlace((xSize * zSize) / 2 + 3 + (xSize * 2));
         }
+
+        // 건물 위치
+        Vector3 pos = pizzaStore.transform.position;
+        Vector3 buildingSize = pizzaStore.GetComponent<MeshRenderer>().bounds.size;
+        Debug.Log("피자가게 위치 -> " + pos + ", " + buildingSize);
 
         pizzaStore.AddComponent<BoxCollider>();
         BoxCollider col = pizzaStore.GetComponent<BoxCollider>();

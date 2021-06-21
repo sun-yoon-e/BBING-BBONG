@@ -26,7 +26,12 @@ public class onClick_LoginMenu : MonoBehaviour
     public InputField Signup_id;
     public InputField Signup_pw;
     public Text InformationText;
-    
+
+    public void Awake()
+    {
+        //DontDestroyOnLoad(this.gameObject);
+    }
+
     // 회원가입 버튼 클릭
     public void Signup_btn_Clicked()
     {
@@ -100,7 +105,7 @@ public class onClick_LoginMenu : MonoBehaviour
         SignupMenu.SetActive(false);
         LoginMenu.SetActive(true);
 
-        // GameClient에서 소켓 오류가 발생하면, 그 이벤트를 받아서 처리하도록 합니다.
+        // :wishket: GameClient에서 소켓 오류가 발생하면, 그 이벤트를 받아서 처리하도록 합니다.
         gameClient.OnSocketError += SocketError;
         gameClient.OnLogin += LoginResult;
         gameClient.OnSignup += SignupResult;
@@ -109,7 +114,7 @@ public class onClick_LoginMenu : MonoBehaviour
         }
     }
 
-    // GameClient에서 소켓 오류가 발생하면 이 메소드가 실행됩니다.
+    // :wishket: GameClient에서 소켓 오류가 발생하면 이 메소드가 실행됩니다.
     private void SocketError(object sender, EventArgs e)
     {
         InformationText.text = "서버에 접속할 수 없습니다";

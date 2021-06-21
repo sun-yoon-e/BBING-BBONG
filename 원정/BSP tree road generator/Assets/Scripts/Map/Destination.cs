@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Destination : MonoBehaviour
 {
@@ -10,8 +12,9 @@ public class Destination : MonoBehaviour
     public Sprite destinationSprite;
     public Transform parent;
 
-    public int[] destination;
+    public int[] destination = null;
     public int destinationNum;
+    private bool isReady = false;
 
     bool[] isDestination;
 
@@ -24,23 +27,38 @@ public class Destination : MonoBehaviour
     private void Start()
     {
         building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
-        
-        destination = new int[destinationNum];
-        isDestination = new bool[building.buildingNum];
-        DestroyDestination = 0;
-
-        destinationPizzaObject = new GameObject[destinationNum];
-        destinationSpriteObject = new GameObject[destinationNum];
-        pizzaSpriteRenderer = new SpriteRenderer[destinationNum];
-
-        DrawDestination();
-        ApplyDestinationToBuilding();
+        building.OnBuildingReady += OnBuildingReady;
+        if (building.isBuildingReady)
+        {
+            OnBuildingReady(this, EventArgs.Empty);
+        }
     }
 
+    private void OnBuildingReady(object sender, EventArgs args)
+    {
+        if (isReady == false)
+        {
+            isReady = true;
+            destination = new int[destinationNum];
+            isDestination = new bool[building.buildingNum];
+            DestroyDestination = 0;
+
+            destinationPizzaObject = new GameObject[destinationNum];
+            destinationSpriteObject = new GameObject[destinationNum];
+            pizzaSpriteRenderer = new SpriteRenderer[destinationNum];
+        }
+        else
+        {
+            DrawDestination();
+            ApplyDestinationToBuilding();
+        }
+    }
 
     private void Update()
     {
-        if(DestroyDestination == destinationNum)
+        if (destination == null) return;
+       
+        if (DestroyDestination == destinationNum)
         {
             DestroyDestination = 0;
             DrawDestination();
