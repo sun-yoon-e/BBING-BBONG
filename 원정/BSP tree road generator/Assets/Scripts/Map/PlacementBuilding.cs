@@ -26,7 +26,7 @@ public class PlacementBuilding : MonoBehaviour
     private void Start()
     {
         buildingNum = 0;
-        buildingObject = new GameObject[2000];
+        buildingObject = new GameObject[1000];
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
@@ -82,17 +82,17 @@ public class PlacementBuilding : MonoBehaviour
             if (place + i < road.xSize * road.zSize
                 || place - i > 0)
             {
-                road.buildingState[place - i] = 0;
-                road.buildingState[place + i] = 0;
+                road.buildingState[place - i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + i] = (int)buildingDirection.BUILDING;
                 map.vertices[place - i].y = map.vertices[place].y;
                 map.vertices[place + i].y = map.vertices[place].y;
             }
 
             if (place - road.xSize - 2 > 0)
             {
-                road.buildingState[place - road.xSize - i] = 0;
-                road.buildingState[place - road.xSize] = 0;
-                road.buildingState[place - road.xSize - i - 1] = 0;
+                road.buildingState[place - road.xSize - i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place - road.xSize] = (int)buildingDirection.BUILDING;
+                road.buildingState[place - road.xSize - i - 1] = (int)buildingDirection.BUILDING;
                 map.vertices[place - road.xSize - i].y = map.vertices[place].y;
                 map.vertices[place - road.xSize].y = map.vertices[place].y;
                 map.vertices[place - road.xSize - i - 1].y = map.vertices[place].y;
@@ -100,9 +100,9 @@ public class PlacementBuilding : MonoBehaviour
 
             if (place + road.xSize + 2 < road.xSize * road.zSize)
             {
-                road.buildingState[place + road.xSize] = 0;
-                road.buildingState[place + road.xSize + i] = 0;
-                road.buildingState[place + road.xSize + i + 1] = 0;
+                road.buildingState[place + road.xSize] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + road.xSize + i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + road.xSize + i + 1] = (int)buildingDirection.BUILDING;
                 map.vertices[place + road.xSize].y = map.vertices[place].y;
                 map.vertices[place + road.xSize + i].y = map.vertices[place].y;
                 map.vertices[place + road.xSize + i + 1].y = map.vertices[place].y;
@@ -110,17 +110,17 @@ public class PlacementBuilding : MonoBehaviour
 
             if (place + 4 * (road.xSize + 1) + i < road.xSize * road.zSize)
             {
-                road.buildingState[place + 2 * (road.xSize + 1) + i] = 0;
-                road.buildingState[place + 2 * (road.xSize + 1)] = 0;
-                road.buildingState[place + 2 * (road.xSize + 1) - i] = 0;
+                road.buildingState[place + 2 * (road.xSize + 1) + i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + 2 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + 2 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
 
-                road.buildingState[place + 3 * (road.xSize + 1) + i] = 0;
-                road.buildingState[place + 3 * (road.xSize + 1)] = 0;
-                road.buildingState[place + 3 * (road.xSize + 1) - i] = 0;
+                road.buildingState[place + 3 * (road.xSize + 1) + i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + 3 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + 3 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
 
-                road.buildingState[place + 4 * (road.xSize + 1) + i] = 0;
-                road.buildingState[place + 4 * (road.xSize + 1)] = 0;
-                road.buildingState[place + 4 * (road.xSize + 1) - i] = 0;
+                road.buildingState[place + 4 * (road.xSize + 1) + i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + 4 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + 4 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
             }
         }
 
@@ -133,6 +133,7 @@ public class PlacementBuilding : MonoBehaviour
         UP,
         RIGHT,
         LEFT,
-        PIZZABUILDING
+        PIZZABUILDING,
+        BUILDING,
     };
 }

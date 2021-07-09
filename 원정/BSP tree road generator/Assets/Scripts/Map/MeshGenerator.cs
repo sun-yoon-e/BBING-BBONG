@@ -15,8 +15,6 @@ public class MeshGenerator : MonoBehaviour
     public float mapHeight;
     public Vector3 mapPosition;
 
-    public int[] buildingPlace;
-
     private void Awake()
     {
         mesh = new Mesh();
@@ -24,8 +22,6 @@ public class MeshGenerator : MonoBehaviour
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-        buildingPlace = new int[(xSize + 1) * (zSize + 1)];
-        buildingPlace = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>().buildingState;
     }
 
     void Start()

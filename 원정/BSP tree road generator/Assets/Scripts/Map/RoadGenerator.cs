@@ -440,7 +440,7 @@ public class RoadGenerator : MonoBehaviour
         {
             if (isRoad[i] == true)
             {
-                buildingState[i] = 0;
+                buildingState[i] = (int)buildingDirection.NOTBUILDINGPLACE;
                 roadPosition[roadPositionNum] = vertices[i];
                 ++roadPositionNum;
             }
@@ -452,7 +452,7 @@ public class RoadGenerator : MonoBehaviour
         vertices = map.vertices;
     }
 
-    enum buildingDirection: int
+    public enum buildingDirection: int
     {
         NOTBUILDINGPLACE,
         DOWN,

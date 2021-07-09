@@ -289,7 +289,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &350881557
 Transform:
   m_ObjectHideFlags: 0
@@ -600,7 +600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &731673121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -725,7 +725,6 @@ MonoBehaviour:
   zSize: 200
   mapHeight: 5
   mapPosition: {x: 0, y: 0, z: 0}
-  buildingPlace: 
 --- !u!33 &783582554
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1344,7 +1343,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2000955012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,7 +1356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e27aa27406d98f48b33f030a27506d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  road: {fileID: 1710524070}
   objectPrefab:
   - {fileID: 100000, guid: 0ccc03e88bfc20c46b4f5ea02f4da61f, type: 3}
   - {fileID: 100000, guid: 471d45b220915504f893693209abc57d, type: 3}
@@ -1514,7 +1512,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &274606944014094723
 MonoBehaviour:
   m_ObjectHideFlags: 0
