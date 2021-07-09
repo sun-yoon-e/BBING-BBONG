@@ -27,7 +27,7 @@ public class ObjectGenerator : MonoBehaviour
             if (road.buildingState[i] != 0 || road.isRoad[i] == true)
                 continue;
 
-            isObject = Random.Range(0, 2);
+            isObject = Random.Range(0, 4);
             if (isObject == 1)
             {
                 prefab = Random.Range(0, objectPrefab.Length);

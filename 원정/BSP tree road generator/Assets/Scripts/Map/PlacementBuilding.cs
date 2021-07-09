@@ -30,7 +30,7 @@ public class PlacementBuilding : MonoBehaviour
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
-            if (road.buildingState[i] == (int)buildingDirection.NOTBUILDINGPLACE)
+            if (road.buildingState[i] == (int)buildingDirection.NOTBUILDINGPLACE || road.buildingState[i] == (int)buildingDirection.BUILDING)
                 continue;
 
             int prefab = Random.Range(0, buildingPrefab.Length);
