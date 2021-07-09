@@ -6,8 +6,6 @@ public class PlacementBuilding : MonoBehaviour
 {
     RoadGenerator road;
     MeshGenerator map;
-    //Destination destination;
-    ItemBoxGenerator item;
 
     public GameObject[] buildingPrefab;
     public GameObject buildingParent;
@@ -16,61 +14,47 @@ public class PlacementBuilding : MonoBehaviour
 
     public int buildingNum;
 
-    float tempXSize;
-    float tempZSize;
+    // 건물간 간격 사이즈
+    private int interval = 2;
 
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
-        //destination = GameObject.Find("Destination").GetComponent<Destination>();
-        item = GameObject.Find("ItemGenerator").GetComponent<ItemBoxGenerator>();
     }
 
     private void Start()
     {
-        tempXSize = 0;
-        tempZSize = 0;
-
-        buildingObject = new GameObject[1500];
-        
         buildingNum = 0;
+        buildingObject = new GameObject[2000];
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
-            if (road.isBuildingPlace[i] == (int)buildingDirection.NOTBUILDINGPLACE)
+            if (road.buildingState[i] == (int)buildingDirection.NOTBUILDINGPLACE)
                 continue;
 
             int prefab = Random.Range(0, buildingPrefab.Length);
-            Vector3 size = buildingPrefab[prefab].GetComponent<MeshRenderer>().bounds.size;
 
-            tempXSize = size.x / 12;
-            if (tempXSize < 1)
-                tempXSize = 0.5f;
-            else if (tempXSize >= 2)
-                tempXSize = 1.0f;
-
-            i += (int)tempXSize;
-
-            if (((i + road.xSize + 1) < (road.xSize * road.zSize)) &&
-                road.isBuildingPlace[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
+            // 오른쪽 메쉬가 빌딩플레이스일 때 옆으로 간격 조정
+            if (road.buildingState[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
             {
-                tempZSize = size.x / 12;
-                if (tempZSize < 1)
-                    tempZSize = 0.5f;
-                else if (tempZSize >= 2)
-                    tempZSize = 1.0f;
-
-                road.isBuildingPlace[i + (road.xSize + 1)] = (int)buildingDirection.NOTBUILDINGPLACE;
+                i += interval;
             }
-
-            if (road.isBuildingPlace[i] == (int)buildingDirection.DOWN)
+            // i(vertex)가 array를 넘어가지 않고 i 위의 메쉬가 빌딩플레이스일 때
+            if ((i + ((road.xSize + 1) * interval) < (road.xSize * road.zSize)) &&
+                road.buildingState[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
+            {
+                // 위 간격 조정을 위한 notplace지정
+                for (int j = 1; j <= interval; ++j)
+                    road.buildingState[i + (road.xSize + 1) * j] = (int)buildingDirection.NOTBUILDINGPLACE;
+            }
+            if (road.buildingState[i] == (int)buildingDirection.DOWN)
                 buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
-            else if (road.isBuildingPlace[i] == (int)buildingDirection.UP)
+            else if (road.buildingState[i] == (int)buildingDirection.UP)
                 buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 180, 0));
-            else if (road.isBuildingPlace[i] == (int)buildingDirection.LEFT)
+            else if (road.buildingState[i] == (int)buildingDirection.LEFT)
                 buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 90, 0));
-            else if (road.isBuildingPlace[i] == (int)buildingDirection.RIGHT)
+            else if (road.buildingState[i] == (int)buildingDirection.RIGHT)
                 buildingObject[buildingNum] = Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, -90, 0));
             else continue;
 
@@ -78,41 +62,13 @@ public class PlacementBuilding : MonoBehaviour
 
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
 
-            if (road.isBuildingPlace[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
-            {
-                tempXSize += size.x / 12;
-                if (tempXSize < 1)
-                    tempXSize = 1.0f;
-                else if (tempXSize >= 2)
-                    tempXSize = 2.0f;
-
-                i += (int)tempXSize;
-            }
-            if (((i + road.xSize + 1) < (road.xSize * road.zSize)) &&
-                road.isBuildingPlace[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
-            {
-                tempZSize = size.x / 12;
-                if (tempZSize < 1)
-                    tempZSize = 0.5f;
-                else if (tempZSize >= 2)
-                    tempZSize = 1.0f;
-
-                for (int j = 0; j < (int)tempZSize; ++j)
-                {
-                    road.isBuildingPlace[i + road.xSize + 1] = (int)buildingDirection.NOTBUILDINGPLACE;
-                }
-            }
-
-            // 건물 사이즈
-            //Vector3 scale = new Vector3(1.2f, 1.2f, 1.2f);
-            //buildingObject[buildingNum].transform.localScale = scale;
-
             buildingObject[buildingNum].AddComponent<BoxCollider>();
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
 
             ++buildingNum;
         }
+        print(buildingNum);
 
         map.UpdateMesh();
         road.RefreshRoadVertices();
@@ -120,35 +76,54 @@ public class PlacementBuilding : MonoBehaviour
     }
 
     void makeNotBuildingPlace(int place)
-    {
-        if (place + 1 < road.xSize * road.zSize
-            || place - 1 > 0)
+    {   
+        for (int i = 1; i <= interval; ++i)
         {
-            road.isBuildingPlace[place - 1] = 0;
-            road.isBuildingPlace[place + 1] = 0;
-            map.vertices[place - 1].y = map.vertices[place].y;
-            map.vertices[place + 1].y = map.vertices[place].y;
+            if (place + i < road.xSize * road.zSize
+                || place - i > 0)
+            {
+                road.buildingState[place - i] = 0;
+                road.buildingState[place + i] = 0;
+                map.vertices[place - i].y = map.vertices[place].y;
+                map.vertices[place + i].y = map.vertices[place].y;
+            }
+
+            if (place - road.xSize - 2 > 0)
+            {
+                road.buildingState[place - road.xSize - i] = 0;
+                road.buildingState[place - road.xSize] = 0;
+                road.buildingState[place - road.xSize - i - 1] = 0;
+                map.vertices[place - road.xSize - i].y = map.vertices[place].y;
+                map.vertices[place - road.xSize].y = map.vertices[place].y;
+                map.vertices[place - road.xSize - i - 1].y = map.vertices[place].y;
+            }
+
+            if (place + road.xSize + 2 < road.xSize * road.zSize)
+            {
+                road.buildingState[place + road.xSize] = 0;
+                road.buildingState[place + road.xSize + i] = 0;
+                road.buildingState[place + road.xSize + i + 1] = 0;
+                map.vertices[place + road.xSize].y = map.vertices[place].y;
+                map.vertices[place + road.xSize + i].y = map.vertices[place].y;
+                map.vertices[place + road.xSize + i + 1].y = map.vertices[place].y;
+            }
+
+            if (place + 4 * (road.xSize + 1) + i < road.xSize * road.zSize)
+            {
+                road.buildingState[place + 2 * (road.xSize + 1) + i] = 0;
+                road.buildingState[place + 2 * (road.xSize + 1)] = 0;
+                road.buildingState[place + 2 * (road.xSize + 1) - i] = 0;
+
+                road.buildingState[place + 3 * (road.xSize + 1) + i] = 0;
+                road.buildingState[place + 3 * (road.xSize + 1)] = 0;
+                road.buildingState[place + 3 * (road.xSize + 1) - i] = 0;
+
+                road.buildingState[place + 4 * (road.xSize + 1) + i] = 0;
+                road.buildingState[place + 4 * (road.xSize + 1)] = 0;
+                road.buildingState[place + 4 * (road.xSize + 1) - i] = 0;
+            }
         }
 
-        if (place - road.xSize - 2 > 0)
-        {
-            road.isBuildingPlace[place - road.xSize - 1] = 0;
-            road.isBuildingPlace[place - road.xSize] = 0;
-            road.isBuildingPlace[place - road.xSize - 2] = 0;
-            map.vertices[place - road.xSize - 1].y = map.vertices[place].y;
-            map.vertices[place - road.xSize].y = map.vertices[place].y;
-            map.vertices[place - road.xSize - 2].y = map.vertices[place].y;
-        }
-
-        if (place + road.xSize + 2 < road.xSize * road.zSize )
-        {
-            road.isBuildingPlace[place + road.xSize] = 0;
-            road.isBuildingPlace[place + road.xSize + 1] = 0;
-            road.isBuildingPlace[place + road.xSize + 2] = 0;
-            map.vertices[place + road.xSize].y = map.vertices[place].y;
-            map.vertices[place + road.xSize + 1].y = map.vertices[place].y;
-            map.vertices[place + road.xSize + 2].y = map.vertices[place].y;
-        }
     }
 
     enum buildingDirection

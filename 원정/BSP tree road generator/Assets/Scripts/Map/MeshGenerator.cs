@@ -25,13 +25,14 @@ public class MeshGenerator : MonoBehaviour
 
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
         buildingPlace = new int[(xSize + 1) * (zSize + 1)];
-        buildingPlace = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>().isBuildingPlace;
+        buildingPlace = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>().buildingState;
     }
 
     void Start()
     {
         CreateShape();
         CreateTriangle();
+        UpdateMesh();
     }
 
     public void CreateShape()
@@ -44,7 +45,7 @@ public class MeshGenerator : MonoBehaviour
             {
                 y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
 
-                vertices[i] = new Vector3(x * 10, y, z * 10);
+                vertices[i] = new Vector3(x * 5, y, z * 5);
             }
         }
     }

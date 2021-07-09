@@ -20,7 +20,7 @@ public class ObjectGenerator : MonoBehaviour
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
-            if (road.isBuildingPlace[i] != 0 || road.isRoad[i] == true)
+            if (road.buildingState[i] != 0 || road.isRoad[i] == true)
                 continue;
 
             prefab = Random.Range(0, objectPrefab.Length);

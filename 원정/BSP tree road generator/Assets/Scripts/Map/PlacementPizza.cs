@@ -60,22 +60,22 @@ public class PlacementPizza : MonoBehaviour
 
     void makeNotBuildingPlace(int place)
     {
-        road.isBuildingPlace[place] = 5;
+        road.buildingState[place] = 5;
 
         if (place + 1 < road.xSize * road.zSize
              || place - 1 > 0)
         {
-            road.isBuildingPlace[place - 1] = 0;
-            road.isBuildingPlace[place + 1] = 0;
+            road.buildingState[place - 1] = 0;
+            road.buildingState[place + 1] = 0;
             map.vertices[place - 1].y = map.vertices[place].y;
             map.vertices[place + 1].y = map.vertices[place].y;
         }
 
         if (place - road.xSize - 2 > 0)
         {
-            road.isBuildingPlace[place - road.xSize - 1] = 0;
-            road.isBuildingPlace[place - road.xSize] = 0;
-            road.isBuildingPlace[place - road.xSize - 2] = 0;
+            road.buildingState[place - road.xSize - 1] = 0;
+            road.buildingState[place - road.xSize] = 0;
+            road.buildingState[place - road.xSize - 2] = 0;
             map.vertices[place - road.xSize - 1].y = map.vertices[place].y;
             map.vertices[place - road.xSize].y = map.vertices[place].y;
             map.vertices[place - road.xSize - 2].y = map.vertices[place].y;
@@ -83,9 +83,9 @@ public class PlacementPizza : MonoBehaviour
 
         if (place + road.xSize + 2 < road.xSize * road.zSize)
         {
-            road.isBuildingPlace[place + road.xSize] = 0;
-            road.isBuildingPlace[place + road.xSize + 1] = 0;
-            road.isBuildingPlace[place + road.xSize + 2] = 0;
+            road.buildingState[place + road.xSize] = 0;
+            road.buildingState[place + road.xSize + 1] = 0;
+            road.buildingState[place + road.xSize + 2] = 0;
             map.vertices[place + road.xSize].y = map.vertices[place].y;
             map.vertices[place + road.xSize + 1].y = map.vertices[place].y;
             map.vertices[place + road.xSize + 2].y = map.vertices[place].y;
