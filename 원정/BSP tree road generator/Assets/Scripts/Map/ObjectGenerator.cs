@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class ObjectGenerator : MonoBehaviour
 {
-    public RoadGenerator road;
+    RoadGenerator road;
+    //PlacementBuilding building;
+
     public GameObject[] objectPrefab;
 
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        //building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
     }
 
     private void Start()
@@ -17,16 +20,21 @@ public class ObjectGenerator : MonoBehaviour
         GameObject mapObject;
 
         int prefab;
+        int isObject;
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
-            if (road.isBuildingPlace[i] != 0 || road.isRoad[i] == true)
+            if (road.buildingState[i] != 0 || road.isRoad[i] == true)
                 continue;
 
-            prefab = Random.Range(0, objectPrefab.Length);
-            mapObject = Instantiate(objectPrefab[prefab], road.vertices[i], Quaternion.identity) as GameObject;
+            isObject = Random.Range(0, 4);
+            if (isObject == 1)
+            {
+                prefab = Random.Range(0, objectPrefab.Length);
+                mapObject = Instantiate(objectPrefab[prefab], road.vertices[i], Quaternion.identity);
 
-            mapObject.transform.SetParent(transform);
+                mapObject.transform.SetParent(transform);
+            }
         }
     }
 }

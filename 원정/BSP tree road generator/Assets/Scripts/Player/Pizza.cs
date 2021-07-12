@@ -9,9 +9,15 @@ public class Pizza : MonoBehaviour
     public float lifeTime = 10f;
 
     private float lifeTimer;
-    
+
+    Destination destination;
+    PlacementBuilding building;
+
     void Start()
     {
+        destination = GameObject.Find("Destination").GetComponent<Destination>();
+        building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
+
         lifeTimer = lifeTime;
     }
     
@@ -26,11 +32,26 @@ public class Pizza : MonoBehaviour
     }
     private void OnCollisionEnter(Collision col)
     {
-        if (col.collider.tag == "Door"
-            || col.collider.tag == "buildingBoxCollider"
+        if (col.collider.tag =="buildingBoxCollider"
             || col.collider.tag == "map")
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        for (int i = 0; i < destination.destinationNum; ++i)
+        {
+            if (building.buildingObject[destination.destination[i]] == other.gameObject)
+            {
+                Destroy(destination.destinationSpriteObject[i]);
+                Destroy(destination.pizzaSpriteRenderer[i]);
+
+                Destroy(destination.destinationPizzaObject[i]);
+
+                destination.DestroyDestination += 1;
+            }
         }
     }
 }

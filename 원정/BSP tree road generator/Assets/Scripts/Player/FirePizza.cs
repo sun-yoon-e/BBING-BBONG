@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
-using Vector3 = UnityEngine.Vector3;
 
 public class FirePizza : MonoBehaviour
 {
@@ -11,7 +9,7 @@ public class FirePizza : MonoBehaviour
     public Transform firePos;
     public Transform targetPos;
     public GameObject pizza;
-
+    
     public float range = 100f;
     public float coolTime = 20f;
 
@@ -25,14 +23,14 @@ public class FirePizza : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !Item.Using)
         {
             nextTimeToFire = Time.time + 20f / coolTime;
             animator.SetTrigger("FirePizza");
         }
     }
 
-    void Fire() //애니메이션 이벤트로 발생
+    void Fire()
     {
         RaycastHit hit;
         GameObject pizzaObject = Instantiate(pizza);

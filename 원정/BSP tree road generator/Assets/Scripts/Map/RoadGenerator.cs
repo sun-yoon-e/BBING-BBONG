@@ -21,12 +21,14 @@ public class RoadGenerator : MonoBehaviour
     int[] leftZSplit;
     int[] rightZSplit;
 
+    public Vector3[] roadPosition;
+    public int roadPositionNum;
+
     public bool[] isRoad;
-    public int[] isBuildingPlace;
+    public int[] buildingState;
     public bool[] isDestination;
 
     MeshGenerator map;
-    Destination destination;
 
     private void Awake()
     {
@@ -36,14 +38,13 @@ public class RoadGenerator : MonoBehaviour
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
-        //destination = GameObject.Find("Destination").GetComponent<Destination>();
     }
 
     void Start()
     {
         CreateShape();
         CreateTriangle();
-        //UpdateMesh();
+        UpdateMesh();
     }
 
     public void CreateShape()
@@ -55,7 +56,7 @@ public class RoadGenerator : MonoBehaviour
             for (int x = 0; x <= xSize; ++x)
             {
                 float y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
-                vertices[i] = new Vector3(x * 10, y, z * 10);
+                vertices[i] = new Vector3(x * 5, y, z * 5);
                 ++i;
             }
         }
@@ -69,9 +70,12 @@ public class RoadGenerator : MonoBehaviour
         downXSplit = new int[100];
 
         triangles = new int[xSize * zSize * 6];
-        isBuildingPlace = new int[(xSize + 1) * (zSize + 1)];
+        buildingState = new int[(xSize + 1) * (zSize + 1)];
         isRoad = new bool[(xSize + 1) * (zSize + 1)];
         isDestination = new bool[(xSize + 1) * (zSize + 1)];
+
+        roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
+        
 
         splitX(40, 0, zSize);
 
@@ -206,19 +210,11 @@ public class RoadGenerator : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < isRoad.Length; ++i)
-        {
-            if (isRoad[i] == true)
-            {
-                isBuildingPlace[i] = 0;
-            }
-        }
+        makeNotBuildingPlace();
     }
 
     void splitX(int minX, int minZ, int maxZ)
     {
-        //xSplit = Random.Range(minX, xSize - minX);
-
         xSplit = xSize / 2;
         int v = xSplit;
 
@@ -230,17 +226,25 @@ public class RoadGenerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+            
+            triangles[t + 6] = v + 1;
+            triangles[t + 7] = v + xSize + 2;
+            triangles[t + 8] = v + 2;
+            triangles[t + 9] = v + 2;
+            triangles[t + 10] = v + xSize + 2;
+            triangles[t + 11] = v + xSize + 3;
 
             isRoad[v] = true;
             isRoad[v + 1] = true;
+            isRoad[v + 2] = true;
 
             if (z > minZ)
             {
-                isBuildingPlace[v + 2] = (int)buildingDirection.LEFT;
-                isBuildingPlace[v - 1] = (int)buildingDirection.RIGHT;
+                buildingState[v + 5] = (int)buildingDirection.LEFT;
+                buildingState[v - 3] = (int)buildingDirection.RIGHT;
             }
             v += xSize + 1;
-            t += 6;
+            t += 12;
         }
     }
     void upSplitX(int minX, int maxX, int minZ, int maxZ, int num)
@@ -257,16 +261,25 @@ public class RoadGenerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+
+            triangles[t + 6] = v + 1;
+            triangles[t + 7] = v + xSize + 2;
+            triangles[t + 8] = v + 2;
+            triangles[t + 9] = v + 2;
+            triangles[t + 10] = v + xSize + 2;
+            triangles[t + 11] = v + xSize + 3;
+
             isRoad[v] = true;
             isRoad[v + 1] = true;
+            isRoad[v + 2] = true;
 
             if (z > minZ + 1)
             {
-                isBuildingPlace[v + 2] = (int)buildingDirection.LEFT;
-                isBuildingPlace[v - 1] = (int)buildingDirection.RIGHT;
+                buildingState[v + 5] = (int)buildingDirection.LEFT;
+                buildingState[v - 3] = (int)buildingDirection.RIGHT;
             }
             v += xSize + 1;
-            t += 6;
+            t += 12;
         }
     }
     void downSplitX(int minX, int maxX, int minZ, int maxZ, int num)
@@ -287,17 +300,26 @@ public class RoadGenerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+
+            triangles[t + 6] = v + 1;
+            triangles[t + 7] = v + xSize + 2;
+            triangles[t + 8] = v + 2;
+            triangles[t + 9] = v + 2;
+            triangles[t + 10] = v + xSize + 2;
+            triangles[t + 11] = v + xSize + 3;
+
             isRoad[v] = true;
             isRoad[v + 1] = true;
+            isRoad[v + 2] = true;
 
             if (z > minZ + 1)
             {
-                isBuildingPlace[v + 2] = (int)buildingDirection.LEFT;
-                isBuildingPlace[v - 1] = (int)buildingDirection.RIGHT;
+                buildingState[v + 5] = (int)buildingDirection.LEFT;
+                buildingState[v - 3] = (int)buildingDirection.RIGHT;
             }
 
             v += xSize + 1;
-            t += 6;
+            t += 12;
         }
     }
     void leftSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
@@ -314,17 +336,30 @@ public class RoadGenerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+
+            if (v + xSize * 2 + 2 < xSize * zSize)
+            {
+                triangles[t + 6] = v + xSize + 1;
+                triangles[t + 7] = v + xSize * 2 + 2;
+                triangles[t + 8] = v + xSize + 2;
+                triangles[t + 9] = v + xSize + 2;
+                triangles[t + 10] = v + xSize * 2 + 2;
+                triangles[t + 11] = v + xSize * 2 + 3;
+                
+                isRoad[v + xSize * 2 + 2] = true;
+            }
             isRoad[v] = true;
             isRoad[v + xSize + 1] = true;
 
             if (minX + 1 < x && x < maxX - 1)
             {
-                if (v + (xSize * 2) + 3 < (xSize + 1) * (zSize + 1))
-                    isBuildingPlace[v + (xSize * 2) + 3] = (int)buildingDirection.DOWN;
-                isBuildingPlace[v - xSize] = (int)buildingDirection.UP;
+                if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
+                    buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
+                if(v - (xSize - 1) * 3 > 0)
+                    buildingState[v - (xSize - 1) * 3] = (int)buildingDirection.UP;
             }
             v++;
-            t += 6;
+            t += 12;
         }
     }
     void rightSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
@@ -341,17 +376,53 @@ public class RoadGenerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
+
+
+            if (v + xSize * 2 + 2 < xSize * zSize)
+            {
+                triangles[t + 6] = v + xSize + 1;
+                triangles[t + 7] = v + xSize * 2 + 2;
+                triangles[t + 8] = v + xSize + 2;
+                triangles[t + 9] = v + xSize + 2;
+                triangles[t + 10] = v + xSize * 2 + 2;
+                triangles[t + 11] = v + xSize * 2 + 3;
+
+                isRoad[v + xSize * 2 + 2] = true;
+            }
             isRoad[v] = true;
             isRoad[v + xSize + 1] = true;
 
             if (minX + 1 < x && x < maxX - 1)
             {
-                if (v + (xSize * 2) + 3 < (xSize + 1) * (zSize + 1))
-                    isBuildingPlace[v + (xSize * 2) + 3] = (int)buildingDirection.DOWN;
-                isBuildingPlace[v - xSize] = (int)buildingDirection.UP;
+                if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
+                    buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
+                if (v - (xSize - 1) * 3 > 0)
+                    buildingState[v - (xSize - 1) * 3] = (int)buildingDirection.UP;
             }
             v++;
-            t += 6;
+            t += 12;
+        }
+    }
+
+    void makeNotBuildingPlace()
+    {
+        for(int i = 0; i < vertices.Length; ++i)
+        {
+            if (isRoad[i] == true
+                && i + (xSize + 1) * 2 < (xSize + 1) * (zSize + 1)
+                && i - (xSize - 1) * 2 > 0)
+            {
+                buildingState[i - 2] = (int)buildingDirection.NOTBUILDINGPLACE;
+                buildingState[i - 1] = (int)buildingDirection.NOTBUILDINGPLACE;
+                buildingState[i] = (int)buildingDirection.NOTBUILDINGPLACE;
+                buildingState[i + 1] = (int)buildingDirection.NOTBUILDINGPLACE;
+                buildingState[i + 2] = (int)buildingDirection.NOTBUILDINGPLACE;
+
+                buildingState[i - xSize - 1] = (int)buildingDirection.NOTBUILDINGPLACE;
+                //buildingState[i - (xSize - 1) * 2] = (int)buildingDirection.NOTBUILDINGPLACE;
+                buildingState[i + xSize + 1] = (int)buildingDirection.NOTBUILDINGPLACE;
+                //buildingState[i + (xSize + 1) * 2] = (int)buildingDirection.NOTBUILDINGPLACE;
+            }
         }
     }
 
@@ -363,6 +434,17 @@ public class RoadGenerator : MonoBehaviour
         mesh.triangles = triangles;
 
         mesh.RecalculateNormals();
+
+        roadPositionNum = 0;
+        for (int i = 0; i < isRoad.Length; ++i)
+        {
+            if (isRoad[i] == true)
+            {
+                buildingState[i] = (int)buildingDirection.NOTBUILDINGPLACE;
+                roadPosition[roadPositionNum] = vertices[i];
+                ++roadPositionNum;
+            }
+        }
     }
 
     public void RefreshRoadVertices()
@@ -370,13 +452,14 @@ public class RoadGenerator : MonoBehaviour
         vertices = map.vertices;
     }
 
-    enum buildingDirection: int
+    enum buildingDirection
     {
         NOTBUILDINGPLACE,
         DOWN,
         UP,
         RIGHT,
         LEFT,
-        PIZZABUILDING
+        PIZZABUILDING,
+        BUILDING,
     };
 }
