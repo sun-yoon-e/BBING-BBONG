@@ -452,13 +452,14 @@ public class RoadGenerator : MonoBehaviour
         vertices = map.vertices;
     }
 
-    public enum buildingDirection: int
+    enum buildingDirection
     {
         NOTBUILDINGPLACE,
         DOWN,
         UP,
         RIGHT,
         LEFT,
-        PIZZABUILDING
+        PIZZABUILDING,
+        BUILDING,
     };
 }

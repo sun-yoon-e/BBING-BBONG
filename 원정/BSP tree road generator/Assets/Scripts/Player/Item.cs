@@ -16,7 +16,7 @@ public class Item : MonoBehaviour
     private int?[] MyItems = new int?[2];
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터, 4: 보호막
 
-    GameObject mainCamera;
+    GameObject player;
     GameObject miniCamera;
     [SerializeField] GameObject fogParticle;
     
@@ -28,7 +28,9 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
-        mainCamera = GameObject.Find("Main Camera");
+        //mainCamera = GameObject.Find("Main Camera");
+        player = GameObject.Find("Player");
+
         miniCamera = GameObject.Find("Mini Camera");
     }
 
@@ -137,11 +139,11 @@ public class Item : MonoBehaviour
     
     void Fog()
     {
-        Vector3 fogPosition = new Vector3(mainCamera.transform.position.x,
-            mainCamera.transform.position.y,
-            mainCamera.transform.position.z + 3);
+        Vector3 fogPosition = new Vector3(player.transform.position.x,
+            player.transform.position.y + 4,
+            player.transform.position.z);
 
-        GameObject fog = Instantiate(fogParticle, fogPosition, mainCamera.transform.rotation, mainCamera.transform);
+        GameObject fog = Instantiate(fogParticle, fogPosition, player.transform.rotation, player.transform);
         Destroy(fog, 20f);
 
 

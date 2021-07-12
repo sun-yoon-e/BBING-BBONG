@@ -25,30 +25,32 @@ public class PlacementPizza : MonoBehaviour
         int zSize = road.zSize;
         GameObject pizzaStore = new GameObject();
 
-        if (road.isRoad[(xSize * zSize) / 2 + 2 + xSize] == false)
+        if (road.isRoad[(xSize * zSize) / 2 + (5 + xSize)] == false
+            && road.isRoad[(xSize * zSize) / 2 + (5 + xSize)  + (road.xSize + 1) * 3 - 1] == false
+             && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) - (road.xSize + 1) * 3 - 1] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[xSize * zSize / 2 + 2 + xSize], Quaternion.Euler(0, 0, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 + 2 + xSize);
+            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[xSize * zSize / 2 + 5 + xSize], Quaternion.Euler(0, 0, 0));
+            makeNotBuildingPlace((xSize * zSize) / 2 + 5 + xSize);
         }
-        else if (road.isRoad[(xSize * zSize) / 2 - 1 + xSize] == false)
+        else if (road.isRoad[(xSize * zSize) / 2 - 3 + xSize] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 1 + xSize], Quaternion.Euler(0, 180, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 - 1 + xSize);
+            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 3 + xSize], Quaternion.Euler(0, 180, 0));
+            makeNotBuildingPlace((xSize * zSize) / 2 - 3 + xSize);
         }
-        else if (road.isRoad[(xSize * zSize) / 2 + 1] == false)
+        else if (road.isRoad[(xSize * zSize) / 2 + 4] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 1], Quaternion.Euler(0, 0, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 + 1);
+            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 4], Quaternion.Euler(0, 0, 0));
+            makeNotBuildingPlace((xSize * zSize) / 2 + 4);
         }
-        else if (road.isRoad[(xSize * zSize) / 2 - 2] == false)
+        else if (road.isRoad[(xSize * zSize) / 2 - 4] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 2], Quaternion.Euler(0, 180, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 - 2);
+            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 4], Quaternion.Euler(0, 180, 0));
+            makeNotBuildingPlace((xSize * zSize) / 2 - 4);
         }
-        else //if (road.isRoad[(xSize * zSize) / 2 + 3 + (xSize * 2)] == false)
+        else
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 3 + (xSize * 2)], Quaternion.Euler(0, 0, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 + 3 + (xSize * 2));
+            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 6 + (xSize * 2)], Quaternion.Euler(0, 0, 0));
+            makeNotBuildingPlace((xSize * zSize) / 2 + 6 + (xSize * 2));
         }
 
         pizzaStore.AddComponent<BoxCollider>();
@@ -60,36 +62,43 @@ public class PlacementPizza : MonoBehaviour
 
     void makeNotBuildingPlace(int place)
     {
-        road.buildingState[place] = 5;
 
-        if (place + 1 < road.xSize * road.zSize
-             || place - 1 > 0)
+        road.buildingState[place + (road.xSize + 1)] = (int)buildingDirection.BUILDING;
+        for (int i = 1; i < 4; ++i)
         {
-            road.buildingState[place - 1] = 0;
-            road.buildingState[place + 1] = 0;
-            map.vertices[place - 1].y = map.vertices[place].y;
-            map.vertices[place + 1].y = map.vertices[place].y;
+            road.buildingState[place + (road.xSize + 1) * i - 1] = (int)buildingDirection.BUILDING;
+            road.buildingState[place + (road.xSize + 1) * i + 1] = (int)buildingDirection.BUILDING;
         }
 
-        if (place - road.xSize - 2 > 0)
+        road.buildingState[place - 1] = (int)buildingDirection.BUILDING;
+        road.buildingState[place] = (int)buildingDirection.PIZZABUILDING;
+        road.buildingState[place + 1] = (int)buildingDirection.BUILDING;
+
+        road.buildingState[place - (road.xSize + 1)] = (int)buildingDirection.BUILDING;
+        for (int i = 1; i < 4; ++i)
         {
-            road.buildingState[place - road.xSize - 1] = 0;
-            road.buildingState[place - road.xSize] = 0;
-            road.buildingState[place - road.xSize - 2] = 0;
-            map.vertices[place - road.xSize - 1].y = map.vertices[place].y;
-            map.vertices[place - road.xSize].y = map.vertices[place].y;
-            map.vertices[place - road.xSize - 2].y = map.vertices[place].y;
+            road.buildingState[place - (road.xSize + 1) * i - 1] = (int)buildingDirection.BUILDING;
+            road.buildingState[place - (road.xSize + 1) * i + 1] = (int)buildingDirection.BUILDING;
         }
 
-        if (place + road.xSize + 2 < road.xSize * road.zSize)
-        {
-            road.buildingState[place + road.xSize] = 0;
-            road.buildingState[place + road.xSize + 1] = 0;
-            road.buildingState[place + road.xSize + 2] = 0;
-            map.vertices[place + road.xSize].y = map.vertices[place].y;
-            map.vertices[place + road.xSize + 1].y = map.vertices[place].y;
-            map.vertices[place + road.xSize + 2].y = map.vertices[place].y;
-        }
+        map.vertices[place + (road.xSize + 1) * 2 - 1].y = map.vertices[place].y;
+        map.vertices[place + (road.xSize + 1) * 2].y = map.vertices[place].y;
+        map.vertices[place + (road.xSize + 1) * 2 + 1].y = map.vertices[place].y;
+
+        map.vertices[place + (road.xSize + 1) - 1].y = map.vertices[place].y;
+        map.vertices[place + (road.xSize + 1)].y = map.vertices[place].y;
+        map.vertices[place + (road.xSize + 1) + 1].y = map.vertices[place].y;
+
+        map.vertices[place - 1].y = map.vertices[place].y;
+        map.vertices[place + 1].y = map.vertices[place].y;
+
+        map.vertices[place - (road.xSize + 1) - 1].y = map.vertices[place].y;
+        map.vertices[place - (road.xSize + 1)].y = map.vertices[place].y;
+        map.vertices[place - (road.xSize + 1) + 1].y = map.vertices[place].y;
+
+        map.vertices[place - (road.xSize + 1) * 2 - 1].y = map.vertices[place].y;
+        map.vertices[place - (road.xSize + 1) * 2].y = map.vertices[place].y;
+        map.vertices[place - (road.xSize + 1) * 2 + 1].y = map.vertices[place].y;
     }
 
     void InitializeSprite(Vector3 pos)
@@ -110,4 +119,15 @@ public class PlacementPizza : MonoBehaviour
 
         pizzaSpriteObject.layer = 8;
     }
+
+    enum buildingDirection
+    {
+        NOTBUILDINGPLACE,
+        DOWN,
+        UP,
+        RIGHT,
+        LEFT,
+        PIZZABUILDING,
+        BUILDING,
+    };
 }
