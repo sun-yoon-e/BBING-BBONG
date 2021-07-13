@@ -11,20 +11,21 @@ public class ItemBoxGenerator : MonoBehaviour
     [SerializeField] private float itemScale;
 
     public Sprite itemSprite;
+    public GameObject[] itemBox;
     public GameObject[] itemSpriteObject;
     public SpriteRenderer[] itemSpriteRenderer;
     
     int[] itemBoxPlace;
 
     RoadGenerator road;
-    bool[] roadPlace;
 
     void Start()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-        roadPlace = road.isRoad;
 
         itemBoxPlace = new int[itemBoxNum];
+
+        itemBox = new GameObject[itemBoxNum];
         itemSpriteObject = new GameObject[itemBoxNum];
         itemSpriteRenderer = new SpriteRenderer[itemBoxNum];
         
@@ -51,9 +52,9 @@ public class ItemBoxGenerator : MonoBehaviour
                 road.roadPosition[itemBoxPlace[i]].y + 1.5f,
                 road.roadPosition[itemBoxPlace[i]].z);
 
-            GameObject Item = Instantiate(itemBoxPrefab, itemPosition, Quaternion.identity, parent);
-            Item.tag = "ItemBox";
-            Item.transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+            itemBox[i] = Instantiate(itemBoxPrefab, itemPosition, Quaternion.identity, parent);
+            itemBox[i].transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+            itemBox[i].tag = "ItemBox";
 
             Vector3 spritePosition =
                 new Vector3(itemPosition.x, itemPosition.y + 50, itemPosition.z);
@@ -65,9 +66,11 @@ public class ItemBoxGenerator : MonoBehaviour
 
             itemSpriteRenderer[i] = itemSpriteObject[i].AddComponent<SpriteRenderer>();
             itemSpriteRenderer[i].sprite = itemSprite;
-            itemSpriteObject[i].transform.SetParent(parent);
+            itemSpriteObject[i].transform.SetParent(itemBox[i].transform);
 
             itemSpriteObject[i].layer = 8;
+
+
         }
     }
 }

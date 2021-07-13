@@ -50,12 +50,14 @@ public class RoadGenerator : MonoBehaviour
     public void CreateShape()
     {
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+        
+        float y;
 
         for (int i = 0, z = 0; z <= zSize; ++z)
         {
             for (int x = 0; x <= xSize; ++x)
             {
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
+                y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
                 vertices[i] = new Vector3(x * 5, y, z * 5);
                 ++i;
             }
