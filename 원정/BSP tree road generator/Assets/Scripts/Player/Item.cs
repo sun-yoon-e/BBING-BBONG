@@ -148,7 +148,7 @@ public class Item : MonoBehaviour
 
 
         Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
-            miniCamera.transform.position.y - 7,
+            miniCamera.transform.position.y - 10,
             miniCamera.transform.position.z);
 
         GameObject miniFog = Instantiate(fogParticle, miniFogPosition, miniCamera.transform.rotation, miniCamera.transform);

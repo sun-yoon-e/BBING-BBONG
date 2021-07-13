@@ -18,11 +18,12 @@ public class ItemBoxGenerator : MonoBehaviour
     int[] itemBoxPlace;
 
     RoadGenerator road;
+    Quaternion rot;
 
     void Start()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-
+       
         itemBoxPlace = new int[itemBoxNum];
 
         itemBox = new GameObject[itemBoxNum];
@@ -30,6 +31,20 @@ public class ItemBoxGenerator : MonoBehaviour
         itemSpriteRenderer = new SpriteRenderer[itemBoxNum];
         
         DrawItemBox();
+    }
+
+    private void Update()
+    {
+        rot = GameObject.Find("Player").transform.rotation;
+
+        foreach (var i in itemSpriteObject)
+        {
+            if (i == false)
+                continue;
+
+            rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
+            i.transform.rotation = rot;
+        }
     }
 
     public void DrawItemBox()
@@ -69,8 +84,6 @@ public class ItemBoxGenerator : MonoBehaviour
             itemSpriteObject[i].transform.SetParent(itemBox[i].transform);
 
             itemSpriteObject[i].layer = 8;
-
-
         }
     }
 }
