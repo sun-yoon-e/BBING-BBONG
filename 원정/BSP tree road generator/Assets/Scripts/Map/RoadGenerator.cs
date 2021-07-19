@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
+using UnityEditor.AI;
 
 [RequireComponent(typeof(MeshFilter))]
 public class RoadGenerator : MonoBehaviour
@@ -27,8 +29,11 @@ public class RoadGenerator : MonoBehaviour
     public bool[] isRoad;
     public int[] buildingState;
     public bool[] isDestination;
+    public bool[] isObstaclePlace;
 
     MeshGenerator map;
+    public NavMeshPath path;
+    //int cornerNum;
 
     private void Awake()
     {
@@ -36,6 +41,9 @@ public class RoadGenerator : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
 
         mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
+
+        path = new NavMeshPath();
+        //cornerNum = 0;
 
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
     }
@@ -75,6 +83,7 @@ public class RoadGenerator : MonoBehaviour
         buildingState = new int[(xSize + 1) * (zSize + 1)];
         isRoad = new bool[(xSize + 1) * (zSize + 1)];
         isDestination = new bool[(xSize + 1) * (zSize + 1)];
+        isObstaclePlace = new bool[(xSize + 1) * (zSize + 1)];
 
         roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
         
@@ -215,6 +224,7 @@ public class RoadGenerator : MonoBehaviour
         makeNotBuildingPlace();
     }
 
+   
     void splitX(int minX, int minZ, int maxZ)
     {
         xSplit = xSize / 2;
@@ -239,6 +249,10 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v] = true;
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
+
+            isObstaclePlace[v + 1] = true;
+            //path.corners[cornerNum] = vertices[v + 1];
+            //++cornerNum;
 
             if (z > minZ)
             {
@@ -274,6 +288,10 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v] = true;
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
+         
+            isObstaclePlace[v + 1] = true;
+            //path.corners[cornerNum] = vertices[v + 1];
+            //++cornerNum;
 
             if (z > minZ + 1)
             {
@@ -313,6 +331,10 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v] = true;
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
+            
+            isObstaclePlace[v + 1] = true;
+            //path.corners[cornerNum] = vertices[v + 1];
+            //++cornerNum;
 
             if (z > minZ + 1)
             {
@@ -347,11 +369,16 @@ public class RoadGenerator : MonoBehaviour
                 triangles[t + 9] = v + xSize + 2;
                 triangles[t + 10] = v + xSize * 2 + 2;
                 triangles[t + 11] = v + xSize * 2 + 3;
-                
+
+                isRoad[v] = true;
+                isRoad[v + xSize + 1] = true;
                 isRoad[v + xSize * 2 + 2] = true;
+
+                isObstaclePlace[v + xSize + 1] = true;
+                //path.corners[cornerNum] = vertices[v + xSize + 1];
+                //++cornerNum;
             }
-            isRoad[v] = true;
-            isRoad[v + xSize + 1] = true;
+            
 
             if (minX + 1 < x && x < maxX - 1)
             {
@@ -389,10 +416,14 @@ public class RoadGenerator : MonoBehaviour
                 triangles[t + 10] = v + xSize * 2 + 2;
                 triangles[t + 11] = v + xSize * 2 + 3;
 
+                isRoad[v] = true;
+                isRoad[v + xSize + 1] = true;
                 isRoad[v + xSize * 2 + 2] = true;
+
+                isObstaclePlace[v + xSize + 1] = true;
+                //path.corners[cornerNum] = vertices[v + xSize + 1];
+                //++cornerNum;
             }
-            isRoad[v] = true;
-            isRoad[v + xSize + 1] = true;
 
             if (minX + 1 < x && x < maxX - 1)
             {
@@ -421,9 +452,7 @@ public class RoadGenerator : MonoBehaviour
                 buildingState[i + 2] = (int)buildingDirection.NOTBUILDINGPLACE;
 
                 buildingState[i - xSize - 1] = (int)buildingDirection.NOTBUILDINGPLACE;
-                //buildingState[i - (xSize - 1) * 2] = (int)buildingDirection.NOTBUILDINGPLACE;
                 buildingState[i + xSize + 1] = (int)buildingDirection.NOTBUILDINGPLACE;
-                //buildingState[i + (xSize + 1) * 2] = (int)buildingDirection.NOTBUILDINGPLACE;
             }
         }
     }
@@ -431,10 +460,8 @@ public class RoadGenerator : MonoBehaviour
     public void UpdateMesh()
     {
         mesh.Clear();
-
         mesh.vertices = vertices;
         mesh.triangles = triangles;
-
         mesh.RecalculateNormals();
 
         roadPositionNum = 0;
@@ -448,7 +475,6 @@ public class RoadGenerator : MonoBehaviour
             }
         }
     }
-
     public void RefreshRoadVertices()
     {
         vertices = map.vertices;

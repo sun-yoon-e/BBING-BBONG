@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshCollider))]
@@ -101,4 +102,14 @@ public class MeshGenerator : MonoBehaviour
             col = gameObject.AddComponent<MeshCollider>();
         col.sharedMesh = mesh;
     }
+    //public void BakeNavMesh()
+    //{
+    //    NavMeshSurface[] surfaces = gameObject.GetComponentsInChildren<NavMeshSurface>();
+
+    //    foreach (var s in surfaces)
+    //    {
+    //        s.RemoveData();
+    //        s.BuildNavMesh();
+    //    }
+    //}
 }

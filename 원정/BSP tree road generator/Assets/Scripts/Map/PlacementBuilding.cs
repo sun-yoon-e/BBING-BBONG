@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine.AI;
 using UnityEngine;
 
 public class PlacementBuilding : MonoBehaviour
@@ -68,12 +70,15 @@ public class PlacementBuilding : MonoBehaviour
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
 
+            GameObjectUtility.SetStaticEditorFlags(buildingObject[buildingNum], StaticEditorFlags.NavigationStatic);
+
             ++buildingNum;
         }
         print(buildingNum);
 
         map.UpdateMesh();
-        road.RefreshRoadVertices();
+
+        road.vertices = map.vertices;
         road.UpdateMesh();
     }
 
