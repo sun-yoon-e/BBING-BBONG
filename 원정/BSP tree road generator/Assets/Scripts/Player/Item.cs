@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Mime;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
+//using Random = UnityEngine.Random;
 
 public class Item : MonoBehaviour
 {
@@ -64,7 +60,7 @@ public class Item : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision col)
+    private void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.CompareTag("ItemBox"))
         {
