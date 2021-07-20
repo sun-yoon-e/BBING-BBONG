@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor.AI;
 using UnityEngine.AI;
 
@@ -9,8 +7,6 @@ public class Obstacle : MonoBehaviour
     RoadGenerator road;
     public GameObject carPrefab;
     public Transform parent;
-
-    
 
     GameObject[] car;
 
@@ -31,7 +27,6 @@ public class Obstacle : MonoBehaviour
 
             //i.transform.position += new Vector3(0, 0, 10 * Time.deltaTime);
             i.transform.rotation = Quaternion.Euler(0, 180, 0);
-
         }
     }
 
@@ -74,7 +69,7 @@ public class Obstacle : MonoBehaviour
                     NavMeshAgent.SetPath(path);
                 }
                      */
-                    carPosition = new Vector3(road.vertices[i].x, road.vertices[i].y, road.vertices[i].z + 10);
+                    carPosition = new Vector3(road.vertices[i].x, road.vertices[i].y, road.vertices[i].z);
 
                     car[carNum] = Instantiate(carPrefab, carPosition, Quaternion.Euler(0, 180, 0), parent);
                     car[carNum].AddComponent<NavMeshAgent>();

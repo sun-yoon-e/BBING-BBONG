@@ -36,22 +36,6 @@ public class MeshGenerator : MonoBehaviour
     {
         float y;
 
-        //for (int i = 0, z = 0; z <= zSize; ++z)
-        //{
-        //    for (int x = 0; x < xSize / 2; ++x, ++i)
-        //    {
-        //        y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
-
-        //        vertices[i] = new Vector3(x * 5, y, z * 5);
-        //    }
-        //    for (int x = xSize / 2; x <= xSize; ++x, ++i)
-        //    {
-        //        y = Mathf.PerlinNoise(x * .2f, z * .2f) * mapHeight;
-
-        //        vertices[i] = new Vector3(x * 5, y, z * 5);
-        //    }
-        //}
-
         for (int i = 0, z = 0; z <= zSize; ++z)
         {
             for (int x = 0; x <= xSize; ++x, ++i)
