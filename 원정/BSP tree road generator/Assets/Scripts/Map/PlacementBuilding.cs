@@ -17,6 +17,8 @@ public class PlacementBuilding : MonoBehaviour
     // 건물간 간격 사이즈
     private int interval = 2;
 
+    public GameObject boxcol;
+
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
@@ -78,6 +80,15 @@ public class PlacementBuilding : MonoBehaviour
 
         road.vertices = map.vertices;
         road.UpdateMesh();
+
+        for (int i = 0; i < road.vertices.Length; ++i)
+        {
+            //if(road.buildingState[i] != (int)buildingDirection.NOTBUILDINGPLACE)
+            if (!road.isRoad[i])
+            {
+                Instantiate(boxcol, road.vertices[i], Quaternion.identity, buildingParent.transform);
+            }
+        }
     }
 
     void makeNotBuildingPlace(int place)
