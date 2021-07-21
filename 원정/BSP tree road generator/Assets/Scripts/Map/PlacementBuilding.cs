@@ -84,10 +84,27 @@ public class PlacementBuilding : MonoBehaviour
         for (int i = 0; i < road.vertices.Length; ++i)
         {
             //if(road.buildingState[i] != (int)buildingDirection.NOTBUILDINGPLACE)
-            if (!road.isRoad[i])
+            ////if (!road.isRoad[i])
+            //{
+            //    Instantiate(boxcol, road.vertices[i], Quaternion.identity, buildingParent.transform);
+            //}
+
+
+            if (road.isRoad[i] == true)
             {
-                Instantiate(boxcol, road.vertices[i], Quaternion.identity, buildingParent.transform);
+                if (i + 1 < road.xSize * road.zSize && road.isRoad[i + 1] == false)
+                    Instantiate(boxcol, road.vertices[i + 1], Quaternion.identity, buildingParent.transform);
+
+                else if (i + road.xSize + 1 < road.xSize * road.zSize && road.isRoad[i + road.xSize + 1] == false)
+                    Instantiate(boxcol, road.vertices[i + road.xSize + 1], Quaternion.identity, buildingParent.transform);
+
+                else if (i - road.xSize - 1 > 0 && road.isRoad[i - road.xSize - 1] == false)
+                    Instantiate(boxcol, road.vertices[i - road.xSize - 1], Quaternion.identity, buildingParent.transform);
+
+                else if (i - 1 > 0 && road.isRoad[i - 1] == false)
+                    Instantiate(boxcol, road.vertices[i - 1], Quaternion.identity, buildingParent.transform);
             }
+            
         }
     }
 
