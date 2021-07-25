@@ -70,7 +70,7 @@ public class PlacementBuilding : MonoBehaviour
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
 
-            GameObjectUtility.SetStaticEditorFlags(buildingObject[buildingNum], StaticEditorFlags.NavigationStatic);
+            //GameObjectUtility.SetStaticEditorFlags(buildingObject[buildingNum], StaticEditorFlags.NavigationStatic);
 
             ++buildingNum;
         }
@@ -83,13 +83,6 @@ public class PlacementBuilding : MonoBehaviour
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
-            //if(road.buildingState[i] != (int)buildingDirection.NOTBUILDINGPLACE)
-            ////if (!road.isRoad[i])
-            //{
-            //    Instantiate(boxcol, road.vertices[i], Quaternion.identity, buildingParent.transform);
-            //}
-
-
             if (road.isRoad[i] == true)
             {
                 if (i + 1 < road.xSize * road.zSize && road.isRoad[i + 1] == false)
