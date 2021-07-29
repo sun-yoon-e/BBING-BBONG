@@ -30,6 +30,7 @@ public class RoadGenerator : MonoBehaviour
     public int[] buildingState;
     public bool[] isDestination;
     public bool[] isObstaclePlace;
+    public bool[] isWayPointPlace;
 
     MeshGenerator map;
     public NavMeshPath path;
@@ -53,6 +54,7 @@ public class RoadGenerator : MonoBehaviour
 
         wayPoint = new GameObject[500];
         wayPointNum = 0;
+        isWayPointPlace = new bool[xSize * zSize];
     }
 
     void Start()
@@ -300,6 +302,7 @@ public class RoadGenerator : MonoBehaviour
             if (!isWayPoint)
             {
                 GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
+                isWayPointPlace[v + 1 + (xSize + 1)] = true;
                 isWayPoint = true;
             }
 
@@ -350,6 +353,7 @@ public class RoadGenerator : MonoBehaviour
             if (!isWayPoint)
             {
                 GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
+                isWayPointPlace[v + 1 + (xSize + 1)] = true;
                 isWayPoint = true;
             }
 
@@ -397,6 +401,7 @@ public class RoadGenerator : MonoBehaviour
                 if (!isWayPoint)
                 {
                     GenerateWayPoint(vertices[v + xSize + 1 + 1]);
+                    isWayPointPlace[v + xSize + 1 + 1] = true;
                     isWayPoint = true;
                 }
             }
@@ -449,6 +454,7 @@ public class RoadGenerator : MonoBehaviour
                 if (!isWayPoint)
                 {
                     GenerateWayPoint(vertices[v + xSize + 1 + 1]);
+                    isWayPointPlace[v + xSize + 1 + 1] = true;
                     isWayPoint = true;
                 }
             }

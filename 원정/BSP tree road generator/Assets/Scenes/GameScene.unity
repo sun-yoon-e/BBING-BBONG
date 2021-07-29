@@ -876,7 +876,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7c0888efcec40342b3b3b31e915a600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carPrefab: {fileID: 100008, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
+  carPrefabs:
+  - {fileID: 8311826808449277405, guid: c145d35aeff42204f9f449989cd7c1c0, type: 3}
+  - {fileID: 605409813975381846, guid: f26250a4f2b3c564db47693e9a9bee9e, type: 3}
+  - {fileID: 3118569579268563144, guid: 0008c1b27c1ddea499dd9def4f05fdf0, type: 3}
+  - {fileID: 8211807432016652497, guid: 06b39fb3430d0324fb8b41806da9a7b5, type: 3}
+  - {fileID: 3496458091836081090, guid: 8c98f3d6f940ff14eba03fe97c70dd53, type: 3}
+  - {fileID: 7913303680176965808, guid: e937f15a3301296459630f47281a8a13, type: 3}
+  - {fileID: 3088912927087834052, guid: 5d3e38bed980655468783a037e0b9131, type: 3}
+  - {fileID: 1682293963775173072, guid: b0a864c63937a744b9fefeaa60a79e4a, type: 3}
+  - {fileID: 3225135311183678482, guid: 942736e12c0e3cc468edd6326dca5cba, type: 3}
+  - {fileID: 2009365497214746044, guid: a85fc71467a7a95409efdc6f7c7d6725, type: 3}
+  - {fileID: 3824383134371635177, guid: 527a5f0d31448a84d8a0409e364f0efe, type: 3}
   parent: {fileID: 833486945}
   wayPointLayer:
     serializedVersion: 2
@@ -897,7 +908,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &928902952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -911,7 +922,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   navMeshSurfaces:
-  - {fileID: 0}
+  - {fileID: 1710524071}
 --- !u!4 &928902953
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,6 +1208,7 @@ MonoBehaviour:
   buildingState: 
   isDestination: 
   isObstaclePlace: 
+  isWayPointPlace: 
   wayPointPrefab: {fileID: 8090276718302116305, guid: 2e483ba3b8fe9fd44ba2c1cf4774067b,
     type: 3}
   wayPoint: []
@@ -1214,7 +1226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 2
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
@@ -1227,9 +1239,9 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.5
+  m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 224d66c51ba4ecc47a397c53dcc727c4, type: 2}
 --- !u!114 &1710524072
 MonoBehaviour:
   m_ObjectHideFlags: 0

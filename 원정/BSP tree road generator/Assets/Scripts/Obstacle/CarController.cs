@@ -1,38 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.AI;
 
-[RequireComponent(typeof(Rigidbody))]
 public class CarController : MonoBehaviour
 {
-    Rigidbody rb;
-
-    [SerializeField]
-    private float power = 5f;
-    [SerializeField]
-    private float torque = 5f;
-    [SerializeField]
-    private float maxSpeed = 5f;
-
-    [SerializeField]
-    private Vector3 movementVector;
+    NavMeshAgent agent;
+    RoadGenerator road;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
+        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        agent = GetComponent<NavMeshAgent>();
     }
 
-    public void Move(Vector3 movementInput)
+    private void Start()
     {
-        this.movementVector = movementInput;
+        int randWayPoint = Random.Range(0, road.wayPointNum);
+        agent.SetDestination(road.wayPoint[randWayPoint].transform.position);
+        //agent.avoidancePriority = 1;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (rb.velocity.magnitude < maxSpeed)
+        if(agent.remainingDistance <= agent.stoppingDistance)
         {
-            rb.AddForce(movementVector.y * transform.forward * power);
+            int randWayPoint = Random.Range(0, road.wayPointNum);
+            agent.SetDestination(road.wayPoint[randWayPoint].transform.position);
         }
-        rb.AddTorque(movementVector.x * Vector3.up * torque * movementVector.y);
     }
 }

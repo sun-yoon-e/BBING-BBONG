@@ -49,11 +49,9 @@ public class ItemBoxGenerator : MonoBehaviour
 
     public void DrawItemBox()
     {
-        Quaternion SpriteRotation = Quaternion.Euler(90, 0, 0);
         for (int i = 0; i < itemBoxNum; ++i)
         {
             itemBoxPlace[i] = Random.Range(1, road.roadPositionNum);
-            Vector3 ObjectScale = new Vector3(2, 2, 2);
 
             //중복체크
             for (int j = 0; j < itemBoxNum; ++j)
@@ -71,13 +69,10 @@ public class ItemBoxGenerator : MonoBehaviour
             itemBox[i].transform.localScale = new Vector3(itemScale, itemScale, itemScale);
             itemBox[i].tag = "ItemBox";
 
-            Vector3 spritePosition =
-                new Vector3(itemPosition.x, itemPosition.y + 50, itemPosition.z);
-            
-            itemSpriteObject[i] = new GameObject("DestinationSprite");
-            itemSpriteObject[i].transform.position = spritePosition;
-            itemSpriteObject[i].transform.rotation = SpriteRotation;
-            itemSpriteObject[i].transform.localScale = ObjectScale;
+            itemSpriteObject[i] = new GameObject("ItemSprite");
+            itemSpriteObject[i].transform.position = new Vector3(itemPosition.x, itemPosition.y + 50, itemPosition.z);
+            itemSpriteObject[i].transform.rotation = Quaternion.Euler(90, 0, 0);
+            itemSpriteObject[i].transform.localScale = new Vector3(2, 2, 2);
 
             itemSpriteRenderer[i] = itemSpriteObject[i].AddComponent<SpriteRenderer>();
             itemSpriteRenderer[i].sprite = itemSprite;
