@@ -21,6 +21,8 @@ public class Destination : MonoBehaviour
 
     public int DestroyDestination;
 
+    Quaternion rot;
+
     private void Start()
     {
         building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
@@ -45,6 +47,17 @@ public class Destination : MonoBehaviour
             DestroyDestination = 0;
             DrawDestination();
             ApplyDestinationToBuilding();
+        }
+
+        rot = GameObject.Find("Player").transform.rotation;
+
+        foreach (var i in destinationSpriteObject)
+        {
+            if (i == false)
+                continue;
+
+            rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
+            i.transform.rotation = rot;
         }
     }
 

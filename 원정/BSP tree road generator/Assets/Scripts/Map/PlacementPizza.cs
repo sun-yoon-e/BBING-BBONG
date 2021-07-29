@@ -13,6 +13,8 @@ public class PlacementPizza : MonoBehaviour
     RoadGenerator road;
     MeshGenerator map;
 
+    Quaternion rot;
+
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
@@ -58,6 +60,13 @@ public class PlacementPizza : MonoBehaviour
         col.tag = "PizzaStore";
 
         InitializeSprite(pizzaStore.transform.position);
+    }
+
+    private void Update()
+    {
+        rot = GameObject.Find("Player").transform.rotation;
+        rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
+        pizzaSpriteObject.transform.rotation = rot;
     }
 
     void makeNotBuildingPlace(int place)

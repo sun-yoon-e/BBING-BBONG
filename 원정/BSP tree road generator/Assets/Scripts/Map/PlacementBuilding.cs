@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlacementBuilding : MonoBehaviour
 {
@@ -16,6 +14,8 @@ public class PlacementBuilding : MonoBehaviour
 
     // 건물간 간격 사이즈
     private int interval = 2;
+
+    public GameObject boxcol;
 
     private void Awake()
     {
@@ -68,13 +68,35 @@ public class PlacementBuilding : MonoBehaviour
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
 
+            //GameObjectUtility.SetStaticEditorFlags(buildingObject[buildingNum], StaticEditorFlags.NavigationStatic);
+
             ++buildingNum;
         }
         print(buildingNum);
 
         map.UpdateMesh();
-        road.RefreshRoadVertices();
+
+        road.vertices = map.vertices;
         road.UpdateMesh();
+
+        for (int i = 0; i < road.vertices.Length; ++i)
+        {
+            if (road.isRoad[i] == true)
+            {
+                if (i + 1 < road.xSize * road.zSize && road.isRoad[i + 1] == false)
+                    Instantiate(boxcol, road.vertices[i + 1], Quaternion.identity, buildingParent.transform);
+
+                else if (i + road.xSize + 1 < road.xSize * road.zSize && road.isRoad[i + road.xSize + 1] == false)
+                    Instantiate(boxcol, road.vertices[i + road.xSize + 1], Quaternion.identity, buildingParent.transform);
+
+                else if (i - road.xSize - 1 > 0 && road.isRoad[i - road.xSize - 1] == false)
+                    Instantiate(boxcol, road.vertices[i - road.xSize - 1], Quaternion.identity, buildingParent.transform);
+
+                else if (i - 1 > 0 && road.isRoad[i - 1] == false)
+                    Instantiate(boxcol, road.vertices[i - 1], Quaternion.identity, buildingParent.transform);
+            }
+            
+        }
     }
 
     void makeNotBuildingPlace(int place)
