@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class OnCollision : MonoBehaviour
 {
@@ -9,6 +7,12 @@ public class OnCollision : MonoBehaviour
     {
         obstacle = GameObject.Find("Obstacle").GetComponent<Obstacle>();
     }
+
+    private void Update()
+    {
+        //transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")

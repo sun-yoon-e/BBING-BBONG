@@ -1,21 +1,13 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
-using UnityEditor.AI;
 
 [RequireComponent(typeof(MeshFilter))]
 public class RoadGenerator : MonoBehaviour
 {
     Mesh mesh;
-
-    public Vector3[] vertices;
-    public int[] triangles;
+    MeshGenerator map;
 
     public int xSize;
     public int zSize;
-
-    public Vector3 mapPosition;
-
-    int t;
 
     int xSplit;
     int[] upXSplit;
@@ -32,29 +24,27 @@ public class RoadGenerator : MonoBehaviour
     public bool[] isObstaclePlace;
     public bool[] isWayPointPlace;
 
-    MeshGenerator map;
-    public NavMeshPath path;
-    //int cornerNum;
-
     public GameObject wayPointPrefab;
     public GameObject[] wayPoint;
     public int wayPointNum;
 
+    int t;
+    public Vector3[] vertices;
+    public int[] triangles;
+
     private void Awake()
     {
+        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
-        mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
-
-        path = new NavMeshPath();
-        //cornerNum = 0;
-
-        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
 
         wayPoint = new GameObject[500];
         wayPointNum = 0;
         isWayPointPlace = new bool[xSize * zSize];
+
+        xSize = map.xSize;
+        zSize = map.zSize;
     }
 
     void Start()
@@ -67,18 +57,7 @@ public class RoadGenerator : MonoBehaviour
     public void CreateShape()
     {
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-        
-        float y;
-
-        for (int i = 0, z = 0; z <= zSize; ++z)
-        {
-            for (int x = 0; x <= xSize; ++x)
-            {
-                y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
-                vertices[i] = new Vector3(x * 5, y, z * 5);
-                ++i;
-            }
-        }
+        vertices = map.vertices;
     }
 
     public void CreateTriangle()
@@ -259,8 +238,6 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v + 2] = true;
 
             isObstaclePlace[v + 1] = true;
-            //path.corners[cornerNum] = vertices[v + 1];
-            //++cornerNum;
 
             if (z > minZ)
             {

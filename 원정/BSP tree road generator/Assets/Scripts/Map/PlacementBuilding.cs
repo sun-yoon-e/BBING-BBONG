@@ -1,6 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine.AI;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlacementBuilding : MonoBehaviour
 {

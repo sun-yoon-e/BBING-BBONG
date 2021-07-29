@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ItemBoxGenerator : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class ItemBoxGenerator : MonoBehaviour
     public GameObject[] itemBox;
     public GameObject[] itemSpriteObject;
     public SpriteRenderer[] itemSpriteRenderer;
-    
+
     int[] itemBoxPlace;
 
     RoadGenerator road;
@@ -23,13 +21,13 @@ public class ItemBoxGenerator : MonoBehaviour
     void Start()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-       
+
         itemBoxPlace = new int[itemBoxNum];
 
         itemBox = new GameObject[itemBoxNum];
         itemSpriteObject = new GameObject[itemBoxNum];
         itemSpriteRenderer = new SpriteRenderer[itemBoxNum];
-        
+
         DrawItemBox();
     }
 
