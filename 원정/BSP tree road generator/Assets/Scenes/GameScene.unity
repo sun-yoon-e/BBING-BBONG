@@ -892,6 +892,7 @@ MonoBehaviour:
   wayPointLayer:
     serializedVersion: 2
     m_Bits: 65536
+  carNum: 0
 --- !u!1 &928902951
 GameObject:
   m_ObjectHideFlags: 0
@@ -4194,7 +4195,7 @@ GameObject:
   - component: {fileID: 7359638207134492629}
   m_Layer: 13
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -42,7 +42,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 3118569579268563144}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3.46
+  m_Radius: 3.5
   m_Speed: 7
   m_Acceleration: 8
   avoidancePriority: 50
@@ -133,7 +133,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 42
+  m_Constraints: 46
   m_CollisionDetection: 0
 --- !u!65 &6348571576211044552
 BoxCollider:
@@ -148,6 +148,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.807507, y: 3.2753718, z: 6.212371}
   m_Center: {x: 0, y: 1.9600743, z: 0}
+--- !u!114 &7272879075191793821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8402213404196935274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6bd44bf68612345bb6bf4152e5e5d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8402213404196901058
 PrefabInstance:
   m_ObjectHideFlags: 0

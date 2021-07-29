@@ -42,7 +42,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 605409813975381846}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 2.94
+  m_Radius: 3.1
   m_Speed: 7
   m_Acceleration: 8
   avoidancePriority: 50
@@ -119,6 +119,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.22481072, y: 0.7233084, z: 0.7233081}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3589157048334581325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6740476487353645950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6bd44bf68612345bb6bf4152e5e5d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6740476487353744854
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -222,7 +234,7 @@ PrefabInstance:
     - target: {fileID: 6022229710515073586, guid: 1989787f5d4f08647a723f7cb7df5f05,
         type: 3}
       propertyPath: m_Constraints
-      value: 42
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 6022229710515073586, guid: 1989787f5d4f08647a723f7cb7df5f05,
         type: 3}
@@ -231,6 +243,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
+--- !u!1 &6740476487353645950 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100008, guid: 1989787f5d4f08647a723f7cb7df5f05,
+    type: 3}
+  m_PrefabInstance: {fileID: 6740476487353744854}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6740476487353345886 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400008, guid: 1989787f5d4f08647a723f7cb7df5f05,

@@ -42,7 +42,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8311826808449277405}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 3.08
+  m_Radius: 3.5
   m_Speed: 7
   m_Acceleration: 8
   avoidancePriority: 50
@@ -65,6 +65,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 18e0bed1dbb48cf488a0d18de5ed391d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2855264388749185225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8311826809130549145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f6bd44bf68612345bb6bf4152e5e5d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &8311826809130514737
@@ -170,7 +182,7 @@ PrefabInstance:
     - target: {fileID: 7978861211916087193, guid: ca6a542169d8e474aa2c2cb47423839a,
         type: 3}
       propertyPath: m_Constraints
-      value: 42
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 7978861211916087193, guid: ca6a542169d8e474aa2c2cb47423839a,
         type: 3}
@@ -181,6 +193,12 @@ PrefabInstance:
     - {fileID: -972429592474801028, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
     - {fileID: 8599419599471593627, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
+--- !u!1 &8311826809130549145 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100008, guid: ca6a542169d8e474aa2c2cb47423839a,
+    type: 3}
+  m_PrefabInstance: {fileID: 8311826809130514737}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8311826809130640313 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400008, guid: ca6a542169d8e474aa2c2cb47423839a,

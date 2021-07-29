@@ -9,6 +9,7 @@ public class CarController : MonoBehaviour
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        
         agent = GetComponent<NavMeshAgent>();
     }
 
@@ -16,12 +17,12 @@ public class CarController : MonoBehaviour
     {
         int randWayPoint = Random.Range(0, road.wayPointNum);
         agent.SetDestination(road.wayPoint[randWayPoint].transform.position);
-        //agent.avoidancePriority = 1;
+        tag = "Car";
     }
 
     private void Update()
     {
-        if(agent.remainingDistance <= agent.stoppingDistance)
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
             int randWayPoint = Random.Range(0, road.wayPointNum);
             agent.SetDestination(road.wayPoint[randWayPoint].transform.position);

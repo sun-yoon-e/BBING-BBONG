@@ -11,6 +11,7 @@ TagManager:
   - buildingBoxCollider
   - PizzaStore
   - ItemBox
+  - Car
   layers:
   - Default
   - TransparentFX

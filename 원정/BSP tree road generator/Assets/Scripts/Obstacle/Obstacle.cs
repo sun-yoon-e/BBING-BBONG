@@ -12,17 +12,19 @@ public class Obstacle : MonoBehaviour
 
     public LayerMask wayPointLayer;
 
+    public int carNum;
+
     void Start()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
         car = new GameObject[100];
+        carNum = 0;
 
-        GenerateCar();
+        GenerateCar(true);
     }
 
-    void GenerateCar()
+    public void GenerateCar(bool isGenerateManyCar)
     {
-        int carNum = 0;
         int rand;
 
         Vector3 carPosition;
@@ -42,6 +44,8 @@ public class Obstacle : MonoBehaviour
                     car[carNum].GetComponent<NavMeshAgent>().avoidancePriority = 0;
 
                     ++carNum;
+                    if (!isGenerateManyCar)
+                        break;
                 }
             }
         }
