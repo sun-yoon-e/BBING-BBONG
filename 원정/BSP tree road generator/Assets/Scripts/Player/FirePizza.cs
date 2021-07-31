@@ -37,7 +37,10 @@ public class FirePizza : MonoBehaviour
         pizzaObject.tag = "Player";
         pizzaObject.transform.position = firePos.position;
         Vector3 dir = new Vector3();
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range))
+
+        int layermask = (1 << LayerMask.NameToLayer("BoxCol"));
+        layermask = ~layermask;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range, layermask))
         {
             dir = hit.point - firePos.position;
         }
