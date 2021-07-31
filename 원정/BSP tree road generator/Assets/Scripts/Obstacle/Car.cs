@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
-public class OnCollision : MonoBehaviour
+public class Car: MonoBehaviour
 {
     Obstacle obstacle;
+
     private void Start()
     {
         obstacle = GameObject.Find("Obstacle").GetComponent<Obstacle>();
@@ -10,7 +11,6 @@ public class OnCollision : MonoBehaviour
 
     private void Update()
     {
-        //transform.rotation = Quaternion.Euler(0, 180, 0);
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -19,7 +19,7 @@ public class OnCollision : MonoBehaviour
         {
             obstacle.GenerateCar(false);
 
-            Destroy(gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 }

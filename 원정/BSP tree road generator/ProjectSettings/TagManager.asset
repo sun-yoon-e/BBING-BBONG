@@ -12,6 +12,7 @@ TagManager:
   - PizzaStore
   - ItemBox
   - Car
+  - Ground
   layers:
   - Default
   - TransparentFX

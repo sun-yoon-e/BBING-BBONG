@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class CarController : MonoBehaviour
+public class CarNavmeshAgent: MonoBehaviour
 {
     NavMeshAgent agent;
     RoadGenerator road;
