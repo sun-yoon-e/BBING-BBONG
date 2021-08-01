@@ -5,14 +5,12 @@ using UnityEngine;
 public class ObjectGenerator : MonoBehaviour
 {
     RoadGenerator road;
-    //PlacementBuilding building;
 
     public GameObject[] objectPrefab;
 
     private void Awake()
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-        //building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
     }
 
     private void Start()
@@ -24,7 +22,7 @@ public class ObjectGenerator : MonoBehaviour
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
-            if (road.buildingState[i] != 0 || road.isRoad[i] == true)
+            if ((road.isObjectPlace[i] == false && road.buildingState[i] != 0) || road.isRoad[i] == true)
                 continue;
 
             isObject = Random.Range(0, 4);

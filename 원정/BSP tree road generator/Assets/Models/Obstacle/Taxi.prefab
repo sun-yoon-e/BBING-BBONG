@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3952357844293230482}
   - component: {fileID: 6351622064883186936}
   - component: {fileID: 2446715996900069672}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: Taxi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,19 +169,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 27aa3b505c549a24187be29597eb4745, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 27aa3b505c549a24187be29597eb4745, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 27aa3b505c549a24187be29597eb4745, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 27aa3b505c549a24187be29597eb4745, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 27aa3b505c549a24187be29597eb4745, type: 3}
       propertyPath: m_Name
@@ -189,7 +189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 27aa3b505c549a24187be29597eb4745, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 27aa3b505c549a24187be29597eb4745, type: 3}
       propertyPath: m_RootOrder

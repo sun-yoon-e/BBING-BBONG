@@ -23,6 +23,7 @@ public class RoadGenerator : MonoBehaviour
     public bool[] isDestination;
     public bool[] isItemPlace;
     public bool[] isWayPointPlace;
+    public bool[] isObjectPlace;
 
     public GameObject wayPointPrefab;
     public GameObject[] wayPoint;
@@ -44,6 +45,8 @@ public class RoadGenerator : MonoBehaviour
         wayPoint = new GameObject[500];
         wayPointNum = 0;
         isWayPointPlace = new bool[xSize * zSize];
+
+        isObjectPlace = new bool[(xSize + 1) * (zSize + 1)];
 
         xSize = map.xSize;
         zSize = map.zSize;
@@ -391,7 +394,7 @@ public class RoadGenerator : MonoBehaviour
                 if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
                     buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
                 if(v - (xSize - 1) * 3 > 0)
-                    buildingState[v - (xSize - 1) * 3] = (int)buildingDirection.UP;
+                    buildingState[v - (xSize + 1) * 3] = (int)buildingDirection.UP;
             }
             v++;
             t += 12;
@@ -443,7 +446,7 @@ public class RoadGenerator : MonoBehaviour
                 if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
                     buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
                 if (v - (xSize - 1) * 3 > 0)
-                    buildingState[v - (xSize - 1) * 3] = (int)buildingDirection.UP;
+                    buildingState[v - (xSize + 1) * 3] = (int)buildingDirection.UP;
             }
             v++;
             t += 12;

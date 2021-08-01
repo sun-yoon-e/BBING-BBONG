@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5534237533504364794}
   - component: {fileID: 8343471094646557859}
   - component: {fileID: 9087716675239194777}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: PizzaCar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,19 +140,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
       propertyPath: m_Name
@@ -160,7 +160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 1989787f5d4f08647a723f7cb7df5f05, type: 3}
       propertyPath: m_RootOrder

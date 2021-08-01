@@ -14,6 +14,7 @@ public class Item : MonoBehaviour
 
     GameObject player;
     GameObject miniCamera;
+    GameObject mainCamera;
     [SerializeField] GameObject fogParticle;
     
     public float range = 100f;
@@ -24,7 +25,7 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
-        //mainCamera = GameObject.Find("Main Camera");
+        mainCamera = GameObject.Find("Main Camera");
         player = GameObject.Find("Player");
 
         miniCamera = GameObject.Find("Mini Camera");
@@ -144,10 +145,11 @@ public class Item : MonoBehaviour
 
 
         Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
-            miniCamera.transform.position.y - 10,
+            miniCamera.transform.position.y - 14,
             miniCamera.transform.position.z);
 
         GameObject miniFog = Instantiate(fogParticle, miniFogPosition, miniCamera.transform.rotation, miniCamera.transform);
+        miniFog.layer = 18;
         Destroy(miniFog, 20f);
     }
 

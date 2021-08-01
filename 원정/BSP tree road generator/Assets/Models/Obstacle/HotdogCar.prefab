@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8311826808449277379}
   - component: {fileID: 8311826808449277378}
   - component: {fileID: 5373587509877103138}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: HotdogCar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,19 +88,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
       propertyPath: m_Name
@@ -108,7 +108,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: ca6a542169d8e474aa2c2cb47423839a, type: 3}
       propertyPath: m_RootOrder

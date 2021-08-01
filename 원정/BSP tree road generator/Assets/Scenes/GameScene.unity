@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 2794021}
   - component: {fileID: 2794020}
   - component: {fileID: 2794019}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(-1000.0, 0.0, 1000.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 286556876}
   - component: {fileID: 286556875}
   - component: {fileID: 286556874}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(-1000.0, 0.0, -1000.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +368,7 @@ GameObject:
   - component: {fileID: 422041694}
   - component: {fileID: 422041693}
   - component: {fileID: 422041696}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(0.0, 0.0, -1000.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 474159572}
   - component: {fileID: 474159571}
   - component: {fileID: 474159570}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(1000.0, 0.0, 1000.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f988b0bc7221550438015e4b925a39da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBoxNum: 50
+  itemBoxNum: 200
   itemBoxPrefab: {fileID: 6291887316783688596, guid: 425b4e6301ed0064bac2fd1d87804a17,
     type: 3}
   parent: {fileID: 731673122}
@@ -675,7 +675,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 748429968}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: SurroundMapTerrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -974,7 +974,7 @@ GameObject:
   - component: {fileID: 948270473}
   - component: {fileID: 948270472}
   - component: {fileID: 948270475}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(-1000.0, 0.0, 0.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1063,7 +1063,7 @@ GameObject:
   - component: {fileID: 1046989574}
   - component: {fileID: 1046989573}
   - component: {fileID: 1046989572}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(1000.0, 0.0, -1000.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1231,6 +1231,7 @@ MonoBehaviour:
   isDestination: 
   isItemPlace: 
   isWayPointPlace: 
+  isObjectPlace: 
   wayPointPrefab: {fileID: 8090276718302116305, guid: 2e483ba3b8fe9fd44ba2c1cf4774067b,
     type: 3}
   wayPoint: []
@@ -1448,7 +1449,7 @@ GameObject:
   - component: {fileID: 1952020536}
   - component: {fileID: 1952020535}
   - component: {fileID: 1952020538}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(1000.0, 0.0, 0.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1597,6 +1598,7 @@ MonoBehaviour:
   buildingObject: []
   buildingNum: 0
   boxcol: {fileID: 5747667584125446996, guid: b97609f5199c4484a840f928fa78e946, type: 3}
+  buildingScale: 0.85
 --- !u!114 &1982610962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1705,7 +1707,7 @@ GameObject:
   - component: {fileID: 2131783582}
   - component: {fileID: 2131783581}
   - component: {fileID: 2131783584}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: Terrain_(0.0, 0.0, 1000.0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14668,7 +14670,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 48695
+    m_Bits: 179767
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -14804,7 +14806,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 3360
+    m_Bits: 396576
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: a62c75f991f8adc438b4f199532ca16c, type: 2}
   m_TargetDisplay: 0

@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 210752668828600214}
   - component: {fileID: 7552891542513086389}
   - component: {fileID: 90200132863545861}
-  m_Layer: 18
+  m_Layer: 0
   m_Name: Cop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,19 +169,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 402718b2b2627784eb67b9f496973b28, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 402718b2b2627784eb67b9f496973b28, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100004, guid: 402718b2b2627784eb67b9f496973b28, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 402718b2b2627784eb67b9f496973b28, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 402718b2b2627784eb67b9f496973b28, type: 3}
       propertyPath: m_Name
@@ -189,7 +189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 402718b2b2627784eb67b9f496973b28, type: 3}
       propertyPath: m_Layer
-      value: 18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 402718b2b2627784eb67b9f496973b28, type: 3}
       propertyPath: m_RootOrder

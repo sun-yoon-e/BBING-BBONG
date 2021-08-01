@@ -39,7 +39,6 @@ public class Destination : MonoBehaviour
         ApplyDestinationToBuilding();
     }
 
-
     private void Update()
     {
         if(DestroyDestination == destinationNum)

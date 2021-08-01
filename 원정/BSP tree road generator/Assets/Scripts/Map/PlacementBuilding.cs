@@ -16,6 +16,7 @@ public class PlacementBuilding : MonoBehaviour
     private int interval;
 
     public GameObject boxcol;
+    public float buildingScale;
 
     private void Awake()
     {
@@ -63,15 +64,14 @@ public class PlacementBuilding : MonoBehaviour
             else continue;
 
             makeNotBuildingPlace(i);
+            //makeObjectPlace(i);
 
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
-            buildingObject[buildingNum].transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
+            buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
 
             buildingObject[buildingNum].AddComponent<BoxCollider>();
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
-
-            //GameObjectUtility.SetStaticEditorFlags(buildingObject[buildingNum], StaticEditorFlags.NavigationStatic);
 
             ++buildingNum;
         }
@@ -98,7 +98,6 @@ public class PlacementBuilding : MonoBehaviour
                 else if (i - 1 > 0 && road.isRoad[i - 1] == false)
                     Instantiate(boxcol, road.vertices[i - 1], Quaternion.identity, buildingParent.transform);
             }
-            
         }
     }
 
@@ -106,41 +105,27 @@ public class PlacementBuilding : MonoBehaviour
     {
         for (int i = 1; i <= interval; ++i)
         {
-            if (place + i < road.xSize * road.zSize
-                || place - i > 0)
+            if ((place + 2 * (road.xSize + 1) + 2 < road.xSize * road.zSize) && (place - 2 * (road.xSize + 1) - 2 > 0))
             {
-                road.buildingState[place - i] = (int)buildingDirection.BUILDING;
-                road.buildingState[place + i] = (int)buildingDirection.BUILDING;
-                map.vertices[place - i].y = map.vertices[place].y;
-                map.vertices[place + i].y = map.vertices[place].y;
-            }
+                road.buildingState[place - 2 * (road.xSize + 1) + i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place - 2 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
+                road.buildingState[place - 2 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
 
-            if (place - road.xSize - 2 > 0)
-            {
+                road.buildingState[place - i] = (int)buildingDirection.BUILDING;
+                road.buildingState[place] = (int)buildingDirection.BUILDING;
+                road.buildingState[place + i] = (int)buildingDirection.BUILDING;
+
                 road.buildingState[place - road.xSize - i - 1] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize - i] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize + 1] = (int)buildingDirection.BUILDING;
-                map.vertices[place - road.xSize - i - 1].y = map.vertices[place].y;
-                map.vertices[place - road.xSize - i].y = map.vertices[place].y;
-                map.vertices[place - road.xSize].y = map.vertices[place].y;
-                map.vertices[place - road.xSize + 1].y = map.vertices[place].y;
-            }
 
-            if (place + road.xSize + 2 < road.xSize * road.zSize)
-            {
                 road.buildingState[place + road.xSize - 1] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + road.xSize] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + road.xSize + i] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + road.xSize + i + 1] = (int)buildingDirection.BUILDING;
-                map.vertices[place + road.xSize - 1].y = map.vertices[place].y;
-                map.vertices[place + road.xSize].y = map.vertices[place].y;
-                map.vertices[place + road.xSize + i].y = map.vertices[place].y;
-                map.vertices[place + road.xSize + i + 1].y = map.vertices[place].y;
-            }
 
-            if (place + 4 * (road.xSize + 1) + i < road.xSize * road.zSize)
-            {
+                // z축 건물 간격 조정
                 road.buildingState[place + 2 * (road.xSize + 1) + i] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + 2 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + 2 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
@@ -149,13 +134,59 @@ public class PlacementBuilding : MonoBehaviour
                 road.buildingState[place + 3 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + 3 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
 
-                road.buildingState[place + 4 * (road.xSize + 1) + i] = (int)buildingDirection.BUILDING;
-                road.buildingState[place + 4 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
-                road.buildingState[place + 4 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
+                if (road.buildingState[place] == (int)buildingDirection.LEFT || road.buildingState[place] == (int)buildingDirection.RIGHT)
+                {
+                    road.buildingState[place + 4 * (road.xSize + 1) + i] = (int)buildingDirection.BUILDING;
+                    road.buildingState[place + 4 * (road.xSize + 1)] = (int)buildingDirection.BUILDING;
+                    road.buildingState[place + 4 * (road.xSize + 1) - i] = (int)buildingDirection.BUILDING;
+                }
+
+                // 건물 주변 지형height 건물 height와 같게 맞추기
+                map.vertices[place - i].y = map.vertices[place].y;
+                map.vertices[place + i].y = map.vertices[place].y;
+
+                map.vertices[place - road.xSize - i - 1].y = map.vertices[place].y;
+                map.vertices[place - road.xSize - i].y = map.vertices[place].y;
+                map.vertices[place - road.xSize].y = map.vertices[place].y;
+                map.vertices[place - road.xSize + 1].y = map.vertices[place].y;
+
+                map.vertices[place + road.xSize - 1].y = map.vertices[place].y;
+                map.vertices[place + road.xSize].y = map.vertices[place].y;
+                map.vertices[place + road.xSize + i].y = map.vertices[place].y;
+                map.vertices[place + road.xSize + i + 1].y = map.vertices[place].y;
             }
         }
-
     }
+    
+    //void makeObjectPlace(int place)
+    //{
+    //    // 건물 사이 
+    //    if (place + 3 * (road.xSize + 1) + 1 < road.xSize * road.zSize && place - 2 * (road.xSize + 1) - 1 > 0)
+    //    {
+    //        road.isObjectPlace[place + 2 * (road.xSize + 1) + 1] = true;
+    //        road.isObjectPlace[place + 2 * (road.xSize + 1)] = true;
+    //        road.isObjectPlace[place + 2 * (road.xSize + 1) - 1] = true;
+
+    //        road.isObjectPlace[place - 2 * (road.xSize + 1) + 1] = true;
+    //        road.isObjectPlace[place - 2 * (road.xSize + 1)] = true;
+    //        road.isObjectPlace[place - 2 * (road.xSize + 1) - 1] = true;
+
+    //        road.isObjectPlace[place + road.xSize + 3] = true;
+    //        road.isObjectPlace[place + 2] = true;
+    //        road.isObjectPlace[place - road.xSize + 1] = true;
+
+    //        road.isObjectPlace[place + road.xSize - 1] = true;
+    //        road.isObjectPlace[place - 2] = true;
+    //        road.isObjectPlace[place - road.xSize - 3] = true;
+
+    //        if (road.buildingState[place] == (int)buildingDirection.DOWN)
+    //        {
+    //            road.isObjectPlace[place + 3 * (road.xSize + 1) + 1] = true;
+    //            road.isObjectPlace[place + 3 * (road.xSize + 1)] = true;
+    //            road.isObjectPlace[place + 3 * (road.xSize + 1) - 1] = true;
+    //        }
+    //    }
+    //}
 
     enum buildingDirection
     {

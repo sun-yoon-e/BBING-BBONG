@@ -12,6 +12,7 @@ public class PlacementPizza : MonoBehaviour
 
     RoadGenerator road;
     MeshGenerator map;
+    PlacementBuilding building;
 
     Quaternion rot;
 
@@ -19,6 +20,7 @@ public class PlacementPizza : MonoBehaviour
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+        building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
     }
 
     private void Start()
@@ -58,7 +60,7 @@ public class PlacementPizza : MonoBehaviour
         pizzaStore.AddComponent<BoxCollider>();
         BoxCollider col = pizzaStore.GetComponent<BoxCollider>();
         col.tag = "PizzaStore";
-        pizzaStore.transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
+        pizzaStore.transform.localScale = new Vector3(building.buildingScale, building.buildingScale, building.buildingScale);
 
         InitializeSprite(pizzaStore.transform.position);
     }
