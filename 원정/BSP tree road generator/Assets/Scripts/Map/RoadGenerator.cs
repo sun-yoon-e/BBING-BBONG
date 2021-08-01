@@ -21,7 +21,7 @@ public class RoadGenerator : MonoBehaviour
     public bool[] isRoad;
     public int[] buildingState;
     public bool[] isDestination;
-    public bool[] isObstaclePlace;
+    public bool[] isItemPlace;
     public bool[] isWayPointPlace;
 
     public GameObject wayPointPrefab;
@@ -73,7 +73,7 @@ public class RoadGenerator : MonoBehaviour
         buildingState = new int[(xSize + 1) * (zSize + 1)];
         isRoad = new bool[(xSize + 1) * (zSize + 1)];
         isDestination = new bool[(xSize + 1) * (zSize + 1)];
-        isObstaclePlace = new bool[(xSize + 1) * (zSize + 1)];
+        isItemPlace = new bool[(xSize + 1) * (zSize + 1)];
 
         roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
         
@@ -239,7 +239,7 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
 
-            isObstaclePlace[v + 1] = true;
+            isItemPlace[v + 1] = true;
 
             if (z > minZ)
             {
@@ -277,7 +277,7 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
          
-            isObstaclePlace[v + 1] = true;
+            isItemPlace[v + 1] = true;
             if (!isWayPoint)
             {
                 GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
@@ -328,7 +328,7 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
             
-            isObstaclePlace[v + 1] = true;
+            isItemPlace[v + 1] = true;
             if (!isWayPoint)
             {
                 GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
@@ -376,7 +376,7 @@ public class RoadGenerator : MonoBehaviour
                 isRoad[v + xSize + 1] = true;
                 isRoad[v + xSize * 2 + 2] = true;
 
-                isObstaclePlace[v + xSize + 1] = true;
+                isItemPlace[v + xSize + 1] = true;
                 if (!isWayPoint)
                 {
                     GenerateWayPoint(vertices[v + xSize + 1 + 1]);
@@ -428,7 +428,7 @@ public class RoadGenerator : MonoBehaviour
                 isRoad[v + xSize + 1] = true;
                 isRoad[v + xSize * 2 + 2] = true;
 
-                isObstaclePlace[v + xSize + 1] = true;
+                isItemPlace[v + xSize + 1] = true;
 
                 if (!isWayPoint)
                 {
@@ -482,7 +482,7 @@ public class RoadGenerator : MonoBehaviour
         roadPositionNum = 0;
         for (int i = 0; i < isRoad.Length; ++i)
         {
-            if (isRoad[i] == true)
+            if (isItemPlace[i] == true)
             {
                 buildingState[i] = (int)buildingDirection.NOTBUILDINGPLACE;
                 roadPosition[roadPositionNum] = vertices[i];

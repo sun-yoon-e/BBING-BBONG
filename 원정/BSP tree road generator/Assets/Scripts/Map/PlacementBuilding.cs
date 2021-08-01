@@ -65,13 +65,13 @@ public class PlacementBuilding : MonoBehaviour
             makeNotBuildingPlace(i);
 
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
+            buildingObject[buildingNum].transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
 
             buildingObject[buildingNum].AddComponent<BoxCollider>();
             BoxCollider col = buildingObject[buildingNum].GetComponent<BoxCollider>();
             col.tag = "buildingBoxCollider";
 
             //GameObjectUtility.SetStaticEditorFlags(buildingObject[buildingNum], StaticEditorFlags.NavigationStatic);
-            buildingObject[buildingNum].transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
 
             ++buildingNum;
         }

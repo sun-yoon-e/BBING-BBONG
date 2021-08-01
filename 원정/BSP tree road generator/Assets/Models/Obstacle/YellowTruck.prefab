@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7411576877623156050}
   - component: {fileID: 5335625395774956984}
   - component: {fileID: 100042956531750133}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: YellowTruck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,9 +167,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7411576877623156050}
     m_Modifications:
+    - target: {fileID: 100000, guid: 83ca4f42a9302344f86dd4a182495cd1, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 83ca4f42a9302344f86dd4a182495cd1, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 83ca4f42a9302344f86dd4a182495cd1, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 83ca4f42a9302344f86dd4a182495cd1, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 83ca4f42a9302344f86dd4a182495cd1, type: 3}
       propertyPath: m_Name
       value: ute_empty_seperate_yellow
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 83ca4f42a9302344f86dd4a182495cd1, type: 3}
+      propertyPath: m_Layer
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 83ca4f42a9302344f86dd4a182495cd1, type: 3}
       propertyPath: m_RootOrder

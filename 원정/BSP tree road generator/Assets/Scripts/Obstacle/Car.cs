@@ -9,10 +9,6 @@ public class Car: MonoBehaviour
         obstacle = GameObject.Find("Obstacle").GetComponent<Obstacle>();
     }
 
-    private void Update()
-    {
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")

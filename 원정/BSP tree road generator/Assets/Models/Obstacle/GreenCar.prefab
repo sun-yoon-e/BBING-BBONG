@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4320215852085380422}
   - component: {fileID: 5342653631086776632}
   - component: {fileID: 1984669277967245933}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: GreenCar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,9 +167,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4320215852085380422}
     m_Modifications:
+    - target: {fileID: 100000, guid: 059fdf75fe518a443ac7cdf212dee7dc, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 059fdf75fe518a443ac7cdf212dee7dc, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: 059fdf75fe518a443ac7cdf212dee7dc, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 059fdf75fe518a443ac7cdf212dee7dc, type: 3}
+      propertyPath: m_Layer
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 100008, guid: 059fdf75fe518a443ac7cdf212dee7dc, type: 3}
       propertyPath: m_Name
       value: car_seperate_green
+      objectReference: {fileID: 0}
+    - target: {fileID: 100008, guid: 059fdf75fe518a443ac7cdf212dee7dc, type: 3}
+      propertyPath: m_Layer
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 059fdf75fe518a443ac7cdf212dee7dc, type: 3}
       propertyPath: m_RootOrder
