@@ -32,6 +32,8 @@ public class RoadGenerator : MonoBehaviour
     public Vector3[] vertices;
     public int[] triangles;
 
+    public int roadInterval;
+
     private void Awake()
     {
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
@@ -250,7 +252,7 @@ public class RoadGenerator : MonoBehaviour
     }
     void upSplitX(int minX, int maxX, int minZ, int maxZ, int num)
     {
-        upXSplit[num] = Random.Range(minX + 4, maxX - 4);
+        upXSplit[num] = Random.Range(minX + roadInterval, maxX - roadInterval);
 
         int v = ((xSize + 1) * minZ) + upXSplit[num];
         bool isWayPoint = false;
@@ -296,7 +298,7 @@ public class RoadGenerator : MonoBehaviour
     }
     void downSplitX(int minX, int maxX, int minZ, int maxZ, int num)
     {
-        downXSplit[num] = Random.Range(minX + 4, maxX - 4);
+        downXSplit[num] = Random.Range(minX + roadInterval, maxX - roadInterval);
 
         int v;
         if (num - 1 < 0)
@@ -347,7 +349,7 @@ public class RoadGenerator : MonoBehaviour
     }
     void leftSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
     {
-        leftZSplit[num] = Random.Range(minZ + 4, maxZ - 4);
+        leftZSplit[num] = Random.Range(minZ + roadInterval, maxZ - roadInterval);
 
         int v = (xSize + 1) * (leftZSplit[num]) + minX;
         bool isWayPoint = false;
@@ -398,7 +400,7 @@ public class RoadGenerator : MonoBehaviour
     }
     void rightSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
     {
-        rightZSplit[num] = Random.Range(minZ + 4, maxZ - 4);
+        rightZSplit[num] = Random.Range(minZ + roadInterval, maxZ - roadInterval);
 
         int v = (xSize + 1) * (rightZSplit[num]) + minX;
         bool isWayPoint = false;

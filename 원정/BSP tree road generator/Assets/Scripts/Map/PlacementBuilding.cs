@@ -69,6 +69,7 @@ public class PlacementBuilding : MonoBehaviour
             col.tag = "buildingBoxCollider";
 
             //GameObjectUtility.SetStaticEditorFlags(buildingObject[buildingNum], StaticEditorFlags.NavigationStatic);
+            buildingObject[buildingNum].transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
 
             ++buildingNum;
         }

@@ -58,6 +58,7 @@ public class PlacementPizza : MonoBehaviour
         pizzaStore.AddComponent<BoxCollider>();
         BoxCollider col = pizzaStore.GetComponent<BoxCollider>();
         col.tag = "PizzaStore";
+        pizzaStore.transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
 
         InitializeSprite(pizzaStore.transform.position);
     }
@@ -71,7 +72,6 @@ public class PlacementPizza : MonoBehaviour
 
     void makeNotBuildingPlace(int place)
     {
-
         road.buildingState[place + (road.xSize + 1)] = (int)buildingDirection.BUILDING;
         for (int i = 1; i < 4; ++i)
         {
