@@ -61,6 +61,8 @@ public class PlacementBuilding : MonoBehaviour
             else continue;
 
             makeNotBuildingPlace(i);
+            
+            buildingObject[buildingNum].transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
 
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
 
