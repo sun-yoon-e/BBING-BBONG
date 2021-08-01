@@ -13,7 +13,7 @@ public class PlacementBuilding : MonoBehaviour
     public int buildingNum;
 
     // 건물간 간격 사이즈
-    private int interval = 2;
+    private int interval;
 
     public GameObject boxcol;
 
@@ -21,6 +21,8 @@ public class PlacementBuilding : MonoBehaviour
     {
         road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
         map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+
+        interval = 2;
     }
 
     private void Start()
@@ -101,7 +103,7 @@ public class PlacementBuilding : MonoBehaviour
     }
 
     void makeNotBuildingPlace(int place)
-    {   
+    {
         for (int i = 1; i <= interval; ++i)
         {
             if (place + i < road.xSize * road.zSize
@@ -118,9 +120,11 @@ public class PlacementBuilding : MonoBehaviour
                 road.buildingState[place - road.xSize - i] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize - i - 1] = (int)buildingDirection.BUILDING;
+                road.buildingState[place - road.xSize + 1] = (int)buildingDirection.BUILDING;
                 map.vertices[place - road.xSize - i].y = map.vertices[place].y;
                 map.vertices[place - road.xSize].y = map.vertices[place].y;
                 map.vertices[place - road.xSize - i - 1].y = map.vertices[place].y;
+                map.vertices[place - road.xSize + 1].y = map.vertices[place].y;
             }
 
             if (place + road.xSize + 2 < road.xSize * road.zSize)
