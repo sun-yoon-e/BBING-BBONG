@@ -117,21 +117,23 @@ public class PlacementBuilding : MonoBehaviour
 
             if (place - road.xSize - 2 > 0)
             {
+                road.buildingState[place - road.xSize - i - 1] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize - i] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize] = (int)buildingDirection.BUILDING;
-                road.buildingState[place - road.xSize - i - 1] = (int)buildingDirection.BUILDING;
                 road.buildingState[place - road.xSize + 1] = (int)buildingDirection.BUILDING;
+                map.vertices[place - road.xSize - i - 1].y = map.vertices[place].y;
                 map.vertices[place - road.xSize - i].y = map.vertices[place].y;
                 map.vertices[place - road.xSize].y = map.vertices[place].y;
-                map.vertices[place - road.xSize - i - 1].y = map.vertices[place].y;
                 map.vertices[place - road.xSize + 1].y = map.vertices[place].y;
             }
 
             if (place + road.xSize + 2 < road.xSize * road.zSize)
             {
+                road.buildingState[place + road.xSize - 1] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + road.xSize] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + road.xSize + i] = (int)buildingDirection.BUILDING;
                 road.buildingState[place + road.xSize + i + 1] = (int)buildingDirection.BUILDING;
+                map.vertices[place + road.xSize - 1].y = map.vertices[place].y;
                 map.vertices[place + road.xSize].y = map.vertices[place].y;
                 map.vertices[place + road.xSize + i].y = map.vertices[place].y;
                 map.vertices[place + road.xSize + i + 1].y = map.vertices[place].y;
