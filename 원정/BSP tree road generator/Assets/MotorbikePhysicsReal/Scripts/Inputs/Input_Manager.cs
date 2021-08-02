@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Gadd420
 {
     
     public class Input_Manager : MonoBehaviour
     {
-
+        CrashController crashScript;
+        
         public bool combineLeanAndSteering;
 
         public float inputSmoothingTime = 0.5f;
@@ -45,19 +48,36 @@ namespace Gadd420
 
         private void Start()
         {
+            crashScript = GetComponent<CrashController>();
+            
             vInput = 0;
             hzInput = 0;
         }
 
         void Update()
         {
+            ResetInput();
             VerticalInput();
             HZInput();
             GetLeanValue();
             GetLeanBackValue();
         }
 
-        
+        protected virtual void ResetInput()
+        {
+            if (Input.GetKey(KeyCode.R))
+            {
+                gameObject.transform.localRotation = Quaternion.identity;
+                crashScript.isCrashed = false;
+                //Vector3 originalPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+                //gameObject.transform.position = originalPos;
+            }
+            if (Input.GetKey(KeyCode.P))
+            {
+                Vector3 resetPos = new Vector3(505f, 10f, 500f);
+                gameObject.transform.position = resetPos;
+            }
+        }
 
         protected virtual void VerticalInput()
         {

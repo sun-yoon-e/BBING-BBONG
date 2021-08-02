@@ -13,6 +13,7 @@ TagManager:
   - ItemBox
   - Car
   - Ground
+  - mapBoxCollider
   layers:
   - Default
   - TransparentFX
