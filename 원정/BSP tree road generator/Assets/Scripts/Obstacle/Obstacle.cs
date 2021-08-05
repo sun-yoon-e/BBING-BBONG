@@ -15,7 +15,7 @@ public class Obstacle : MonoBehaviour
 
     void Start()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         car = new GameObject[100];
         carNum = 0;
 

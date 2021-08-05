@@ -8,7 +8,7 @@ public class CarNavmeshAgent: MonoBehaviour
 
     private void Awake()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         
         agent = GetComponent<NavMeshAgent>();
     }

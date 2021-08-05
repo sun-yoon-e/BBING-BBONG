@@ -18,9 +18,9 @@ public class PlacementPizza : MonoBehaviour
 
     private void Awake()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
-        building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
+        building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
     }
 
     private void Start()

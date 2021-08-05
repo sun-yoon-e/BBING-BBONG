@@ -25,7 +25,7 @@ public class Destination : MonoBehaviour
 
     private void Start()
     {
-        building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
+        building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
         
         destination = new int[destinationNum];
         isDestination = new bool[building.buildingNum];

@@ -20,7 +20,7 @@ public class ItemBoxGenerator : MonoBehaviour
 
     void Start()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
 
         itemBoxPlace = new int[itemBoxNum];
 

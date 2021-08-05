@@ -10,7 +10,7 @@ public class MapBoxCollider : MonoBehaviour
     
     private void Start()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         
         GenerateMapBoxCollider();
     }

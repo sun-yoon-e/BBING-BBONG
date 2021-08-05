@@ -37,7 +37,7 @@ public class RoadGenerator : MonoBehaviour
 
     private void Awake()
     {
-        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+        map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
 
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;

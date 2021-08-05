@@ -10,7 +10,7 @@ public class ObjectGenerator : MonoBehaviour
 
     private void Awake()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
     }
 
     private void Start()

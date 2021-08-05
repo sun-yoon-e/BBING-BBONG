@@ -6,7 +6,7 @@ public class Car: MonoBehaviour
 
     private void Start()
     {
-        obstacle = GameObject.Find("Obstacle").GetComponent<Obstacle>();
+        obstacle = GameObject.Find("Obstacle Generator").GetComponent<Obstacle>();
     }
 
     private void OnCollisionEnter(Collision collision)

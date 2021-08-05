@@ -20,8 +20,8 @@ public class PlacementBuilding : MonoBehaviour
 
     private void Awake()
     {
-        road = GameObject.Find("RoadGenerator").GetComponent<RoadGenerator>();
-        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
 
         interval = 2;
     }
