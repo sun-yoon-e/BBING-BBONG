@@ -6,13 +6,12 @@ using UnityEngine;
 public class MiniCam : MonoBehaviour
 {
     public Transform player;
+    private Vector3 newPosition;
 
-    private void LateUpdate()
+    private void Update()
     {
-        Vector3 newPosition = player.position;
-        newPosition.y = transform.position.y;
-        transform.position = newPosition;
-
         transform.rotation = Quaternion.Euler(90f, player.eulerAngles.y, 0f);
+        newPosition = new Vector3(player.position.x, 490f, player.position.z);
+        transform.position = newPosition;
     }
 }
