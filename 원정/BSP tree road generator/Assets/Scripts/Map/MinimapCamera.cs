@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class MinimapCamera : MonoBehaviour
 {
-    PlacementBuilding building;
-    Destination dest;
-    
     public Sprite destinationSprite;
     public Transform target;
     

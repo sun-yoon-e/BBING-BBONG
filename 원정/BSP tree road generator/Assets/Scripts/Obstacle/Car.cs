@@ -2,11 +2,11 @@
 
 public class Car: MonoBehaviour
 {
-    Obstacle obstacle;
+    ObstacleGenerator obstacle;
 
     private void Start()
     {
-        obstacle = GameObject.Find("Obstacle Generator").GetComponent<Obstacle>();
+        obstacle = GameObject.Find("Obstacle Generator").GetComponent<ObstacleGenerator>();
     }
 
     private void OnCollisionEnter(Collision collision)

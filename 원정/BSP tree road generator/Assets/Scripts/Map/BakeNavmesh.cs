@@ -3,15 +3,18 @@ using UnityEngine;
 
 public class BakeNavmesh : MonoBehaviour
 {
-    [SerializeField]
-    NavMeshSurface[] navMeshSurfaces;
-
+    NavMeshSurface navMeshSurface;
     private void Start()
     {
-        for (int i = 0; i < navMeshSurfaces.Length; ++i)
-        {
-            if (navMeshSurfaces[i] == true)
-                navMeshSurfaces[i].BuildNavMesh();
-        }
+        navMeshSurface = GetComponent<NavMeshSurface>();
+
+        if (navMeshSurface == true)
+            navMeshSurface.BuildNavMesh();
+
+        //for (int i = 0; i < navMeshSurfaces.Length; ++i)
+        //{
+        //    if (navMeshSurfaces[i] == true)
+        //        navMeshSurfaces[i].BuildNavMesh();
+        //}
     }
 }

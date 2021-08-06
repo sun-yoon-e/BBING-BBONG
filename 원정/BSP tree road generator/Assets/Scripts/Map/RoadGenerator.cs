@@ -15,12 +15,12 @@ public class RoadGenerator : MonoBehaviour
     int[] leftZSplit;
     int[] rightZSplit;
 
-    public Vector3[] roadPosition;
-    public int roadPositionNum;
+    public Vector3[] passibleItemPlace;
+    public int middleRoadNum;
+    public int[] buildingState;
 
     public bool[] isRoad;
-    public int[] buildingState;
-    public bool[] isDestination;
+    //public bool[] isDestination;
     public bool[] isItemPlace;
     public bool[] isWayPointPlace;
     public bool[] isObjectPlace;
@@ -41,19 +41,21 @@ public class RoadGenerator : MonoBehaviour
 
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
-        wayPoint = new GameObject[500];
-        wayPointNum = 0;
-        isWayPointPlace = new bool[xSize * zSize];
-
-        isObjectPlace = new bool[(xSize + 1) * (zSize + 1)];
-
-        xSize = map.xSize;
-        zSize = map.zSize;
     }
 
     void Start()
     {
+        vertices = new Vector3[map.vertices.Length];
+
+        wayPoint = new GameObject[500];
+        wayPointNum = 0;
+        isWayPointPlace = new bool[vertices.Length];
+
+        isObjectPlace = new bool[vertices.Length];
+
+        xSize = map.xSize;
+        zSize = map.zSize;
+
         CreateShape();
         CreateTriangle();
         UpdateMesh();
@@ -61,7 +63,6 @@ public class RoadGenerator : MonoBehaviour
 
     public void CreateShape()
     {
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
         vertices = map.vertices;
     }
 
@@ -73,13 +74,13 @@ public class RoadGenerator : MonoBehaviour
         downXSplit = new int[100];
 
         triangles = new int[xSize * zSize * 6];
-        buildingState = new int[(xSize + 1) * (zSize + 1)];
-        isRoad = new bool[(xSize + 1) * (zSize + 1)];
-        isDestination = new bool[(xSize + 1) * (zSize + 1)];
-        isItemPlace = new bool[(xSize + 1) * (zSize + 1)];
+        buildingState = new int[vertices.Length];
+        isRoad = new bool[vertices.Length];
+        //isDestination = new bool[vertices.Length];
+        isItemPlace = new bool[vertices.Length];
 
-        roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
-        
+        passibleItemPlace = new Vector3[vertices.Length];
+
 
         splitX(40, 0, zSize);
 
@@ -230,7 +231,7 @@ public class RoadGenerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
-            
+
             triangles[t + 6] = v + 1;
             triangles[t + 7] = v + xSize + 2;
             triangles[t + 8] = v + 2;
@@ -279,7 +280,7 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v] = true;
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
-         
+
             isItemPlace[v + 1] = true;
             if (!isWayPoint)
             {
@@ -330,7 +331,7 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v] = true;
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
-            
+
             isItemPlace[v + 1] = true;
             if (!isWayPoint)
             {
@@ -387,13 +388,13 @@ public class RoadGenerator : MonoBehaviour
                     isWayPoint = true;
                 }
             }
-            
+
 
             if (minX + 1 < x && x < maxX - 1)
             {
                 if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
                     buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
-                if(v - (xSize - 1) * 3 > 0)
+                if (v - (xSize - 1) * 3 > 0)
                     buildingState[v - (xSize + 1) * 3] = (int)buildingDirection.UP;
             }
             v++;
@@ -457,7 +458,7 @@ public class RoadGenerator : MonoBehaviour
 
     void makeNotBuildingPlace()
     {
-        for(int i = 0; i < vertices.Length; ++i)
+        for (int i = 0; i < vertices.Length; ++i)
         {
             if (isRoad[i] == true
                 && i + (xSize + 1) * 2 < (xSize + 1) * (zSize + 1)
@@ -482,14 +483,14 @@ public class RoadGenerator : MonoBehaviour
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
 
-        roadPositionNum = 0;
+        middleRoadNum = 0;
         for (int i = 0; i < isRoad.Length; ++i)
         {
             if (isItemPlace[i] == true)
             {
                 buildingState[i] = (int)buildingDirection.NOTBUILDINGPLACE;
-                roadPosition[roadPositionNum] = vertices[i];
-                ++roadPositionNum;
+                passibleItemPlace[middleRoadNum] = vertices[i];
+                ++middleRoadNum;
             }
         }
     }

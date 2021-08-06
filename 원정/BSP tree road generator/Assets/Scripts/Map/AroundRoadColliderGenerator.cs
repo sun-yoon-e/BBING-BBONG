@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MapBoxCollider : MonoBehaviour
+public class AroundRoadColliderGenerator : MonoBehaviour
 {
     private RoadGenerator road;
     public GameObject boxcol;
@@ -12,10 +9,10 @@ public class MapBoxCollider : MonoBehaviour
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         
-        GenerateMapBoxCollider();
+        GenerateBoxCollider();
     }
 
-    void GenerateMapBoxCollider()
+    void GenerateBoxCollider()
     {
         GameObject col = new GameObject();
         for (int i = 0; i < road.vertices.Length; ++i)

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlacementPizza : MonoBehaviour
+public class PlacementPizzaStore : MonoBehaviour
 {
-    public GameObject pizzaBuildingPrefab;
-    public Sprite pizzaBuildingSprite;
+    public GameObject pizzaStorePrefab;
+    public Sprite pizzaStoreSprite;
 
-    public GameObject pizzaSpriteObject;
-    public SpriteRenderer pizzaSpriteRenderer;
+    public GameObject pizzaStoreSpriteObject;
+    public SpriteRenderer pizzaStoreSpriteRenderer;
 
     RoadGenerator road;
     MeshGenerator map;
@@ -30,37 +30,35 @@ public class PlacementPizza : MonoBehaviour
         GameObject pizzaStore = new GameObject();
 
         if (road.isRoad[(xSize * zSize) / 2 + (5 + xSize)] == false
-            && road.isRoad[(xSize * zSize) / 2 + (5 + xSize)  + (road.xSize + 1) * 3 - 1] == false
+            && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) + (road.xSize + 1) * 3 - 1] == false
              && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) - (road.xSize + 1) * 3 - 1] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[xSize * zSize / 2 + 5 + xSize], Quaternion.Euler(0, 0, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 + 5 + xSize);
+            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[xSize * zSize / 2 + 5 + xSize], Quaternion.Euler(0, 0, 0));
+            makeBuildingPlace((xSize * zSize) / 2 + 5 + xSize);
         }
         else if (road.isRoad[(xSize * zSize) / 2 - 3 + xSize] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 3 + xSize], Quaternion.Euler(0, 180, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 - 3 + xSize);
+            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 - 3 + xSize], Quaternion.Euler(0, 180, 0));
+            makeBuildingPlace((xSize * zSize) / 2 - 3 + xSize);
         }
         else if (road.isRoad[(xSize * zSize) / 2 + 4] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 4], Quaternion.Euler(0, 0, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 + 4);
+            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 + 4], Quaternion.Euler(0, 0, 0));
+            makeBuildingPlace((xSize * zSize) / 2 + 4);
         }
         else if (road.isRoad[(xSize * zSize) / 2 - 4] == false)
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 - 4], Quaternion.Euler(0, 180, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 - 4);
+            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 - 4], Quaternion.Euler(0, 180, 0));
+            makeBuildingPlace((xSize * zSize) / 2 - 4);
         }
         else
         {
-            pizzaStore = Instantiate(pizzaBuildingPrefab, road.vertices[(xSize * zSize) / 2 + 6 + (xSize * 2)], Quaternion.Euler(0, 0, 0));
-            makeNotBuildingPlace((xSize * zSize) / 2 + 6 + (xSize * 2));
+            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 + 6 + (xSize * 2)], Quaternion.Euler(0, 0, 0));
+            makeBuildingPlace((xSize * zSize) / 2 + 6 + (xSize * 2));
         }
 
-        pizzaStore.AddComponent<BoxCollider>();
-        BoxCollider col = pizzaStore.GetComponent<BoxCollider>();
-        col.tag = "PizzaStore";
         pizzaStore.transform.localScale = new Vector3(building.buildingScale, building.buildingScale, building.buildingScale);
+        pizzaStore.tag = "PizzaStore";
 
         InitializeSprite(pizzaStore.transform.position);
     }
@@ -69,10 +67,10 @@ public class PlacementPizza : MonoBehaviour
     {
         rot = GameObject.Find("Player").transform.rotation;
         rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
-        pizzaSpriteObject.transform.rotation = rot;
+        pizzaStoreSpriteObject.transform.rotation = rot;
     }
 
-    void makeNotBuildingPlace(int place)
+    void makeBuildingPlace(int place)
     {
         road.buildingState[place + (road.xSize + 1)] = (int)buildingDirection.BUILDING;
         for (int i = 1; i < 4; ++i)
@@ -120,15 +118,15 @@ public class PlacementPizza : MonoBehaviour
         Vector3 destinationPosition =
             new Vector3(pos.x, pos.y + 20, pos.z);
 
-        pizzaSpriteObject = new GameObject("DestinationSprite");
-        pizzaSpriteObject.transform.position = destinationPosition;
-        pizzaSpriteObject.transform.rotation = SpriteRotation;
-        pizzaSpriteObject.transform.localScale = SpriteScale;
+        pizzaStoreSpriteObject = new GameObject("DestinationSprite");
+        pizzaStoreSpriteObject.transform.position = destinationPosition;
+        pizzaStoreSpriteObject.transform.rotation = SpriteRotation;
+        pizzaStoreSpriteObject.transform.localScale = SpriteScale;
 
-        pizzaSpriteRenderer = pizzaSpriteObject.AddComponent<SpriteRenderer>();
-        pizzaSpriteRenderer.sprite = pizzaBuildingSprite;
+        pizzaStoreSpriteRenderer = pizzaStoreSpriteObject.AddComponent<SpriteRenderer>();
+        pizzaStoreSpriteRenderer.sprite = pizzaStoreSprite;
 
-        pizzaSpriteObject.layer = 8;
+        pizzaStoreSpriteObject.layer = 8;
     }
 
     enum buildingDirection

@@ -486,7 +486,7 @@ MonoBehaviour:
   parent: {fileID: 350881557}
   destination: 
   destinationNum: 30
-  destinationPizzaObject: []
+  destinationObject: []
   destinationSpriteObject: []
   pizzaSpriteRenderer: []
   DestroyDestination: 0
@@ -977,12 +977,11 @@ MonoBehaviour:
   itemBoxNum: 200
   itemBoxPrefab: {fileID: 6291887316783688596, guid: 425b4e6301ed0064bac2fd1d87804a17,
     type: 3}
-  parent: {fileID: 731673122}
-  itemScale: 1
   itemSprite: {fileID: 21300000, guid: b5f06d786ea4e1a41a6c10e563fa7ceb, type: 3}
   itemBox: []
   itemSpriteObject: []
   itemSpriteRenderer: []
+  itemScale: 1
 --- !u!4 &731673122
 Transform:
   m_ObjectHideFlags: 0
@@ -1115,7 +1114,7 @@ MonoBehaviour:
   vertices: []
   xSize: 200
   zSize: 200
-  mapHeight: 0
+  mapHeight: 10
   perlinNoiseNum: 0.1
 --- !u!33 &783582554
 MeshFilter:
@@ -1203,7 +1202,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 833486945}
-  - component: {fileID: 833486947}
+  - component: {fileID: 833486946}
   m_Layer: 0
   m_Name: Obstacle Generator
   m_TagString: Untagged
@@ -1225,7 +1224,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &833486947
+--- !u!114 &833486946
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1234,22 +1233,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 833486944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7c0888efcec40342b3b3b31e915a600, type: 3}
+  m_Script: {fileID: 11500000, guid: 043f9f4fc5c884147a07286edc0a5986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefabs:
-  - {fileID: 8311826808449277405, guid: c145d35aeff42204f9f449989cd7c1c0, type: 3}
-  - {fileID: 605409813975381846, guid: f26250a4f2b3c564db47693e9a9bee9e, type: 3}
   - {fileID: 3118569579268563144, guid: 0008c1b27c1ddea499dd9def4f05fdf0, type: 3}
   - {fileID: 8211807432016652497, guid: 06b39fb3430d0324fb8b41806da9a7b5, type: 3}
   - {fileID: 3496458091836081090, guid: 8c98f3d6f940ff14eba03fe97c70dd53, type: 3}
   - {fileID: 7913303680176965808, guid: e937f15a3301296459630f47281a8a13, type: 3}
   - {fileID: 3088912927087834052, guid: 5d3e38bed980655468783a037e0b9131, type: 3}
+  - {fileID: 8311826808449277405, guid: c145d35aeff42204f9f449989cd7c1c0, type: 3}
+  - {fileID: 605409813975381846, guid: f26250a4f2b3c564db47693e9a9bee9e, type: 3}
   - {fileID: 1682293963775173072, guid: b0a864c63937a744b9fefeaa60a79e4a, type: 3}
   - {fileID: 3225135311183678482, guid: 942736e12c0e3cc468edd6326dca5cba, type: 3}
   - {fileID: 2009365497214746044, guid: a85fc71467a7a95409efdc6f7c7d6725, type: 3}
   - {fileID: 3824383134371635177, guid: 527a5f0d31448a84d8a0409e364f0efe, type: 3}
-  parent: {fileID: 833486945}
   wayPointLayer:
     serializedVersion: 2
     m_Bits: 65536
@@ -1819,11 +1817,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xSize: 200
   zSize: 200
-  roadPosition: []
-  roadPositionNum: 0
-  isRoad: 
+  passibleItemPlace: []
+  middleRoadNum: 0
   buildingState: 
-  isDestination: 
+  isRoad: 
   isItemPlace: 
   isWayPointPlace: 
   isObjectPlace: 
@@ -1862,7 +1859,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.33333334
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: 224d66c51ba4ecc47a397c53dcc727c4, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 66f1688ed21c57848aa03ba5d935e53c, type: 2}
 --- !u!114 &1710524072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1875,8 +1872,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07257c57c20a87a45aa5a8a588e30a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  navMeshSurfaces:
-  - {fileID: 1710524071}
 --- !u!1 &1885910701
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,11 +2179,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0865110b69b6e004480d47ba2c63eb50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pizzaBuildingPrefab: {fileID: 100000, guid: 601b00ca0b9de0247beae089ec7e640f, type: 3}
-  pizzaBuildingSprite: {fileID: 21300000, guid: a1d04cd1568b1a14f9623a17187bde3d,
-    type: 3}
-  pizzaSpriteObject: {fileID: 0}
-  pizzaSpriteRenderer: {fileID: 0}
+  pizzaStorePrefab: {fileID: 100000, guid: 601b00ca0b9de0247beae089ec7e640f, type: 3}
+  pizzaStoreSprite: {fileID: 21300000, guid: a1d04cd1568b1a14f9623a17187bde3d, type: 3}
+  pizzaStoreSpriteObject: {fileID: 0}
+  pizzaStoreSpriteRenderer: {fileID: 0}
 --- !u!1 &2000955011
 GameObject:
   m_ObjectHideFlags: 0

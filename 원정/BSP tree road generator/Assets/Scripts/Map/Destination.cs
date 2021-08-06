@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Destination : MonoBehaviour
 {
@@ -15,7 +13,7 @@ public class Destination : MonoBehaviour
 
     bool[] isDestination;
 
-    public GameObject[] destinationPizzaObject;
+    public GameObject[] destinationObject;
     public GameObject[] destinationSpriteObject;
     public SpriteRenderer[] pizzaSpriteRenderer;
 
@@ -26,12 +24,12 @@ public class Destination : MonoBehaviour
     private void Start()
     {
         building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
-        
+
         destination = new int[destinationNum];
         isDestination = new bool[building.buildingNum];
         DestroyDestination = 0;
 
-        destinationPizzaObject = new GameObject[destinationNum];
+        destinationObject = new GameObject[destinationNum];
         destinationSpriteObject = new GameObject[destinationNum];
         pizzaSpriteRenderer = new SpriteRenderer[destinationNum];
 
@@ -41,7 +39,7 @@ public class Destination : MonoBehaviour
 
     private void Update()
     {
-        if(DestroyDestination == destinationNum)
+        if (DestroyDestination == destinationNum)
         {
             DestroyDestination = 0;
             DrawDestination();
@@ -65,7 +63,7 @@ public class Destination : MonoBehaviour
         for (int i = 0; i < destinationNum; ++i)
         {
             destination[i] = Random.Range(1, building.buildingNum);
-            
+
             //중복체크
             for (int j = 0; j < destinationNum; ++j)
             {
@@ -91,9 +89,9 @@ public class Destination : MonoBehaviour
                 building.buildingObject[destination[i]].transform.position.y + 20,
                 building.buildingObject[destination[i]].transform.position.z);
 
-            destinationPizzaObject[i] = Instantiate(destinationPrefab, destinationPosition,
+            destinationObject[i] = Instantiate(destinationPrefab, destinationPosition,
                 Quaternion.Euler(0, 0, 0), parent);
-            destinationPizzaObject[i].layer = 9;
+            destinationObject[i].layer = 9;
 
             destinationSpriteObject[i] = new GameObject("DestinationSprite");
             destinationSpriteObject[i].transform.position = destinationPosition;

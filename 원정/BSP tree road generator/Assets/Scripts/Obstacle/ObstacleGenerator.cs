@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class Obstacle : MonoBehaviour
+public class ObstacleGenerator : MonoBehaviour
 {
     public GameObject[] carPrefabs;
-    public Transform parent;
 
     RoadGenerator road;
     GameObject[] car;
@@ -16,7 +15,7 @@ public class Obstacle : MonoBehaviour
     void Start()
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
-        car = new GameObject[100];
+        car = new GameObject[road.wayPoint.Length];
         carNum = 0;
 
         GenerateCar(true);
@@ -25,10 +24,9 @@ public class Obstacle : MonoBehaviour
     public void GenerateCar(bool isGenerateManyCar)
     {
         int rand;
-
         Vector3 carPosition;
 
-        for (int i = 1; i < road.xSize * road.zSize; ++i)
+        for (int i = 1; i < road.vertices.Length; ++i)
         {
             if (road.isWayPointPlace[i] == true)
             {
@@ -38,7 +36,7 @@ public class Obstacle : MonoBehaviour
                     carPosition = road.vertices[i + road.xSize + 1];
 
                     var randomINdex = Random.Range(0, carPrefabs.Length);
-                    car[carNum] = Instantiate(carPrefabs[randomINdex], carPosition, Quaternion.identity, parent);
+                    car[carNum] = Instantiate(carPrefabs[randomINdex], carPosition, Quaternion.identity, transform);
 
                     car[carNum].GetComponent<NavMeshAgent>().avoidancePriority = 0;
 

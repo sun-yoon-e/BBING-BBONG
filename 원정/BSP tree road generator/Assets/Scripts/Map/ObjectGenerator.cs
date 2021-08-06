@@ -15,8 +15,6 @@ public class ObjectGenerator : MonoBehaviour
 
     private void Start()
     {
-        GameObject mapObject;
-
         int prefab;
         int isObject;
 
@@ -29,9 +27,7 @@ public class ObjectGenerator : MonoBehaviour
             if (isObject == 1)
             {
                 prefab = Random.Range(0, objectPrefab.Length);
-                mapObject = Instantiate(objectPrefab[prefab], road.vertices[i], Quaternion.identity);
-
-                mapObject.transform.SetParent(transform);
+                Instantiate(objectPrefab[prefab], road.vertices[i], Quaternion.identity, transform);
             }
         }
     }
