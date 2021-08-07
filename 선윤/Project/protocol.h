@@ -10,10 +10,14 @@
 #define SC_CHAT		4
 #define SC_ITEM		5
 #define SC_SCORE    6
+#define SC_GAMESTATE 7
+#define SC_FIRE     8
+
 #define SC_MESH     10
 #define SC_SET_MESH 11
 #define SC_ROAD     12
 #define SC_SET_ROAD 13
+#define SC_INIT     14
 
 #define CS_LOGIN	0
 #define CS_LOGOUT	1
@@ -22,10 +26,15 @@
 #define CS_CHAT		4
 #define CS_CLICK	5
 #define CS_SCORE    6
+
+#define CS_FIRE     8
+
 #define CS_MESH     10
 #define CS_SET_MESH 11
 #define CS_ROAD     12
 #define CS_SET_ROAD 13
+
+#define PACKET_CMD_MAX  15
 
 struct Vector3 {
 	float x;
@@ -133,6 +142,28 @@ struct Packet_Move_SC {
 	Vector3 rotation[MAX_CLIENT];
 };
 
+struct Packet_GameState_SC {
+	BYTE type = SC_GAMESTATE;
+	BYTE state;
+};
+
+struct Packet_Fire {
+	BYTE TYPE = CS_FIRE;
+	Vector3 position;
+	Vector3 targetPosition;
+};
+
+struct Packet_Fire_SC {
+	BYTE TYPE = SC_FIRE;
+	Vector3 position;
+	Vector3 targetPosition;
+};
+
+struct Packet_GameInit_SC {
+    BYTE type = SC_INIT;
+    int32_t scene;
+};
+
 struct sc_packet_enter {
 	BYTE type;
 	BYTE size;
@@ -201,5 +232,6 @@ struct cs_packet_move {
 	float y;
 	float z;
 };
+
 
 #pragma pack (pop)

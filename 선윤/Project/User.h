@@ -13,4 +13,3 @@ public:
 	int GetId();
 	string GetName();
 };
-
