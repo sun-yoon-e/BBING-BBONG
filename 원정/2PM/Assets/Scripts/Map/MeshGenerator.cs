@@ -4,6 +4,8 @@
 [RequireComponent(typeof(MeshCollider))]
 public class MeshGenerator : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+    
     Mesh mesh;
 
     public Vector3[] vertices;
@@ -18,17 +20,37 @@ public class MeshGenerator : MonoBehaviour
 
     private void Awake()
     {
-        mesh = new Mesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+       
     }
 
     void Start()
     {
-        CreateShape();
-        CreateTriangle();
-        UpdateMesh();
+        gameClient.OnMeshChanged += SetMeshEvent;
+        
+        mesh = new Mesh();
+        GetComponent<MeshFilter>().mesh = mesh;
+        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+
+        gameClient.GetMesh();
+    }
+    
+    public void SetMeshEvent(object sender, MeshEventArgs args)
+    {
+        if (!args.ready)
+        {
+            Debug.Log("SetMeshEvent() 처음!!");
+            CreateShape();
+            CreateTriangle();
+            gameClient.SetMesh(vertices, triangles);
+        }
+        else
+        {
+            Debug.Log("SetMeshEvent() 업뎃");
+            vertices = args.vertices;
+            triangles = args.triangles;
+
+            UpdateMesh();
+        }
     }
 
     public void CreateShape()

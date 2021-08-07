@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ObjectGenerator : MonoBehaviour
 {
+    PlacementBuilding building;
     RoadGenerator road;
-
     public GameObject[] objectPrefab;
 
     private void Awake()
@@ -14,6 +14,16 @@ public class ObjectGenerator : MonoBehaviour
     }
 
     private void Start()
+    {
+        building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
+        building.OnBuildingReady2 += CreateObjectPrefab;
+        if (building.isBuildingReady)
+        {
+            CreateObjectPrefab(this, EventArgs.Empty);
+        }
+    }
+    
+    private void CreateObjectPrefab(object sender, EventArgs args)
     {
         int prefab;
         int isObject;

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Destination : MonoBehaviour
 {
@@ -20,21 +22,36 @@ public class Destination : MonoBehaviour
     public int DestroyDestination;
 
     Quaternion rot;
+    
+    private bool isReady = false;
 
     private void Start()
     {
         building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
 
-        destination = new int[destinationNum];
-        isDestination = new bool[building.buildingNum];
-        DestroyDestination = 0;
+        building.OnBuildingReady += OnBuildingReady;
+        if (building.isBuildingReady)
+        {
+            OnBuildingReady(this, EventArgs.Empty);
+        }
+    }
 
-        destinationObject = new GameObject[destinationNum];
-        destinationSpriteObject = new GameObject[destinationNum];
-        pizzaSpriteRenderer = new SpriteRenderer[destinationNum];
+    private void OnBuildingReady(object sender, EventArgs args)
+    {
+        if (isReady == false)
+        {
+            isReady = true;
+            destination = new int[destinationNum];
+            isDestination = new bool[building.buildingNum];
+            DestroyDestination = 0;
 
-        DrawDestination();
-        ApplyDestinationToBuilding();
+            destinationObject = new GameObject[destinationNum];
+            destinationSpriteObject = new GameObject[destinationNum];
+            pizzaSpriteRenderer = new SpriteRenderer[destinationNum];
+
+            DrawDestination();
+            ApplyDestinationToBuilding();
+        }
     }
 
     private void Update()

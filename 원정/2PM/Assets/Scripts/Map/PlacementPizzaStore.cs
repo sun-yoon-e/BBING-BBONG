@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class PlacementPizzaStore : MonoBehaviour
@@ -18,12 +17,23 @@ public class PlacementPizzaStore : MonoBehaviour
 
     private void Awake()
     {
-        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
-        map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
-        building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
+        
     }
 
     private void Start()
+    {
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
+        map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
+        building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
+
+        road.OnRoadReady2 += OnRoadReady;
+        if (road.isRoadReady)
+        {
+            OnRoadReady(this, EventArgs.Empty);
+        }
+    }
+    
+    private void OnRoadReady(object sender, EventArgs args)
     {
         int xSize = road.xSize;
         int zSize = road.zSize;
@@ -31,7 +41,7 @@ public class PlacementPizzaStore : MonoBehaviour
 
         if (road.isRoad[(xSize * zSize) / 2 + (5 + xSize)] == false
             && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) + (road.xSize + 1) * 3 - 1] == false
-             && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) - (road.xSize + 1) * 3 - 1] == false)
+            && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) - (road.xSize + 1) * 3 - 1] == false)
         {
             pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[xSize * zSize / 2 + 5 + xSize], Quaternion.Euler(0, 0, 0));
             makeBuildingPlace((xSize * zSize) / 2 + 5 + xSize);
