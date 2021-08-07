@@ -1,9 +1,10 @@
 ﻿#pragma once
-#include "stdafx.h"
+#include <time.h>
+#include <mutex>
 
+#include "stdafx.h"
 #include "User.h"
 #include "Client.h"
-
 #include "DB.h"
 #include "protocol.h"
 
@@ -35,6 +36,12 @@ private:
 
 	int client_id_counter = 0;
 
+	BOOL isGameStarted = false;
+	BOOL isCountdownStarted = false;
+	time_t gameStartedAt = 0;
+	time_t gameFinishedAt = 0;
+	mutex _mutex;
+
 public:
 	Server();
 	~Server();
@@ -42,23 +49,17 @@ public:
 	void InitServer();
 	void StartServer();
 
-
-	void LoginServer(int);
-
 	void ClientMain(Client* client);
+	void ServerMain();
+    int SendTo(SOCKET sock, char* packet, int packetSize);
 
 	User* ClientLogin(Packet_Login* loginPacket);
 	BOOL ClientSignUp(Packet_SignUp* signUpPacket);
 
-	void Send_Enter_Packet(int);
-	void Send_Login_Packet();
-	void Send_Logout_Packet();
-	void Send_Move_Packet();
-	void Send_Chat_Packet();
-	void Send_Item_Packet();
+	BOOL CanStartGame();
 
 	static DWORD WINAPI NewClientThread(LPVOID);
-	static DWORD WINAPI LobbyServer(LPVOID);
+	static DWORD WINAPI ServerThread(LPVOID);
 
 	// https://stackoverflow.com/questions/10737644/convert-const-char-to-wstring 를 참고하여 수정함
 	wstring c2ws(const char* cstr)
@@ -69,8 +70,6 @@ public:
 		MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), &wstrTo[0], size_needed);
 		return wstrTo;
 	}
-
-
 
 	void err_quit(const wstring msg)
 	{

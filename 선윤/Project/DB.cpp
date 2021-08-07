@@ -60,4 +60,3 @@ User* DB::login(wstring username, wstring password)
 	SQLFreeHandle(SQL_HANDLE_STMT, hstmt);
 	return NULL;
 }
-
