@@ -761,11 +761,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 493118768}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 490, z: 0}
+  m_LocalPosition: {x: 505, y: 500, z: 500}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
-  m_Father: {fileID: 542957389623694199}
-  m_RootOrder: 5
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &493118770
 MonoBehaviour:
@@ -974,7 +974,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f988b0bc7221550438015e4b925a39da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBoxNum: 300
+  itemBoxNum: 50
   itemBoxPrefab: {fileID: 6291887316783688596, guid: 425b4e6301ed0064bac2fd1d87804a17,
     type: 3}
   itemSprite: {fileID: 21300000, guid: b5f06d786ea4e1a41a6c10e563fa7ceb, type: 3}
@@ -2464,6 +2464,7 @@ MonoBehaviour:
   isCrashed: 0
   crashTag:
   - map
+  - mapBoxCollider
 --- !u!114 &542957389623694193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2624,7 +2625,6 @@ Transform:
   - {fileID: 1885910702}
   - {fileID: 703520091}
   - {fileID: 205021018}
-  - {fileID: 493118769}
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2668,8 +2668,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelRotationAxis: 0
   isGrounded: 0
-  firstGearTorque: 2000
-  topGearTorque: 2000
+  firstGearTorque: 1000
+  topGearTorque: 1000
   isAutomatic: 0
   maxSpeed: 50
   maxReverseSpeed: 3
@@ -2722,7 +2722,7 @@ MonoBehaviour:
   images:
   - {fileID: 5618960221759066338}
   - {fileID: 5618960221988427918}
-  nullSprite: {fileID: 0}
+  nullSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   fogParticle: {fileID: 1543837207191096947, guid: 00a487a7191c7ea4ab1e15684e6f476a,
     type: 3}
   range: 100
@@ -10920,7 +10920,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 110, y: 110}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5618960222696037316
 CanvasRenderer:

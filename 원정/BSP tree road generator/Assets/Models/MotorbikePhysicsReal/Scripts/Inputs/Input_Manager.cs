@@ -59,7 +59,7 @@ namespace Gadd420
             ResetInput();
             VerticalInput();
             HZInput();
-            GetLeanValue();
+            //GetLeanValue();
             GetLeanBackValue();
         }
 
@@ -67,10 +67,8 @@ namespace Gadd420
         {
             if (Input.GetKey(KeyCode.R))
             {
-                gameObject.transform.localRotation = Quaternion.identity;
+                transform.localRotation = Quaternion.identity;
                 crashScript.isCrashed = false;
-                //Vector3 originalPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
-                //gameObject.transform.position = originalPos;
             }
             if (Input.GetKey(KeyCode.P))
             {
@@ -194,6 +192,7 @@ namespace Gadd420
 
         }
 
+        /*
         protected virtual void GetLeanValue()
         {
             if (!combineLeanAndSteering)
@@ -219,6 +218,7 @@ namespace Gadd420
                 leanInput = hzInput;
             }
         }
+        */
 
         protected virtual void GetLeanBackValue()
         {

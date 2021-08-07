@@ -10,8 +10,7 @@ public class MiniCam : MonoBehaviour
 
     private void Update()
     {
+        transform.position = new Vector3(player.position.x, 490f, player.position.z);
         transform.rotation = Quaternion.Euler(90f, player.eulerAngles.y, 0f);
-        newPosition = new Vector3(player.position.x, 490f, player.position.z);
-        transform.position = newPosition;
     }
 }

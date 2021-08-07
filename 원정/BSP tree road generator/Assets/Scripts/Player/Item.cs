@@ -11,6 +11,7 @@ public class Item : MonoBehaviour
     private int ItemCnt;
     private int?[] MyItems;
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터, 4: 보호막
+    private int useIndex;
 
     GameObject player;
     GameObject miniCamera;
@@ -19,10 +20,7 @@ public class Item : MonoBehaviour
     
     public float range = 100f;
     public Camera cam;
-    public static bool Using = false; //아이템 사용중
-    private int useIndex;
-
-
+    
     private void Start()
     {
         mainCamera = GameObject.Find("Main Camera");
@@ -38,29 +36,36 @@ public class Item : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (!Using) Using = true;
             if (MyItems[0] != null)
             {
                 useIndex = 0;
-                UseItem(MyItems[0].Value, 0);
+                UseItem(MyItems[0].Value);
+                
+                if (MyItems[1] != null)
+                {
+                    MyItems[0] = MyItems[1];
+                    MyItems[1] = null;
+                }
+                else
+                {
+                    MyItems[0] = null;
+                }
+                
+                ChangeSprite();
+                ItemCnt--;
             }
         }
         
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (!Using) Using = true;
             if (MyItems[1] != null)
             {
                 useIndex = 1;
-                UseItem(MyItems[1].Value, 1);
+                UseItem(MyItems[1].Value);
+                MyItems[1] = null;
+                ChangeSprite();
+                ItemCnt--;
             }
-        }
-        
-        if (Input.GetButton("Fire1") && Using)
-        {
-            UseItem(MyItems[useIndex].Value, 0); 
-            //MyItems[useIndex] = nullSprite;
-            Using = false;
         }
     }
 
@@ -71,6 +76,7 @@ public class Item : MonoBehaviour
             if (ItemCnt < 2)
             {
                 RandomItem();
+                ItemCnt++;
                 ChangeSprite();
 
                 Destroy(col.gameObject);
@@ -86,11 +92,9 @@ public class Item : MonoBehaviour
         {
             case 0:
                 MyItems[0] = index;
-                ItemCnt++;
                 break;
             case 1:
                 MyItems[1] = index;
-                ItemCnt++;
                 break;
             //case 2:
             //    MyItems[0] = MyItems[1];
@@ -110,37 +114,35 @@ public class Item : MonoBehaviour
                 Sprite select = sprites[MyItems[i].Value];
                 images[i].sprite = select;
             }
+            else
+            {
+                images[i].sprite = nullSprite;
+            }
         }
     }
 
-    void UseItem(int itemIndex, int itemBoxNum)
+    void UseItem(int itemIndex)
     {
         switch (itemIndex)
         {
             case 0:
                 Fog();
-                images[itemBoxNum].sprite = null;
                 break;
             case 1:
                 Fog();
-                images[itemBoxNum].sprite = null;
                 break;
             case 2:
                 Debug.Log("슬로우");
                 PlayerController.slowdown = true;
-                images[itemBoxNum].sprite = null;
                 break;
             case 3:
                 Debug.Log("부스터");
                 PlayerController.booster = true;
-                images[itemBoxNum].sprite = null;
                 break;
             case 4:
                 Debug.Log("쉴드");
-                images[itemBoxNum].sprite = null;
                 break;
         }
-        --ItemCnt;
     }
     
     void Fog()
@@ -161,16 +163,4 @@ public class Item : MonoBehaviour
         miniFog.layer = 18;
         Destroy(miniFog, 20f);
     }
-
-
-    //StartCoroutine(LateCall());
-    //IEnumerator LateCall()
-    //{
-
-    //    yield return new WaitForSeconds(20);
-
-    //    miniMap.SetActive(true);
-    //    //Do Function here...
-    //}
-
 }

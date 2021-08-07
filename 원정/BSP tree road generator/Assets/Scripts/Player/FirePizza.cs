@@ -22,7 +22,7 @@ public class FirePizza : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && !Item.Using)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 20f / coolTime;
             animator.SetTrigger("FirePizza");
