@@ -46,19 +46,21 @@ public class ItemBoxGenerator : MonoBehaviour
 
     public void GenerateItemBox()
     {
+        bool isDuplicate;
         for (int i = 0; i < itemBoxNum; ++i)
         {
             itemBoxPlace[i] = Random.Range(1, road.middleRoadNum);
 
-            for (int j = 0; j < itemBoxNum; ++j)
+            // 중복체크
+            isDuplicate = false;
+            for (int j = 0; j < i; ++j)
             {
-                if (itemBoxPlace[i] == itemBoxPlace[j])
-                    itemBoxPlace[i] = Random.Range(1, road.middleRoadNum);
+                if (itemBoxPlace[j] == itemBoxPlace[i])
+                    isDuplicate = true;
             }
-        }
+            if (isDuplicate)
+                continue;
 
-        for (int i = 0; i < itemBoxNum; ++i)
-        {
             Vector3 itemPosition =
                 new Vector3(road.passibleItemPlace[itemBoxPlace[i]].x,
                 road.passibleItemPlace[itemBoxPlace[i]].y + 1.5f,
