@@ -15,8 +15,8 @@ public class Pizza : MonoBehaviour
 
     void Start()
     {
-        destination = GameObject.Find("Destination").GetComponent<Destination>();
-        building = GameObject.Find("BuildingGenerator").GetComponent<PlacementBuilding>();
+        destination = GameObject.Find("Destination Generator").GetComponent<Destination>();
+        building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
 
         lifeTimer = lifeTime;
     }
@@ -48,7 +48,7 @@ public class Pizza : MonoBehaviour
                 Destroy(destination.destinationSpriteObject[i]);
                 Destroy(destination.pizzaSpriteRenderer[i]);
 
-                Destroy(destination.destinationPizzaObject[i]);
+                Destroy(destination.destinationObject[i]);
 
                 destination.DestroyDestination += 1;
             }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.Mime;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
+//using Random = UnityEngine.Random;
 
 public class Item : MonoBehaviour
 {
@@ -12,12 +8,13 @@ public class Item : MonoBehaviour
     public Image[] images = new Image[2];
     public Sprite nullSprite;
 
-    private int ItemCnt = 0;
-    private int?[] MyItems = new int?[2];
+    private int ItemCnt;
+    private int?[] MyItems;
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터, 4: 보호막
 
     GameObject player;
     GameObject miniCamera;
+    GameObject mainCamera;
     [SerializeField] GameObject fogParticle;
     
     public float range = 100f;
@@ -28,10 +25,13 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
-        //mainCamera = GameObject.Find("Main Camera");
+        mainCamera = GameObject.Find("Main Camera");
         player = GameObject.Find("Player");
 
-        miniCamera = GameObject.Find("Mini Camera");
+        miniCamera = GameObject.Find("Minimap Camera");
+
+        ItemCnt = 0;
+        MyItems = new int?[2] { null, null };
     }
 
     private void Update()
@@ -42,7 +42,7 @@ public class Item : MonoBehaviour
             if (MyItems[0] != null)
             {
                 useIndex = 0;
-                UseItem(MyItems[0].Value);
+                UseItem(MyItems[0].Value, 0);
             }
         }
         
@@ -52,25 +52,29 @@ public class Item : MonoBehaviour
             if (MyItems[1] != null)
             {
                 useIndex = 1;
-                UseItem(MyItems[1].Value);
+                UseItem(MyItems[1].Value, 1);
             }
         }
         
         if (Input.GetButton("Fire1") && Using)
         {
-            UseItem(MyItems[useIndex].Value); 
+            UseItem(MyItems[useIndex].Value, 0); 
             //MyItems[useIndex] = nullSprite;
             Using = false;
         }
     }
 
-    private void OnCollisionEnter(Collision col)
+    private void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.CompareTag("ItemBox"))
         {
-            Destroy(col.gameObject);
-            RandomItem();
-            ChangeSprite();
+            if (ItemCnt < 2)
+            {
+                RandomItem();
+                ChangeSprite();
+
+                Destroy(col.gameObject);
+            }
         }
     }
 
@@ -84,14 +88,15 @@ public class Item : MonoBehaviour
                 MyItems[0] = index;
                 ItemCnt++;
                 break;
-
             case 1:
                 MyItems[1] = index;
                 ItemCnt++;
                 break;
-            case 2:
-                MyItems[0] = MyItems[1];
-                MyItems[1] = index;
+            //case 2:
+            //    MyItems[0] = MyItems[1];
+            //    MyItems[1] = index;
+            //    break;
+            default:
                 break;
         }
     }
@@ -108,33 +113,34 @@ public class Item : MonoBehaviour
         }
     }
 
-    void UseItem(int itemIndex)
+    void UseItem(int itemIndex, int itemBoxNum)
     {
         switch (itemIndex)
         {
             case 0:
                 Fog();
-                //images[itemIndex].sprite = ;
+                images[itemBoxNum].sprite = null;
                 break;
             case 1:
                 Fog();
-                images[itemIndex].sprite = null;
+                images[itemBoxNum].sprite = null;
                 break;
             case 2:
                 Debug.Log("슬로우");
                 PlayerController.slowdown = true;
-                images[itemIndex].sprite = null;
+                images[itemBoxNum].sprite = null;
                 break;
             case 3:
                 Debug.Log("부스터");
                 PlayerController.booster = true;
-                images[itemIndex].sprite = null;
+                images[itemBoxNum].sprite = null;
                 break;
             case 4:
                 Debug.Log("쉴드");
-                images[itemIndex].sprite = null;
+                images[itemBoxNum].sprite = null;
                 break;
-        } 
+        }
+        --ItemCnt;
     }
     
     void Fog()
@@ -148,10 +154,11 @@ public class Item : MonoBehaviour
 
 
         Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
-            miniCamera.transform.position.y - 7,
+            miniCamera.transform.position.y - 14,
             miniCamera.transform.position.z);
 
         GameObject miniFog = Instantiate(fogParticle, miniFogPosition, miniCamera.transform.rotation, miniCamera.transform);
+        miniFog.layer = 18;
         Destroy(miniFog, 20f);
     }
 

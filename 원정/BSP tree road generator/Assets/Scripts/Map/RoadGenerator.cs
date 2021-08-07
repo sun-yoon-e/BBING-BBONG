@@ -4,16 +4,10 @@
 public class RoadGenerator : MonoBehaviour
 {
     Mesh mesh;
-
-    public Vector3[] vertices;
-    public int[] triangles;
+    MeshGenerator map;
 
     public int xSize;
     public int zSize;
-
-    public Vector3 mapPosition;
-
-    int t;
 
     int xSplit;
     int[] upXSplit;
@@ -21,27 +15,47 @@ public class RoadGenerator : MonoBehaviour
     int[] leftZSplit;
     int[] rightZSplit;
 
-    public Vector3[] roadPosition;
-    public int roadPositionNum;
+    public Vector3[] passibleItemPlace;
+    public int middleRoadNum;
+    public int[] buildingState;
 
     public bool[] isRoad;
-    public int[] buildingState;
-    public bool[] isDestination;
+    //public bool[] isDestination;
+    public bool[] isItemPlace;
+    public bool[] isWayPointPlace;
+    public bool[] isObjectPlace;
 
-    MeshGenerator map;
+    public GameObject wayPointPrefab;
+    public GameObject[] wayPoint;
+    public int wayPointNum;
+
+    int t;
+    public Vector3[] vertices;
+    public int[] triangles;
+
+    public int roadInterval;
 
     private void Awake()
     {
+        map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
+
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
-        mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
-
-        map = GameObject.Find("MapGenerator").GetComponent<MeshGenerator>();
     }
 
     void Start()
     {
+        vertices = new Vector3[map.vertices.Length];
+
+        wayPoint = new GameObject[500];
+        wayPointNum = 0;
+        isWayPointPlace = new bool[vertices.Length];
+
+        isObjectPlace = new bool[vertices.Length];
+
+        xSize = map.xSize;
+        zSize = map.zSize;
+
         CreateShape();
         CreateTriangle();
         UpdateMesh();
@@ -49,17 +63,7 @@ public class RoadGenerator : MonoBehaviour
 
     public void CreateShape()
     {
-        vertices = new Vector3[(xSize + 1) * (zSize + 1)];
-
-        for (int i = 0, z = 0; z <= zSize; ++z)
-        {
-            for (int x = 0; x <= xSize; ++x)
-            {
-                float y = Mathf.PerlinNoise(x * .3f, z * .3f) * map.mapHeight;
-                vertices[i] = new Vector3(x * 5, y, z * 5);
-                ++i;
-            }
-        }
+        vertices = map.vertices;
     }
 
     public void CreateTriangle()
@@ -70,12 +74,13 @@ public class RoadGenerator : MonoBehaviour
         downXSplit = new int[100];
 
         triangles = new int[xSize * zSize * 6];
-        buildingState = new int[(xSize + 1) * (zSize + 1)];
-        isRoad = new bool[(xSize + 1) * (zSize + 1)];
-        isDestination = new bool[(xSize + 1) * (zSize + 1)];
+        buildingState = new int[vertices.Length];
+        isRoad = new bool[vertices.Length];
+        //isDestination = new bool[vertices.Length];
+        isItemPlace = new bool[vertices.Length];
 
-        roadPosition = new Vector3[(xSize + 1) * (zSize + 1)];
-        
+        passibleItemPlace = new Vector3[vertices.Length];
+
 
         splitX(40, 0, zSize);
 
@@ -226,7 +231,7 @@ public class RoadGenerator : MonoBehaviour
             triangles[t + 3] = v + 1;
             triangles[t + 4] = v + xSize + 1;
             triangles[t + 5] = v + xSize + 2;
-            
+
             triangles[t + 6] = v + 1;
             triangles[t + 7] = v + xSize + 2;
             triangles[t + 8] = v + 2;
@@ -237,6 +242,8 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v] = true;
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
+
+            isItemPlace[v + 1] = true;
 
             if (z > minZ)
             {
@@ -249,9 +256,10 @@ public class RoadGenerator : MonoBehaviour
     }
     void upSplitX(int minX, int maxX, int minZ, int maxZ, int num)
     {
-        upXSplit[num] = Random.Range(minX + 4, maxX - 4);
+        upXSplit[num] = Random.Range(minX + roadInterval, maxX - roadInterval);
 
         int v = ((xSize + 1) * minZ) + upXSplit[num];
+        bool isWayPoint = false;
 
         for (int z = minZ; z < maxZ; ++z)
         {
@@ -273,6 +281,14 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
 
+            isItemPlace[v + 1] = true;
+            if (!isWayPoint)
+            {
+                GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
+                isWayPointPlace[v + 1 + (xSize + 1)] = true;
+                isWayPoint = true;
+            }
+
             if (z > minZ + 1)
             {
                 buildingState[v + 5] = (int)buildingDirection.LEFT;
@@ -281,10 +297,12 @@ public class RoadGenerator : MonoBehaviour
             v += xSize + 1;
             t += 12;
         }
+        if (v + 1 + (xSize + 1) < xSize * zSize)
+            GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
     }
     void downSplitX(int minX, int maxX, int minZ, int maxZ, int num)
     {
-        downXSplit[num] = Random.Range(minX + 4, maxX - 4);
+        downXSplit[num] = Random.Range(minX + roadInterval, maxX - roadInterval);
 
         int v;
         if (num - 1 < 0)
@@ -292,6 +310,8 @@ public class RoadGenerator : MonoBehaviour
         else
             v = ((xSize + 1) * minZ) + downXSplit[num];
 
+        bool isWayPoint = false;
+
         for (int z = minZ; z < maxZ; ++z)
         {
             triangles[t + 0] = v + 0;
@@ -312,6 +332,14 @@ public class RoadGenerator : MonoBehaviour
             isRoad[v + 1] = true;
             isRoad[v + 2] = true;
 
+            isItemPlace[v + 1] = true;
+            if (!isWayPoint)
+            {
+                GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
+                isWayPointPlace[v + 1 + (xSize + 1)] = true;
+                isWayPoint = true;
+            }
+
             if (z > minZ + 1)
             {
                 buildingState[v + 5] = (int)buildingDirection.LEFT;
@@ -321,12 +349,14 @@ public class RoadGenerator : MonoBehaviour
             v += xSize + 1;
             t += 12;
         }
+        GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
     }
     void leftSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
     {
-        leftZSplit[num] = Random.Range(minZ + 4, maxZ - 4);
+        leftZSplit[num] = Random.Range(minZ + roadInterval, maxZ - roadInterval);
 
         int v = (xSize + 1) * (leftZSplit[num]) + minX;
+        bool isWayPoint = false;
 
         for (int x = minX + 1; x < maxX + 1; ++x)
         {
@@ -345,68 +375,90 @@ public class RoadGenerator : MonoBehaviour
                 triangles[t + 9] = v + xSize + 2;
                 triangles[t + 10] = v + xSize * 2 + 2;
                 triangles[t + 11] = v + xSize * 2 + 3;
-                
+
+                isRoad[v] = true;
+                isRoad[v + xSize + 1] = true;
                 isRoad[v + xSize * 2 + 2] = true;
+
+                isItemPlace[v + xSize + 1] = true;
+                if (!isWayPoint)
+                {
+                    GenerateWayPoint(vertices[v + xSize + 1 + 1]);
+                    isWayPointPlace[v + xSize + 1 + 1] = true;
+                    isWayPoint = true;
+                }
             }
-            isRoad[v] = true;
-            isRoad[v + xSize + 1] = true;
 
-            if (minX + 1 < x && x < maxX - 1)
-            {
-                if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
-                    buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
-                if(v - (xSize - 1) * 3 > 0)
-                    buildingState[v - (xSize - 1) * 3] = (int)buildingDirection.UP;
-            }
-            v++;
-            t += 12;
-        }
-    }
-    void rightSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
-    {
-        rightZSplit[num] = Random.Range(minZ + 4, maxZ - 4);
-
-        int v = (xSize + 1) * (rightZSplit[num]) + minX;
-
-        for (int x = minX + 1; x < maxX + 1; ++x)
-        {
-            triangles[t + 0] = v + 0;
-            triangles[t + 1] = v + xSize + 1;
-            triangles[t + 2] = v + 1;
-            triangles[t + 3] = v + 1;
-            triangles[t + 4] = v + xSize + 1;
-            triangles[t + 5] = v + xSize + 2;
-
-
-            if (v + xSize * 2 + 2 < xSize * zSize)
-            {
-                triangles[t + 6] = v + xSize + 1;
-                triangles[t + 7] = v + xSize * 2 + 2;
-                triangles[t + 8] = v + xSize + 2;
-                triangles[t + 9] = v + xSize + 2;
-                triangles[t + 10] = v + xSize * 2 + 2;
-                triangles[t + 11] = v + xSize * 2 + 3;
-
-                isRoad[v + xSize * 2 + 2] = true;
-            }
-            isRoad[v] = true;
-            isRoad[v + xSize + 1] = true;
 
             if (minX + 1 < x && x < maxX - 1)
             {
                 if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
                     buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
                 if (v - (xSize - 1) * 3 > 0)
-                    buildingState[v - (xSize - 1) * 3] = (int)buildingDirection.UP;
+                    buildingState[v - (xSize + 1) * 3] = (int)buildingDirection.UP;
             }
             v++;
             t += 12;
         }
+        GenerateWayPoint(vertices[v + 1 + xSize + 1]);
+    }
+    void rightSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
+    {
+        rightZSplit[num] = Random.Range(minZ + roadInterval, maxZ - roadInterval);
+
+        int v = (xSize + 1) * (rightZSplit[num]) + minX;
+        bool isWayPoint = false;
+
+        for (int x = minX + 1; x < maxX + 1; ++x)
+        {
+            triangles[t + 0] = v + 0;
+            triangles[t + 1] = v + xSize + 1;
+            triangles[t + 2] = v + 1;
+            triangles[t + 3] = v + 1;
+            triangles[t + 4] = v + xSize + 1;
+            triangles[t + 5] = v + xSize + 2;
+
+
+            if (v + xSize * 2 + 2 < xSize * zSize)
+            {
+                triangles[t + 6] = v + xSize + 1;
+                triangles[t + 7] = v + xSize * 2 + 2;
+                triangles[t + 8] = v + xSize + 2;
+                triangles[t + 9] = v + xSize + 2;
+                triangles[t + 10] = v + xSize * 2 + 2;
+                triangles[t + 11] = v + xSize * 2 + 3;
+
+                isRoad[v] = true;
+                isRoad[v + xSize + 1] = true;
+                isRoad[v + xSize * 2 + 2] = true;
+
+                isItemPlace[v + xSize + 1] = true;
+
+                if (!isWayPoint)
+                {
+                    GenerateWayPoint(vertices[v + xSize + 1 + 1]);
+                    isWayPointPlace[v + xSize + 1 + 1] = true;
+                    isWayPoint = true;
+                }
+            }
+
+            if (minX + 1 < x && x < maxX - 1)
+            {
+                if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
+                    buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
+                if (v - (xSize - 1) * 3 > 0)
+                    buildingState[v - (xSize + 1) * 3] = (int)buildingDirection.UP;
+            }
+            v++;
+            t += 12;
+        }
+        if (v + xSize + 1 < xSize * zSize)
+            GenerateWayPoint(new Vector3(vertices[v + xSize + 1].x + 5, vertices[v + xSize + 1].y, vertices[v + xSize + 1].z));
     }
 
     void makeNotBuildingPlace()
     {
-        for(int i = 0; i < vertices.Length; ++i)
+        for (int i = 0; i < vertices.Length; ++i)
         {
             if (isRoad[i] == true
                 && i + (xSize + 1) * 2 < (xSize + 1) * (zSize + 1)
@@ -419,9 +471,7 @@ public class RoadGenerator : MonoBehaviour
                 buildingState[i + 2] = (int)buildingDirection.NOTBUILDINGPLACE;
 
                 buildingState[i - xSize - 1] = (int)buildingDirection.NOTBUILDINGPLACE;
-                //buildingState[i - (xSize - 1) * 2] = (int)buildingDirection.NOTBUILDINGPLACE;
                 buildingState[i + xSize + 1] = (int)buildingDirection.NOTBUILDINGPLACE;
-                //buildingState[i + (xSize + 1) * 2] = (int)buildingDirection.NOTBUILDINGPLACE;
             }
         }
     }
@@ -429,27 +479,32 @@ public class RoadGenerator : MonoBehaviour
     public void UpdateMesh()
     {
         mesh.Clear();
-
         mesh.vertices = vertices;
         mesh.triangles = triangles;
-
         mesh.RecalculateNormals();
 
-        roadPositionNum = 0;
+        middleRoadNum = 0;
         for (int i = 0; i < isRoad.Length; ++i)
         {
-            if (isRoad[i] == true)
+            if (isItemPlace[i] == true)
             {
                 buildingState[i] = (int)buildingDirection.NOTBUILDINGPLACE;
-                roadPosition[roadPositionNum] = vertices[i];
-                ++roadPositionNum;
+                passibleItemPlace[middleRoadNum] = vertices[i];
+                ++middleRoadNum;
             }
         }
     }
-
     public void RefreshRoadVertices()
     {
         vertices = map.vertices;
+    }
+
+    void GenerateWayPoint(Vector3 position)
+    {
+        Transform parent = GameObject.Find("WayPoint").transform;
+        wayPoint[wayPointNum] = Instantiate(wayPointPrefab, position, Quaternion.identity, parent);
+        wayPoint[wayPointNum].layer = 16;
+        ++wayPointNum;
     }
 
     enum buildingDirection

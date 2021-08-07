@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         public Transform wheelFront;
         public Transform wheelBack;
-        public Transform AxleFront;
+        public Transform AxleFront; //축
         public Transform AxleBack;
     }
 
@@ -52,11 +52,11 @@ public class PlayerController : MonoBehaviour
         public Transform bikeSteer;
 
         public float maxWheelie = 40.0f;
-        public float speedWheelie = 30.0f;
-        public float slipBrake = 3.0f;
+        public float speedWheelie = 30.0f;  // 앞바퀴를 들고 타는 오토바이 묘기
+        public float slipBrake = 3.0f;      // 브레이크 밟기
 
-        public float springs = 35000.0f;
-        public float dampers = 4000.0f;
+        public float springs = 35000.0f;    // 용수철(탱탱볼 처럼 튈 때 사용)
+        public float dampers = 4000.0f;     // 댐퍼(진동 에너지를 흡수하는 장치)
 
         public float bikePower = 120;
         public float shiftPower = 150;
@@ -67,17 +67,17 @@ public class PlayerController : MonoBehaviour
         public float maxSteerAngle = 30.0f;
         public float maxTurn = 1.5f;
 
-        public float shiftDownRPM = 1500.0f;
+        public float shiftDownRPM = 1500.0f;    // RPM - 분당 회전수
         public float shiftUpRPM = 4000.0f;
         public float idleRPM = 700.0f;
 
-        public float stiffness = 1.0f;
+        public float stiffness = 1.0f;      // 뻣뻣함
 
-        public bool automaticGear = true;
+        public bool automaticGear = true;   // 자동 기어
 
-        public float[] gears = { -10f, 9f, 6f, 4.5f, 3f, 2.5f };
+        public float[] gears = { -10f, 9f, 6f, 4.5f, 3f, 2.5f };    // 기어
 
-        public float LimitBackwardSpeed = 60.0f;
+        public float LimitBackwardSpeed = 60.0f;    // 후진 속도 제한
         public float LimitForwardSpeed = 220.0f;
     }
 
@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public float speed = 0.0f;
 
+    // 효율성 표
     float[] efficiencyTable = { 0.6f, 0.65f, 0.7f, 0.75f, 0.8f, 0.85f, 0.9f, 1.0f, 1.0f, 0.95f, 0.80f, 0.70f, 0.60f, 0.5f, 0.45f, 0.40f, 0.36f, 0.33f, 0.30f, 0.20f, 0.10f, 0.05f };
 
     float efficiencyTableStep = 250.0f;
@@ -130,9 +131,9 @@ public class PlayerController : MonoBehaviour
     private float shiftTime = 0.0f;
 
     [HideInInspector]
-    public int currentGear = 0;
+    public int currentGear = 0;     // 현재 기어
     [HideInInspector]
-    public bool NeutralGear = true;
+    public bool NeutralGear = true; // 중립 기어
 
     [HideInInspector]
     public float motorRPM = 0.0f;

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class FirePizza : MonoBehaviour
 {
-    public Camera cam;
     public Transform firePos;
     public Transform targetPos;
     public GameObject pizza;
@@ -37,7 +36,10 @@ public class FirePizza : MonoBehaviour
         pizzaObject.tag = "Player";
         pizzaObject.transform.position = firePos.position;
         Vector3 dir = new Vector3();
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range))
+        
+        int layermask = (1 << LayerMask.NameToLayer("BoxCol"));
+        layermask = ~layermask;
+        if (Physics.Raycast(gameObject.transform.position, gameObject.transform.forward, out hit, range, layermask))
         {
             dir = hit.point - firePos.position;
         }
@@ -46,5 +48,6 @@ public class FirePizza : MonoBehaviour
             dir = targetPos.position - firePos.position;
         }
         pizzaObject.transform.forward = dir;
+        
     }
 }

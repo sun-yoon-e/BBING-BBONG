@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -2347710661173055762}
   - component: {fileID: 6049705598990046044}
   - component: {fileID: 842631964787106002}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: PizzaBox
   m_TagString: Pizza
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45e760e094b352449a5e38bd9a792a48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 20
   lifeTime: 10
 --- !u!65 &6049705598990046044
 BoxCollider:
@@ -148,6 +148,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PizzaBox
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4f7b77d136d98a84395666178c0d299a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f7b77d136d98a84395666178c0d299a, type: 3}

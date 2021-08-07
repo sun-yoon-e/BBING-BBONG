@@ -13,13 +13,13 @@ public class MeshGenerator : MonoBehaviour
     public int zSize;
 
     public float mapHeight;
-    public Vector3 mapPosition;
+
+    public float perlinNoiseNum;
 
     private void Awake()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-        mapPosition = new Vector3(0.0f, 0.0f, 0.0f);
 
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
     }
@@ -39,7 +39,7 @@ public class MeshGenerator : MonoBehaviour
         {
             for (int x = 0; x <= xSize; ++x, ++i)
             {
-                y = Mathf.PerlinNoise(x * .3f, z * .3f) * mapHeight;
+                y = Mathf.PerlinNoise(x * perlinNoiseNum, z * perlinNoiseNum) * mapHeight;
 
                 vertices[i] = new Vector3(x * 5, y, z * 5);
             }

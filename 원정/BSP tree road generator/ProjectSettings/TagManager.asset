@@ -11,6 +11,9 @@ TagManager:
   - buildingBoxCollider
   - PizzaStore
   - ItemBox
+  - Car
+  - Ground
+  - mapBoxCollider
   layers:
   - Default
   - TransparentFX
@@ -22,15 +25,15 @@ TagManager:
   - 
   - MiniMap
   - NoShow
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Road
+  - Map
+  - Building
+  - Player
+  - BoxCol
+  - Pizza
+  - WayPoint
+  - Terrain
+  - fog
   - 
   - 
   - 
