@@ -89,7 +89,7 @@ public class GameClient
     public const byte CS_ROAD     = 12;
     public const byte CS_SET_ROAD = 13;
 
-    public const string SERVER_IP = "14.35.11.69";
+    public const string SERVER_IP = "14.38.227.223";
     public const int SERVER_PORT = 13531;
 
     // 싱글톤 패턴
