@@ -15,7 +15,8 @@ public class Item : MonoBehaviour
 
     GameObject player;
     GameObject miniCamera;
-    GameObject mainCamera;
+    GameObject fpsCamera;
+    GameObject tpsCamera;
     [SerializeField] GameObject fogParticle;
     
     public float range = 100f;
@@ -23,7 +24,9 @@ public class Item : MonoBehaviour
     
     private void Start()
     {
-        mainCamera = GameObject.Find("Main Camera");
+        fpsCamera = GameObject.Find("FPS Camera");
+        tpsCamera = GameObject.Find("TPS Camera");
+
         player = GameObject.Find("Player");
 
         miniCamera = GameObject.Find("Minimap Camera");
@@ -144,16 +147,27 @@ public class Item : MonoBehaviour
                 break;
         }
     }
-    
+
     void Fog()
     {
-        Vector3 fogPosition = new Vector3(player.transform.position.x,
-            player.transform.position.y + 4,
-            player.transform.position.z);
+        //Vector3 fogPosition = new Vector3(0, 0, 0);
 
-        GameObject fog = Instantiate(fogParticle, fogPosition, player.transform.rotation, player.transform);
-        Destroy(fog, 20f);
+        GameObject fog;
+        if (fpsCamera.activeSelf)
+        {
+            fog = Instantiate(fogParticle, fpsCamera.transform.position, fpsCamera.transform.rotation, fpsCamera.transform);
 
+            Destroy(fog, 20f);
+            print("fps");
+        }
+        else if (tpsCamera.activeSelf)
+        {
+
+            fog = Instantiate(fogParticle, tpsCamera.transform.position, tpsCamera.transform.rotation, tpsCamera.transform);
+
+            Destroy(fog, 20f);
+            print("tps");
+        }
 
         Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
             miniCamera.transform.position.y - 14,
@@ -163,4 +177,5 @@ public class Item : MonoBehaviour
         miniFog.layer = 18;
         Destroy(miniFog, 20f);
     }
+
 }
