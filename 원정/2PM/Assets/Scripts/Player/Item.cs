@@ -78,11 +78,11 @@ public class Item : MonoBehaviour
         {
             if (ItemCnt < 2)
             {
+                Destroy(col.gameObject);
+
                 RandomItem();
                 ItemCnt++;
                 ChangeSprite();
-
-                Destroy(col.gameObject);
             }
         }
     }
