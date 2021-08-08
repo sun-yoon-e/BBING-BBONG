@@ -11,6 +11,7 @@ public class Chat : MonoBehaviour
 
     public GameObject chatPanel, textObject;
     public InputField chatBox;
+    public ScrollRect chatScroll;
 
     public Color playerMessage, info;
 
@@ -50,6 +51,8 @@ public class Chat : MonoBehaviour
         
     }
 
+    void ScrollDelay() => chatScroll.verticalScrollbar.value = 0;
+
     public void SendMessgeToChat(string text, Message.MessageType msgType)
     {
         if (messageList.Count >= maxMsg)
@@ -67,6 +70,8 @@ public class Chat : MonoBehaviour
         newMsg.textObject.color = MsgTypeColor(msgType);
 
         messageList.Add(newMsg);
+
+        Invoke("ScrollDelay", 0.03f);
     }
 
     Color MsgTypeColor(Message.MessageType msgType)
