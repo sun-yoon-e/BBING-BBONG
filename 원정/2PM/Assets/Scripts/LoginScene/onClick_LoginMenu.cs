@@ -131,7 +131,7 @@ public class onClick_LoginMenu : MonoBehaviour
         if (e.success)
         {
             // TODO: 다음 scene으로 넘어감
-            SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
+            SceneManager.LoadScene("Scenes/LobbyScene", LoadSceneMode.Single);
         }
         else if(InformationText!=null)
         {

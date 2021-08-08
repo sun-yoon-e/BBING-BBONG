@@ -51,8 +51,6 @@ public class Chat : MonoBehaviour
         
     }
 
-    void ScrollDelay() => chatScroll.verticalScrollbar.value = 0;
-
     public void SendMessgeToChat(string text, Message.MessageType msgType)
     {
         if (messageList.Count >= maxMsg)
@@ -73,6 +71,8 @@ public class Chat : MonoBehaviour
 
         Invoke("ScrollDelay", 0.03f);
     }
+
+    void ScrollDelay() => chatScroll.verticalScrollbar.value = 0;
 
     Color MsgTypeColor(Message.MessageType msgType)
     {
