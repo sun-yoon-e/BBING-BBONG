@@ -59,6 +59,11 @@ public class FireEventArgs : EventArgs
     public Vector3 targetPosition;
 }
 
+public class ReceiveMessageEventArgs : EventArgs
+{
+    public string msg;
+}
+
 public class GameClient
 {
     public const byte SC_LOGIN  = 0;
@@ -88,6 +93,11 @@ public class GameClient
     public const byte CS_SET_MESH = 11;
     public const byte CS_ROAD     = 12;
     public const byte CS_SET_ROAD = 13;
+
+    public const byte CS_MAKE_ROOM = 14;
+    public const byte CS_ENTER_ROOM = 15;
+    public const byte CS_EXIT_ROOM = 16;
+    public const byte CS_ROOM_LIST = 16;
 
     public const string SERVER_IP = "14.38.227.223";
     public const int SERVER_PORT = 13531;
@@ -132,6 +142,7 @@ public class GameClient
     public event EventHandler<GameStateChangedEventArgs> OnGameStateChanged;
     public event EventHandler<GameSceneChangedEventArgs> OnGameSceneChanged;
     public event EventHandler<FireEventArgs> OnFired;
+    public event EventHandler<ReceiveMessageEventArgs> OnReceivedMessage;
     
     public int clientId { get; private set; } = -1;
 
@@ -173,7 +184,7 @@ public class GameClient
                     {
                         while (socket.Connected)
                         {
-                            byte[] buffer = new byte[512000];
+                            byte[] buffer = new byte[512000*4];
                             int read = socket.Receive(buffer);
 
                             if (read == 0)
@@ -234,6 +245,20 @@ public class GameClient
 
         Debug.Log(header + " ProcessPacket");
 
+        if(header == SC_CHAT)
+        {
+            byte size = reader.ReadByte();
+            int id = reader.ReadInt32();
+
+            string str = reader.ReadString();
+            if (OnReceivedMessage != null)
+            { 
+                var eventArgs = new ReceiveMessageEventArgs();
+                eventArgs.msg = str;
+                OnReceivedMessage(this, eventArgs);
+            }
+        }
+
         if (header == SC_LOGIN)
         {
             var success = reader.ReadBoolean();
@@ -259,8 +284,8 @@ public class GameClient
         else if (header == SC_MESH || header == SC_SET_MESH)
         {
             var ready = reader.ReadBoolean();
-            var vertices = new Vector3[101 * 101];
-            var triangles = new int[100 * 100 * 6];
+            var vertices = new Vector3[201 * 201];
+            var triangles = new int[200 * 200 * 6];
 
             for (int i = 0; i < vertices.Length; i++)
             {
@@ -290,10 +315,10 @@ public class GameClient
         } else if (header == SC_ROAD || header == SC_SET_ROAD)
         {
             var ready = reader.ReadBoolean();
-            var vertices = new Vector3[101 * 101];
-            var triangles = new int[100 * 100 * 6];
-            var isRoad = new bool[101 * 101];
-            var isBuildingPlace = new int[101 * 101];
+            var vertices = new Vector3[201 * 201];
+            var triangles = new int[200 * 200 * 6];
+            var isRoad = new bool[201 * 201];
+            var isBuildingPlace = new int[201 * 201];
 
             for (int i = 0; i < vertices.Length; i++)
             {
@@ -463,6 +488,41 @@ public class GameClient
         socket.Send(buffer);
     }
 
+    public void MakeRoom(string roomName)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+        char[] byteRoomName = new char[32];
+        roomName.CopyTo(0, byteRoomName, 0, Math.Min(roomName.Length, 31));
+
+        writer.Write(CS_MAKE_ROOM);
+        writer.Write(byteRoomName);
+
+        socket.Send(buffer);
+    }
+
+    public void SendMessage(string str)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+        var byteChatMessage = new char[251];
+        str.CopyTo(0, byteChatMessage, 0, Math.Min(str.Length, 250));
+
+        writer.Write(SC_CHAT);
+        writer.Write(byteChatMessage);
+
+        socket.Send(buffer);
+    }
+
+    public void ExitRoom()
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_EXIT_ROOM);
+        socket.Send(buffer);
+    }
+
     public void GetMesh()
     {
         var buffer = new byte[255];
@@ -474,7 +534,7 @@ public class GameClient
 
     public void SetMesh(Vector3[] vertices, int[] triangles)
     {
-        var buffer = new byte[512000];
+        var buffer = new byte[512000*4];
         var writer = new BinaryWriter(new MemoryStream(buffer));
         
         writer.Write(CS_SET_MESH);
@@ -504,7 +564,7 @@ public class GameClient
 
     public void SetRoad(Vector3[] vertices, int[] triangles, bool[] isRoad, int[] isBuildingPlace)
     {
-        var buffer = new byte[512000];
+        var buffer = new byte[512000*4];
         var writer = new BinaryWriter(new MemoryStream(buffer));
         
         writer.Write(CS_SET_ROAD);

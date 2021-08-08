@@ -3,11 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class onClick_LobbyScene: MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     public GameObject CreateRoomMenu;
     public InputField RoomName;
+    public InputField SendMessage;
+    public Text ReceiveMessage;
+
+    private void Start()
+    {
+        gameClient.OnReceivedMessage += ReceiveMsgResult;
+    }
+
+    private void ReceiveMsgResult(object sender, ReceiveMessageEventArgs e)
+    {
+        ReceiveMessage.text = e.msg;
+    }
 
     // 방 입장 버튼 클릭
     public void EnterRoom_btn_Clicked()
@@ -35,23 +50,33 @@ public class onClick_LobbyScene: MonoBehaviour
     {
     }
 
+    public void SendChatMessage()
+    {
+        gameClient.SendMessage(SendMessage.text);
+        SendMessage.text = "";
+    }
+
     // 게임종료 버튼 클릭
     public void ExitGame_btn_Clicked()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
-            Application.Quit()
+        Application.Quit();
 #endif
     }
     
     // 방 생성 확인 버튼 클릭
     public void Ok_btn_Clicked()
     {
+        gameClient.MakeRoom(RoomName.text);
+
         RoomName.text = "";
         CreateRoomMenu.SetActive(false);
+
+        SceneManager.LoadScene("Scenes/WaitingRoomScene", LoadSceneMode.Single);
     }
-    
+
     // 방 생성 취소 버튼 클릭
     public void Cancel_btn_Clicked()
     {
