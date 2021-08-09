@@ -99,7 +99,7 @@ public class GameClient
     public const byte CS_EXIT_ROOM = 16;
     public const byte CS_ROOM_LIST = 16;
 
-    public const string SERVER_IP = "14.38.227.223";
+    public const string SERVER_IP = "127.0.0.1";
     public const int SERVER_PORT = 13531;
 
     // 싱글톤 패턴

@@ -33,7 +33,9 @@ public class MeshGenerator : MonoBehaviour
 
         gameClient.GetMesh();
     }
-    
+
+    private bool IsMapGenerated = false;
+
     public void SetMeshEvent(object sender, MeshEventArgs args)
     {
         if (!args.ready)
@@ -41,9 +43,11 @@ public class MeshGenerator : MonoBehaviour
             Debug.Log("SetMeshEvent() 처음!!");
             CreateShape();
             CreateTriangle();
+            UpdateMesh();
+            IsMapGenerated = true;
             gameClient.SetMesh(vertices, triangles);
         }
-        else
+        else if (!IsMapGenerated)
         {
             Debug.Log("SetMeshEvent() 업뎃");
             vertices = args.vertices;

@@ -67,9 +67,9 @@ public class RoadGenerator : MonoBehaviour
         xSize = map.xSize;
         zSize = map.zSize;
 
-        CreateShape();
-        CreateTriangle();
-        UpdateMesh();
+        //CreateShape();
+        //CreateTriangle();
+        //UpdateMesh();
     }
     
     public void SetRoadEvent(object sender, RoadEventArgs args)
