@@ -5,11 +5,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsExamples", "NavMeshComponentsExamples.csproj", "{0E76820B-73B8-9A95-BA32-2DD4F779B167}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxophobic.Utils.Scripts", "Boxophobic.Utils.Scripts.csproj", "{2D57BD6B-BA29-A7D5-962A-B216741BFA88}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponents", "NavMeshComponents.csproj", "{769AF517-7911-E8DC-732D-01AF4F45BA22}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsTestsPlaymode", "NavMeshComponentsTestsPlaymode.csproj", "{E53FEDBC-4C25-2E1D-353E-95566DF34B71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{08E3B644-D8D6-0F74-D140-AB6925270612}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxophobic.Utils.Editor", "Boxophobic.Utils.Editor.csproj", "{A21E5CE9-3E4D-9FD9-C0B6-EBA5B1387087}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsEditor", "NavMeshComponentsEditor.csproj", "{C4C656B3-1AFE-4870-CA7B-C688B034EFDA}"
 EndProject
@@ -18,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsTestsEditmode", "NavMeshComponentsTestsEditmode.csproj", "{62EA99A3-CE9F-C9E5-071D-BCB01E0731F7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{6AF3E658-5492-88C6-A329-D310D4DD6F5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boxophobic.SkyboxCubemapExtended.Editor", "Boxophobic.SkyboxCubemapExtended.Editor.csproj", "{532D8805-97A7-A2DA-0AC6-D852788A2C89}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavMeshComponentsExamplesEditor", "NavMeshComponentsExamplesEditor.csproj", "{EE615242-B151-0B79-5887-598AF3A39C17}"
 EndProject
@@ -35,6 +41,10 @@ Global
 		{0E76820B-73B8-9A95-BA32-2DD4F779B167}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E76820B-73B8-9A95-BA32-2DD4F779B167}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E76820B-73B8-9A95-BA32-2DD4F779B167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D57BD6B-BA29-A7D5-962A-B216741BFA88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D57BD6B-BA29-A7D5-962A-B216741BFA88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D57BD6B-BA29-A7D5-962A-B216741BFA88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D57BD6B-BA29-A7D5-962A-B216741BFA88}.Release|Any CPU.Build.0 = Release|Any CPU
 		{769AF517-7911-E8DC-732D-01AF4F45BA22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{769AF517-7911-E8DC-732D-01AF4F45BA22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{769AF517-7911-E8DC-732D-01AF4F45BA22}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,6 +57,10 @@ Global
 		{08E3B644-D8D6-0F74-D140-AB6925270612}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08E3B644-D8D6-0F74-D140-AB6925270612}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08E3B644-D8D6-0F74-D140-AB6925270612}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A21E5CE9-3E4D-9FD9-C0B6-EBA5B1387087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A21E5CE9-3E4D-9FD9-C0B6-EBA5B1387087}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A21E5CE9-3E4D-9FD9-C0B6-EBA5B1387087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A21E5CE9-3E4D-9FD9-C0B6-EBA5B1387087}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4C656B3-1AFE-4870-CA7B-C688B034EFDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4C656B3-1AFE-4870-CA7B-C688B034EFDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4C656B3-1AFE-4870-CA7B-C688B034EFDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,6 +77,10 @@ Global
 		{6AF3E658-5492-88C6-A329-D310D4DD6F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AF3E658-5492-88C6-A329-D310D4DD6F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AF3E658-5492-88C6-A329-D310D4DD6F5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{532D8805-97A7-A2DA-0AC6-D852788A2C89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{532D8805-97A7-A2DA-0AC6-D852788A2C89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{532D8805-97A7-A2DA-0AC6-D852788A2C89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{532D8805-97A7-A2DA-0AC6-D852788A2C89}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EE615242-B151-0B79-5887-598AF3A39C17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EE615242-B151-0B79-5887-598AF3A39C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE615242-B151-0B79-5887-598AF3A39C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
