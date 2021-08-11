@@ -13,19 +13,26 @@ public class onClick_WaitingRoomScene: MonoBehaviour
 
     private void Start()
     {
-        gameClient.OnReceivedMessage += ReceiveMsgResult;
+        gameClient.OnGameStateChanged += GameStateChanged;
+        //gameClient.OnReceivedMessage += ReceiveMsgResult;
     }
 
-    public void SendChatMessage()
+    private void GameStateChanged(object sender, GameStateChangedEventArgs e)
     {
-        gameClient.SendMessage(SendMessage.text);
-        SendMessage.text = "";
+        if (e.gameState)
+            SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
     }
 
-    private void ReceiveMsgResult(object sender, ReceiveMessageEventArgs e)
-    {
-        ReceiveMessage.text = e.msg;
-    }
+    //public void SendChatMessage()
+    //{
+    //    gameClient.SendMessage(SendMessage.text);
+    //    SendMessage.text = "";
+    //}
+
+    //private void ReceiveMsgResult(object sender, ReceiveMessageEventArgs e)
+    //{
+    //    ReceiveMessage.text = e.msg;
+    //}
 
     public void ExitRoom_Btn_Clicked()
     {
@@ -35,7 +42,8 @@ public class onClick_WaitingRoomScene: MonoBehaviour
 
     public void GameStart_Btn_Clicked()
     {
-        SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
+        gameClient.StartGame();
+        //SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
     }
 
     // 게임종료 버튼 클릭

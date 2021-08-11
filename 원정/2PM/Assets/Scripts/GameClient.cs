@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -42,6 +43,24 @@ public class PositionUpdateEventArgs : EventArgs
     public Vector3[] position;
     public Vector3[] rotation;
 }
+public class FireEventArgs : EventArgs
+{
+    public Vector3 position;
+    public Vector3 targetPosition;
+}
+
+public class AIPositionUpdateEventArgs : EventArgs
+{
+    public int AIID;
+    public Vector3 position;
+    public Vector3 rotation;
+}
+public class AIFireEventArgs : EventArgs
+{
+    public int AIID;
+    public Vector3 position;
+    public Vector3 targetPosition;
+}
 
 public class GameStateChangedEventArgs : EventArgs
 {
@@ -53,15 +72,41 @@ public class GameSceneChangedEventArgs : EventArgs
     public int scene;
 }
 
-public class FireEventArgs : EventArgs
-{
-    public Vector3 position;
-    public Vector3 targetPosition;
-}
+
 
 public class ReceiveMessageEventArgs : EventArgs
 {
     public string msg;
+}
+
+public class RoomInfo
+{
+    public int RoomID;
+    public bool IsPlaying;
+    public int PlayerNum;
+    public string RoomName;
+}
+
+public class RoomListMessageEventArgs : EventArgs
+{
+    public List<RoomInfo> roomInfo;
+}
+
+public class PlaceItemBoxMessageEventArgs : EventArgs
+{
+    public int ItemID;
+    public Vector3 Position;
+}
+
+public class RemoveItemBoxMessageEventArgs : EventArgs
+{
+    public int ItemID;
+}
+
+public class ItemMessageEventArgs : EventArgs
+{
+    //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
+    public byte ItemType;
 }
 
 public class GameClient
@@ -71,7 +116,7 @@ public class GameClient
     public const byte SC_SIGNUP = 2;
     public const byte SC_MOVE   = 3;
     public const byte SC_CHAT   = 4;
-    public const byte SC_ITEM   = 5;
+    //public const byte SC_ITEM   = 5;
     public const byte SC_SCORE  = 6;
     public const byte SC_GAMESTATE = 7;
     public const byte SC_FIRE   = 8;
@@ -80,13 +125,24 @@ public class GameClient
     public const byte SC_ROAD     = 12;
     public const byte SC_SET_ROAD = 13;
     public const byte SC_INIT = 14;
+    public const byte SC_ROOM_LIST_INFO = 15;
+    public const byte SC_ROOM_INFO = 16;
+    public const byte SC_ROOM_PLAYER_INOUT = 17;
+    public const byte SC_ROOM_READY = 18;
+
+    public const byte SC_PLACE_ITEM   = 21;
+    public const byte SC_REMOVE_ITEM = 22;
+    public const byte SC_USE_ITEM = 23;
+
+    public const byte SC_AI_MOVE = 24;
+    public const byte SC_AI_FIRE = 25;
 
     public const byte CS_LOGIN  = 0;
     public const byte CS_LOGOUT = 1;
     public const byte CS_SIGNUP = 2;
     public const byte CS_MOVE   = 3;
     public const byte CS_CHAT   = 4;
-    public const byte CS_ITEM   = 5;
+    //public const byte CS_ITEM   = 5;
     public const byte CS_SCORE  = 6;
     public const byte CS_FIRE   = 8;
     public const byte CS_MESH     = 10;
@@ -97,7 +153,17 @@ public class GameClient
     public const byte CS_MAKE_ROOM = 14;
     public const byte CS_ENTER_ROOM = 15;
     public const byte CS_EXIT_ROOM = 16;
-    public const byte CS_ROOM_LIST = 16;
+    public const byte CS_GAMESTATE = 17;
+    public const byte CS_ROOM_LIST_INFO = 18;
+    public const byte CS_ROOM_INFO = 19;
+    public const byte CS_PLAYER_READ = 20;
+
+    public const byte CS_PLACE_ITEM   = 21;
+    public const byte CS_REMOVE_ITEM = 22;
+    public const byte CS_USE_ITEM = 23;
+
+    public const byte CS_AI_MOVE = 24;
+    public const byte CS_AI_FIRE = 25;
 
     public const string SERVER_IP = "127.0.0.1";
     public const int SERVER_PORT = 13531;
@@ -138,12 +204,22 @@ public class GameClient
     public event EventHandler<MeshEventArgs> OnMeshChanged;
     public event EventHandler<RoadEventArgs> OnRoadChanged;
     public event EventHandler<ScoreUpdateEventArgs> OnScoreUpdated;
+
     public event EventHandler<PositionUpdateEventArgs> OnPositionUpdated;
+    public event EventHandler<FireEventArgs> OnFired;
+    public event EventHandler<AIPositionUpdateEventArgs> OnAIPositionUpdated;
+    public event EventHandler<AIFireEventArgs> OnAIFired;
+
     public event EventHandler<GameStateChangedEventArgs> OnGameStateChanged;
     public event EventHandler<GameSceneChangedEventArgs> OnGameSceneChanged;
-    public event EventHandler<FireEventArgs> OnFired;
+
     public event EventHandler<ReceiveMessageEventArgs> OnReceivedMessage;
-    
+    public event EventHandler<RoomListMessageEventArgs> OnRoomList;
+
+    public event EventHandler<PlaceItemBoxMessageEventArgs> OnPlaceItemBox;
+    public event EventHandler<RemoveItemBoxMessageEventArgs> OnRemoveItemBox;
+    public event EventHandler<ItemMessageEventArgs> OnUseItem;
+
     public int clientId { get; private set; } = -1;
 
     public bool isGameStarted = false;
@@ -191,9 +267,12 @@ public class GameClient
                             {
                                 break;
                             }
+
+                            if (buffer[0] == SC_ROAD || buffer[0] == SC_SET_ROAD)
+                                Debug.Log("Road packet is received");
                             //Debug.Log(read + " bytes read");
 
-                            if(dispinstance == null)
+                            if (dispinstance == null)
                             {
                                 dispinstance = UnityMainThreadDispatcher.Instance();
                             }
@@ -243,8 +322,6 @@ public class GameClient
         var reader = new BinaryReader(new MemoryStream(buffer));
         var header = reader.ReadByte();
 
-        Debug.Log(header + " ProcessPacket");
-
         if(header == SC_CHAT)
         {
             byte size = reader.ReadByte();
@@ -258,8 +335,30 @@ public class GameClient
                 OnReceivedMessage(this, eventArgs);
             }
         }
+        else if(header == SC_ROOM_LIST_INFO)
+        {
+            if (OnRoomList != null)
+            { 
+                var eventArgs = new RoomListMessageEventArgs();
+                eventArgs.roomInfo = new List<RoomInfo>();
 
-        if (header == SC_LOGIN)
+                const int MAX_ROOM_NAME_SIZE = 30;
+                for (int i =0; i<6; i++)
+                {
+                    byte type = reader.ReadByte();
+                    RoomInfo room = new RoomInfo();
+                    room.RoomID = reader.ReadInt32();
+                    room.IsPlaying = reader.ReadBoolean();
+                    room.PlayerNum = reader.ReadByte();
+                    byte[] bytes = reader.ReadBytes(MAX_ROOM_NAME_SIZE);
+                    room.RoomName = System.Text.Encoding.Default.GetString(bytes).TrimEnd('\0');
+                    if(room.RoomID > 0)
+                        eventArgs.roomInfo.Add(room);
+                }
+                OnRoomList(this, eventArgs);
+            }
+        }
+        else if (header == SC_LOGIN)
         {
             var success = reader.ReadBoolean();
             clientId = reader.ReadInt32();
@@ -369,7 +468,24 @@ public class GameClient
                 eventArgs.scores = scores;
                 OnScoreUpdated(this, eventArgs);
             }
-        } else if (header == SC_MOVE)
+        } else if (header == SC_GAMESTATE)
+        {
+            bool state = reader.ReadBoolean();
+            isGameStarted = state;
+            Debug.Log("게임시작여부? " + state);
+            if (OnGameStateChanged != null)
+            {
+                var eventArgs = new GameStateChangedEventArgs();
+                eventArgs.gameState = state;
+                
+                OnGameStateChanged(this, eventArgs);
+            }
+            else
+            {
+                Debug.Log("OnGameStateChanged is null");
+            }
+        } 
+        else if (header == SC_MOVE)
         {
             int players = reader.ReadInt32();
             Vector3[] position = new Vector3[players];
@@ -398,23 +514,8 @@ public class GameClient
 
                 OnPositionUpdated(this, eventArgs);
             }
-        } else if (header == SC_GAMESTATE)
-        {
-            bool state = reader.ReadBoolean();
-            isGameStarted = state;
-            Debug.Log("게임시작여부? " + state);
-            if (OnGameStateChanged != null)
-            {
-                var eventArgs = new GameStateChangedEventArgs();
-                eventArgs.gameState = state;
-                
-                OnGameStateChanged(this, eventArgs);
-            }
-            else
-            {
-                Debug.Log("OnGameStateChanged is null");
-            }
-        } else if (header == SC_FIRE)
+        }
+        else if (header == SC_FIRE)
         {
             Vector3 position = new Vector3();
             Vector3 targetPosition = new Vector3();
@@ -435,7 +536,56 @@ public class GameClient
 
                 OnFired(this, eventArgs);
             }
-        } else if (header == SC_INIT)
+        }
+        else if (header == SC_AI_MOVE)
+        {
+            int aiID = reader.ReadInt32();
+            Vector3 position = new Vector3();
+            Vector3 rotation = new Vector3();
+
+            position.x = reader.ReadSingle();
+            position.y = reader.ReadSingle();
+            position.z = reader.ReadSingle();
+            
+            rotation.x = reader.ReadSingle();
+            rotation.y = reader.ReadSingle();
+            rotation.z = reader.ReadSingle();
+
+            if (OnAIPositionUpdated != null)
+            {
+                var eventArgs = new AIPositionUpdateEventArgs();
+                eventArgs.AIID = aiID;
+                eventArgs.position = position;
+                eventArgs.rotation = rotation;
+
+                OnAIPositionUpdated(this, eventArgs);
+            }
+        }
+        else if (header == SC_AI_FIRE)
+        {
+            int aiID = reader.ReadInt32();
+            Vector3 position = new Vector3();
+            Vector3 targetPosition = new Vector3();
+
+            position.x = reader.ReadSingle();
+            position.y = reader.ReadSingle();
+            position.z = reader.ReadSingle();
+            
+            targetPosition.x = reader.ReadSingle();
+            targetPosition.y = reader.ReadSingle();
+            targetPosition.z = reader.ReadSingle();
+
+            if (OnAIFired != null)
+            {
+                var eventArgs = new AIFireEventArgs();
+                eventArgs.AIID = aiID;
+                eventArgs.position = position;
+                eventArgs.targetPosition = targetPosition;
+
+                OnAIFired(this, eventArgs);
+            }
+        }
+        else if (header == SC_INIT)
         {
             isGameStarted = false;
             int scene = reader.ReadInt32();
@@ -454,8 +604,49 @@ public class GameClient
                 Debug.Log("OnGameSceneChanged is null");
             }
         }
+        else if(header == SC_PLACE_ITEM)
+        {
+            int itemID = reader.ReadInt32();
+
+            Vector3 position = new Vector3();
+            position.x = reader.ReadSingle();
+            position.y = reader.ReadSingle();
+            position.z = reader.ReadSingle();
+
+            if(OnPlaceItemBox != null)
+            {
+                var eventArgs = new PlaceItemBoxMessageEventArgs();
+                eventArgs.ItemID = itemID;
+                eventArgs.Position = position;
+
+                OnPlaceItemBox(this, eventArgs);
+            }
+        }else if(header == SC_REMOVE_ITEM)
+        {
+            int itemID = reader.ReadInt32();
+
+            if(OnRemoveItemBox != null)
+            {
+                var eventArgs = new RemoveItemBoxMessageEventArgs();
+                eventArgs.ItemID = itemID;
+                OnRemoveItemBox(this, eventArgs);
+            }
+        }
+        else if(header == SC_USE_ITEM)
+        {
+            //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
+            //Event를 받는 쪽에서 아이템종류에 맞춰 처리
+            byte itemType = reader.ReadByte();
+            if(OnUseItem != null)
+            {
+                var eventArgs = new ItemMessageEventArgs();
+                eventArgs.ItemType = itemType;
+                OnUseItem(this, eventArgs);
+            }
+        }
     }
 
+#region LoginSceneMessage
     public void Login(string username, string password)
     {
         var buffer = new byte[255];
@@ -471,7 +662,6 @@ public class GameClient
 
         socket.Send(buffer);
     }
-
     public void SignUp(string username, string password)
     {
         var buffer = new byte[255];
@@ -487,7 +677,18 @@ public class GameClient
 
         socket.Send(buffer);
     }
+#endregion
+#region LobbySceneMessage
+    public void RequestRoomList(int pageNum)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
 
+        writer.Write(CS_ROOM_LIST_INFO);
+        writer.Write((byte)pageNum);
+
+        socket.Send(buffer);
+    }
     public void MakeRoom(string roomName)
     {
         var buffer = new byte[255];
@@ -500,7 +701,38 @@ public class GameClient
 
         socket.Send(buffer);
     }
+    public void EnterRoom(int roomID)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
 
+        writer.Write(CS_ENTER_ROOM);
+        writer.Write((byte)roomID);
+
+        socket.Send(buffer);
+    }
+#endregion
+#region WaitingRoomSceneMessage
+    public void StartGame()
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_GAMESTATE);
+        writer.Write(true);
+
+        socket.Send(buffer);
+    }
+    public void ExitRoom()
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_EXIT_ROOM);
+        socket.Send(buffer);
+    }
+#endregion
+#region GamePlaySceneMessage
     public void SendMessage(string str)
     {
         var buffer = new byte[255];
@@ -513,16 +745,129 @@ public class GameClient
 
         socket.Send(buffer);
     }
+    public void UpdateScore()
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+        writer.Write(CS_SCORE);
 
-    public void ExitRoom()
+        socket.Send(buffer);
+    }
+
+#region Player연동
+    public void UpdatePosition(Vector3 pos, Vector3 rot)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+        writer.Write(CS_MOVE);
+        
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+        
+        
+        writer.Write(rot.x);
+        writer.Write(rot.y);
+        writer.Write(rot.z);
+
+        socket.Send(buffer);
+    }
+    public void FirePizza(Vector3 pos, Vector3 targetPos)
+    {
+         var buffer = new byte[255];
+         var writer = new BinaryWriter(new MemoryStream(buffer));
+         writer.Write(CS_FIRE);
+        
+         writer.Write(pos.x);
+         writer.Write(pos.y);
+         writer.Write(pos.z);
+         
+         
+         writer.Write(targetPos.x);
+         writer.Write(targetPos.y);
+         writer.Write(targetPos.z);
+ 
+         socket.Send(buffer);       
+    }
+#endregion
+#region AI 플레이어 연동
+     public void UpdatePositionAI(int aiID, Vector3 pos, Vector3 rot)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+        writer.Write(CS_AI_MOVE);
+
+        writer.Write(aiID);
+        
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+        
+        writer.Write(rot.x);
+        writer.Write(rot.y);
+        writer.Write(rot.z);
+
+        socket.Send(buffer);
+    }
+    public void FirePizzaAI(int aiID, Vector3 pos, Vector3 targetPos)
+    {
+         var buffer = new byte[255];
+         var writer = new BinaryWriter(new MemoryStream(buffer));
+         writer.Write(CS_AI_FIRE);
+
+         writer.Write(aiID);
+        
+         writer.Write(pos.x);
+         writer.Write(pos.y);
+         writer.Write(pos.z);
+         
+         writer.Write(targetPos.x);
+         writer.Write(targetPos.y);
+         writer.Write(targetPos.z);
+ 
+         socket.Send(buffer);       
+    }
+#endregion
+#region Item연동
+    //itemID는 각 아이템별로 고유한 값이어야한다
+    public void PlaceItemBox(int itemID, Vector3 pos)
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
 
-        writer.Write(CS_EXIT_ROOM);
+        writer.Write(CS_PLACE_ITEM);
+        writer.Write(itemID);
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+
         socket.Send(buffer);
     }
+    public void RemoveItemBox(int itemID)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
 
+        writer.Write(CS_REMOVE_ITEM);
+        writer.Write(itemID);
+
+        socket.Send(buffer);
+    }
+    public void UseItem(int itemType, int playerID)
+    {
+        //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
+        //나빼고 다 시야차단일 경우 playerID를 0으로 보내줄것
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_USE_ITEM);
+        writer.Write((byte)itemType);
+        writer.Write(playerID);
+
+        socket.Send(buffer);
+    }
+#endregion
+#region MeshSyncMessage
     public void GetMesh()
     {
         var buffer = new byte[255];
@@ -531,7 +876,6 @@ public class GameClient
         writer.Write(CS_MESH);
         socket.Send(buffer);
     }
-
     public void SetMesh(Vector3[] vertices, int[] triangles)
     {
         var buffer = new byte[512000*4];
@@ -552,7 +896,6 @@ public class GameClient
 
         socket.Send(buffer);
     }
-    
     public void GetRoad()
     {
         var buffer = new byte[255];
@@ -560,8 +903,9 @@ public class GameClient
 
         writer.Write(CS_ROAD);
         socket.Send(buffer);
-    }
 
+        Debug.Log("Request to get road from server");
+    }
     public void SetRoad(Vector3[] vertices, int[] triangles, bool[] isRoad, int[] isBuildingPlace)
     {
         var buffer = new byte[512000*4];
@@ -592,49 +936,6 @@ public class GameClient
 
         socket.Send(buffer);
     }
-
-    public void UpdateScore()
-    {
-        var buffer = new byte[255];
-        var writer = new BinaryWriter(new MemoryStream(buffer));
-        writer.Write(CS_SCORE);
-
-        socket.Send(buffer);
-    }
-
-    public void UpdatePosition(Vector3 pos, Vector3 rot)
-    {
-        var buffer = new byte[255];
-        var writer = new BinaryWriter(new MemoryStream(buffer));
-        writer.Write(CS_MOVE);
-        
-        writer.Write(pos.x);
-        writer.Write(pos.y);
-        writer.Write(pos.z);
-        
-        
-        writer.Write(rot.x);
-        writer.Write(rot.y);
-        writer.Write(rot.z);
-
-        socket.Send(buffer);
-    }
-
-    public void FirePizza(Vector3 pos, Vector3 targetPos)
-    {
-         var buffer = new byte[255];
-         var writer = new BinaryWriter(new MemoryStream(buffer));
-         writer.Write(CS_FIRE);
-        
-         writer.Write(pos.x);
-         writer.Write(pos.y);
-         writer.Write(pos.z);
-         
-         
-         writer.Write(targetPos.x);
-         writer.Write(targetPos.y);
-         writer.Write(targetPos.z);
- 
-         socket.Send(buffer);       
-    }
+#endregion
+#endregion
 }

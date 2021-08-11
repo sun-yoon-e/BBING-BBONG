@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -55,7 +56,7 @@ public class RoadGenerator : MonoBehaviour
 
     void Start()
     {
-        gameClient.GetRoad();
+        Debug.Log("RoadGenerator Start!!");
         vertices = new Vector3[map.vertices.Length];
 
         wayPoint = new GameObject[500];
@@ -67,11 +68,12 @@ public class RoadGenerator : MonoBehaviour
         xSize = map.xSize;
         zSize = map.zSize;
 
+        gameClient.GetRoad();
         //CreateShape();
         //CreateTriangle();
         //UpdateMesh();
     }
-    
+
     public void SetRoadEvent(object sender, RoadEventArgs args)
     {
         if (!args.ready)

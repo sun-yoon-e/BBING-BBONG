@@ -20,13 +20,8 @@ public class MeshGenerator : MonoBehaviour
 
     private void Awake()
     {
-       
-    }
-
-    void Start()
-    {
         gameClient.OnMeshChanged += SetMeshEvent;
-        
+
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
@@ -34,8 +29,19 @@ public class MeshGenerator : MonoBehaviour
         gameClient.GetMesh();
     }
 
-    private bool IsMapGenerated = false;
+    void Start()
+    {
+        //gameClient.OnMeshChanged += SetMeshEvent;
+        
+        //mesh = new Mesh();
+        //GetComponent<MeshFilter>().mesh = mesh;
+        //vertices = new Vector3[(xSize + 1) * (zSize + 1)];
 
+        //gameClient.GetMesh();
+    }
+
+    private bool IsMapGenerated = false;
+    
     public void SetMeshEvent(object sender, MeshEventArgs args)
     {
         if (!args.ready)
@@ -47,11 +53,14 @@ public class MeshGenerator : MonoBehaviour
             IsMapGenerated = true;
             gameClient.SetMesh(vertices, triangles);
         }
-        else if (!IsMapGenerated)
+        else if(!IsMapGenerated)
         {
             Debug.Log("SetMeshEvent() 업뎃");
             vertices = args.vertices;
             triangles = args.triangles;
+
+            Debug.Log("Vertex size : " + vertices.Length);
+            Debug.Log("triangle size : " + triangles.Length);
 
             UpdateMesh();
         }
