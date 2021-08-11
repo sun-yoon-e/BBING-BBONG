@@ -194,12 +194,18 @@ public class GameSceneMain : MonoBehaviour
     void OnGameSceneChanged(int scene)
     {
         Debug.Log("OnGameSceneChanged(): " + scene);
-        if (scene == 1)
+        //if (scene == 1)
+        //{
+        //    Debug.Log("SceneManager.LoadScene() Scenes/LoginScene");
+        //    gameOverPanel.SetActive(false);
+
+        //    SceneManager.LoadScene("Scenes/LoginScene", LoadSceneMode.Single);
+        //}
+        if (scene == 2)
         {
-            Debug.Log("SceneManager.LoadScene() Scenes/LoginScene");
+            Debug.Log("SceneManager.LoadScene() Scenes/Scenes/WaitingRoomScene");
             gameOverPanel.SetActive(false);
-            
-            SceneManager.LoadScene("Scenes/LoginScene", LoadSceneMode.Single);
+            SceneManager.LoadScene("Scenes/WaitingRoomScene", LoadSceneMode.Single);
         }
     }
 
