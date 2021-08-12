@@ -11,6 +11,7 @@ public class ObstacleGenerator : MonoBehaviour
     public LayerMask wayPointLayer;
 
     public int carNum;
+    NavMeshAgent agent;
 
     void Start()
     {
@@ -38,7 +39,9 @@ public class ObstacleGenerator : MonoBehaviour
                     var randomINdex = Random.Range(0, carPrefabs.Length);
                     car[carNum] = Instantiate(carPrefabs[randomINdex], carPosition, Quaternion.identity, transform);
 
-                    car[carNum].GetComponent<NavMeshAgent>().avoidancePriority = 0;
+                    agent = car[carNum].GetComponent<NavMeshAgent>();
+                    agent.avoidancePriority = 0;
+                    //agent.updateRotation = false;
 
                     ++carNum;
                     if (!isGenerateManyCar)

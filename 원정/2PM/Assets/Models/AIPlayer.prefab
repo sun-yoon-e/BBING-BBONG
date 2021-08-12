@@ -741,16 +741,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2825156406043957212}
   - component: {fileID: 3373908997994987118}
-  - component: {fileID: 2417975744965658235}
-  - component: {fileID: 3466231533245157397}
-  - component: {fileID: 2488284244171006178}
   - component: {fileID: 5639827947294496006}
-  - component: {fileID: 8353698818358634239}
-  - component: {fileID: 3422628440454515106}
-  - component: {fileID: 5078254227507669374}
-  - component: {fileID: 4496569665687643646}
-  - component: {fileID: 8449364608897996823}
+  - component: {fileID: 8963240422820498259}
   - component: {fileID: 6722828006774563377}
+  - component: {fileID: 2986326711763339070}
+  - component: {fileID: 2531607313722417363}
+  - component: {fileID: 4385317985567965039}
+  - component: {fileID: 4705031368890160593}
+  - component: {fileID: 1103178828949224495}
   m_Layer: 13
   m_Name: AIPlayer
   m_TagString: Player
@@ -766,7 +764,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1826455755767085821}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 503.786, y: 10, z: 500}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 527560272125458036}
@@ -790,54 +788,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2417975744965658235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455755767085821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9b65946d725be044a825709ebe5eb7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoLevelForce: 2
-  safeWheelies: 0
-  antiLoopStrength: 10
-  maxWheelieAngle: 45
-  maxAngleMultiplier: 1.25
-  dotForAutoLevel: 0.2
---- !u!114 &3466231533245157397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455755767085821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 594b90f4639b9ea429ed2753bf2d8225, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isCrashed: 0
-  crashTag:
-  - map
-  - mapBoxCollider
---- !u!114 &2488284244171006178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455755767085821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0bd523cd0e96b94bb25f2c908589253, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  combineLeanAndSteering: 0
-  inputSmoothingTime: 0.5
 --- !u!82 &5639827947294496006
 AudioSource:
   m_ObjectHideFlags: 0
@@ -934,7 +884,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8353698818358634239
+--- !u!114 &8963240422820498259
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -943,128 +893,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1826455755767085821}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c892aad35694014780940f60cf0ef5e, type: 3}
+  m_Script: {fileID: 11500000, guid: 046cf39b0b9df2249abcbf575a6c023d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wheelRotationAxis: 0
-  isGrounded: 0
-  firstGearTorque: 1000
-  topGearTorque: 1000
-  isAutomatic: 0
-  maxSpeed: 50
-  maxReverseSpeed: 3
-  msToMph: 2.237
-  currentSpeed: 0
-  numGears: 6
-  currentGear: 1
-  frontBrakeTorque: 350
-  backBrakeTorque: 350
-  LeanSteerAmount: 2.5
-  maxLeanAngle: 45
-  minLeanTorque: 0.1
-  maxLeanTorque: 2
-  speedForMaxLean: 50
-  minSteerAngle: 5
-  maxSteerAngle: 20
-  speedForMinSteer: 50
-  steerLeanTorque: 0.5
-  wheelieTorque: 500
-  backFlipTorque: 500
-  inAirSpinTorque: 500
-  wheelColliders:
-  - {fileID: 7217609830269902539}
-  - {fileID: 6155919729459848588}
-  wheels:
-  - {fileID: 4530119944179231956}
-  - {fileID: 7546220738780095812}
-  forkPivot: {fileID: 8351537166055892462}
-  cog: {fileID: 5977982182946307852}
-  lowPitch: 1
-  highPitch: 3
---- !u!114 &3422628440454515106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455755767085821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b916a640c1faa5440bcd49233d4fb28a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isBoosting: 0
-  nitrousPower: 2000
-  forwardForce: 1
-  timeToEmptyTank: 10
-  timeToRefil: 20
-  numberOfTanks: 2
-  saveNitrous: 1
-  vfx: {fileID: 6793027542005653483}
-  nitrousSFX: {fileID: 8384628961318691059}
-  ogTimeToEmptyTanks: 0
-  hasNitrous: 1
---- !u!114 &5078254227507669374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455755767085821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06777235816714c489f1a8c56d832869, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  frontRayPos: {fileID: 0}
-  rearRayPos: {fileID: 0}
-  forwardY: 0
-  surfaceAngle: 0
-  actualAngle: 0
-  wheelieAngleMinusSurfaceAngle: 0
---- !u!114 &4496569665687643646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455755767085821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 204d3694c3d1e4f45a27628a2b51cc83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sprites:
-  - {fileID: 21300000, guid: de0e05d756b64924a97cf7c45f423739, type: 3}
-  - {fileID: 21300000, guid: d8e53c2c96c34484aba6808c329c6c3b, type: 3}
-  - {fileID: 21300000, guid: 4b0c128cc0540f447b33827ea0d13d03, type: 3}
-  - {fileID: 21300000, guid: dcf12a87386b9954fbc6a182adea9821, type: 3}
-  - {fileID: 21300000, guid: a8ad61d8529c09441ae5af20e8e09e2e, type: 3}
-  images:
-  - {fileID: 0}
-  - {fileID: 0}
-  nullSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  fogParticle: {fileID: 1543837207191096947, guid: 00a487a7191c7ea4ab1e15684e6f476a,
-    type: 3}
-  range: 100
-  cam: {fileID: 0}
---- !u!114 &8449364608897996823
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1826455755767085821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72041918fd7b8d54bad431fb7ac7d7a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  FPSCam: {fileID: 0}
-  TPSCam: {fileID: 0}
 --- !u!65 &6722828006774563377
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1078,6 +909,122 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 2.3}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &2986326711763339070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455755767085821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ad281efb19a17044b3f57f334bfb3b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  frontRayPos: {fileID: 0}
+  rearRayPos: {fileID: 0}
+  forwardY: 0
+  surfaceAngle: 0
+  actualAngle: 0
+  wheelieAngleMinusSurfaceAngle: 0
+--- !u!114 &2531607313722417363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455755767085821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e20c2db5a2c8584eb782c95555d39a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoLevelForce: 2
+  safeWheelies: 0
+  antiLoopStrength: 10
+  maxWheelieAngle: 45
+  maxAngleMultiplier: 1.25
+  dotForAutoLevel: 0.2
+--- !u!114 &4385317985567965039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455755767085821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594b90f4639b9ea429ed2753bf2d8225, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCrashed: 0
+  crashTag:
+  - map
+  - mapBoxCollider
+--- !u!114 &4705031368890160593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455755767085821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf76302970c74684db896a63e6f52b7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheelRotationAxis: 0
+  isGrounded: 0
+  firstGearTorque: 500
+  topGearTorque: 350
+  isAutomatic: 0
+  maxSpeed: 70
+  maxReverseSpeed: 3
+  msToMph: 2.237
+  currentSpeed: 0
+  numGears: 6
+  currentGear: 1
+  frontBrakeTorque: 350
+  backBrakeTorque: 350
+  LeanSteerAmount: 2.5
+  maxLeanAngle: 45
+  minLeanTorque: 0.1
+  maxLeanTorque: 2
+  speedForMaxLean: 50
+  minSteerAngle: 5
+  maxSteerAngle: 25
+  speedForMinSteer: 50
+  steerLeanTorque: 0.5
+  wheelieTorque: 750
+  backFlipTorque: 500
+  inAirSpinTorque: 500
+  wheelColliders:
+  - {fileID: 7217609830269902539}
+  - {fileID: 6155919729459848588}
+  wheels:
+  - {fileID: 4530119944179231956}
+  - {fileID: 7546220738780095812}
+  forkPivot: {fileID: 8351537166055892462}
+  cog: {fileID: 5977982182946307852}
+  lowPitch: 1
+  highPitch: 3
+--- !u!114 &1103178828949224495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826455755767085821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17edc1fe694215847b69769023d08ab9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combineLeanAndSteering: 0
+  inputSmoothingTime: 0.5
 --- !u!1 &1885460371251464296
 GameObject:
   m_ObjectHideFlags: 0
@@ -9696,7 +9643,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9022883778595244726}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9639c61b3a3eeb643a9e6db9962a051c, type: 3}
   m_Name: 
