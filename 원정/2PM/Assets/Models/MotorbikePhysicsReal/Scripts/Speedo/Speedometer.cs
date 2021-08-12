@@ -14,14 +14,13 @@ public class Speedometer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cam = GameObject.Find("Main Camera").GetComponent<ThirdPersonCamera>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //When the camera look at has been set get the RBController from the selected bike
-        if (cam.lookAt && !controller)
+        if (!controller)
         {
             controller = cam.lookAt.GetComponent<RB_Controller>();
         }

@@ -20,7 +20,6 @@ public class Chat : MonoBehaviour
 
     void Start()
     {
-
     }
 
     void Update()

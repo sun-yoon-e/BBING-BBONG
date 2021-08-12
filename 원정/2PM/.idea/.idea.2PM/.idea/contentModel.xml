@@ -108,6 +108,7 @@
             </e>
           </e>
         </e>
+        <e p="ItemCollision.cs" t="Include" />
         <e p="Models" t="Include">
           <e p="MotorbikePhysicsReal" t="Include">
             <e p="Scripts" t="Include">
