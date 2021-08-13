@@ -192,46 +192,12 @@ namespace Gadd420
 
         }
 
-        /*
-        protected virtual void GetLeanValue()
-        {
-            if (!combineLeanAndSteering)
-            {
-                if (Input.GetKey(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse1))
-                {
-                    if (Input.GetKey(KeyCode.Mouse0))
-                    {
-                        leanInput = -1;
-                    }
-                    if (Input.GetKey(KeyCode.Mouse1))
-                    {
-                        leanInput = 1;
-                    }
-                }
-                else
-                {
-                    leanInput = 0;
-                }
-            }
-            else
-            {
-                leanInput = hzInput;
-            }
-        }
-        */
-
         protected virtual void GetLeanBackValue()
         {
-            if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                if (Input.GetKey(KeyCode.LeftControl))
-                {
-                    wheelieInput = -1;
-                }
-                if (Input.GetKey(KeyCode.LeftShift))
-                {
-                    wheelieInput = 1;
-                }
+                wheelieInput = 1;
+                wheelieInput = 1;
             }
             else
             {

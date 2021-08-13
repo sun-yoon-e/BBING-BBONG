@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="88d02ce1-0af5-4312-8cce-7d8ab9f07764" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.2PM/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.2PM/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.2PM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.2PM/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameObject.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameObject.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LobbyScene.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LobbyScene.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/BikePhysics/NitrousManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/BikePhysics/NitrousManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/BikePhysics/RB_Controller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/BikePhysics/RB_Controller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/Speedo/Speedometer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/Speedo/Speedometer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/LobbyScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/LobbyScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Player/Item.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player/Item.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Player/PlayerCamera.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Player/PlayerCamera.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/ItemCollision.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/MinimapSprite.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/Chat.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <changedPaths>
+      <option value="$PROJECT_DIR$/Assets/Scripts/Map/RoadGenerator.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Map/PlacementPizzaStore.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Map/PlacementBuilding.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Map/MeshGenerator.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Map/ObjectGenerator.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Map/Destination.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Player/FirePizza.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/GameClient.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/onClick_LobbyScene.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Chat.cs" />
+      <option value="$PROJECT_DIR$/Assets/ItemBox.cs" />
+      <option value="$PROJECT_DIR$/Assets/ItemCollision.cs" />
+      <option value="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/Speedo/NitrousUI.cs" />
+      <option value="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/Inputs/Input_Manager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/Speedo/Speedometer.cs" />
+      <option value="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/BikePhysics/NitrousManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Player/Item.cs" />
+      <option value="$PROJECT_DIR$/Assets/MinimapSprite.cs" />
+      <option value="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/BikePhysics/CrashController.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Player/PlayerCamera.cs" />
+      <option value="$PROJECT_DIR$/Assets/Models/MotorbikePhysicsReal/Scripts/BikePhysics/RB_Controller.cs" />
+    </changedPaths>
+  </component>
+  <component name="ProjectId" id="1wPDKO0gF186awIPXclmzsOZU6q" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Discover.Launch.Via.Unity" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="88d02ce1-0af5-4312-8cce-7d8ab9f07764" name="Default Changelist" comment="" />
+      <created>1628351292149</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1628351292149</updated>
+      <workItem from="1628351302726" duration="8391000" />
+      <workItem from="1628371225032" duration="671000" />
+      <workItem from="1628436075610" duration="1223000" />
+      <workItem from="1628510552790" duration="1226000" />
+      <workItem from="1628512466365" duration="6391000" />
+      <workItem from="1628605408795" duration="5831000" />
+      <workItem from="1628682713995" duration="7941000" />
+      <workItem from="1628767583647" duration="12703000" />
+      <workItem from="1628858073943" duration="8917000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

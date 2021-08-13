@@ -31,9 +31,6 @@ public class NitrousUI : MonoBehaviour
     {
         if (nitrousScript)
         {
-            slider.maxValue = nitrousScript.ogTimeToEmptyTanks;
-            tankNo.text = (nitrousScript.numberOfTanks + "x");
-            slider.value = nitrousScript.timeToEmptyTank;
         }
 
         

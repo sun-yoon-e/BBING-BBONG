@@ -1,16 +1,21 @@
-﻿using UnityEngine;
+﻿using Gadd420;
+using UnityEngine;
 using UnityEngine.UI;
 //using Random = UnityEngine.Random;
 
 public class Item : MonoBehaviour
 {
-    public Sprite[] sprites = new Sprite[5];
+    NitrousManager nitrousScript;
+    RB_Controller rbScript;
+    
+    public Sprite[] sprites = new Sprite[4];
     public Image[] images = new Image[2];
     public Sprite nullSprite;
 
-    private int ItemCnt;
+    public static int ItemCnt;
+    public static bool ItemCol;
     private int?[] MyItems;
-    //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터, 4: 보호막
+    //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터
     private int useIndex;
 
     GameObject player;
@@ -21,68 +26,131 @@ public class Item : MonoBehaviour
     
     public float range = 100f;
     public Camera cam;
+
+    public bool cheat;
+    public int cheatSlot;
+    
+    public bool isSlow;
+    private float slowTimer;
+    private float orMaxSpeed;
     
     private void Start()
     {
         fpsCamera = GameObject.Find("FPS Camera");
         tpsCamera = GameObject.Find("TPS Camera");
-
         player = GameObject.Find("Player");
-
         miniCamera = GameObject.Find("Minimap Camera");
+        nitrousScript = GetComponent<NitrousManager>();
+        rbScript = GetComponent<RB_Controller>();
 
+        orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
         MyItems = new int?[2] { null, null };
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1))
+        if (ItemCol)
         {
-            if (MyItems[0] != null)
-            {
-                useIndex = 0;
-                UseItem(MyItems[0].Value);
-                
-                if (MyItems[1] != null)
-                {
-                    MyItems[0] = MyItems[1];
-                    MyItems[1] = null;
-                }
-                else
-                {
-                    MyItems[0] = null;
-                }
-                
-                ChangeSprite();
-                ItemCnt--;
-            }
+            RandomItem();
+            ItemCnt++;
+            ChangeSprite();
+            ItemCol = false;
         }
         
-        if(Input.GetKeyDown(KeyCode.Alpha2))
+        //아이템 치트키
+        if (Input.GetKeyDown(KeyCode.F1))
         {
-            if (MyItems[1] != null)
+            cheat = true;
+            cheatSlot = 0;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            cheat = true;
+            cheatSlot = 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            if (cheat)
             {
-                useIndex = 1;
-                UseItem(MyItems[1].Value);
-                MyItems[1] = null;
+                if (MyItems[cheatSlot] == null)
+                {
+                    ItemCnt++;
+                }
+                MyItems[cheatSlot] = 0;
                 ChangeSprite();
-                ItemCnt--;
+                cheat = false;
+            }
+            else
+            {
+                if (MyItems[0] != null)
+                {
+                    useIndex = 0;
+                    UseItem(MyItems[0].Value);
+                
+                    if (MyItems[1] != null)
+                    {
+                        MyItems[0] = MyItems[1];
+                        MyItems[1] = null;
+                    }
+                    else
+                    {
+                        MyItems[0] = null;
+                    }
+                
+                    ChangeSprite();
+                    ItemCnt--;
+                }
             }
         }
-    }
-
-    private void OnTriggerEnter(Collider col)
-    {
-        if (col.gameObject.CompareTag("ItemBox"))
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (ItemCnt < 2)
+            if (cheat)
             {
-                Destroy(col.gameObject);
-
-                RandomItem();
-                ItemCnt++;
+                if (MyItems[cheatSlot] == null)
+                {
+                    ItemCnt++;
+                }
+                MyItems[cheatSlot] = 1;
                 ChangeSprite();
+                cheat = false;
+            }
+            else
+            {
+                if (MyItems[1] != null)
+                {
+                    useIndex = 1;
+                    UseItem(MyItems[1].Value);
+                    MyItems[1] = null;
+                    ChangeSprite();
+                    ItemCnt--;
+                }
+            }
+           
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            MyItems[cheatSlot] = 2;
+            ChangeSprite();
+            cheat = false;
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            MyItems[cheatSlot] = 3;
+            ChangeSprite();
+            cheat = false;
+        }
+        
+        if (isSlow)
+        {
+            slowTimer += Time.deltaTime;
+            if (slowTimer >= 20f)
+            {
+                isSlow = false;
+                rbScript.maxSpeed = orMaxSpeed;
+                slowTimer = 0f;
             }
         }
     }
@@ -99,10 +167,6 @@ public class Item : MonoBehaviour
             case 1:
                 MyItems[1] = index;
                 break;
-            //case 2:
-            //    MyItems[0] = MyItems[1];
-            //    MyItems[1] = index;
-            //    break;
             default:
                 break;
         }
@@ -135,15 +199,11 @@ public class Item : MonoBehaviour
                 Fog();
                 break;
             case 2:
-                Debug.Log("슬로우");
-                PlayerController.slowdown = true;
+                rbScript.maxSpeed = orMaxSpeed / 2;
+                isSlow = true;
                 break;
             case 3:
-                Debug.Log("부스터");
-                PlayerController.booster = true;
-                break;
-            case 4:
-                Debug.Log("쉴드");
+                nitrousScript.isBoosting = true;
                 break;
         }
     }
@@ -158,7 +218,6 @@ public class Item : MonoBehaviour
             fog = Instantiate(fogParticle, fpsCamera.transform.position, fpsCamera.transform.rotation, fpsCamera.transform);
 
             Destroy(fog, 20f);
-            print("fps");
         }
         else if (tpsCamera.activeSelf)
         {
@@ -166,7 +225,6 @@ public class Item : MonoBehaviour
             fog = Instantiate(fogParticle, tpsCamera.transform.position, tpsCamera.transform.rotation, tpsCamera.transform);
 
             Destroy(fog, 20f);
-            print("tps");
         }
 
         Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
