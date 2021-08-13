@@ -6,13 +6,17 @@ using UnityEngine.AI;
 public class AIMovement : MonoBehaviour
 {
     RoadGenerator road;
-    Rigidbody rb;
+    public Rigidbody rb;
 
-    Vector3 moveDirection;
-    Vector3 direction;
+    public Vector3 direction;
+    //public Quaternion rot;
 
     GameObject navObject;
-    NavMeshAgent agent;
+    [HideInInspector] public NavMeshAgent agent;
+
+    [HideInInspector] public float cal;
+
+    public bool isLookAgent = false;
 
     void Start()
     {
@@ -24,24 +28,53 @@ public class AIMovement : MonoBehaviour
 
     private void Update()
     {
-        moveDirection = Vector3.zero;
         direction = agent.transform.position - transform.position;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+        if (direction.x > 8f || direction.x < -8f || direction.z > 8f || direction.z < -8f)
+            agent.isStopped = true;
+        else
+            agent.isStopped = false;
+
+        //rot = Quaternion.Euler(agent.transform.rotation.x - transform.rotation.x,
+        //    agent.transform.rotation.y - transform.rotation.y,
+        //    agent.transform.rotation.z - transform.rotation.z);
+
+        if (isLookAgent)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+        else
+            transform.rotation = agent.transform.rotation;
+
+        //if (agent.remainingDistance <= agent.stoppingDistance)
+        //{
+        //    if (!agent.hasPath || agent.velocity.sqrMagnitude == 0)
+        //    {
+        //        AIRBController rbController = GetComponent<AIRBController>();
+        //        rbController.topGearTorque = 0;
+        //        rbController.firstGearTorque = 0;
+        //    }
+        //}
+
+        CalculateDirection();
+
+        StartCoroutine("LookNavMeshAgent");
     }
 
-    void FixedUpdate()
+    IEnumerator LookNavMeshAgent()
     {
-        //rb.AddForce(moveDirection * 500000f);
+        yield return new WaitForSeconds(1f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
     }
 
     void CreateNavMeshAgentObject()
     {
         navObject = new GameObject("AI NavMesh Agent");
         navObject.transform.position = transform.position;
+        
         agent = navObject.AddComponent<NavMeshAgent>();
-
-        //agent = navObject.GetComponent<NavMeshAgent>();
+        agent.speed = 20f;
+        agent.radius = 2f;
+        agent.avoidancePriority = 1;
+        agent.angularSpeed = 60f;
 
         for (int i = 1; i < road.vertices.Length; ++i)
         {
@@ -50,6 +83,11 @@ public class AIMovement : MonoBehaviour
                 agent.SetDestination(road.vertices[i]);
             }
         }
-        //agent.velocity = new Vector3(10f, 10f, 10f);
+    }
+
+    void CalculateDirection()
+    {
+        cal = Mathf.Sqrt(direction.x * direction.x + direction.z * direction.z);
+        //print(cal);
     }
 }

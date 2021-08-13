@@ -7,7 +7,7 @@ using Gadd420;
 
 public class AIInputManager : MonoBehaviour
 {
-    CrashController crashScript;
+    AIMovement movementScript;
 
     public bool combineLeanAndSteering;
 
@@ -15,6 +15,8 @@ public class AIInputManager : MonoBehaviour
 
     float vInputTime;
     float hzInputTime;
+
+    bool isPressS = false;
 
     //A&D
     protected float hzInput;
@@ -46,7 +48,7 @@ public class AIInputManager : MonoBehaviour
 
     private void Start()
     {
-        crashScript = GetComponent<CrashController>();
+        movementScript = GetComponent<AIMovement>();
 
         vInput = 0;
         hzInput = 0;
@@ -54,36 +56,18 @@ public class AIInputManager : MonoBehaviour
 
     void Update()
     {
-        ResetInput();
         VerticalInput();
         HZInput();
-        //GetLeanValue();
-        GetLeanBackValue();
-    }
-
-    protected virtual void ResetInput()
-    {
-        //if (Input.GetKey(KeyCode.R))
-        //{
-        //    transform.localRotation = Quaternion.identity;
-        //    crashScript.isCrashed = false;
-        //}
-        //if (Input.GetKey(KeyCode.P))
-        //{
-        //    Vector3 resetPos = new Vector3(505f, 10f, 500f);
-        //    gameObject.transform.position = resetPos;
-        //}
     }
 
     protected virtual void VerticalInput()
     {
         vInputTime = Mathf.Clamp(vInputTime, 0, inputSmoothingTime);
 
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+        if (PressW() || PressS() || isPressS)
         {
-            if (Input.GetKey(KeyCode.W))
+            if (PressW())
             {
-
                 if (vInput < 0)
                 {
                     vInputTime -= 2 * Time.deltaTime;
@@ -95,7 +79,7 @@ public class AIInputManager : MonoBehaviour
                     vInput = Mathf.InverseLerp(0, inputSmoothingTime, vInputTime);
                 }
             }
-            if (Input.GetKey(KeyCode.S))
+            if (PressS() || isPressS)
             {
                 if (vInput > 0.01f)
                 {
@@ -109,7 +93,6 @@ public class AIInputManager : MonoBehaviour
                 }
             }
         }
-
         else
         {
             if (vInputTime > 0.01f)
@@ -136,11 +119,10 @@ public class AIInputManager : MonoBehaviour
     {
         hzInputTime = Mathf.Clamp(hzInputTime, 0, inputSmoothingTime);
 
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A))
+        if (isPressS || PressD() || PressA())
         {
-            if (Input.GetKey(KeyCode.D))
+            if (PressD() || isPressS)
             {
-
                 if (hzInput < 0)
                 {
                     hzInputTime -= 2 * Time.deltaTime;
@@ -152,7 +134,7 @@ public class AIInputManager : MonoBehaviour
                     hzInput = Mathf.InverseLerp(0, inputSmoothingTime, hzInputTime);
                 }
             }
-            if (Input.GetKey(KeyCode.A))
+            if (PressA())
             {
                 if (hzInput > 0.01f)
                 {
@@ -166,7 +148,6 @@ public class AIInputManager : MonoBehaviour
                 }
             }
         }
-
         else
         {
             if (hzInputTime > 0.01f)
@@ -187,53 +168,65 @@ public class AIInputManager : MonoBehaviour
                 hzInput = 0;
             }
         }
-
     }
 
-    /*
-    protected virtual void GetLeanValue()
+    bool PressW()
     {
-        if (!combineLeanAndSteering)
-        {
-            if (Input.GetKey(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse1))
-            {
-                if (Input.GetKey(KeyCode.Mouse0))
-                {
-                    leanInput = -1;
-                }
-                if (Input.GetKey(KeyCode.Mouse1))
-                {
-                    leanInput = 1;
-                }
-            }
-            else
-            {
-                leanInput = 0;
-            }
-        }
-        else
-        {
-            leanInput = hzInput;
-        }
-    }
-    */
+        if (movementScript.cal > 4)
+            return true;
 
-    protected virtual void GetLeanBackValue()
+        return false;
+    }
+
+    bool PressS()
     {
-        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftShift))
+        //if (movementScript.direction.z < 0)
+        //    return true;
+
+        return false;
+    }
+
+    bool PressD()   //오른쪽
+    {
+        //if (movementScript.direction.x > 3
+        //    || movementScript.rot.x > 15f)
+        //    return true;
+
+        return false;
+    }
+
+    bool PressA()   //왼쪽
+    {
+        //if (movementScript.direction.x < -3
+        //    || movementScript.rot.x < -15f)
+        //    return true;
+
+        return false;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform.tag == "mapBoxCollider")
         {
-            if (Input.GetKey(KeyCode.LeftControl))
-            {
-                wheelieInput = -1;
-            }
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                wheelieInput = 1;
-            }
-        }
-        else
-        {
-            wheelieInput = 0;
+            movementScript.isLookAgent = true;
+            //StartCoroutine("goBack");
         }
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.transform.tag == "mapBoxCollider")
+        {
+            movementScript.isLookAgent = false;
+        }
+    }
+
+    IEnumerator goBack()
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movementScript.direction), 0.1f);
+
+        yield return new WaitForSeconds(1f);
+    }
+
+    
 }

@@ -33,7 +33,7 @@ public class AIRBController : MonoBehaviour
     public bool isAutomatic;
 
     [Header("MPH")]
-    public float maxSpeed = 70;
+    public float maxSpeed = 20;
     public float maxReverseSpeed = 3f;
 
     //Metres a second

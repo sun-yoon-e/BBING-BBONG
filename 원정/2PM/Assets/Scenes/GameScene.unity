@@ -1191,7 +1191,7 @@ MonoBehaviour:
   vertices: []
   xSize: 200
   zSize: 200
-  mapHeight: 0
+  mapHeight: 10
   perlinNoiseNum: 0.1
 --- !u!33 &783582554
 MeshFilter:
@@ -1286,7 +1286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &833486945
 Transform:
   m_ObjectHideFlags: 0
@@ -1672,7 +1672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8268478defc6a244bbd752aec1118497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AIPrefab: {fileID: 1826455755767085821, guid: 278b49aaad5aa44438236f7f7e6da0ea,
+  AIPrefab: {fileID: 2837713474543578133, guid: 278b49aaad5aa44438236f7f7e6da0ea,
     type: 3}
 --- !u!1 &1611854714
 GameObject:
@@ -2791,8 +2791,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelRotationAxis: 0
   isGrounded: 0
-  firstGearTorque: 1000
-  topGearTorque: 1000
+  firstGearTorque: 800
+  topGearTorque: 800
   isAutomatic: 0
   maxSpeed: 50
   maxReverseSpeed: 3
