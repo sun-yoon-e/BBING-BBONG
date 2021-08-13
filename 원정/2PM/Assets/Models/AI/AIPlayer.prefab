@@ -7729,11 +7729,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelRotationAxis: 0
   isGrounded: 0
-  firstGearTorque: 800
-  topGearTorque: 800
+  firstGearTorque: 600
+  topGearTorque: 600
   isAutomatic: 0
   maxSpeed: 30
-  maxReverseSpeed: 3
+  maxReverseSpeed: 10
   msToMph: 2.237
   currentSpeed: 0
   numGears: 6
@@ -7746,10 +7746,10 @@ MonoBehaviour:
   maxLeanTorque: 2
   speedForMaxLean: 50
   minSteerAngle: 5
-  maxSteerAngle: 25
+  maxSteerAngle: 20
   speedForMinSteer: 50
   steerLeanTorque: 0.5
-  wheelieTorque: 750
+  wheelieTorque: 500
   backFlipTorque: 500
   inAirSpinTorque: 500
   wheelColliders:
