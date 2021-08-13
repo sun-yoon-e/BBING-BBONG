@@ -21,6 +21,7 @@ namespace Gadd420
         CrashController crashScript;
         Input_Manager inputs;
         NitrousManager nitrousScript;
+        PlayerCamera cameraScript;
         
         float maxLeanRight;
         float maxLeanLeft;
@@ -41,7 +42,7 @@ namespace Gadd420
         public float maxReverseSpeed = 3f;
         
         //Metres a second
-        [HideInInspector] public float msToMph = 2.237f;
+        //[HideInInspector] public float msToMph = 2.237f;
         [HideInInspector] public float currentSpeed;
         
         float rpm;
@@ -137,6 +138,7 @@ namespace Gadd420
             crashScript = GetComponent<CrashController>();
             inputs = GetComponent<Input_Manager>();
             nitrousScript = GetComponent<NitrousManager>();
+            cameraScript = GetComponent<PlayerCamera>();
 
             //Sets ogTorque which never changes
             ogTorque = firstGearTorque;
@@ -162,29 +164,36 @@ namespace Gadd420
             }
 
             //Converts speed in mph to ms (meters per second)
-            maxSpeed = maxSpeed / msToMph;
+            //maxSpeed = maxSpeed / msToMph;
             //Converts reverse speed to ms
-            maxReverseSpeed = maxReverseSpeed / msToMph;
+            //maxReverseSpeed = maxReverseSpeed / msToMph;
             //Converts speed for max lean to ms
-            speedForMaxLean = speedForMaxLean / msToMph;
+            //speedForMaxLean = speedForMaxLean / msToMph;
             //Converts speed for min steer to ms
-            speedForMinSteer = speedForMinSteer / msToMph;
+            //speedForMinSteer = speedForMinSteer / msToMph;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (crashScript &&crashScript.isCrashed)
+            if (cameraScript.nowCam == 1)
             {
-                //When Crashed the Z rotation is turned off so the bike can crash more realisticly
-                rb.constraints = RigidbodyConstraints.None;
-                transform.localRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
-                crashScript.isCrashed = false;
+                rb.constraints = RigidbodyConstraints.FreezeAll;
             }
             else
             {
-                //If not Crashed Z rotation is Locked to stop gravity pulling the bike down
-                rb.constraints = RigidbodyConstraints.FreezeRotationZ;
+                if (crashScript &&crashScript.isCrashed)
+                {
+                    //When Crashed the Z rotation is turned off so the bike can crash more realisticly
+                    rb.constraints = RigidbodyConstraints.None;
+                    transform.localRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
+                    crashScript.isCrashed = false;
+                }
+                else
+                {
+                    //If not Crashed Z rotation is Locked to stop gravity pulling the bike down
+                    rb.constraints = RigidbodyConstraints.FreezeRotationZ;
+                }
             }
 
             //Checks when no wheels are touching the ground isGrounded is set to true
@@ -264,7 +273,7 @@ namespace Gadd420
         void HandleEngine()
         {
             //Do I have to explain this?
-            currentSpeed = rb.velocity.magnitude;
+            currentSpeed = rb.velocity.magnitude * 3.6f;
 
             //If an audio clip has been set
             if (sound)

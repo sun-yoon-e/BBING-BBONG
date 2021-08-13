@@ -32,6 +32,7 @@ public class Item : MonoBehaviour
     
     public bool isSlow;
     private float slowTimer;
+    private float orMaxSpeed;
     
     private void Start()
     {
@@ -42,6 +43,7 @@ public class Item : MonoBehaviour
         nitrousScript = GetComponent<NitrousManager>();
         rbScript = GetComponent<RB_Controller>();
 
+        orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
         MyItems = new int?[2] { null, null };
     }
@@ -68,7 +70,7 @@ public class Item : MonoBehaviour
             cheat = true;
             cheatSlot = 1;
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (cheat)
@@ -143,13 +145,11 @@ public class Item : MonoBehaviour
         
         if (isSlow)
         {
-            Debug.Log("슬로우");
             slowTimer += Time.deltaTime;
-            if (slowTimer >= 10f)
+            if (slowTimer >= 20f)
             {
                 isSlow = false;
-                rbScript.maxSpeed = 20f;
-                rbScript.maxSpeed = rbScript.maxSpeed / rbScript.msToMph;
+                rbScript.maxSpeed = orMaxSpeed;
                 slowTimer = 0f;
             }
         }
@@ -199,8 +199,7 @@ public class Item : MonoBehaviour
                 Fog();
                 break;
             case 2:
-                rbScript.maxSpeed = 10f;
-                rbScript.maxSpeed = rbScript.maxSpeed / rbScript.msToMph;
+                rbScript.maxSpeed = orMaxSpeed / 2;
                 isSlow = true;
                 break;
             case 3:

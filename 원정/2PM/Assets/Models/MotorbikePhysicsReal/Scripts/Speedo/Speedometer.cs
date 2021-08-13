@@ -8,8 +8,7 @@ public class Speedometer : MonoBehaviour
     ThirdPersonCamera cam;
     public RB_Controller controller;
 
-    public Text mph;
-    public Text gear;
+    public Text kmh;
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +28,10 @@ public class Speedometer : MonoBehaviour
         if (controller)
         {
             //Gets and displays speed in Mph
-            float speed = controller.currentSpeed * controller.msToMph;
+            float speed = controller.currentSpeed;
+            kmh.color = new Color(1f, 0.92f - (speed * 0.015f), 0f);
             speed = Mathf.Round(speed);
-            mph.text = (speed + " Mph");
-
-            //Gets and displays the gears
-            float currentGear = controller.currentGear + 1;
-            gear.text = ("Gear " + currentGear);
+            kmh.text = (speed + "");
         }
     }
 }

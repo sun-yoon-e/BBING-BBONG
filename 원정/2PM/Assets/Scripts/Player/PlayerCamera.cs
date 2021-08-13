@@ -8,8 +8,10 @@ public class PlayerCamera : MonoBehaviour
 {
     public Camera FPSCam;
     public Camera TPSCam;
+    public Image aim;
+    public Rigidbody rb;
 
-    private int nowCam;
+    public int nowCam;
 
     private void Start()
     {
@@ -25,12 +27,14 @@ public class PlayerCamera : MonoBehaviour
             if (nowCam == 1)
             {
                 nowCam = 3;
+                aim.gameObject.SetActive(false);
                 TPSCam.gameObject.SetActive(true);
                 FPSCam.gameObject.SetActive(false);
             }
             else
             {
                 nowCam = 1;
+                aim.gameObject.SetActive(true);
                 TPSCam.gameObject.SetActive(false);
                 FPSCam.gameObject.SetActive(true);
             }

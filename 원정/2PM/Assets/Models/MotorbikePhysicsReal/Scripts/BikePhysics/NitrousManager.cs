@@ -15,6 +15,7 @@ public class NitrousManager : MonoBehaviour
     //Not For Inspector
     public bool isBoosting;
     private float boosterTimer;
+    public float boostTime;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +28,8 @@ public class NitrousManager : MonoBehaviour
     {
         if (isBoosting)
         {
-            Debug.Log("부스터");
             boosterTimer += Time.deltaTime;
-            if (boosterTimer >= 5f)
+            if (boosterTimer >= boostTime)
             {
                 isBoosting = false;
                 boosterTimer = 0f;
