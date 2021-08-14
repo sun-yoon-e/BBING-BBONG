@@ -8,7 +8,6 @@ public class AIFirePizza : MonoBehaviour
     public GameObject pizzaPrefab;
     public Transform firePos;
 
-    bool isDoor;
     public float sight;
 
     public LayerMask whatIsDoor;
@@ -20,6 +19,7 @@ public class AIFirePizza : MonoBehaviour
     void Start()
     {
         movementScript = GetComponent<AIMovement>();
+        col = new Collider[5];
     }
 
     void Update()
@@ -32,16 +32,16 @@ public class AIFirePizza : MonoBehaviour
             {
                 if (!isFire)
                 {
-                    Quaternion rot = firePos.rotation;
-                    //Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-                    firePos.rotation = Quaternion.Slerp(rot, Quaternion.LookRotation(col[0].transform.position), 1f);
-                    pizza = Instantiate(pizzaPrefab, firePos);
+                    Vector3 vec = col[0].transform.position - transform.position;
+                    vec.Normalize();
+
+                    firePos.rotation = Quaternion.LookRotation(vec);
+
+                    pizza = Instantiate(pizzaPrefab, firePos.position, firePos.rotation);
                     isFire = true;
                 }
 
                 print(col[0].transform.position);
-                print("있음");
-                
             }
             else
             {

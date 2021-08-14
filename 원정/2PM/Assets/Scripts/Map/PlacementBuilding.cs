@@ -69,6 +69,9 @@ public class PlacementBuilding : MonoBehaviour
 
             makeNotBuildingPlace(i);
             //makeObjectPlace(i);
+            buildingObject[buildingNum].AddComponent<BoxCollider>();
+            BoxCollider buildingCol = buildingObject[buildingNum].GetComponent<BoxCollider>();
+            buildingCol.tag = "buildingBoxCollider";
 
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);

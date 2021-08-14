@@ -32,18 +32,18 @@ public class Pizza : MonoBehaviour
     }
     private void OnCollisionEnter(Collision col)
     {
-        if (col.collider.tag =="buildingBoxCollider"
+        if (col.collider.tag =="Door"
             || col.collider.tag == "map")
         {
             Destroy(gameObject);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider col)
     {
         for (int i = 0; i < destination.destinationNum; ++i)
         {
-            if (building.buildingObject[destination.destination[i]] == other.gameObject)
+            if (building.buildingObject[destination.destination[i]] == col.gameObject)
             {
                 Destroy(destination.destinationSpriteObject[i]);
                 Destroy(destination.pizzaSpriteRenderer[i]);
@@ -52,6 +52,19 @@ public class Pizza : MonoBehaviour
 
                 destination.DestroyDestination += 1;
             }
+        }
+
+        if (col.tag == "Door")
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnCollisionExit(Collision col)
+    {
+        if(col.transform.tag == "buildingBoxCollider")
+        {
+            Destroy(gameObject);
         }
     }
 }
