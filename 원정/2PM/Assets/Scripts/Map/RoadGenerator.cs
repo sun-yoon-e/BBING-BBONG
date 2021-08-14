@@ -395,7 +395,7 @@ public class RoadGenerator : MonoBehaviour
                 if (v + (xSize + 1) * 5 < (xSize + 1) * (zSize + 1))
                     buildingState[v + (xSize + 1) * 5] = (int)buildingDirection.DOWN;
                 if (v - (xSize - 1) * 3 > 0)
-                    buildingState[v - (xSize + 1) * 3] = (int)buildingDirection.UP;
+                    buildingState[v - (xSize - 1) * 3] = (int)buildingDirection.UP;
             }
             v++;
             t += 12;

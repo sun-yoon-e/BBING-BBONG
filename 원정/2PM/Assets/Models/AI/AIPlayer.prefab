@@ -7715,6 +7715,7 @@ MonoBehaviour:
   agent: {fileID: 0}
   cal: 0
   isLookAgent: 0
+  isArriveDestination: 0
 --- !u!114 &2837713474543578132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7729,12 +7730,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelRotationAxis: 0
   isGrounded: 0
-  firstGearTorque: 600
-  topGearTorque: 600
+  firstGearTorque: 500
+  topGearTorque: 500
   isAutomatic: 0
   maxSpeed: 30
   maxReverseSpeed: 10
-  msToMph: 2.237
   currentSpeed: 0
   numGears: 6
   currentGear: 1
@@ -7775,7 +7775,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isCrashed: 0
-  crashTag: []
+  crashTag:
+  - map
+  - mapBoxCollider
 --- !u!1 &2837713474545755051
 GameObject:
   m_ObjectHideFlags: 0

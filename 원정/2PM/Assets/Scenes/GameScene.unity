@@ -1466,7 +1466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefabs:
-  - {fileID: 3118569579268563144, guid: 0008c1b27c1ddea499dd9def4f05fdf0, type: 3}
+  - {fileID: 8618988340833197911, guid: 0008c1b27c1ddea499dd9def4f05fdf0, type: 3}
   - {fileID: 8211807432016652497, guid: 06b39fb3430d0324fb8b41806da9a7b5, type: 3}
   - {fileID: 3496458091836081090, guid: 8c98f3d6f940ff14eba03fe97c70dd53, type: 3}
   - {fileID: 7913303680176965808, guid: e937f15a3301296459630f47281a8a13, type: 3}
@@ -2195,6 +2195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07257c57c20a87a45aa5a8a588e30a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  navMeshSurfaces:
+  - {fileID: 1710524071}
 --- !u!1 &1885910701
 GameObject:
   m_ObjectHideFlags: 0
@@ -2870,7 +2872,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 542957389623694204}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4abbad7bbb2cc7849841f6555fbc2059, type: 3}
