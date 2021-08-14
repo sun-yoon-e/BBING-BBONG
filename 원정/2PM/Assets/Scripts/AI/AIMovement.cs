@@ -36,14 +36,8 @@ public class AIMovement : MonoBehaviour
 
         if (isArriveDestination)
         {
-            
             if (!isStopPosition)
             {
-                //AIRBController rbController = GetComponent<AIRBController>();
-                //rbController.topGearTorque = 0;
-                //rbController.firstGearTorque = 0;
-                //rbController.frontBrakeTorque = 100000f;
-                //rbController.backBrakeTorque = 100000f;
                 stopPosition = transform.position;
                 isStopPosition = true;
             }

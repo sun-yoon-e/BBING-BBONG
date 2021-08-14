@@ -7791,7 +7791,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d6fc87ffbdd9f44ad1f805bc2abf65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sight: 10
+  pizzaPrefab: {fileID: 8660808437739804389, guid: f149a959c89c06045acdeead329d14dc,
+    type: 3}
+  firePos: {fileID: 2837713474855798015}
+  sight: 20
   whatIsDoor:
     serializedVersion: 2
     m_Bits: 524288
