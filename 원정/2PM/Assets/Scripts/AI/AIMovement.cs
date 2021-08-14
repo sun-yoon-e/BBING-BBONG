@@ -13,11 +13,13 @@ public class AIMovement : MonoBehaviour
     GameObject navObject;
     [HideInInspector] public NavMeshAgent agent;
 
-    [HideInInspector] public float cal;
+    [HideInInspector] public float distance;
 
     public bool isLookAgent = false;
-
     public bool isArriveDestination = false;
+
+    Vector3 stopPosition;
+    bool isStopPosition;
 
     void Start()
     {
@@ -32,19 +34,26 @@ public class AIMovement : MonoBehaviour
         CalculateDirection();
         CheckIsSetDestination();
 
-        //if (isLookAgent)
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-        //else
-        //    StartCoroutine("UpdateAIRotation");
+        if (isArriveDestination)
+        {
+            
+            if (!isStopPosition)
+            {
+                //AIRBController rbController = GetComponent<AIRBController>();
+                //rbController.topGearTorque = 0;
+                //rbController.firstGearTorque = 0;
+                //rbController.frontBrakeTorque = 100000f;
+                //rbController.backBrakeTorque = 100000f;
+                stopPosition = transform.position;
+                isStopPosition = true;
+            }
 
-        //StartCoroutine("LookNavMeshAgent");
-
-        //if (cal > 8)
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-        //else
-        //    transform.rotation = agent.transform.rotation;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-
+            transform.position = stopPosition;
+        }
+        else
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+        }
     }
 
     void CreateNavMeshAgentObject()
@@ -57,12 +66,15 @@ public class AIMovement : MonoBehaviour
         agent.speed = 20f;
         agent.radius = 0.1f;
         agent.acceleration = 50f;
-        agent.avoidancePriority = 0;
+        agent.avoidancePriority = 1;
         agent.tag = "AI";
         agent.autoBraking = true;
 
-        //for (int i = 1; i < road.vertices.Length; ++i)
-        
+        SetAIDestination();
+    }
+
+    void SetAIDestination()
+    {
         int destination = Random.Range(1, road.middleRoadNum);
         agent.SetDestination(road.passibleItemPlace[destination]);
     }
@@ -78,74 +90,11 @@ public class AIMovement : MonoBehaviour
     void CalculateDirection()
     {
         direction = agent.transform.position - transform.position;
-        cal = Mathf.Sqrt(direction.x * direction.x + direction.z * direction.z);
-        //print(cal);
-
-        if (cal > 5)// 8밑으로 줄이지 말것
+        distance = Mathf.Sqrt(direction.x * direction.x + direction.z * direction.z);
+        
+        if (distance > 5)
             agent.isStopped = true;
         else
             agent.isStopped = false;
     }
-
-    IEnumerator goBack()
-    {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-
-        yield return new WaitForSeconds(1f);
-    }
-
-    IEnumerator UpdateAIRotation()
-    {
-        yield return new WaitForSeconds(0.1f);
-        transform.rotation = agent.transform.rotation;
-    }
-
-    IEnumerator LookNavMeshAgent()
-    {
-        yield return new WaitForSeconds(1f);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-    }
-
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.transform.tag == "mapBoxCollider")
-        {
-            isLookAgent = true;
-            //StartCoroutine("goBack");
-        }
-    }
-
-    private void OnCollisionStay(Collision collision)
-    {
-        if (collision.transform.tag == "mapBoxCollider")
-        {
-            isLookAgent = true;
-        }
-        //else if (collision.transform.tag == "map") 값 안들어감
-        //{
-        //    AIRBController rbController = GetComponent<AIRBController>();
-        //    rbController.topGearTorque = 1000;
-        //    rbController.firstGearTorque = 1000;
-        //    rbController.maxSpeed = 50;
-        //    print("map");
-        //}
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.transform.tag == "mapBoxCollider")
-        {
-            new WaitForSeconds(2f);
-            isLookAgent = false;
-        }
-        //else if (collision.transform.tag == "map") 값 안들어감
-        //{
-        //    AIRBController rbController = GetComponent<AIRBController>();
-        //    rbController.topGearTorque = 800;
-        //    rbController.firstGearTorque = 800;
-        //    rbController.maxSpeed = 30;
-        //}
-    }
-    */
 }

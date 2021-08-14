@@ -14,9 +14,6 @@ public class AIInputManager : MonoBehaviour
     public float inputSmoothingTime = 0.5f;
 
     float vInputTime;
-    float hzInputTime;
-
-    bool isPressS = false;
 
     //A&D
     protected float hzInput;
@@ -63,33 +60,17 @@ public class AIInputManager : MonoBehaviour
     {
         vInputTime = Mathf.Clamp(vInputTime, 0, inputSmoothingTime);
 
-        if (PressW() || PressS() || isPressS)
+        if (PressW())
         {
-            if (PressW())
+            if (vInput < 0)
             {
-                if (vInput < 0)
-                {
-                    vInputTime -= 2 * Time.deltaTime;
-                    vInput = -Mathf.InverseLerp(0, inputSmoothingTime, vInputTime);
-                }
-                else
-                {
-                    vInputTime += 1 * Time.deltaTime;
-                    vInput = Mathf.InverseLerp(0, inputSmoothingTime, vInputTime);
-                }
+                vInputTime -= 2 * Time.deltaTime;
+                vInput = -Mathf.InverseLerp(0, inputSmoothingTime, vInputTime);
             }
-            if (PressS() || isPressS)
+            else
             {
-                if (vInput > 0.01f)
-                {
-                    vInputTime -= 2 * Time.deltaTime;
-                    vInput = Mathf.InverseLerp(0, inputSmoothingTime, vInputTime);
-                }
-                else
-                {
-                    vInputTime += 1 * Time.deltaTime;
-                    vInput = -Mathf.InverseLerp(0, inputSmoothingTime, vInputTime);
-                }
+                vInputTime += 1 * Time.deltaTime;
+                vInput = Mathf.InverseLerp(0, inputSmoothingTime, vInputTime);
             }
         }
         else
@@ -116,16 +97,8 @@ public class AIInputManager : MonoBehaviour
 
     bool PressW()
     {
-        if (movementScript.cal > 5 && movementScript.isArriveDestination == false)
+        if (movementScript.distance > 5 && movementScript.isArriveDestination == false)
             return true;
-
-        return false;
-    }
-
-    bool PressS()
-    {
-        //if (movementScript.agent.isStopped)
-        //    return true;
 
         return false;
     }

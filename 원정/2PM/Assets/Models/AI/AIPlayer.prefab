@@ -7497,6 +7497,7 @@ GameObject:
   - component: {fileID: 2837713474543578135}
   - component: {fileID: 2837713474543578132}
   - component: {fileID: 2807501998753776604}
+  - component: {fileID: 3733114469338777254}
   m_Layer: 13
   m_Name: AIPlayer
   m_TagString: Player
@@ -7713,7 +7714,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   agent: {fileID: 0}
-  cal: 0
+  distance: 0
   isLookAgent: 0
   isArriveDestination: 0
 --- !u!114 &2837713474543578132
@@ -7730,10 +7731,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelRotationAxis: 0
   isGrounded: 0
-  firstGearTorque: 500
-  topGearTorque: 500
+  firstGearTorque: 400
+  topGearTorque: 400
   isAutomatic: 0
-  maxSpeed: 30
+  maxSpeed: 20
   maxReverseSpeed: 10
   currentSpeed: 0
   numGears: 6
@@ -7778,6 +7779,22 @@ MonoBehaviour:
   crashTag:
   - map
   - mapBoxCollider
+--- !u!114 &3733114469338777254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2837713474543578133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1d6fc87ffbdd9f44ad1f805bc2abf65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sight: 10
+  whatIsDoor:
+    serializedVersion: 2
+    m_Bits: 524288
 --- !u!1 &2837713474545755051
 GameObject:
   m_ObjectHideFlags: 0
