@@ -19,7 +19,7 @@ public class AIMovement : MonoBehaviour
     public bool isArriveDestination = false;
 
     Vector3 stopPosition;
-    bool isStopPosition;
+    public bool isStopPosition;
 
     void Start()
     {
@@ -34,6 +34,7 @@ public class AIMovement : MonoBehaviour
         CalculateDirection();
         CheckIsSetDestination();
 
+        
         if (isArriveDestination)
         {
             if (!isStopPosition)
@@ -67,7 +68,7 @@ public class AIMovement : MonoBehaviour
         SetAIDestination();
     }
 
-    void SetAIDestination()
+    public void SetAIDestination()
     {
         int destination = Random.Range(1, road.middleRoadNum);
         agent.SetDestination(road.passibleItemPlace[destination]);

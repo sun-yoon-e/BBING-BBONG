@@ -5,49 +5,74 @@ using UnityEngine;
 public class AIFirePizza : MonoBehaviour
 {
     AIMovement movementScript;
+
     public GameObject pizzaPrefab;
     public Transform firePos;
-
-    public float sight;
+    GameObject pizza;
 
     public LayerMask whatIsDoor;
     Collider[] col;
 
     bool isFire;
-    GameObject pizza;
+    public float sight;
+
+    Vector3 pizzaPosition;
+    Quaternion pizzaRotation;
 
     void Start()
     {
         movementScript = GetComponent<AIMovement>();
-        col = new Collider[5];
     }
 
     void Update()
     {
         if(movementScript.isArriveDestination == true)
         {
-            col = Physics.OverlapSphere(transform.position, sight, whatIsDoor);
-
-            if(col[0] == true)
-            {
-                if (!isFire)
-                {
-                    Vector3 vec = col[0].transform.position - transform.position;
-                    vec.Normalize();
-
-                    firePos.rotation = Quaternion.LookRotation(vec);
-
-                    pizza = Instantiate(pizzaPrefab, firePos.position, firePos.rotation);
-                    isFire = true;
-                }
-
-                print(col[0].transform.position);
-            }
-            else
-            {
-                // agent setDestination
-            }
+            print("기다림..");
+            StartCoroutine("InstantiatePizza");
+            StartCoroutine("resetSettings");
+            //Invoke("InstantiatePizza", 3f);
+            
         }
+    }
+
+    IEnumerator InstantiatePizza()
+    {
+        yield return new WaitForSeconds(3f);
+
+        col = Physics.OverlapSphere(transform.position, sight, whatIsDoor);
+
+        if (col[0].enabled)
+        {
+            Vector3 vec = col[0].transform.position - transform.position;
+            vec.Normalize();
+            //firePos.rotation = Quaternion.LookRotation(vec);
+            pizzaRotation = Quaternion.LookRotation(vec);
+            pizzaPosition = firePos.position;
+
+            pizza = Instantiate(pizzaPrefab, pizzaPosition, pizzaRotation);
+
+            print(col[0].transform.position);
+
+            Destroy(col[0]);
+        }
+        else
+            print("주변에 문 없음");
+
+        movementScript.isArriveDestination = false;
+
+        StopCoroutine("InstantiatePizza");
+    }
+
+    IEnumerator resetSettings()
+    {
+        yield return new WaitForSeconds(2f);
+
+        movementScript.SetAIDestination();
+        movementScript.isStopPosition = false;
+
+        StopCoroutine("resetSettings");
+        //isFire = false;
     }
 
 }
