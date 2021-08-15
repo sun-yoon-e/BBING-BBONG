@@ -17,11 +17,23 @@ public class onClick_WaitingRoomScene : MonoBehaviour
     private bool[] PlayerList = new bool[4];
     private int maxPlayer = 4;
     
-    private GameClient gameClient = GameClient.Instance;
+    private SoundManager soundManager;
     
+    private GameClient gameClient = GameClient.Instance;
+   
     private void Start()
     {
         Debug.Log("waitingRoomScene.start()");
+        
+        //배경음 전환
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        if (soundManager.reload)
+        {
+            soundManager.bgmNum = 0;
+            soundManager.PlayeBGM();
+            soundManager.reload = false; 
+        }
+        
         gameClient.OnGameStateChanged += GameStateChanged;
         gameClient.OnRoomInfo += OnRoomInfo;
         gameClient.OnRoomNewPlayer += OnRoomNewPlayer;
