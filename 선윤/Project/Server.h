@@ -7,6 +7,7 @@
 #include "Client.h"
 #include "DB.h"
 #include "protocol.h"
+#include "Lobby.h"
 
 class Server;
 
@@ -24,23 +25,14 @@ private:
 	vector<Client*> clients;
 	vector<HANDLE> client_threads;
 
-	BOOL meshReady = false;
-	Vector3 meshVertices[(XSIZE + 1) * (ZSIZE + 1)];
-	int32_t meshTriangles[XSIZE * ZSIZE * 6];
-
-	BOOL roadReady = false;
-	Vector3 roadVertices[(XSIZE + 1) * (ZSIZE + 1)];
-	int32_t roadTriangles[XSIZE * ZSIZE * 6];
-	bool isRoad[(XSIZE + 1) * (ZSIZE + 1)];
-	int16_t isBuildingPlace[(XSIZE + 1) * (ZSIZE + 1)];
-
 	int client_id_counter = 0;
 
-	BOOL isGameStarted = false;
-	BOOL isCountdownStarted = false;
-	time_t gameStartedAt = 0;
-	time_t gameFinishedAt = 0;
+	
 	mutex _mutex;
+
+	HANDLE serverSem;
+
+	Lobby* lobby;
 
 public:
 	Server();

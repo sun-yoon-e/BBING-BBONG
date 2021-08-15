@@ -2,6 +2,7 @@
 #include "Server.h"
 #include "Client.h"
 #include "protocol.h"
+#include "Room.h"
 
 const wchar_t* PACKET_NAME[] = { L"Login"
                             ,L"Logout"
@@ -23,19 +24,16 @@ const wchar_t* PACKET_NAME[] = { L"Login"
 Server::Server() :
 	db(ODBC_NAME, DBUSER, DBPASSWORD)
 {
-	ZeroMemory(meshVertices, sizeof(meshVertices));
-	ZeroMemory(meshTriangles, sizeof(meshTriangles));
 
-	ZeroMemory(roadVertices, sizeof(roadVertices));
-	ZeroMemory(roadTriangles, sizeof(roadTriangles));
+	lobby = new Lobby();
 
-	ZeroMemory(isRoad, sizeof(isRoad));
-	ZeroMemory(isBuildingPlace, sizeof(isBuildingPlace));
+	serverSem = CreateSemaphore(NULL, 1, 1, NULL);
 }
 
 Server::~Server()
 {
-
+	delete lobby;
+	CloseHandle(serverSem);
 }
 
 void Server::InitServer()
@@ -135,14 +133,30 @@ void Server::ClientMain(Client* client)
 {
 	SOCKET socket = client->GetSocket();
 	BYTE* buffer = new BYTE[MAX_PACKET_SIZE];
+	
+	auto totalRead = 0ull;	
 
-	while (TRUE) {
-		int read = recv(socket, (char*) buffer, MAX_PACKET_SIZE, 0);
+	while (TRUE) {		
+		int read = recv(socket, (char*) (buffer + totalRead), (MAX_PACKET_SIZE - totalRead), 0);
 
 		if (read <= 0) {
+			cout << read << endl;
 			break;
 		}
-        
+
+		// 큰 패킷의 경우 recv 한번에 안받아 질 수 있음
+		// SET_MESH와 SET_ROAD 가 패킷 사이즈가 크므로
+		// 두 개만 받은 데이터 양 체크해서 부족하면 이어서 받을 수 있도록 수정
+		if (buffer[0] == CS_SET_MESH || buffer[0] == CS_SET_ROAD)
+		{
+			totalRead += read;
+			if (totalRead < MAX_PACKET_SIZE)
+			{
+				continue;
+			}
+		}
+
+		totalRead = 0;        
         if (buffer[0] >= 0 && buffer[0] < PACKET_CMD_MAX) {
             //wprintf(L"[Recv From %d] Cmd: %s, %d bytes\n", socket, PACKET_NAME[(int)buffer[0]], read);
         }
@@ -160,18 +174,7 @@ void Server::ClientMain(Client* client)
 				scPacket->clientId = client->GetID();
 				client->SetNick(user->GetName());
 
-				if (CanStartGame()) {
-					isGameStarted = true;
-					gameStartedAt = time(NULL);
-                    cout << "-- START GAME -- " << endl;
-
-					Packet_GameState_SC* packet = new Packet_GameState_SC;
-					packet->state = 1;
-					for (int i = 0; i < clients.size(); i++) {
-                        SendTo(clients[i]->GetSocket(), (char*)packet, sizeof(*packet));
-					}
-					delete packet;
-				}
+				lobby->AddUser(client);
 			}
 
             SendTo(socket, (char*) scPacket, sizeof(*scPacket));
@@ -189,183 +192,416 @@ void Server::ClientMain(Client* client)
             SendTo(socket, (char*) scPacket, sizeof(*scPacket));
 			delete scPacket;
 		}
+
+
 		if (buffer[0] == CS_MESH) {
-            /*if (!isGameStarted) {
-                continue;
-            }*/
-			Packet_Request_Mesh_SC* scPacket = new Packet_Request_Mesh_SC;
-			scPacket->ready = meshReady;
-			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
-			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
-            cout << "CS_MESH: " << meshReady << endl;
-            SendTo(socket, (char*) scPacket, sizeof(*scPacket));
-			delete scPacket;
+			auto* room = client->GetRoom();
+			if (room)
+			{
+
+				auto* packet = new BYTE[MAX_PACKET_SIZE];
+				Packet_Request_Mesh_SC* scPacket = reinterpret_cast<Packet_Request_Mesh_SC*>(packet);
+				scPacket->ready = room->Execute_Cs_Mesh(scPacket);
+				cout << "CS_MESH: " << client->GetID() << ", " << scPacket->ready << endl;
+				
+				SendTo(socket, (char*)packet, MAX_PACKET_SIZE);
+
+				delete [] packet;
+
+			}
+			else
+			{
+				cout << "CS_MESH: " << client->GetID() << " " << "room not exist" << endl;
+			}
 		}
 		if (buffer[0] == CS_SET_MESH) {
-            /*if (!isGameStarted) {
-                continue;
-            }*/
-			if (meshReady) {
-                cout << "CS_SET_MESH: continue "<< endl;
-				continue;
-			}
-			Packet_Set_Mesh* packet = reinterpret_cast<Packet_Set_Mesh*>(buffer);
-			meshReady = true;
-			memcpy(meshVertices, packet->vertices, sizeof(meshVertices));
-			memcpy(meshTriangles, packet->triangles, sizeof(meshTriangles));
-            cout << "CS_SET_MESH: meshReady true " << endl;
-			Packet_Set_Mesh_SC* scPacket = new Packet_Set_Mesh_SC;
-			scPacket->ready = meshReady;
-			memcpy(scPacket->vertices, meshVertices, sizeof(meshVertices));
-			memcpy(scPacket->triangles, meshTriangles, sizeof(meshTriangles));
+
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				
+				if (room->IsMeshReady()) {
+					cout << "CS_SET_MESH: continue " << client->GetID() << endl;
+					continue;
+				}
+
+				Packet_Set_Mesh* packet = reinterpret_cast<Packet_Set_Mesh*>(buffer);
+				auto* scPacket = room->Execute_Cs_Set_Mesh(packet);
+				cout << "CS_SET_MESH: " << client->GetID() << " meshReady true " << endl;
 
 #if (Debug == TRUE)
 				cout << sizeof(*scPacket) << endl;
 #endif
-			for (int i = 0; i < clients.size(); i++) {
-                SendTo(socket, (char*) scPacket, sizeof(*scPacket));
+				room->SendMessageToOtherPlayers(nullptr, (char*)scPacket, MAX_PACKET_SIZE);
+				delete [] (BYTE*)scPacket;
+
 			}
-			delete scPacket;
+			else
+			{
+				cout << "CS_SET_MESH: " << client->GetID() << " " << "room not exist" << endl;
+			}
 		}
 		if (buffer[0] == CS_ROAD) {
-            /*if (!isGameStarted) {
-                continue;
-            }*/
-			Packet_Request_Road_SC* scPacket = new Packet_Request_Road_SC;
-			scPacket->ready = roadReady;
-            cout << "CS_ROAD: " << roadReady << endl;
-			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
-			memcpy(scPacket->triangles, roadTriangles, sizeof(roadTriangles));
-			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
-			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
-
-            SendTo(socket, (char*) scPacket, sizeof(*scPacket));
-			delete scPacket;
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				auto* packet = new BYTE[MAX_PACKET_SIZE];
+				Packet_Request_Road_SC* scPacket = reinterpret_cast<Packet_Request_Road_SC*>(packet);
+				scPacket->ready = room->Execute_Cs_Road(scPacket);
+				cout << "CS_ROAD: " << client->GetID() << " , " << scPacket->ready << endl;
+				SendTo(socket, (char*)packet, MAX_PACKET_SIZE);
+				delete [] packet;
+			}
+			else
+			{
+				cout << "CS_ROAD: " << client->GetID() << " " << "room not exist" << endl;
+			}
 		}
 		if (buffer[0] == CS_SET_ROAD) {
-            /*if (!isGameStarted) {
-                continue;
-            }*/
-			if (roadReady) {
-                cout << "CS_SET_ROAD continue" << endl;
-				continue;
-			}
-			Packet_Set_Road* packet = reinterpret_cast<Packet_Set_Road*>(buffer);
-			roadReady = true;
-			memcpy(roadVertices, packet->vertices, sizeof(roadVertices));
-			memcpy(roadTriangles, packet->triangles, sizeof(roadTriangles));
-			memcpy(isRoad, packet->isRoad, sizeof(isRoad));
-			memcpy(isBuildingPlace, packet->isBuildingPlace, sizeof(isBuildingPlace));
-            cout << "CS_SET_ROAD roadReady true" << endl;
-			Packet_Set_Road_SC* scPacket = new Packet_Set_Road_SC;
-			scPacket->ready = roadReady;
-			memcpy(scPacket->vertices, roadVertices, sizeof(roadVertices));
-			memcpy(scPacket->triangles, roadTriangles, sizeof(roadTriangles));
-			memcpy(scPacket->isRoad, isRoad, sizeof(isRoad));
-			memcpy(scPacket->isBuildingPlace, isBuildingPlace, sizeof(isBuildingPlace));
+			auto* room = client->GetRoom();
+			
+			if (room)
+			{
+				if (room->IsRoadReady()) {
+					cout << "CS_SET_ROAD: continue " << client->GetID() << endl;
+					continue;
+				}
+
+				Packet_Set_Road* packet = reinterpret_cast<Packet_Set_Road*>(buffer);
+				auto* scPacket = room->Execute_Cs_Set_Road(packet);
+				cout << "CS_SET_ROAD: roadready true " << client->GetID() << endl;
 
 #if (Debug == TRUE)
-			cout << sizeof(*scPacket) << endl;
+				cout << sizeof(*scPacket) << endl;
 #endif
-			for (int i = 0; i < clients.size(); i++) {
-                SendTo(clients[i]->GetSocket(), (char*) scPacket, sizeof(*scPacket));
+				room->SendMessageToOtherPlayers(nullptr, (char*)scPacket, MAX_PACKET_SIZE);
+				delete [] (BYTE*)scPacket;
+
 			}
-			delete scPacket;
+			else
+			{
+				cout << "CS_SET_ROAD: " << client->GetID() << " " << "room not exist" << endl;
+			}
 		}
-		if (buffer[0] == CS_SCORE) {
-			if (!isGameStarted) {
-				continue;
+		if (buffer[0] == CS_MAKE_CAR)
+		{
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				buffer[1] = SC_MAKE_CAR;
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), sizeof(cs_packet_make_car));
 			}
-
-			client->SetScore(client->GetScore() + 50);
-
-			Packet_Score_SC* scPacket = new Packet_Score_SC;
-			scPacket->players = MAX_CLIENT;
-			memset(scPacket->scores, -1, sizeof(int32_t) * MAX_CLIENT);
-
-			for (int i = 0; i < clients.size(); i++) {
-				scPacket->scores[i] = clients[i]->GetScore();
-			}
-
-			for (int i = 0; i < clients.size(); i++) {
-                SendTo(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket));
-			}
-		} 
-		if (buffer[0] == CS_MOVE) {
-            if (!isGameStarted) {
-                continue;
-            }
-			Packet_Move* packet = reinterpret_cast<Packet_Move*>(buffer);
-
-			client->SetPos(
-				packet->position.x,
-				packet->position.y,
-				packet->position.z
-			);
-			client->SetRot(
-				packet->rotation.x,
-				packet->rotation.y,
-				packet->rotation.z
-			);
-
-			Packet_Move_SC* scPacket = new Packet_Move_SC;
-			memset(scPacket->position, 0x00, sizeof(scPacket->position));
-			memset(scPacket->rotation, 0x00, sizeof(scPacket->rotation));
-			scPacket->players = MAX_CLIENT;
-
-			for (int i = 0; i < clients.size(); i++) {
-				scPacket->position[i] = clients[i]->GetPos();
-				scPacket->rotation[i] = clients[i]->GetRot();
-				std::cout << "player " << i << ": " << scPacket->position[i].x << "," << scPacket->position[i].y << "," << scPacket->position[i].z << endl;
-			}
-
-			for (int i = 0; i < clients.size(); i++) {
-                SendTo(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket));
-			}
-
-			// 타이머 시간에 따라 '180'위치의 숫자 초 단위로 조절
-			// gameTimer.cs의 limitTime 숫자도 함께 조절
-#ifdef TEST
-            if (isGameStarted && (time(NULL) - gameStartedAt >= 10)) {
-#else
-			if (isGameStarted && (time(NULL) - gameStartedAt >= 100)) {
-#endif
-				cout << "-- END GAME --" << endl;
-				if (_mutex.try_lock()) {
-					isGameStarted = false;
-                    gameFinishedAt = time(NULL);
-                    isCountdownStarted = true;
-
-					Packet_GameState_SC* packet = new Packet_GameState_SC;
-					packet->state = 0;
-					for (int i = 0; i < clients.size(); i++) {
-                        SendTo(clients[i]->GetSocket(), (char*)packet, sizeof(*packet));
-					}
-					delete packet;
-
-					_mutex.unlock();
+		}
+		if (buffer[0] == CS_DESTROY_CAR)
+		{
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				auto* room = client->GetRoom();
+				if (room)
+				{
+					buffer[1] = SC_DESTROY_CAR;
+					room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), sizeof(cs_packet_destroy_car));
 				}
 			}
 		}
-		if (buffer[0] == CS_FIRE) {
-            if (!isGameStarted) {
-                continue;
-            }
-			Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
 
-			Packet_Fire_SC* scPacket = new Packet_Fire_SC;
-			scPacket->position = packet->position;
-			scPacket->targetPosition = packet->targetPosition;
+		if (buffer[0] == CS_SCORE) {
+			auto* room = client->GetRoom();
+			if (room && room->IsGameStarted())
+			{
+				client->SetScore(client->GetScore() + 50);
 
-			for (int i = 0; i < clients.size(); i++) {
-                SendTo(clients[i]->GetSocket(), (char*)scPacket, sizeof(*scPacket));
+				Packet_Score_SC* scPacket = new Packet_Score_SC;
+				scPacket->players = MAX_CLIENT;
+				memset(scPacket->scores, -1, sizeof(int32_t)* MAX_CLIENT);
+
+				for (int i = 0; i < clients.size(); i++) {
+					scPacket->scores[i] = clients[i]->GetScore();
+				}
+
+				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(scPacket), sizeof(*scPacket));
+				delete scPacket;
 			}
-			delete scPacket;
+		} 
+		if (buffer[0] == CS_MOVE) {
+
+			auto* room = client->GetRoom();
+			Packet_Move* packet = reinterpret_cast<Packet_Move*>(buffer);
+			if (room && room->IsGameStarted())
+			{
+				client->SetPos(
+					packet->position.x,
+					packet->position.y,
+					packet->position.z
+				);
+				client->SetRot(
+					packet->rotation.x,
+					packet->rotation.y,
+					packet->rotation.z
+				);
+
+				Packet_Move_SC* scPacket = room->GetMovePacket();
+				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(scPacket), sizeof(Packet_Move_SC));
+				delete scPacket;
+			}
+		}
+		if (buffer[0] == CS_FIRE) {
+
+			auto* room = client->GetRoom();
+			Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
+			if (room && room->IsGameStarted())
+			{
+				packet->TYPE = SC_FIRE;
+				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(packet), sizeof(Packet_Fire));
+			}
+		}
+		if (buffer[0] == CS_AI_MOVE)
+		{
+			auto* room = client->GetRoom();
+			if (room && room->IsGameStarted())
+			{
+				buffer[0] = SC_AI_MOVE;
+				auto* p = reinterpret_cast<packet_ai_move*>(buffer);
+				room->SetAIPosition(p->aiId, p->pos, p->rot);
+				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(buffer), sizeof(packet_ai_move));
+			}
+		}
+		if (buffer[0] == CS_AI_FIRE) 
+		{
+			auto* room = client->GetRoom();
+			if (room && room->IsGameStarted())
+			{
+				buffer[0] = SC_AI_FIRE;
+				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(buffer), sizeof(packet_ai_fire));
+			}
+		}
+		if (buffer[0] == CS_AI_ADD)
+		{
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				auto aiIndex = room->AddAI();
+				auto* packet = new sc_packet_bot_add();
+				packet->aiId = aiIndex;
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(packet), sizeof(sc_packet_bot_add));
+				delete packet;
+
+				auto* scPacket = room->GetPlayerInfo();
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(scPacket), sizeof(sc_packet_room_player));
+				delete scPacket;
+			}
+		}
+		if (buffer[0] == CS_AI_REMOVE)
+		{
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				auto* packet = reinterpret_cast<cs_packet_bot_remove*>(buffer);				
+				auto id = room->RemoveAI();
+				packet->type = SC_AI_REMOVE;
+				packet->aiId = id;
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(packet), sizeof(sc_packet_bot_remove));			
+
+				auto* scPacket = room->GetPlayerInfo();
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(scPacket), sizeof(sc_packet_room_player));
+				delete scPacket;
+			}
+		}
+
+
+		if (buffer[0] == CS_CHAT)
+		{
+			auto* room = client->GetRoom();
+			auto* packet = sc_packet_chat::GetChatPacket(buffer, client->GetNickPtr());
+
+			if (room)
+			{
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(packet), sizeof(sc_packet_chat));
+			}
+
+			delete [] packet;
+		}
+
+
+		if (buffer[0] == CS_MAKE_ROOM)
+		{
+			// 클라이언트가 방에 속해있지 않을 때만 방 생성
+			auto* room = client->GetRoom();
+			if (!room)
+			{
+				auto roomId = lobby->MakeRoom(reinterpret_cast<char*>(&buffer[1]));
+				if (roomId < 0)
+				{
+					cout << "make room fail" << endl;
+				}
+				else
+				{
+					lobby->EnterToRoom(roomId, client);
+					lobby->RemoveUser(client);
+				}
+			}
+
+			// 방을 성공적으로 생성했으면
+			room = client->GetRoom();
+			if (room)
+			{	
+				auto* scPacket = room->GetPlayerInfo();
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(scPacket), sizeof(sc_packet_room_player));
+				delete scPacket;
+			}
+		}
+		if (buffer[0] == CS_ENTER_ROOM)
+		{
+			auto* room = client->GetRoom();
+			auto success = false;
+			if (!room)
+			{
+				success = lobby->EnterToRoom(*reinterpret_cast<int*>(&buffer[1]), client);
+				if (success)
+				{
+					lobby->RemoveUser(client);
+				}
+			}
+
+			// 방에 입장하면 모두에게 방에 있는 플레이어 정보 전달
+			room = client->GetRoom();
+			if (room)
+			{
+				auto* scPacket = room->GetPlayerInfo();
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(scPacket), sizeof(sc_packet_room_player));
+				delete scPacket;
+			}
+
+			// 방 입장에 실패하면 입장 요청한 클라이언트에 방 정보 전달
+			if (!success)
+			{
+				auto roomId = *reinterpret_cast<int*>(buffer + 1);
+				auto* packet = lobby->GetRoomInfoPacket(roomId);
+				SendTo(client->GetSocket(), reinterpret_cast<char*>(packet), sizeof(sc_packet_room_info));
+				delete packet;
+			}
+		}
+		if (buffer[0] == CS_EXIT_ROOM)
+		{
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				lobby->AddUser(client);
+
+				// 클라이언트가 룸에서 마지막으로 나오면 룸 삭제
+				if (room->RemoveUser(client))
+				{
+					lobby->DestroyRoom(room->GetID());
+				}
+				else
+				{
+					auto* scPacket = room->GetPlayerInfo();
+					room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(scPacket), sizeof(sc_packet_room_player));;
+					delete scPacket;
+				}
+			}
+		}
+
+		if (buffer[0] == CS_ROOM_LIST_INFO)
+		{
+			auto page = buffer[1];
+			sc_packet_room_list rList;
+			ZeroMemory(&rList, sizeof(sc_packet_room_list));
+			rList.type = SC_ROOM_LIST_INFO;
+			lobby->GetRoomListInfoPacket(page, rList.roomInfo);
+			SendTo(client->GetSocket(), reinterpret_cast<char*>(&rList), sizeof(sc_packet_room_list));
+		}
+		if (buffer[0] == CS_ROOM_INFO)
+		{
+			auto roomId = *reinterpret_cast<int*>(&buffer[1]);
+
+			if (roomId < 0)
+			{
+				auto* room = client->GetRoom();
+				if (room)
+				{
+					roomId = room->GetID();
+				}
+			}			
+			auto*  packet = lobby->GetRoomInfoPacket(roomId);
+			SendTo(client->GetSocket(), reinterpret_cast<char*>(packet), sizeof(sc_packet_room_info));
+			delete packet;
+		}
+
+
+		if (buffer[0] == CS_GAMESTATE)
+		{
+			auto* room = client->GetRoom();
+			if(room)
+			{
+				room->StartGame();
+				room->gameStartedAt = time(NULL);
+				cout << "-- START GAME @" << room->GetID() << " --" << endl;
+
+				Packet_GameState_SC* packet = new Packet_GameState_SC;
+				packet->state = buffer[1];
+				room->SendMessageToOtherPlayers(nullptr, (char*)packet, sizeof(*packet));
+				delete packet;
+			}
+		}
+
+
+		if (buffer[0] == CS_PLACE_ITEM)
+		{
+			buffer[0] = SC_PLACE_ITEM;
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), sizeof(packet_place_item));
+			}
+		}
+		if (buffer[1] == CS_REMOVE_ITEM)
+		{
+			buffer[0] = SC_REMOVE_ITEM;
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), sizeof(packet_remove_item));
+			}
+		}
+		if (buffer[1] == CS_USE_ITEM)
+		{
+			auto* room = client->GetRoom();
+			if (room)
+			{
+				auto* msg = reinterpret_cast<packet_use_item*>(buffer);
+				msg->type = SC_USE_ITEM;
+				auto targetId = msg->targetPlayerId;
+
+				if (targetId > 0)
+				{
+					auto* target = room->GetIndexedPlayer(msg->targetPlayerId);
+					if (target)
+					{
+						SendTo(target->GetSocket(), reinterpret_cast<char*>(buffer), sizeof(packet_use_item));
+					}
+				}
+				else
+				{
+					room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(buffer), sizeof(packet_use_item));
+				}
+			}
 		}
 	}
 
 	closesocket(socket);
-	delete buffer;
+	delete [] buffer;
+
+	auto* room = client->GetRoom();
+	if (room)
+	{
+		if (room->RemoveUser(client))
+		{
+			lobby->DestroyRoom(room->GetID());
+		}
+	}
+	lobby->RemoveUser(client);
 
 	for (int i = 0; i < clients.size(); i++) {
 		if (clients[i] == client) {
@@ -377,20 +613,6 @@ void Server::ClientMain(Client* client)
 
 	cout << "disconnected : " << client->GetID() << std::endl;
 
-	if (clients.size() == 0) {
-		// 클라이언트가 0명이 되면 맵 초기화
-		ZeroMemory(meshVertices, sizeof(meshVertices));
-		ZeroMemory(meshTriangles, sizeof(meshTriangles));
-
-		ZeroMemory(roadVertices, sizeof(roadVertices));
-		ZeroMemory(roadTriangles, sizeof(roadTriangles));
-
-		ZeroMemory(isRoad, sizeof(isRoad));
-		ZeroMemory(isBuildingPlace, sizeof(isBuildingPlace));
-
-		meshReady = false;
-		roadReady = false;
-	}
 }
 
 void Server::ServerMain()
@@ -398,7 +620,11 @@ void Server::ServerMain()
     while (TRUE) {
         Sleep(1000);
 
+		lobby->CheckGameFinish();
+		lobby->ToGameRoom();
+#if false
         // 게임종료 후 10초뒤에 로그인화면으로 이동
+		// To-Do 게임종료 후 방 별로 맵 초기화 하도록 코드 수정필요		
         if (isCountdownStarted && (time(NULL) - gameFinishedAt >= 10)) {
             if (_mutex.try_lock()) {
                 isCountdownStarted = false;
@@ -424,6 +650,7 @@ void Server::ServerMain()
             meshReady = false;
             roadReady = false;
         }
+#endif
     }
 }
 

@@ -3,9 +3,6 @@
 
 #pragma pack (push, 1)
 
-#define SC_LOGIN	0
-#define SC_LOGOUT	1
-#define SC_SIGNUP   2 
 #define SC_MOVE		3
 #define SC_CHAT		4
 #define SC_ITEM		5
@@ -18,10 +15,27 @@
 #define SC_ROAD     12
 #define SC_SET_ROAD 13
 #define SC_INIT     14
+#define SC_ROOM_LIST_INFO 15
+#define SC_ROOM_INFO 16
+#define SC_ROOM_PLAYER_INOUT 17
+#define SC_PLAYER_READY 18
 
-#define CS_LOGIN	0
-#define CS_LOGOUT	1
-#define CS_SIGNUP   2
+#define SC_PLACE_ITEM 21
+#define SC_REMOVE_ITEM 22
+#define SC_USE_ITEM 23
+
+#define SC_AI_MOVE 24
+#define SC_AI_FIRE 25
+#define SC_MAKE_CAR 26
+#define SC_DESTROY_CAR 27
+#define SC_AI_ADD 28
+#define SC_AI_REMOVE 29
+
+#define SC_LOGIN	100
+#define SC_LOGOUT	101
+#define SC_SIGNUP   102 
+
+
 #define CS_MOVE		3
 #define CS_CHAT		4
 #define CS_CLICK	5
@@ -34,7 +48,30 @@
 #define CS_ROAD     12
 #define CS_SET_ROAD 13
 
-#define PACKET_CMD_MAX  15
+#define CS_MAKE_ROOM 14
+#define CS_ENTER_ROOM 15
+#define CS_EXIT_ROOM 16
+#define CS_GAMESTATE 17
+#define CS_ROOM_LIST_INFO 18
+#define CS_ROOM_INFO 19
+#define CS_PLAYER_READY 20
+
+#define CS_PLACE_ITEM 21
+#define CS_REMOVE_ITEM 22
+#define CS_USE_ITEM 23
+
+#define CS_AI_MOVE 24
+#define CS_AI_FIRE 25
+#define CS_MAKE_CAR 26
+#define CS_DESTROY_CAR 27
+#define CS_AI_ADD 28
+#define CS_AI_REMOVE 29
+
+#define CS_LOGIN	100
+#define CS_LOGOUT	101
+#define CS_SIGNUP   102
+
+#define PACKET_CMD_MAX  200
 
 struct Vector3 {
 	float x;
@@ -147,6 +184,13 @@ struct Packet_GameState_SC {
 	BYTE state;
 };
 
+// 클라이언트에서 전송하는 게임 시작 명령
+struct Packet_GameState_CS
+{
+	BYTE type = CS_GAMESTATE;
+	BYTE state;
+};
+
 struct Packet_Fire {
 	BYTE TYPE = CS_FIRE;
 	Vector3 position;
@@ -196,16 +240,184 @@ struct sc_packet_move {
 };
 
 struct sc_packet_chat {
-	BYTE type;
-	BYTE size;
-	int id;
+	BYTE type;	
+	BYTE nickName[MAX_NICKNAME_SIZE];
+	BYTE message[MAX_CHAT_SIZE];
 
-	string message;
+	static BYTE* GetChatPacket(BYTE* buffer, BYTE* pNickName)
+	{
+		auto* packet = new BYTE[sizeof(sc_packet_chat)];
+
+		packet[0] = SC_CHAT;
+
+		memcpy_s(packet + 1 , MAX_NICKNAME_SIZE, pNickName, MAX_NICKNAME_SIZE);
+		memcpy_s(packet + 1 + MAX_NICKNAME_SIZE, MAX_CHAT_SIZE, buffer + 1, MAX_CHAT_SIZE);
+
+		return packet;
+	}
+};
+
+// 로비에 있는 현재 페이지 방 정보 요청
+struct cs_packet_room_list
+{
+	BYTE type = CS_ROOM_LIST_INFO;
+	// 방 정보를 불러올 페이지 번호 입력(0 부터 시작)
+	BYTE page;
+};
+
+// 특정 아이디의 방 정보 요청
+struct cs_packet_room_info
+{
+	BYTE type = CS_ROOM_INFO;
+	int roomId;
+};
+
+// 방 정보
+struct sc_packet_room_info
+{
+	BYTE type = SC_ROOM_INFO;
+	// 로비에 있는 방 번호(1번 부터 시작, 0번은 없는 방)
+	int roomId;
+	// 게임중인지
+	bool inPlaying;
+	// 방에 있는 플레이어 숫자(1~4)
+	BYTE playerNum;
+	// 로비에 있는 방 이름
+	char roomName[MAX_ROOM_NAME_SIZE];
+};
+
+// 로비 현재 페이지의 방 정보들
+struct sc_packet_room_list
+{
+	BYTE type = SC_ROOM_LIST_INFO;
+	// 요청한 페이지에 있는 방 정보(최대 6개)
+	sc_packet_room_info roomInfo[MAX_ROOM_LIST_PER_PAGE];
+};
+
+// 방에 입장
+struct cs_packet_enter_room
+{
+	BYTE type = CS_ENTER_ROOM;
+	int roomId;
+};
+
+// 방에서 퇴장
+struct cs_packet_exit_room
+{
+	BYTE type = CS_EXIT_ROOM;
+	int roomId;
+};
+
+// 방에 플레이어 입장
+struct sc_packet_room_player
+{
+	BYTE type = SC_ROOM_PLAYER_INOUT;
+	char nickName[MAX_NICKNAME_SIZE * 4];
+};
+
+// 방 생성
+struct cs_packet_make_room
+{
+	BYTE type = CS_MAKE_ROOM;
+	char roomName[MAX_ROOM_NAME_SIZE];
+};
+
+// 플레이어 준비 클릭
+struct cs_packet_player_ready {
+	BYTE type = CS_PLAYER_READY;
+	bool flag;
+};
+
+// 플레이어 준비상태 전송
+struct sc_packet_player_ready
+{
+	BYTE type = SC_PLAYER_READY;
+	bool flag;
+	int id;
+};
+
+
+struct packet_place_item
+{
+	BYTE type;
+	int itemId;
+	float x;
+	float y;
+	float z;
+};
+
+struct packet_remove_item
+{
+	BYTE type;
+	int itemId;
+};
+
+struct packet_use_item
+{
+	BYTE type;
+	int itemType;
+	int targetPlayerId;
+};
+
+struct packet_ai_move
+{
+	BYTE type;
+	int aiId;
+	Vector3 pos;
+	Vector3 rot;
+};
+
+struct packet_ai_fire
+{
+	BYTE type;
+	int aiId;
+	Vector3 pos;
+	Vector3 tar;
+};
+
+struct cs_packet_bot_add
+{
+	BYTE type = CS_AI_ADD;
+};
+
+struct sc_packet_bot_add
+{
+	BYTE type = SC_AI_ADD;
+	// 빈 자리 채우고 그 자리 index 를 넣어서 클라이언트로 보내도록
+	int aiId;
+};
+
+struct sc_packet_bot_remove
+{
+	BYTE type = SC_AI_REMOVE;
+	// 지운 bot ID
+	int aiId;
+};
+
+struct cs_packet_bot_remove
+{
+	BYTE type;
+	// 지울 bot ID
+	int aiId;
 };
 
 struct sc_packet_item {
 	BYTE type;
 	BYTE size;
+	int id;
+};
+
+
+struct cs_packet_make_car
+{
+	BYTE type;
+	int id;
+	Vector3 pos;
+};
+
+struct cs_packet_destroy_car
+{
+	BYTE type;
 	int id;
 };
 
