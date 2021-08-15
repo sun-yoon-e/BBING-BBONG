@@ -7733,8 +7733,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wheelRotationAxis: 0
   isGrounded: 0
-  firstGearTorque: 400
-  topGearTorque: 400
+  firstGearTorque: 350
+  topGearTorque: 350
   isAutomatic: 0
   maxSpeed: 20
   maxReverseSpeed: 10

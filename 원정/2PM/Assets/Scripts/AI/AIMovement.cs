@@ -37,15 +37,17 @@ public class AIMovement : MonoBehaviour
         
         if (isArriveDestination)
         {
-            if (!isStopPosition)
-            {
-                stopPosition = transform.position;
-                isStopPosition = true;
-            }
-            transform.position = stopPosition;
+            //if (!isStopPosition)
+            //{
+            //    stopPosition = transform.position;
+            //    isStopPosition = true;
+            //}
+            //transform.position = stopPosition;
+
+            rb.constraints = RigidbodyConstraints.FreezeAll;
         }
         else
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.05f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.07f);
     }
 
     void CreateNavMeshAgentObject()
@@ -84,11 +86,9 @@ public class AIMovement : MonoBehaviour
         direction = agent.transform.position - transform.position;
         distance = Mathf.Sqrt(direction.x * direction.x + direction.z * direction.z);
         
-        if (distance > 5)
+        if (distance > 7)
             agent.isStopped = true;
         else
             agent.isStopped = false;
     }
-
-   
 }

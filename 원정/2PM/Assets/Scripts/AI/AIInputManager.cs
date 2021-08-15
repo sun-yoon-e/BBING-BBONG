@@ -97,7 +97,7 @@ public class AIInputManager : MonoBehaviour
 
     bool PressW()
     {
-        if (movementScript.distance > 5 && movementScript.isArriveDestination == false)
+        if (movementScript.distance > 7 && movementScript.isArriveDestination == false)
             return true;
 
         return false;
