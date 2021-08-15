@@ -7498,6 +7498,7 @@ GameObject:
   - component: {fileID: 2837713474543578132}
   - component: {fileID: 2807501998753776604}
   - component: {fileID: 3733114469338777254}
+  - component: {fileID: 7534731858833328075}
   m_Layer: 13
   m_Name: AIPlayer
   m_TagString: Player
@@ -7717,6 +7718,7 @@ MonoBehaviour:
   distance: 0
   isLookAgent: 0
   isArriveDestination: 0
+  isStopPosition: 0
 --- !u!114 &2837713474543578132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7794,10 +7796,22 @@ MonoBehaviour:
   pizzaPrefab: {fileID: 8660808437739804389, guid: f149a959c89c06045acdeead329d14dc,
     type: 3}
   firePos: {fileID: 2837713474855798015}
-  sight: 20
   whatIsDoor:
     serializedVersion: 2
     m_Bits: 524288
+  sight: 20
+--- !u!114 &7534731858833328075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2837713474543578133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b37d8013379645d44a3341bd33d3894c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2837713474545755051
 GameObject:
   m_ObjectHideFlags: 0

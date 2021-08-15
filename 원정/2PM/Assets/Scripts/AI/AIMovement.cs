@@ -42,13 +42,10 @@ public class AIMovement : MonoBehaviour
                 stopPosition = transform.position;
                 isStopPosition = true;
             }
-
             transform.position = stopPosition;
         }
         else
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-        }
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.05f);
     }
 
     void CreateNavMeshAgentObject()
@@ -92,4 +89,6 @@ public class AIMovement : MonoBehaviour
         else
             agent.isStopped = false;
     }
+
+   
 }
