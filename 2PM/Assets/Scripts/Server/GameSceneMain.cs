@@ -30,10 +30,19 @@ public class GameSceneMain : MonoBehaviour
     private GameObject[] players = null;
     private bool materialSet = false;
     private Vector3 scaleChange;
+    
+    SoundManager soundManager;
 
     public void Awake()
     {
         Cursor.visible = false;
+        
+        //배경음 전환
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        soundManager.bgmNum = 1;
+        soundManager.PlayeBGM();
+        soundManager.reload = true;
+        
         gameClient.OnScoreUpdated += OnScoreUpdated;
         gameClient.OnPositionUpdated += OnPositionUpdated;
         gameClient.OnGameStateChanged += (o, e) => OnGameStateChanged(e.gameState);
