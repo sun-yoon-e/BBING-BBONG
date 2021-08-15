@@ -2,7 +2,6 @@
 #include "stdafx.h"
 #include "protocol.h"
 
-
 class Room;
 
 class Client
@@ -60,5 +59,4 @@ public:
 	/// </summary>
 	/// <param name="room">플레이어가 들어가 있는 대기실 객체</param>
 	void SetRoom(Room* room) { m_participatedRoom = room; }
-	
 };

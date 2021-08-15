@@ -21,10 +21,8 @@ const wchar_t* PACKET_NAME[] = { L"Login"
                             ,L"Init Mode"
                         };
 
-Server::Server() :
-	db(ODBC_NAME, DBUSER, DBPASSWORD)
+Server::Server() : db(ODBC_NAME, DBUSER, DBPASSWORD)
 {
-
 	lobby = new Lobby();
 
 	serverSem = CreateSemaphore(NULL, 1, 1, NULL);
@@ -192,13 +190,10 @@ void Server::ClientMain(Client* client)
             SendTo(socket, (char*) scPacket, sizeof(*scPacket));
 			delete scPacket;
 		}
-
-
 		if (buffer[0] == CS_MESH) {
 			auto* room = client->GetRoom();
 			if (room)
 			{
-
 				auto* packet = new BYTE[MAX_PACKET_SIZE];
 				Packet_Request_Mesh_SC* scPacket = reinterpret_cast<Packet_Request_Mesh_SC*>(packet);
 				scPacket->ready = room->Execute_Cs_Mesh(scPacket);
@@ -207,7 +202,6 @@ void Server::ClientMain(Client* client)
 				SendTo(socket, (char*)packet, MAX_PACKET_SIZE);
 
 				delete [] packet;
-
 			}
 			else
 			{
@@ -215,11 +209,9 @@ void Server::ClientMain(Client* client)
 			}
 		}
 		if (buffer[0] == CS_SET_MESH) {
-
 			auto* room = client->GetRoom();
 			if (room)
-			{
-				
+			{	
 				if (room->IsMeshReady()) {
 					cout << "CS_SET_MESH: continue " << client->GetID() << endl;
 					continue;
@@ -234,7 +226,6 @@ void Server::ClientMain(Client* client)
 #endif
 				room->SendMessageToOtherPlayers(nullptr, (char*)scPacket, MAX_PACKET_SIZE);
 				delete [] (BYTE*)scPacket;
-
 			}
 			else
 			{
@@ -276,15 +267,13 @@ void Server::ClientMain(Client* client)
 #endif
 				room->SendMessageToOtherPlayers(nullptr, (char*)scPacket, MAX_PACKET_SIZE);
 				delete [] (BYTE*)scPacket;
-
 			}
 			else
 			{
 				cout << "CS_SET_ROAD: " << client->GetID() << " " << "room not exist" << endl;
 			}
 		}
-		if (buffer[0] == CS_MAKE_CAR)
-		{
+		if (buffer[0] == CS_MAKE_CAR) {
 			auto* room = client->GetRoom();
 			if (room)
 			{
@@ -292,8 +281,7 @@ void Server::ClientMain(Client* client)
 				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), sizeof(cs_packet_make_car));
 			}
 		}
-		if (buffer[0] == CS_DESTROY_CAR)
-		{
+		if (buffer[0] == CS_DESTROY_CAR) {
 			auto* room = client->GetRoom();
 			if (room)
 			{
@@ -305,7 +293,6 @@ void Server::ClientMain(Client* client)
 				}
 			}
 		}
-
 		if (buffer[0] == CS_SCORE) {
 			auto* room = client->GetRoom();
 			if (room && room->IsGameStarted())
@@ -325,7 +312,6 @@ void Server::ClientMain(Client* client)
 			}
 		} 
 		if (buffer[0] == CS_MOVE) {
-
 			auto* room = client->GetRoom();
 			Packet_Move* packet = reinterpret_cast<Packet_Move*>(buffer);
 			if (room && room->IsGameStarted())
@@ -347,7 +333,6 @@ void Server::ClientMain(Client* client)
 			}
 		}
 		if (buffer[0] == CS_FIRE) {
-
 			auto* room = client->GetRoom();
 			Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
 			if (room && room->IsGameStarted())
@@ -356,8 +341,7 @@ void Server::ClientMain(Client* client)
 				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(packet), sizeof(Packet_Fire));
 			}
 		}
-		if (buffer[0] == CS_AI_MOVE)
-		{
+		if (buffer[0] == CS_AI_MOVE) {
 			auto* room = client->GetRoom();
 			if (room && room->IsGameStarted())
 			{
@@ -367,8 +351,7 @@ void Server::ClientMain(Client* client)
 				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(buffer), sizeof(packet_ai_move));
 			}
 		}
-		if (buffer[0] == CS_AI_FIRE) 
-		{
+		if (buffer[0] == CS_AI_FIRE) {
 			auto* room = client->GetRoom();
 			if (room && room->IsGameStarted())
 			{
@@ -376,8 +359,7 @@ void Server::ClientMain(Client* client)
 				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(buffer), sizeof(packet_ai_fire));
 			}
 		}
-		if (buffer[0] == CS_AI_ADD)
-		{
+		if (buffer[0] == CS_AI_ADD) {
 			auto* room = client->GetRoom();
 			if (room)
 			{
@@ -392,8 +374,7 @@ void Server::ClientMain(Client* client)
 				delete scPacket;
 			}
 		}
-		if (buffer[0] == CS_AI_REMOVE)
-		{
+		if (buffer[0] == CS_AI_REMOVE) {
 			auto* room = client->GetRoom();
 			if (room)
 			{
@@ -408,10 +389,7 @@ void Server::ClientMain(Client* client)
 				delete scPacket;
 			}
 		}
-
-
-		if (buffer[0] == CS_CHAT)
-		{
+		if (buffer[0] == CS_CHAT) {
 			auto* room = client->GetRoom();
 			auto* packet = sc_packet_chat::GetChatPacket(buffer, client->GetNickPtr());
 
@@ -422,10 +400,7 @@ void Server::ClientMain(Client* client)
 
 			delete [] packet;
 		}
-
-
-		if (buffer[0] == CS_MAKE_ROOM)
-		{
+		if (buffer[0] == CS_MAKE_ROOM) {
 			// 클라이언트가 방에 속해있지 않을 때만 방 생성
 			auto* room = client->GetRoom();
 			if (!room)
@@ -451,8 +426,7 @@ void Server::ClientMain(Client* client)
 				delete scPacket;
 			}
 		}
-		if (buffer[0] == CS_ENTER_ROOM)
-		{
+		if (buffer[0] == CS_ENTER_ROOM) {
 			auto* room = client->GetRoom();
 			auto success = false;
 			if (!room)
@@ -482,8 +456,7 @@ void Server::ClientMain(Client* client)
 				delete packet;
 			}
 		}
-		if (buffer[0] == CS_EXIT_ROOM)
-		{
+		if (buffer[0] == CS_EXIT_ROOM) {
 			auto* room = client->GetRoom();
 			if (room)
 			{
@@ -502,9 +475,7 @@ void Server::ClientMain(Client* client)
 				}
 			}
 		}
-
-		if (buffer[0] == CS_ROOM_LIST_INFO)
-		{
+		if (buffer[0] == CS_ROOM_LIST_INFO) {
 			auto page = buffer[1];
 			sc_packet_room_list rList;
 			ZeroMemory(&rList, sizeof(sc_packet_room_list));
@@ -512,8 +483,7 @@ void Server::ClientMain(Client* client)
 			lobby->GetRoomListInfoPacket(page, rList.roomInfo);
 			SendTo(client->GetSocket(), reinterpret_cast<char*>(&rList), sizeof(sc_packet_room_list));
 		}
-		if (buffer[0] == CS_ROOM_INFO)
-		{
+		if (buffer[0] == CS_ROOM_INFO) {
 			auto roomId = *reinterpret_cast<int*>(&buffer[1]);
 
 			if (roomId < 0)
@@ -528,10 +498,7 @@ void Server::ClientMain(Client* client)
 			SendTo(client->GetSocket(), reinterpret_cast<char*>(packet), sizeof(sc_packet_room_info));
 			delete packet;
 		}
-
-
-		if (buffer[0] == CS_GAMESTATE)
-		{
+		if (buffer[0] == CS_GAMESTATE) {
 			auto* room = client->GetRoom();
 			if(room)
 			{
@@ -545,10 +512,7 @@ void Server::ClientMain(Client* client)
 				delete packet;
 			}
 		}
-
-
-		if (buffer[0] == CS_PLACE_ITEM)
-		{
+		if (buffer[0] == CS_PLACE_ITEM) {
 			buffer[0] = SC_PLACE_ITEM;
 			auto* room = client->GetRoom();
 			if (room)
@@ -556,8 +520,7 @@ void Server::ClientMain(Client* client)
 				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), sizeof(packet_place_item));
 			}
 		}
-		if (buffer[1] == CS_REMOVE_ITEM)
-		{
+		if (buffer[1] == CS_REMOVE_ITEM) {
 			buffer[0] = SC_REMOVE_ITEM;
 			auto* room = client->GetRoom();
 			if (room)
@@ -565,8 +528,7 @@ void Server::ClientMain(Client* client)
 				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), sizeof(packet_remove_item));
 			}
 		}
-		if (buffer[1] == CS_USE_ITEM)
-		{
+		if (buffer[1] == CS_USE_ITEM) {
 			auto* room = client->GetRoom();
 			if (room)
 			{
@@ -612,7 +574,6 @@ void Server::ClientMain(Client* client)
 	}
 
 	cout << "disconnected : " << client->GetID() << std::endl;
-
 }
 
 void Server::ServerMain()

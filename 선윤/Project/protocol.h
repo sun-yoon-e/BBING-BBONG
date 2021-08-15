@@ -3,73 +3,74 @@
 
 #pragma pack (push, 1)
 
-#define SC_MOVE		3
-#define SC_CHAT		4
-#define SC_ITEM		5
-#define SC_SCORE    6
-#define SC_GAMESTATE 7
-#define SC_FIRE     8
+#define SC_LOGIN			  100
+#define SC_LOGOUT			  101
+#define SC_SIGNUP			  102 
 
-#define SC_MESH     10
-#define SC_SET_MESH 11
-#define SC_ROAD     12
-#define SC_SET_ROAD 13
-#define SC_INIT     14
-#define SC_ROOM_LIST_INFO 15
-#define SC_ROOM_INFO 16
-#define SC_ROOM_PLAYER_INOUT 17
-#define SC_PLAYER_READY 18
+#define SC_MOVE					3
+#define SC_CHAT					4
+#define SC_ITEM					5
+#define SC_SCORE				6
+#define SC_GAMESTATE			7
+#define SC_FIRE					8
 
-#define SC_PLACE_ITEM 21
-#define SC_REMOVE_ITEM 22
-#define SC_USE_ITEM 23
+#define SC_MESH					10
+#define SC_SET_MESH				11
+#define SC_ROAD					12
+#define SC_SET_ROAD				13
+#define SC_INIT					14
+#define SC_ROOM_LIST_INFO		15
+#define SC_ROOM_INFO			16
+#define SC_ROOM_PLAYER_INOUT	17
+#define SC_PLAYER_READY			18
 
-#define SC_AI_MOVE 24
-#define SC_AI_FIRE 25
-#define SC_MAKE_CAR 26
-#define SC_DESTROY_CAR 27
-#define SC_AI_ADD 28
-#define SC_AI_REMOVE 29
+#define SC_PLACE_ITEM			21
+#define SC_REMOVE_ITEM			22
+#define SC_USE_ITEM				23
 
-#define SC_LOGIN	100
-#define SC_LOGOUT	101
-#define SC_SIGNUP   102 
+#define SC_AI_MOVE				24
+#define SC_AI_FIRE				25
+#define SC_MAKE_CAR				26
+#define SC_DESTROY_CAR			27
+#define SC_AI_ADD				28
+#define SC_AI_REMOVE			29
 
+// -----------------------------------
 
-#define CS_MOVE		3
-#define CS_CHAT		4
-#define CS_CLICK	5
-#define CS_SCORE    6
+#define CS_LOGIN			  100
+#define CS_LOGOUT			  101
+#define CS_SIGNUP			  102
 
-#define CS_FIRE     8
+#define CS_MOVE					3
+#define CS_CHAT					4
+#define CS_CLICK				5
+#define CS_SCORE				6
 
-#define CS_MESH     10
-#define CS_SET_MESH 11
-#define CS_ROAD     12
-#define CS_SET_ROAD 13
+#define CS_FIRE					8
 
-#define CS_MAKE_ROOM 14
-#define CS_ENTER_ROOM 15
-#define CS_EXIT_ROOM 16
-#define CS_GAMESTATE 17
-#define CS_ROOM_LIST_INFO 18
-#define CS_ROOM_INFO 19
-#define CS_PLAYER_READY 20
+#define CS_MESH					10
+#define CS_SET_MESH				11
+#define CS_ROAD					12
+#define CS_SET_ROAD				13
 
-#define CS_PLACE_ITEM 21
-#define CS_REMOVE_ITEM 22
-#define CS_USE_ITEM 23
+#define CS_MAKE_ROOM			14
+#define CS_ENTER_ROOM			15
+#define CS_EXIT_ROOM			16
+#define CS_GAMESTATE			17
+#define CS_ROOM_LIST_INFO		18
+#define CS_ROOM_INFO			19
+#define CS_PLAYER_READY			20
 
-#define CS_AI_MOVE 24
-#define CS_AI_FIRE 25
-#define CS_MAKE_CAR 26
-#define CS_DESTROY_CAR 27
-#define CS_AI_ADD 28
-#define CS_AI_REMOVE 29
+#define CS_PLACE_ITEM			21
+#define CS_REMOVE_ITEM			22
+#define CS_USE_ITEM				23
 
-#define CS_LOGIN	100
-#define CS_LOGOUT	101
-#define CS_SIGNUP   102
+#define CS_AI_MOVE				24
+#define CS_AI_FIRE				25
+#define CS_MAKE_CAR				26
+#define CS_DESTROY_CAR			27
+#define CS_AI_ADD				28
+#define CS_AI_REMOVE			29
 
 #define PACKET_CMD_MAX  200
 
@@ -336,7 +337,6 @@ struct sc_packet_player_ready
 	int id;
 };
 
-
 struct packet_place_item
 {
 	BYTE type;
@@ -407,7 +407,6 @@ struct sc_packet_item {
 	int id;
 };
 
-
 struct cs_packet_make_car
 {
 	BYTE type;
@@ -444,6 +443,5 @@ struct cs_packet_move {
 	float y;
 	float z;
 };
-
 
 #pragma pack (pop)

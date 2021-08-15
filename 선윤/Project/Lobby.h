@@ -13,6 +13,7 @@ using namespace std;
 /// <remarks>
 /// 객체 life cycle 관리 안함
 /// </remakrs>
+
 class Lobby
 {
 private:
@@ -90,5 +91,4 @@ public:
 	/// <returns>대기실 정보 객체</returns>
 	sc_packet_room_info* GetRoomInfoPacket(int roomId);
 };
-
 #endif

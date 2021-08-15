@@ -257,7 +257,6 @@ Client* Room::GetIndexedPlayer(int playerIndex)
 	return ptr;
 }
 
-
 int Room::AddAI()
 {
 	WaitForSingleObject(clientSem, 0xffff);

@@ -4,9 +4,7 @@
 #include <map>
 #include "Client.h"
 
-
 using namespace std;
-
 
 /// <summary>
 /// AI 플레이어 위치 및 방향 정보
@@ -137,5 +135,4 @@ public:
 	time_t gameStartedAt = 0;
 	time_t gameFinishedAt = 0;
 };
-
 #endif
