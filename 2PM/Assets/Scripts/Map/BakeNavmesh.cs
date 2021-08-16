@@ -34,6 +34,6 @@ public class BakeNavmesh : MonoBehaviour
         if (navMeshSurface == true)
             navMeshSurface.BuildNavMesh();
 
-        Debug.Log("BakeNavMesh");
+        //Debug.Log("BakeNavMesh");
     }
 }

@@ -680,7 +680,7 @@ public class GameClient
                 eventArgs.position = position;
                 eventArgs.rotation = rotation;
 
-                Debug.Log("OnPositionUpdate");
+                //Debug.Log("OnPositionUpdate");
                 OnPositionUpdated(this, eventArgs);
             }
         }
@@ -797,7 +797,7 @@ public class GameClient
         }
         else if (header == SC_PLACE_ITEM)
         {
-            Debug.Log("recvItem");
+            //Debug.Log("recvItem");
             int itemID = reader.ReadInt32();
 
             Vector3 position = new Vector3();
@@ -811,7 +811,7 @@ public class GameClient
                 eventArgs.ItemID = itemID;
                 eventArgs.Position = position;
 
-                Debug.Log("eventItem");
+                //Debug.Log("eventItem");
                 OnPlaceItemBox(this, eventArgs);
             }
         }
@@ -840,7 +840,7 @@ public class GameClient
         }
         else if (header == SC_MAKE_CAR)
         {
-            Debug.Log("recvCar");
+            //Debug.Log("recvCar");
             int id = reader.ReadInt32();
             byte carType = reader.ReadByte();
 
@@ -856,7 +856,7 @@ public class GameClient
                 eventArgs.CarType = carType;
                 eventArgs.Position = position;
 
-                Debug.Log("eventCar");
+                //Debug.Log("eventCar");
                 OnMakeCar(this, eventArgs);
             }
         }
@@ -868,6 +868,7 @@ public class GameClient
             {
                 var eventArgs = new DestroyCarMessageEventArgs();
                 eventArgs.ID = id;
+                //Debug.Log("Server Destroy");
                 OnDestroyCar(this, eventArgs);
             }
         }
@@ -1028,7 +1029,7 @@ public class GameClient
 
         socket.Send(buffer);
 
-        Debug.Log("sendCar");
+        //Debug.Log("sendCar");
     }
     public void DestroyCar(int id)
     {
@@ -1039,6 +1040,7 @@ public class GameClient
         writer.Write(id);
 
         socket.Send(buffer);
+        //Debug.Log("Send Destroy");
     }
     #endregion
     #region 나무연동
@@ -1060,7 +1062,7 @@ public class GameClient
     #region Player연동
     public void UpdatePosition(Vector3 pos, Vector3 rot)
     {
-        Debug.Log("UpdatePosition");
+        //Debug.Log("UpdatePosition");
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
         writer.Write(CS_MOVE);
@@ -1162,7 +1164,7 @@ public class GameClient
         writer.Write(pos.z);
 
         socket.Send(buffer);
-        Debug.Log("sendItem");
+        //Debug.Log("sendItem");
     }
     public void RemoveItemBox(int itemID)
     {

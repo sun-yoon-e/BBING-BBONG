@@ -21,6 +21,7 @@ public class Car: MonoBehaviour
             ObstacleGenerator.CarObject car = obstacle.Cars.Find(p => p.Car == transform.parent.gameObject);
             if (car != null)
             {
+                //Debug.Log("Coll Car");
                 GameClient.Instance.DestroyCar(car.ID);
             }
         }

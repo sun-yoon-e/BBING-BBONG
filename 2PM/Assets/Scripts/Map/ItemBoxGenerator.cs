@@ -79,7 +79,7 @@ public class ItemBoxGenerator : MonoBehaviour
 
             gameClient.PlaceItemBox(i, itemPosition);
             //Debug.Log(itemPosition);
-            Debug.Log("OnRoadItem");
+            //Debug.Log("OnRoadItem");
         }
     }
 
@@ -98,7 +98,7 @@ public class ItemBoxGenerator : MonoBehaviour
 
         itemSpriteRenderer[args.ItemID] = itemSpriteObject[args.ItemID].AddComponent<SpriteRenderer>();
         itemSpriteRenderer[args.ItemID].sprite = itemSprite;
-        Debug.Log("PlaceItem");
+        //Debug.Log("PlaceItem");
     }
 
     public void RemoveItem(object sender, RemoveItemBoxMessageEventArgs args)

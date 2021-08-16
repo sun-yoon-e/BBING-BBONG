@@ -59,7 +59,7 @@ public class ObstacleGenerator : MonoBehaviour
                     carPosition = road.vertices[i + road.xSize + 1];
 
                     GameClient.Instance.MakeCar(carID, (byte)carType, carPosition);
-                    Debug.Log("OnRoadCar");
+                    //Debug.Log("OnRoadCar");
                 }
             }
         }
@@ -78,21 +78,25 @@ public class ObstacleGenerator : MonoBehaviour
         if (args.ID > CarNum)
             CarNum = args.ID;
 
-        Debug.Log("MakeCar");
+        //Debug.Log("MakeCar");
     }
 
     public void OnDestroyCar(object sender, DestroyCarMessageEventArgs args)
     {
+        //Debug.Log("onCar");
         CarObject car = Cars.Find(p => p.ID == args.ID);
         if(car != null)
         {
             GenerateCar();
             Destroy(car.Car);
+
+            //Debug.Log("Destroy car");
         }
     }
 
     public void GenerateCar()
     {
+        //Debug.Log("Generate Car");
         int rand;
         Vector3 carPosition;
         int carNum = CarNum;
