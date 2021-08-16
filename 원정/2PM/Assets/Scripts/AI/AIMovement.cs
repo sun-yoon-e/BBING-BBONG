@@ -29,6 +29,8 @@ public class AIMovement : MonoBehaviour
         CreateNavMeshAgentObject();
     }
 
+    bool isStop = false;
+    float stopStartTime =0f;
     private void Update()
     {
         CalculateDirection();
@@ -37,17 +39,12 @@ public class AIMovement : MonoBehaviour
         
         if (isArriveDestination)
         {
-            //if (!isStopPosition)
-            //{
-            //    stopPosition = transform.position;
-            //    isStopPosition = true;
-            //}
-            //transform.position = stopPosition;
-
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
         else
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.07f);
+
+        CheckAIStop();
     }
 
     void CreateNavMeshAgentObject()
@@ -90,5 +87,31 @@ public class AIMovement : MonoBehaviour
             agent.isStopped = true;
         else
             agent.isStopped = false;
+    }
+
+    void CheckAIStop()
+    {
+        if (agent.isStopped == true)
+        {
+            if (!isStop)
+            {
+                stopStartTime = Time.time;
+                isStop = true;
+            }
+
+            if (Time.time - stopStartTime > 15f)
+            {
+                gameObject.transform.position = road.vertices[road.vertices.Length / 2 + 1];
+                agent.transform.position = road.vertices[road.vertices.Length / 2 + 1];
+                stopStartTime = 0f;
+
+                rb.constraints = RigidbodyConstraints.FreezeAll;
+            }
+        }
+        else
+        {
+            stopStartTime = 0f;
+            isStop = false;
+        }
     }
 }

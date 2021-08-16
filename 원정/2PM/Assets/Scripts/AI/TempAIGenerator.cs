@@ -22,9 +22,17 @@ public class TempAIGenerator : MonoBehaviour
         //agent = AINavmeshAgent.GetComponent<NavMeshAgent>();
         
         transform.position = road.vertices[road.vertices.Length / 2 + 1 + road.xSize + 1];
+        Instantiate(AIPrefab, transform.position, Quaternion.identity);
+
         //agent.transform.position = transform.position;
 
-        Instantiate(AIPrefab, transform.position, Quaternion.identity);
+        //for (int i = 0; i < 100; ++i)
+        //{
+        //    transform.position = road.vertices[road.vertices.Length / 2 + 1 + (road.xSize + 1) * i];
+
+        //    Instantiate(AIPrefab, transform.position, Quaternion.identity);
+        //}
+
         //agent.SetDestination(road.vertices[road.vertices.Length / 2 + 1 + (road.xSize + 1) * 10]);
         //agent.avoidancePriority = 0;
     }
