@@ -230,10 +230,11 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 
 			Packet_Score_SC* scPacket = new Packet_Score_SC;
 			scPacket->players = MAX_CLIENT;
-			memset(scPacket->scores, -1, sizeof(int32_t) * MAX_CLIENT);
+			memset(scPacket->scores, 0, sizeof(int) * scPacket->players);
 
 			for (int i = 0; i < clients.size(); i++) {
 				scPacket->scores[i] = clients[i]->GetScore();
+				cout << scPacket->scores[i] << endl;
 			}
 
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
@@ -322,10 +323,11 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			auto* packet = reinterpret_cast<cs_packet_bot_remove*>(buffer);
+			auto* packet = reinterpret_cast<sc_packet_bot_remove*>(buffer);
 			auto id = room->RemoveAI();
-			packet->type = SC_AI_REMOVE;
+			//packet->type = SC_AI_REMOVE;
 			packet->aiId = id;
+
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)packet, sizeof(sc_packet_bot_remove));
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(sendBuffer), sizeof(OTHER_PACKET_SIZE_MAX));

@@ -165,7 +165,7 @@ struct Packet_Score {
 
 struct Packet_Score_SC {
 	BYTE type = SC_SCORE;
-	int32_t players;
+	int players;
 	int32_t scores[MAX_CLIENT];
 };
 
