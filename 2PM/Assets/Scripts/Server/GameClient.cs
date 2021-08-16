@@ -622,16 +622,19 @@ public class GameClient
         }
         else if (header == SC_SCORE)
         {
+            Debug.Log("SC_SCORE");
             int players = reader.ReadInt32();
             int[] scores = new int[players];
 
             for (int i = 0; i < players; i++)
             {
                 scores[i] = reader.ReadInt32();
+                Debug.Log($"{i} : {scores[i]}");
             }
 
             if (OnScoreUpdated != null)
             {
+                Debug.Log("OnScore");
                 var eventArgs = new ScoreUpdateEventArgs();
                 eventArgs.scores = scores;
                 OnScoreUpdated(this, eventArgs);

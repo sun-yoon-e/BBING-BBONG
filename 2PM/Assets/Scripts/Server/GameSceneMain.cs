@@ -40,7 +40,7 @@ public class GameSceneMain : MonoBehaviour
     
     SoundManager soundManager;
 
-    public void Awake()
+    public void Start()
     {
         Cursor.visible = false;
         
@@ -92,14 +92,11 @@ public class GameSceneMain : MonoBehaviour
         //    //text += $"플레이어 {i + 1}: {scores[i]}\n";
         //}
 
-        if (scores[0] != -1)
-            text += $"{gameClient.client_nick1} : {scores[0]}\n";
-        if (scores[1] != -1)
-            text += $"{gameClient.client_nick2} : {scores[1]}\n";
-        if (scores[2] != -1)
-            text += $"{gameClient.client_nick3} : {scores[2]}\n";
-        if (scores[3] != -1)
-            text += $"{gameClient.client_nick4} : {scores[3]}\n";
+        //if (scores[0] != -1)
+        text += $"{gameClient.client_nick1} : {scores[0]}\n";
+        text += $"{gameClient.client_nick2} : {scores[1]}\n";
+        text += $"{gameClient.client_nick3} : {scores[2]}\n";
+        text += $"{gameClient.client_nick4} : {scores[3]}\n";
 
         scoreTable.text = text;
     }
@@ -372,17 +369,5 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
