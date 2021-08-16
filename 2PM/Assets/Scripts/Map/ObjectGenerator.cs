@@ -17,6 +17,8 @@ public class ObjectGenerator : MonoBehaviour
         {
             CreateObjectPrefab(this, EventArgs.Empty);
         }
+
+        GameClient.Instance.OnMakeTree += OnMakeTree;
     }
 
     private void Start()
@@ -29,7 +31,7 @@ public class ObjectGenerator : MonoBehaviour
         int prefab = 0;
         int isObject;
 
-        for (int i = 0; i < road.vertices.Length; i += 3)
+        for (int i = 0; i < road.vertices.Length; ++i)
         {
             if ((road.isObjectPlace[i] == false && road.buildingState[i] != 0) || road.isRoad[i] == true)
                 continue;
@@ -50,6 +52,7 @@ public class ObjectGenerator : MonoBehaviour
 
     public void OnMakeTree(object sender, MakeTreeMessageEventArgs args)
     {
+        //Debug.Log($"{args.Type}, {args.Position}");
         Instantiate(objectPrefab[args.Type], args.Position, Quaternion.identity, transform);
     }
 }

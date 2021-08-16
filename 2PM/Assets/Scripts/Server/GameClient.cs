@@ -130,6 +130,7 @@ public class DestroyCarMessageEventArgs : EventArgs
 
 public class MakeTreeMessageEventArgs : EventArgs
 {
+    public int ID;
     public byte Type;
     public Vector3 Position;
 }
@@ -874,7 +875,9 @@ public class GameClient
         }
         else if (header == SC_MAKE_TREE)
         {
+            int id = reader.ReadInt32();
             byte type = reader.ReadByte();
+
             Vector3 position = new Vector3();
             position.x = reader.ReadSingle();
             position.y = reader.ReadSingle();
@@ -1051,6 +1054,7 @@ public class GameClient
 
         writer.Write(CS_MAKE_TREE);
 
+        writer.Write(0);
         writer.Write(treeType);
         writer.Write(pos.x);
         writer.Write(pos.y);
