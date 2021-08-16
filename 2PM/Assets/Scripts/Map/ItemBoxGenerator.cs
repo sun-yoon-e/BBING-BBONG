@@ -29,14 +29,14 @@ public class ItemBoxGenerator : MonoBehaviour
 
         itemBoxPlace = new int[itemBoxNum];
 
+        gameClient.OnPlaceItemBox += PlaceItem;
+        gameClient.OnRemoveItemBox += RemoveItem;
+
         road.OnRoadReady3 += CreateItemBox;
         if (road.isRoadReady)
         {
             CreateItemBox(this, System.EventArgs.Empty);
         }
-
-        gameClient.OnPlaceItemBox += PlaceItem;
-        gameClient.OnRemoveItemBox += RemoveItem;
 
         //GenerateItemBox();
     }
@@ -103,7 +103,9 @@ public class ItemBoxGenerator : MonoBehaviour
 
     public void RemoveItem(object sender, RemoveItemBoxMessageEventArgs args)
     {
-
+        Destroy(itemBox[args.ItemID]);
+        Destroy(itemSpriteObject[args.ItemID]);
+        Destroy(itemSpriteRenderer[args.ItemID]);
     }
 
     public void GenerateItemBox()

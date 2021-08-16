@@ -43,6 +43,7 @@ public class RoadGenerator : MonoBehaviour
     public event EventHandler OnRoadReady;
     public event EventHandler OnRoadReady2;
     public event EventHandler OnRoadReady3;
+    public event EventHandler OnRoadReady4;
     public bool isRoadReady = false;
 
     private void Awake()
@@ -120,6 +121,15 @@ public class RoadGenerator : MonoBehaviour
             else
             {
                 Debug.Log("OnRoadReady3() is null");
+            }
+
+            if (OnRoadReady4 != null)
+            {
+                OnRoadReady4(this, EventArgs.Empty);
+            }
+            else
+            {
+                Debug.Log("OnRoadReady4() is null");
             }
         }
     }

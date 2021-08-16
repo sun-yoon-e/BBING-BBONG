@@ -1216,7 +1216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &666119546
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1425,7 +1425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f988b0bc7221550438015e4b925a39da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBoxNum: 500
+  itemBoxNum: 50
   itemBoxPrefab: {fileID: 6291887316783688596, guid: 425b4e6301ed0064bac2fd1d87804a17,
     type: 3}
   itemSprite: {fileID: 21300000, guid: b5f06d786ea4e1a41a6c10e563fa7ceb, type: 3}
@@ -3677,10 +3677,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4dc9e839e1ba1144aab946875aec57e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  material00: {fileID: 2100000, guid: cab26a887e8446d4abc66aa615cb79b3, type: 2}
-  material01: {fileID: 2100000, guid: 68d11b15b6fc6c446be2420e543b8bdc, type: 2}
-  material02: {fileID: 2100000, guid: 784299e474fa94949ace2c171ba5f358, type: 2}
-  material03: {fileID: 2100000, guid: 4344c68be163ece4f89d96c54de84e28, type: 2}
+  material00: {fileID: 2100000, guid: 8bde56ea09b434b45b1a197344f72552, type: 2}
+  material01: {fileID: 2100000, guid: 174b6695e07c8e847878909437b8d172, type: 2}
+  material02: {fileID: 2100000, guid: 96bfd0236ac0f83418e330791e87bdc2, type: 2}
+  material03: {fileID: 2100000, guid: 24fe1592333293947ad50223b1e9face, type: 2}
   playerObject: {fileID: 919132149155446097, guid: a24cc896edcd49241aba0a3cbeb98c5e,
     type: 3}
   currentPlayer: {fileID: 542957389623694204}

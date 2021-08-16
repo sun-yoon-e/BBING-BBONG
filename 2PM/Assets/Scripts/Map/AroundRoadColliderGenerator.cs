@@ -10,7 +10,7 @@ public class AroundRoadColliderGenerator : MonoBehaviour
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
 
-        road.OnRoadReady += GenerateBoxCollider;
+        road.OnRoadReady2 += GenerateBoxCollider;
         if (road.isRoadReady)
         {
             GenerateBoxCollider(this, EventArgs.Empty);

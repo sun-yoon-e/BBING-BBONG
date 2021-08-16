@@ -56,6 +56,7 @@ public class Item : MonoBehaviour
             ItemCnt++;
             ChangeSprite();
             ItemCol = false;
+            //GameClient.Instance.RemoveItemBox();
         }
         
         //아이템 치트키

@@ -28,7 +28,7 @@ public class GameSceneMain : MonoBehaviour
 
     private int[] scores = null;
     private GameObject[] players = null;
-    private bool materialSet = false;
+    //private bool materialSet = false;
     private Vector3 scaleChange;
     
     SoundManager soundManager;
@@ -60,7 +60,7 @@ public class GameSceneMain : MonoBehaviour
     {
         scores = null;
         players = null;
-        materialSet = false;
+        //materialSet = false;
         gameOverPanel = null;
     }
 
@@ -140,7 +140,6 @@ public class GameSceneMain : MonoBehaviour
                     Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
                     characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                 }
-
             }
         }
         else

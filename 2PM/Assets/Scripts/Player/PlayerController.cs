@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     //Mathf.LerpAngle(a, b, t) : t시간 동안 a부터 b까지 변경되는 각도를 반환 / t : 회전 감도
     //Camera
     public Camera cam;
@@ -11,6 +13,9 @@ public class PlayerController : MonoBehaviour
     private float cameraRotationLimitY = 70.0f;
     private float cameraRotationX;
     private float cameraRotationY;
+
+    public Vector3 myPrevPosition;
+    public Vector3 myPrevEulerAngles;
 
     //Item
     public static bool booster;
@@ -593,7 +598,16 @@ public class PlayerController : MonoBehaviour
             col.steerAngle = steer * (w.maxSteer / SteerAngle);
         }
         shiftTime = Mathf.MoveTowards(shiftTime, 0.0f, 0.1f);
+        if (gameClient.isGameStarted == false) return;
+
+        if (myPrevPosition != myRigidbody.position || myPrevEulerAngles != myRigidbody.rotation.eulerAngles)
+        {
+            gameClient.UpdatePosition(myRigidbody.position, myRigidbody.rotation.eulerAngles);
+            myPrevPosition = myRigidbody.position;
+            myPrevEulerAngles = myRigidbody.rotation.eulerAngles;
+        }
     }
+
     void CameraRotate()
     {
         //카메라 회전 

@@ -128,6 +128,12 @@ public class DestroyCarMessageEventArgs : EventArgs
     public int ID;
 }
 
+public class MakeTreeMessageEventArgs : EventArgs
+{
+    public byte Type;
+    public Vector3 Position;
+}
+
 public class AIMessageEventArgs : EventArgs
 {
     public int ID;
@@ -168,6 +174,8 @@ public class GameClient
     public const byte SC_AI_ADD = 28;
     public const byte SC_AI_REMOVE = 29;
 
+    public const byte SC_MAKE_TREE = 30;
+
     //------------------------------------------------------------
 
     public const byte CS_LOGIN  = 100;
@@ -204,6 +212,8 @@ public class GameClient
 
     public const byte CS_AI_ADD = 28;
     public const byte CS_AI_REMOVE = 29;
+
+    public const byte CS_MAKE_TREE = 30;
 
     //public const string SERVER_IP = "127.0.0.1";
     public const string SERVER_IP = "14.38.227.223";
@@ -265,6 +275,8 @@ public class GameClient
 
     public event EventHandler<MakeCarMessageEventArgs> OnMakeCar;
     public event EventHandler<DestroyCarMessageEventArgs> OnDestroyCar;
+
+    public event EventHandler<MakeTreeMessageEventArgs> OnMakeTree;
 
     public event EventHandler<AIMessageEventArgs> OnAddAI;
     public event EventHandler<AIMessageEventArgs> OnRemoveAI;
@@ -826,6 +838,22 @@ public class GameClient
                 OnDestroyCar(this, eventArgs);
             }
         }
+        else if (header == SC_MAKE_TREE)
+        {
+            byte type = reader.ReadByte();
+            Vector3 position = new Vector3();
+            position.x = reader.ReadSingle();
+            position.y = reader.ReadSingle();
+            position.z = reader.ReadSingle();
+
+            if (OnMakeTree != null)
+            {
+                var eventArgs = new MakeTreeMessageEventArgs();
+                eventArgs.Type = type;
+                eventArgs.Position = position;
+                OnMakeTree(this, eventArgs);
+            }
+        }
     }
 
 #region LoginSceneMessage
@@ -979,7 +1007,23 @@ public class GameClient
 
         socket.Send(buffer);
     }
-#endregion
+    #endregion
+#region 나무연동
+    public void MakeTree(byte treeType, Vector3 pos)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_MAKE_TREE);
+
+        writer.Write(treeType);
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+
+        socket.Send(buffer);
+    }
+    #endregion
 #region Player연동
     public void UpdatePosition(Vector3 pos, Vector3 rot)
     {

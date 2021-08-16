@@ -4,6 +4,8 @@ using UnityEngine.AI;
 
 public class ObstacleGenerator : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     public GameObject[] carPrefabs;
 
     public class CarObject
@@ -23,15 +25,16 @@ public class ObstacleGenerator : MonoBehaviour
 
     private void Awake()
     {
-        GameClient.Instance.OnMakeCar += OnMakeCar;
-        GameClient.Instance.OnDestroyCar += OnDestroyCar;
-
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
+        
         //car = new GameObject[road.wayPoint.Length];
         Cars = new List<CarObject>();
         CarNum = 0;
 
-        road.OnRoadReady3 += CreateCar;
+        gameClient.OnMakeCar += OnMakeCar;
+        gameClient.OnDestroyCar += OnDestroyCar;
+
+        road.OnRoadReady4 += CreateCar;
         if (road.isRoadReady)
         {
             CreateCar(this, System.EventArgs.Empty);
