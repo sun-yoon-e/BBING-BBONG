@@ -328,10 +328,13 @@ public class GameClient
                     Debug.Log("recvThread started");
                     try
                     {
-                            
+
                         var maxBufferSize = 512000 * 4;
                         var totalRead = 0;
+                        var readCount = 0;
                         byte[] buffer = new byte[maxBufferSize];
+                        byte[] temp = new byte[maxBufferSize];
+                        bool isRoadMesh = false;
 
                         while (socket.Connected)
                         {
@@ -342,31 +345,58 @@ public class GameClient
                                 break;
                             }
 
+                            totalRead += read;
                             if (buffer[0] == SC_ROAD || buffer[0] == SC_SET_ROAD || buffer[0] == SC_MESH || buffer[0] == SC_SET_MESH)
                             {
-                                totalRead += read;
                                 if (totalRead < 512000 * 4)
                                 {
                                     continue;
                                 }
+                                isRoadMesh = true;
                             }
-                            totalRead = 0;
 
-                            // if (buffer[0] == SC_ROAD || buffer[0] == SC_SET_ROAD)
-                            //     Debug.Log("Road packet is received");
-                            //Debug.Log(read + " bytes read");
 
                             if (dispinstance == null)
                             {
                                 dispinstance = UnityMainThreadDispatcher.Instance();
                             }
 
-                            var target = new byte[maxBufferSize];
-                            Buffer.BlockCopy(buffer, 0, target, 0, maxBufferSize);
-                            dispinstance.Enqueue(
-                                () => ProcessPacket(target)
-                            );
-                            Array.Clear(buffer, 0, maxBufferSize);
+                            if (isRoadMesh)
+                            {
+                                var target = new byte[maxBufferSize];
+                                Buffer.BlockCopy(buffer, 0, target, 0, maxBufferSize);
+                                dispinstance.Enqueue(
+                                    () => ProcessPacket(target)
+                                );
+                                totalRead = 0;
+                                isRoadMesh = false;
+                                Array.Clear(buffer, 0, maxBufferSize);
+                            }
+                            else
+                            {
+                                readCount = 0;
+                                while (totalRead > 254)
+                                {
+                                    var target = new byte[255];
+                                    Buffer.BlockCopy(buffer, readCount * 255, target, 0, 255);
+                                    dispinstance.Enqueue(
+                                        () => ProcessPacket(target)
+                                    );
+                                    readCount++;
+                                    totalRead -= 255;
+                                }
+                                Array.Clear(temp, 0, maxBufferSize);
+
+                                if (totalRead > 0)
+                                {
+                                    Buffer.BlockCopy(buffer, readCount * 255, temp, 0, totalRead);
+                                    Buffer.BlockCopy(temp, 0, buffer, 0, totalRead);
+                                }
+                                else
+                                {
+                                    Array.Clear(buffer, 0, maxBufferSize);
+                                }
+                            }
                         }
                     }
                     catch (SocketException e)
@@ -414,13 +444,13 @@ public class GameClient
         var reader = new BinaryReader(new MemoryStream(buffer));
         var header = reader.ReadByte();
 
-        if(header == SC_CHAT)
+        if (header == SC_CHAT)
         {
             // byte size = reader.ReadByte();
             // int id = reader.ReadInt32();
             var nick = reader.ReadBytes(20);
             string nickStr = System.Text.Encoding.Default.GetString(nick).Trim('\0');
-            var byteChatMessage = reader.ReadBytes(83*3);
+            var byteChatMessage = reader.ReadBytes(231);
             string str = System.Text.Encoding.UTF8.GetString(byteChatMessage).Trim('\0');
 
             if (OnReceivedMessage != null)
@@ -430,7 +460,7 @@ public class GameClient
                 OnReceivedMessage(this, eventArgs);
             }
         }
-        else if(header == SC_ROOM_PLAYER_INOUT)
+        else if (header == SC_ROOM_PLAYER_INOUT)
         {
             RoomPlayer players = new RoomPlayer();
             byte[] nick1 = reader.ReadBytes(20);
@@ -454,7 +484,7 @@ public class GameClient
                 OnRoomNewPlayer(this, eventArgs);
             }
         }
-        else if(header == SC_ROOM_INFO)
+        else if (header == SC_ROOM_INFO)
         {
             RoomInfo room = new RoomInfo();
             room.RoomID = reader.ReadInt32();
@@ -462,7 +492,7 @@ public class GameClient
             room.PlayerNum = reader.ReadByte();
             byte[] bytes = reader.ReadBytes(30);
             room.RoomName = System.Text.Encoding.Default.GetString(bytes).TrimEnd('\0');
-            
+
             if (OnRoomInfo != null)
             {
                 var eventArgs = new RoomInfo();
@@ -470,15 +500,15 @@ public class GameClient
                 OnRoomInfo(this, eventArgs);
             }
         }
-        else if(header == SC_ROOM_LIST_INFO)
+        else if (header == SC_ROOM_LIST_INFO)
         {
             if (OnRoomList != null)
-            { 
+            {
                 var eventArgs = new RoomListMessageEventArgs();
                 eventArgs.roomInfo = new List<RoomInfo>();
 
                 const int MAX_ROOM_NAME_SIZE = 30;
-                for (int i =0; i<6; i++)
+                for (int i = 0; i < 6; i++)
                 {
                     byte type = reader.ReadByte();
                     RoomInfo room = new RoomInfo();
@@ -487,7 +517,7 @@ public class GameClient
                     room.PlayerNum = reader.ReadByte();
                     byte[] bytes = reader.ReadBytes(MAX_ROOM_NAME_SIZE);
                     room.RoomName = System.Text.Encoding.Default.GetString(bytes).TrimEnd('\0');
-                    if(room.RoomID > 0)
+                    if (room.RoomID > 0)
                         eventArgs.roomInfo.Add(room);
                 }
                 OnRoomList(this, eventArgs);
@@ -497,7 +527,7 @@ public class GameClient
         {
             var success = reader.ReadBoolean();
             clientId = reader.ReadInt32();
-            
+
             if (OnLogin != null)
             {
                 var eventArgs = new LoginEventArgs();
@@ -588,7 +618,7 @@ public class GameClient
                 eventArgs.isBuildingPlace = isBuildingPlace;
                 OnRoadChanged(this, eventArgs);
             }
-        } 
+        }
         else if (header == SC_SCORE)
         {
             int players = reader.ReadInt32();
@@ -605,7 +635,7 @@ public class GameClient
                 eventArgs.scores = scores;
                 OnScoreUpdated(this, eventArgs);
             }
-        } 
+        }
         else if (header == SC_GAMESTATE)
         {
             bool state = reader.ReadBoolean();
@@ -615,14 +645,14 @@ public class GameClient
             {
                 var eventArgs = new GameStateChangedEventArgs();
                 eventArgs.gameState = state;
-                
+
                 OnGameStateChanged(this, eventArgs);
             }
             else
             {
                 Debug.Log("OnGameStateChanged is null");
             }
-        } 
+        }
         else if (header == SC_MOVE)
         {
             int players = reader.ReadInt32();
@@ -635,7 +665,7 @@ public class GameClient
                 position[i].y = reader.ReadSingle();
                 position[i].z = reader.ReadSingle();
             }
-            
+
             for (int i = 0; i < players; i++)
             {
                 rotation[i].x = reader.ReadSingle();
@@ -662,7 +692,7 @@ public class GameClient
             position.x = reader.ReadSingle();
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
-            
+
             targetPosition.x = reader.ReadSingle();
             targetPosition.y = reader.ReadSingle();
             targetPosition.z = reader.ReadSingle();
@@ -676,7 +706,7 @@ public class GameClient
                 OnFired(this, eventArgs);
             }
         }
-        else if(header == SC_AI_ADD)
+        else if (header == SC_AI_ADD)
         {
             int aiID = reader.ReadInt32();
 
@@ -687,7 +717,7 @@ public class GameClient
                 OnAddAI(this, eventArgs);
             }
         }
-        else if(header == SC_AI_REMOVE)
+        else if (header == SC_AI_REMOVE)
         {
             int aiID = reader.ReadInt32();
 
@@ -707,7 +737,7 @@ public class GameClient
             position.x = reader.ReadSingle();
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
-            
+
             rotation.x = reader.ReadSingle();
             rotation.y = reader.ReadSingle();
             rotation.z = reader.ReadSingle();
@@ -731,7 +761,7 @@ public class GameClient
             position.x = reader.ReadSingle();
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
-            
+
             targetPosition.x = reader.ReadSingle();
             targetPosition.y = reader.ReadSingle();
             targetPosition.z = reader.ReadSingle();
@@ -765,7 +795,7 @@ public class GameClient
                 Debug.Log("OnGameSceneChanged is null");
             }
         }
-        else if(header == SC_PLACE_ITEM)
+        else if (header == SC_PLACE_ITEM)
         {
             Debug.Log("recvItem");
             int itemID = reader.ReadInt32();
@@ -775,7 +805,7 @@ public class GameClient
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
 
-            if(OnPlaceItemBox != null)
+            if (OnPlaceItemBox != null)
             {
                 var eventArgs = new PlaceItemBoxMessageEventArgs();
                 eventArgs.ItemID = itemID;
@@ -785,23 +815,23 @@ public class GameClient
                 OnPlaceItemBox(this, eventArgs);
             }
         }
-        else if(header == SC_REMOVE_ITEM)
+        else if (header == SC_REMOVE_ITEM)
         {
             int itemID = reader.ReadInt32();
 
-            if(OnRemoveItemBox != null)
+            if (OnRemoveItemBox != null)
             {
                 var eventArgs = new RemoveItemBoxMessageEventArgs();
                 eventArgs.ItemID = itemID;
                 OnRemoveItemBox(this, eventArgs);
             }
         }
-        else if(header == SC_USE_ITEM)
+        else if (header == SC_USE_ITEM)
         {
             //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
             //Event를 받는 쪽에서 아이템종류에 맞춰 처리
             byte itemType = reader.ReadByte();
-            if(OnUseItem != null)
+            if (OnUseItem != null)
             {
                 var eventArgs = new ItemMessageEventArgs();
                 eventArgs.ItemType = itemType;
@@ -859,7 +889,7 @@ public class GameClient
         }
     }
 
-#region LoginSceneMessage
+    #region LoginSceneMessage
     public void Login(string username, string password)
     {
         var buffer = new byte[255];
@@ -868,7 +898,7 @@ public class GameClient
         char[] bytePassword = new char[32];
         username.CopyTo(0, byteUsername, 0, Math.Min(username.Length, 31));
         password.CopyTo(0, bytePassword, 0, Math.Min(password.Length, 31));
-        
+
         writer.Write(CS_LOGIN);
         writer.Write(byteUsername);
         writer.Write(bytePassword);
@@ -885,15 +915,15 @@ public class GameClient
         char[] bytePassword = new char[32];
         username.CopyTo(0, byteUsername, 0, Math.Min(username.Length, 31));
         password.CopyTo(0, bytePassword, 0, Math.Min(password.Length, 31));
-        
+
         writer.Write(CS_SIGNUP);
         writer.Write(byteUsername);
         writer.Write(bytePassword);
 
         socket.Send(buffer);
     }
-#endregion
-#region LobbySceneMessage
+    #endregion
+    #region LobbySceneMessage
     public void RequestRoomList(int pageNum)
     {
         var buffer = new byte[255];
@@ -927,7 +957,7 @@ public class GameClient
         socket.Send(buffer);
     }
     #endregion
-#region WaitingRoomSceneMessage
+    #region WaitingRoomSceneMessage
     public void RoomInfo(int roomID)
     {
         var buffer = new byte[255];
@@ -956,8 +986,8 @@ public class GameClient
         writer.Write(CS_EXIT_ROOM);
         socket.Send(buffer);
     }
-#endregion
-#region GamePlaySceneMessage
+    #endregion
+    #region GamePlaySceneMessage
     public void SendMessage(string str)
     {
         var buffer = new byte[255];
@@ -982,7 +1012,7 @@ public class GameClient
         socket.Send(buffer);
     }
 
-#region 자동차생성삭제연동
+    #region 자동차생성삭제연동
     public void MakeCar(int id, byte carType, Vector3 pos)
     {
         var buffer = new byte[255];
@@ -1011,7 +1041,7 @@ public class GameClient
         socket.Send(buffer);
     }
     #endregion
-#region 나무연동
+    #region 나무연동
     public void MakeTree(byte treeType, Vector3 pos)
     {
         var buffer = new byte[255];
@@ -1027,18 +1057,18 @@ public class GameClient
         socket.Send(buffer);
     }
     #endregion
-#region Player연동
+    #region Player연동
     public void UpdatePosition(Vector3 pos, Vector3 rot)
     {
         Debug.Log("UpdatePosition");
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
         writer.Write(CS_MOVE);
-        
+
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);
-        
+
         writer.Write(rot.x);
         writer.Write(rot.y);
         writer.Write(rot.z);
@@ -1047,23 +1077,23 @@ public class GameClient
     }
     public void FirePizza(Vector3 pos, Vector3 targetPos)
     {
-         var buffer = new byte[255];
-         var writer = new BinaryWriter(new MemoryStream(buffer));
-         writer.Write(CS_FIRE);
-        
-         writer.Write(pos.x);
-         writer.Write(pos.y);
-         writer.Write(pos.z);
-         
-         
-         writer.Write(targetPos.x);
-         writer.Write(targetPos.y);
-         writer.Write(targetPos.z);
- 
-         socket.Send(buffer);       
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+        writer.Write(CS_FIRE);
+
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+
+
+        writer.Write(targetPos.x);
+        writer.Write(targetPos.y);
+        writer.Write(targetPos.z);
+
+        socket.Send(buffer);
     }
-#endregion
-#region AI 플레이어 연동
+    #endregion
+    #region AI 플레이어 연동
     public void AddAI()
     {
         var buffer = new byte[255];
@@ -1088,11 +1118,11 @@ public class GameClient
         writer.Write(CS_AI_MOVE);
 
         writer.Write(aiID);
-        
+
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);
-        
+
         writer.Write(rot.x);
         writer.Write(rot.y);
         writer.Write(rot.z);
@@ -1101,24 +1131,24 @@ public class GameClient
     }
     public void FirePizzaAI(int aiID, Vector3 pos, Vector3 targetPos)
     {
-         var buffer = new byte[255];
-         var writer = new BinaryWriter(new MemoryStream(buffer));
-         writer.Write(CS_AI_FIRE);
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+        writer.Write(CS_AI_FIRE);
 
-         writer.Write(aiID);
-        
-         writer.Write(pos.x);
-         writer.Write(pos.y);
-         writer.Write(pos.z);
-         
-         writer.Write(targetPos.x);
-         writer.Write(targetPos.y);
-         writer.Write(targetPos.z);
- 
-         socket.Send(buffer);       
+        writer.Write(aiID);
+
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+
+        writer.Write(targetPos.x);
+        writer.Write(targetPos.y);
+        writer.Write(targetPos.z);
+
+        socket.Send(buffer);
     }
-#endregion
-#region Item연동
+    #endregion
+    #region Item연동
     //itemID는 각 아이템별로 고유한 값이어야한다
     public void PlaceItemBox(int itemID, Vector3 pos)
     {
@@ -1157,8 +1187,8 @@ public class GameClient
 
         socket.Send(buffer);
     }
-#endregion
-#region MeshSyncMessage
+    #endregion
+    #region MeshSyncMessage
     public void GetMesh()
     {
         var buffer = new byte[255];
@@ -1169,9 +1199,9 @@ public class GameClient
     }
     public void SetMesh(Vector3[] vertices, int[] triangles)
     {
-        var buffer = new byte[512000*4];
+        var buffer = new byte[512000 * 4];
         var writer = new BinaryWriter(new MemoryStream(buffer));
-        
+
         writer.Write(CS_SET_MESH);
         for (int i = 0; i < vertices.Length; i++)
         {
@@ -1199,9 +1229,9 @@ public class GameClient
     }
     public void SetRoad(Vector3[] vertices, int[] triangles, bool[] isRoad, int[] isBuildingPlace)
     {
-        var buffer = new byte[512000*4];
+        var buffer = new byte[512000 * 4];
         var writer = new BinaryWriter(new MemoryStream(buffer));
-        
+
         writer.Write(CS_SET_ROAD);
         for (int i = 0; i < vertices.Length; i++)
         {
@@ -1222,11 +1252,11 @@ public class GameClient
 
         for (int i = 0; i < isBuildingPlace.Length; i++)
         {
-            writer.Write((short) isBuildingPlace[i]);
+            writer.Write((short)isBuildingPlace[i]);
         }
 
         socket.Send(buffer);
     }
-#endregion
-#endregion
+    #endregion
+    #endregion
 }
