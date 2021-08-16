@@ -65,9 +65,9 @@ public class PlacementPizzaStore : MonoBehaviour
 
     private void Update()
     {
-        rot = GameObject.Find("Player").transform.rotation;
-        rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
-        pizzaStoreSpriteObject.transform.rotation = rot;
+        //rot = GameObject.Find("Player").transform.rotation;
+        //rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
+        //pizzaStoreSpriteObject.transform.rotation = rot;
     }
 
     void makeBuildingPlace(int place)

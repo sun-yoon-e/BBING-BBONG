@@ -46,16 +46,16 @@ public class Destination : MonoBehaviour
             ApplyDestinationToBuilding();
         }
 
-        rot = GameObject.Find("Player").transform.rotation;
+        //rot = GameObject.Find("Player").transform.rotation;
 
-        foreach (var i in destinationSpriteObject)
-        {
-            if (i == false)
-                continue;
+        //foreach (var i in destinationSpriteObject)
+        //{
+        //    if (i == false)
+        //        continue;
 
-            rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
-            i.transform.rotation = rot;
-        }
+        //    rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
+        //    i.transform.rotation = rot;
+        //}
     }
 
     public void DrawDestination()

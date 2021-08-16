@@ -8,6 +8,7 @@ public class PlayerCamera : MonoBehaviour
 {
     public Camera FPSCam;
     public Camera TPSCam;
+    public GameObject fullMap;
     public Image aim;
     public Rigidbody rb;
 
@@ -18,6 +19,7 @@ public class PlayerCamera : MonoBehaviour
         nowCam = 3;
         TPSCam.gameObject.SetActive(true);
         FPSCam.gameObject.SetActive(false);
+        fullMap.SetActive(false);
     }
 
     private void Update()
@@ -38,6 +40,14 @@ public class PlayerCamera : MonoBehaviour
                 TPSCam.gameObject.SetActive(false);
                 FPSCam.gameObject.SetActive(true);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            if (fullMap.activeSelf == true)
+                fullMap.SetActive(false);
+            else if (fullMap.activeSelf == false)
+                fullMap.SetActive(true);
         }
     }
 }
