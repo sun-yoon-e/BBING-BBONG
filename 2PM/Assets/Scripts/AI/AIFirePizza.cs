@@ -5,8 +5,6 @@ using System;
 
 public class AIFirePizza : MonoBehaviour
 {
-    private GameClient gameClient = GameClient.Instance;
-
     AIMovement movementScript;
     AIRBController rbController;
     Rigidbody rb;
@@ -26,8 +24,6 @@ public class AIFirePizza : MonoBehaviour
 
         //rbController = GetComponent<AIRBController>();
         //rb = rbController.GetComponent<Rigidbody>();
-
-        gameClient.OnAIFired += AIFired;
     }
 
     void Update()
@@ -38,16 +34,6 @@ public class AIFirePizza : MonoBehaviour
             StartCoroutine("InstantiatePizza");
             StartCoroutine("resetSettings");
         }
-    }
-
-    public void AIFired(object sender, AIFireEventArgs args)
-    {
-        //GameObject pizzaObject = Instantiate(pizza);
-        //pizzaObject.transform.position = args.position;
-        //var dir = args.targetPosition - args.position;
-        //pizzaObject.transform.forward = dir;
-
-        //args.AIID;
     }
 
     IEnumerator InstantiatePizza()
@@ -64,7 +50,7 @@ public class AIFirePizza : MonoBehaviour
             Vector3 pizzaPosition = firePos.position;
 
             pizza = Instantiate(pizzaPrefab, pizzaPosition, pizzaRotation);
-            //gameClient.FirePizzaAI(id, pizzaPosition, col[0].transform.position);
+            GameClient.Instance.FirePizzaAI(2, pizzaPosition, col[0].transform.position);
 
             //print(col[0].transform.position);
             Destroy(col[0]);

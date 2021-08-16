@@ -198,15 +198,19 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             {
                 case 1:
                     AIImages[0].gameObject.SetActive(true);
+                    gameClient.ai[0] = true;
                     break;
                 case 2:
                     AIImages[1].gameObject.SetActive(true);
+                    gameClient.ai[1] = true;
                     break;
                 case 3:
                     AIImages[2].gameObject.SetActive(true);
+                    gameClient.ai[2] = true;
                     break;
                 case 4:
                     AIImages[3].gameObject.SetActive(true);
+                    gameClient.ai[3] = true;
                     break;
                 default:
                     break;
@@ -222,15 +226,19 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             {
                 case 1:
                     AIImages[0].gameObject.SetActive(false);
+                    gameClient.ai[0] = false;
                     break;
                 case 2:
                     AIImages[1].gameObject.SetActive(false);
+                    gameClient.ai[1] = false;
                     break;
                 case 3:
                     AIImages[2].gameObject.SetActive(false);
+                    gameClient.ai[2] = false;
                     break;
                 case 4:
                     AIImages[3].gameObject.SetActive(false);
+                    gameClient.ai[3] = false;
                     break;
                 default:
                     break;

@@ -24,7 +24,7 @@ public class BakeNavmesh : MonoBehaviour
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
 
-        road.OnRoadReady2 += GenerateNavMesh;
+        road.OnRoadReady += GenerateNavMesh;
     }
 
     void GenerateNavMesh(object sender, EventArgs args)
@@ -33,5 +33,7 @@ public class BakeNavmesh : MonoBehaviour
 
         if (navMeshSurface == true)
             navMeshSurface.BuildNavMesh();
+
+        Debug.Log("BakeNavMesh");
     }
 }

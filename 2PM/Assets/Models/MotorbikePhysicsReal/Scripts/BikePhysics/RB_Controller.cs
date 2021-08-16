@@ -17,6 +17,9 @@ namespace Gadd420
 
         #region Variables
 
+        public Vector3 myPrevPosition;
+        public Vector3 myPrevEulerAngles;
+
         Rigidbody rb;
         CrashController crashScript;
         Input_Manager inputs;
@@ -212,6 +215,13 @@ namespace Gadd420
             HandleEngine();
             HandleBrakes();
             SetWheelMeshPos();
+
+            if (myPrevPosition != rb.position || myPrevEulerAngles != rb.rotation.eulerAngles)
+            {
+                GameClient.Instance.UpdatePosition(rb.position, rb.rotation.eulerAngles);
+                myPrevPosition = rb.position;
+                myPrevEulerAngles = rb.rotation.eulerAngles;
+            }
         }
 
         private void FixedUpdate()

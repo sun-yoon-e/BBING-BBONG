@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class CreateAIID : MonoBehaviour
 {
-    int idNum;
+    public int idNum = 2;
     void Start()
     {
-        idNum = 0;
+
     }
 
     // Update is called once per frame

@@ -7,8 +7,6 @@ using System;
 
 public class AIMovement : MonoBehaviour
 {
-    private GameClient gameClient = GameClient.Instance;
-
     RoadGenerator road;
     public Rigidbody rb;
 
@@ -38,8 +36,6 @@ public class AIMovement : MonoBehaviour
         CalculateDirection();
         CheckIsSetDestination();
 
-        gameClient.OnAIPositionUpdated += AIPositionUpdated;
-
         if (isArriveDestination)
         {
             //if (!isStopPosition)
@@ -56,14 +52,7 @@ public class AIMovement : MonoBehaviour
 
 
         Vector3 rot = new Vector3(transform.rotation.x, transform.rotation.y, transform.rotation.z);
-        //gameClient.UpdatePositionAI(id, transform.position, rot);
-    }
-
-    public void AIPositionUpdated(object sender, AIPositionUpdateEventArgs args)
-    {
-        //args.AIID;
-        //args.position;
-        //args.rotation;
+        GameClient.Instance.UpdatePositionAI(2, transform.position, rot);
     }
 
     void CreateNavMeshAgentObject()

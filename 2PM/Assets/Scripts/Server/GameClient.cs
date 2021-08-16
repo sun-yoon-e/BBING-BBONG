@@ -288,6 +288,8 @@ public class GameClient
     public string client_nick3 = "";
     public string client_nick4 = "";
 
+    public bool[] ai = new bool[4];
+
     public int client_roomNum = -1;
 
     public bool isGameStarted = false;
@@ -295,7 +297,7 @@ public class GameClient
 
     private GameClient() 
     {
-        
+
     }
 
     public void ConnectServer(string serverIP, int serverPort)
@@ -648,6 +650,7 @@ public class GameClient
                 eventArgs.position = position;
                 eventArgs.rotation = rotation;
 
+                Debug.Log("OnPositionUpdate");
                 OnPositionUpdated(this, eventArgs);
             }
         }
@@ -1027,6 +1030,7 @@ public class GameClient
 #region Player연동
     public void UpdatePosition(Vector3 pos, Vector3 rot)
     {
+        Debug.Log("UpdatePosition");
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
         writer.Write(CS_MOVE);

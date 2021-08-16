@@ -14,7 +14,14 @@ public class GameSceneMain : MonoBehaviour
     public Material material01;
     public Material material02;
     public Material material03;
-    
+
+    public Material body;
+    public Material body3;
+    public Material handle;
+    public Material mirror;
+    public Material wheel;
+
+    public GameObject AIObject;
     public GameObject playerObject;
     public GameObject currentPlayer;
     public Text scoreTable;
@@ -42,17 +49,22 @@ public class GameSceneMain : MonoBehaviour
         soundManager.bgmNum = 1;
         soundManager.PlayeBGM();
         soundManager.reload = true;
-        
+
+        gameClient.OnAIPositionUpdated += AIPositionUpdated;
+        gameClient.OnAIFired += AIFired;
+
         gameClient.OnScoreUpdated += OnScoreUpdated;
         gameClient.OnPositionUpdated += OnPositionUpdated;
+        gameClient.OnFired += OnFired;
+
         gameClient.OnGameStateChanged += (o, e) => OnGameStateChanged(e.gameState);
         gameClient.OnGameSceneChanged += (o, e) => OnGameSceneChanged(e.scene);
-        gameClient.OnFired += OnFired;
 
         if (gameClient.isGameStarted)
         {
             OnGameStateChanged(gameClient.isGameStarted);
         }
+
         scaleChange = new Vector3(2.0f, 2.0f, 2.0f);
     }
 
@@ -112,9 +124,86 @@ public class GameSceneMain : MonoBehaviour
         Debug.Log("decideMaterial() 03 : " + playerId);
         return material03;
     }
+    public void AIFired(object sender, AIFireEventArgs args)
+    {
+        GameObject pizzaObject = Instantiate(pizza);
+        pizzaObject.transform.position = args.position;
+        var dir = args.targetPosition - args.position;
+        pizzaObject.transform.forward = dir;
+
+        Debug.Log("AIFireUpdate");
+        //args.AIID;
+    }
+
+    public void AIPositionUpdated(object sender, AIPositionUpdateEventArgs args)
+    {
+        AIObject.gameObject.SetActive(true);
+        Destroy(players[args.AIID - 1]);
+
+        players = new GameObject[args.AIID-1];
+        Debug.Log($"new player : + {args.AIID - 1}");
+
+        if (gameClient.ai[args.AIID] == true)
+        {
+            players[args.AIID - 1] = Instantiate(AIObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
+            var characterTransform = players[args.AIID - 1].transform.Find("Box001");
+            if (characterTransform != null)
+            {
+                characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(args.AIID - 1);
+            }
+            var bike00 = players[args.AIID].transform.Find("pasted__pasted__pSphere8");
+            bike00.gameObject.GetComponent<Renderer>().material = body;
+            var bike01 = players[args.AIID].transform.Find("pasted__pasted__polySurface88");
+            bike01.gameObject.GetComponent<Renderer>().material = body;
+
+            var bike10 = players[args.AIID].transform.Find("pPlane1");
+            bike10.gameObject.GetComponent<Renderer>().material = body3;
+            var bike11 = players[args.AIID].transform.Find("pPlane2");
+            bike11.gameObject.GetComponent<Renderer>().material = body3;
+            var bike12 = players[args.AIID].transform.Find("pPlane3");
+            bike12.gameObject.GetComponent<Renderer>().material = body3;
+            var bike13 = players[args.AIID].transform.Find("pPlane4");
+            bike13.gameObject.GetComponent<Renderer>().material = body3;
+            var bike14 = players[args.AIID].transform.Find("pPlane5");
+            bike14.gameObject.GetComponent<Renderer>().material = body3;
+            var bike15 = players[args.AIID].transform.Find("pPlane6");
+            bike15.gameObject.GetComponent<Renderer>().material = body3;
+            var bike16 = players[args.AIID].transform.Find("pasted__pasted__polySurface81");
+            bike16.gameObject.GetComponent<Renderer>().material = body3;
+            var bike17 = players[args.AIID].transform.Find("pasted__pasted__polySurface82");
+            bike17.gameObject.GetComponent<Renderer>().material = body3;
+
+            var bike20 = players[args.AIID].transform.Find("pasted__pasted__pCube2");
+            bike20.gameObject.GetComponent<Renderer>().material = wheel;
+            var bike21 = players[args.AIID].transform.Find("BackWheel");
+            bike21.gameObject.GetComponent<Renderer>().material = wheel;
+            var bike22 = players[args.AIID].transform.Find("FrontWheel");
+            bike22.gameObject.GetComponent<Renderer>().material = wheel;
+
+            var bike30 = players[args.AIID].transform.Find("Object002");
+            bike30.gameObject.GetComponent<Renderer>().material = handle;
+            var bike31 = players[args.AIID].transform.Find("pasted__pasted__pCylinder12");
+            bike31.gameObject.GetComponent<Renderer>().material = handle;
+            var bike32 = players[args.AIID].transform.Find("pasted__pasted__polySurface87");
+            bike32.gameObject.GetComponent<Renderer>().material = handle;
+            var bike33 = players[args.AIID].transform.Find("CenterMirror");
+            bike33.gameObject.GetComponent<Renderer>().material = handle;
+
+            var bike40 = players[args.AIID].transform.Find("RightMirror");
+            bike40.gameObject.GetComponent<Renderer>().material = mirror;
+            var bike41 = players[args.AIID].transform.Find("LeftMirror");
+            bike41.gameObject.GetComponent<Renderer>().material = mirror;
+        }
+
+        Debug.Log("AIPositionUpdate");
+        //args.AIID;
+        //args.position;
+        //args.rotation;
+    }
 
     void OnPositionUpdated(object caller, PositionUpdateEventArgs args)
     {
+        Debug.Log("GameMain PositionUpdate");
         if (!gameClient.isReadyToControl) return;
         Debug.Log("OnPositionUpdated() args.player : " + args.players);
 
@@ -133,12 +222,57 @@ public class GameSceneMain : MonoBehaviour
 
             for (int i = 0; i < args.players; i++)
             {
-                players[i] = Instantiate(playerObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
-                var characterTransform = players[i].transform.Find("Box001");
-                if (characterTransform != null)
+                if (gameClient.ai[i] == false)
                 {
-                    Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
-                    characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                    players[i] = Instantiate(playerObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
+                    var characterTransform = players[i].transform.Find("Box001");
+                    if (characterTransform != null)
+                    {
+                        Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
+                        characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                    }
+                    var bike00 = players[i].transform.Find("pasted__pasted__pSphere8");
+                    bike00.gameObject.GetComponent<Renderer>().material = body;
+                    var bike01 = players[i].transform.Find("pasted__pasted__polySurface88");
+                    bike01.gameObject.GetComponent<Renderer>().material = body;
+
+                    var bike10 = players[i].transform.Find("pPlane1");
+                    bike10.gameObject.GetComponent<Renderer>().material = body3;
+                    var bike11 = players[i].transform.Find("pPlane2");
+                    bike11.gameObject.GetComponent<Renderer>().material = body3;
+                    var bike12 = players[i].transform.Find("pPlane3");
+                    bike12.gameObject.GetComponent<Renderer>().material = body3;
+                    var bike13 = players[i].transform.Find("pPlane4");
+                    bike13.gameObject.GetComponent<Renderer>().material = body3;
+                    var bike14 = players[i].transform.Find("pPlane5");
+                    bike14.gameObject.GetComponent<Renderer>().material = body3;
+                    var bike15 = players[i].transform.Find("pPlane6");
+                    bike15.gameObject.GetComponent<Renderer>().material = body3;
+                    var bike16 = players[i].transform.Find("pasted__pasted__polySurface81");
+                    bike16.gameObject.GetComponent<Renderer>().material = body3;
+                    var bike17 = players[i].transform.Find("pasted__pasted__polySurface82");
+                    bike17.gameObject.GetComponent<Renderer>().material = body3;
+
+                    var bike20 = players[i].transform.Find("pasted__pasted__pCube2");
+                    bike20.gameObject.GetComponent<Renderer>().material = wheel;
+                    var bike21 = players[i].transform.Find("BackWheel");
+                    bike21.gameObject.GetComponent<Renderer>().material = wheel;
+                    var bike22 = players[i].transform.Find("FrontWheel");
+                    bike22.gameObject.GetComponent<Renderer>().material = wheel;
+
+                    var bike30 = players[i].transform.Find("Object002");
+                    bike30.gameObject.GetComponent<Renderer>().material = handle;
+                    var bike31 = players[i].transform.Find("pasted__pasted__pCylinder12");
+                    bike31.gameObject.GetComponent<Renderer>().material = handle;
+                    var bike32 = players[i].transform.Find("pasted__pasted__polySurface87");
+                    bike32.gameObject.GetComponent<Renderer>().material = handle;
+                    var bike33 = players[i].transform.Find("CenterMirror");
+                    bike33.gameObject.GetComponent<Renderer>().material = handle;
+
+                    var bike40 = players[i].transform.Find("RightMirror");
+                    bike40.gameObject.GetComponent<Renderer>().material = mirror;
+                    var bike41 = players[i].transform.Find("LeftMirror");
+                    bike41.gameObject.GetComponent<Renderer>().material = mirror;
                 }
             }
         }
