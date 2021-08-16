@@ -376,7 +376,7 @@ struct packet_ai_fire
 };
 
 struct cs_packet_bot_add
-{
+{	
 	BYTE type = CS_AI_ADD;
 };
 

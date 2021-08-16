@@ -293,7 +293,8 @@ void Server::ClientMain(Client* client)
 				}
 			}
 		}
-		if (buffer[0] == CS_SCORE) {
+		if (buffer[0] == CS_SCORE)
+		{
 			auto* room = client->GetRoom();
 			if (room && room->IsGameStarted())
 			{

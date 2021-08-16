@@ -41,13 +41,13 @@ using namespace std;
 #define BUF_SIZE				1024
 #define MAX_BUF_SIZE			4096
 #define MAX_PACKET_SIZE			512000 * 4
-#define MAX_CLIENT				4				// 클라이언트 수
+#define MAX_CLIENT				100				// 클라이언트 수
 #define MAX_ROOM_LIST_PER_PAGE	6				// 한 페이지에 표시하는 방 개수
 #define MAX_ROOM_NAME_SIZE		30				// 한 글자에 2바이트 해서 15글자
 #endif
 #define XSIZE					200
 #define ZSIZE					200
-#define MAX_ROOM_NUMBER			1000
+#define MAX_ROOM_NUMBER			100
 #define MAX_CHAT_SIZE			251
 #define MAX_NICKNAME_SIZE		20				
 
