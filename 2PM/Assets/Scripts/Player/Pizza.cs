@@ -30,28 +30,34 @@ public class Pizza : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void OnCollisionEnter(Collision col)
+    private void OnTriggerEnter(Collider col)
     {
-        if (col.collider.tag =="buildingBoxCollider"
-            || col.collider.tag == "map")
+        if (col.tag == "Door")
+        {
+            for (int i = 0; i < destination.destinationNum; ++i)
+            {
+                if (col.transform.parent.gameObject == building.buildingObject[destination.destination[i]])
+                {
+                    Destroy(destination.destinationSpriteObject[i]);
+                    Destroy(destination.pizzaSpriteRenderer[i]);
+
+                    Destroy(destination.destinationObject[i]);
+
+                    destination.DestroyDestination += 1;
+
+                    Destroy(gameObject);
+                }
+                
+            }
+        }
+    }
+
+    private void OnCollisionExit(Collision col)
+    {
+        if(col.transform.tag == "buildingBoxCollider")
         {
             Destroy(gameObject);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        for (int i = 0; i < destination.destinationNum; ++i)
-        {
-            if (building.buildingObject[destination.destination[i]] == other.gameObject)
-            {
-                Destroy(destination.destinationSpriteObject[i]);
-                Destroy(destination.pizzaSpriteRenderer[i]);
-
-                Destroy(destination.destinationObject[i]);
-
-                destination.DestroyDestination += 1;
-            }
-        }
-    }
 }

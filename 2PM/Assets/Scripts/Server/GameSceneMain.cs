@@ -108,20 +108,20 @@ public class GameSceneMain : MonoBehaviour
     {
         if (playerId % 4 == 0)
         {
-            //Debug.Log("decideMaterial() 00 : " + playerId);
+            Debug.Log("decideMaterial() 00 : " + playerId);
             return material00;
         }
         if (playerId % 4 == 1)
         {
-            //Debug.Log("decideMaterial() 01 : " + playerId);
+            Debug.Log("decideMaterial() 01 : " + playerId);
             return material01;
         }
         if (playerId % 4 == 2)
         {
-            //Debug.Log("decideMaterial() 02 : " + playerId);
+            Debug.Log("decideMaterial() 02 : " + playerId);
             return material02;
         }
-        //Debug.Log("decideMaterial() 03 : " + playerId);
+        Debug.Log("decideMaterial() 03 : " + playerId);
         return material03;
     }
     public void AIFired(object sender, AIFireEventArgs args)
@@ -203,9 +203,9 @@ public class GameSceneMain : MonoBehaviour
 
     void OnPositionUpdated(object caller, PositionUpdateEventArgs args)
     {
-        //Debug.Log("GameMain PositionUpdate");
+        Debug.Log("GameMain PositionUpdate");
         if (!gameClient.isReadyToControl) return;
-        //Debug.Log("OnPositionUpdated() args.player : " + args.players);
+        Debug.Log("OnPositionUpdated() args.player : " + args.players);
 
         if (players == null || players.Length != args.players)
         {
@@ -311,7 +311,6 @@ public class GameSceneMain : MonoBehaviour
         if (gameState)
         {
             if(gameOverPanel != null) gameOverPanel.SetActive(false);
-            if(timer != null) timer.StartTimer();
         }
         else
         {

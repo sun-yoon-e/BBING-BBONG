@@ -41,20 +41,6 @@ public class ItemBoxGenerator : MonoBehaviour
         //GenerateItemBox();
     }
 
-    private void Update()
-    {
-        rot = GameObject.Find("Player").transform.rotation;
-
-        foreach (var i in itemSpriteObject)
-        {
-            if (i == false)
-                continue;
-
-            rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
-            i.transform.rotation = rot;
-        }
-    }
-
     void CreateItemBox(object sender, System.EventArgs args)
     {
         bool isDuplicate;

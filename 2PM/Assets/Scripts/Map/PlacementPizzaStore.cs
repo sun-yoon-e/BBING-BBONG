@@ -72,13 +72,6 @@ public class PlacementPizzaStore : MonoBehaviour
         InitializeSprite(pizzaStore.transform.position);
     }
 
-    private void Update()
-    {
-        rot = GameObject.Find("Player").transform.rotation;
-        rot = Quaternion.Euler(90, rot.eulerAngles.y, rot.eulerAngles.z);
-        pizzaStoreSpriteObject.transform.rotation = rot;
-    }
-
     void makeBuildingPlace(int place)
     {
         road.buildingState[place + (road.xSize + 1)] = (int)buildingDirection.BUILDING;

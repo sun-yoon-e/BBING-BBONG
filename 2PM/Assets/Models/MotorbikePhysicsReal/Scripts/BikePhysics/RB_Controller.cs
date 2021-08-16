@@ -179,7 +179,7 @@ namespace Gadd420
         // Update is called once per frame
         void Update()
         {
-            if (cameraScript.nowCam == 1)
+            if (!gameTimer.instance.isStart || cameraScript.nowCam == 1)
             {
                 rb.constraints = RigidbodyConstraints.FreezeAll;
             }

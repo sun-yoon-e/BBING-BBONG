@@ -57,7 +57,7 @@ namespace Gadd420
         void Update()
         {
             ResetInput();
-            if (PlayerCamera.instance.nowCam != 1)
+            if (!gameTimer.instance.isStart || PlayerCamera.instance.nowCam != 1)
             {
                 VerticalInput();
                 HZInput();
