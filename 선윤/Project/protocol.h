@@ -34,6 +34,7 @@
 #define SC_DESTROY_CAR			27
 #define SC_AI_ADD				28
 #define SC_AI_REMOVE			29
+#define SC_MAKE_TREE			30
 
 // -----------------------------------
 
@@ -71,8 +72,9 @@
 #define CS_DESTROY_CAR			27
 #define CS_AI_ADD				28
 #define CS_AI_REMOVE			29
+#define CS_MAKE_TREE			30
 
-#define PACKET_CMD_MAX  200
+#define PACKET_CMD_MAX		   200
 
 struct Vector3 {
 	float x;
@@ -376,7 +378,7 @@ struct packet_ai_fire
 };
 
 struct cs_packet_bot_add
-{	
+{
 	BYTE type = CS_AI_ADD;
 };
 

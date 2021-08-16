@@ -43,6 +43,7 @@ public:
 
 	void ClientMain(Client* client);
 	void ServerMain();
+	void ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer);
     int SendTo(SOCKET sock, char* packet, int packetSize);
 
 	User* ClientLogin(Packet_Login* loginPacket);

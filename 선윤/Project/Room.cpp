@@ -209,7 +209,7 @@ void Room::CheckGameFinish()
 #ifdef TEST
 	if (isGameStarted && (time(NULL) - gameStartedAt >= 20)) {
 #else
-	if (isGameStarted && (time(NULL) - gameStartedAt >= 100 + 3)) {	// gameTimer.cs (+ 스타트시간)
+	if (isGameStarted && (time(NULL) - gameStartedAt >= 100 + 3)) {	// gameTimer.cs + 3초 딜레이
 #endif
 		// 게임 종료 관련 추가 수정 필요함
 		cout << "-- END GAME --" << endl;
