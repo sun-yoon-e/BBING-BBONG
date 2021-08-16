@@ -1,5 +1,6 @@
 ﻿using Gadd420;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
 //using Random = UnityEngine.Random;
 
@@ -16,7 +17,6 @@ public class Item : MonoBehaviour
     public static bool ItemCol;
     private int?[] MyItems;
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터
-    private int useIndex;
 
     GameObject player;
     GameObject miniCamera;
@@ -32,6 +32,7 @@ public class Item : MonoBehaviour
     
     public bool isSlow;
     private float slowTimer;
+    public float slowTime;
     private float orMaxSpeed;
     
     private void Start()
@@ -45,7 +46,7 @@ public class Item : MonoBehaviour
 
         orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
-        MyItems = new int?[2] { null, null };
+        MyItems = new int?[2] { -1, -1 };
     }
 
     private void Update()
@@ -53,12 +54,12 @@ public class Item : MonoBehaviour
         if (ItemCol)
         {
             RandomItem();
-            ItemCnt++;
+            CheckItemCnt();
             ChangeSprite();
             ItemCol = false;
             //GameClient.Instance.RemoveItemBox();
         }
-        
+
         //아이템 치트키
         if (Input.GetKeyDown(KeyCode.F1))
         {
@@ -68,41 +69,40 @@ public class Item : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            cheat = true;
-            cheatSlot = 1;
+            if (MyItems[0] != -1)
+            {
+                cheat = true;
+                cheatSlot = 1;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (cheat)
             {
-                if (MyItems[cheatSlot] == null)
-                {
-                    ItemCnt++;
-                }
                 MyItems[cheatSlot] = 0;
+                CheckItemCnt();
                 ChangeSprite();
                 cheat = false;
             }
             else
             {
-                if (MyItems[0] != null)
+                if (MyItems[0] != -1)
                 {
-                    useIndex = 0;
                     UseItem(MyItems[0].Value);
                 
-                    if (MyItems[1] != null)
+                    if (MyItems[1] != -1)
                     {
                         MyItems[0] = MyItems[1];
-                        MyItems[1] = null;
+                        MyItems[1] = -1;
                     }
                     else
                     {
-                        MyItems[0] = null;
+                        MyItems[0] = -1;
                     }
-                
+
+                    CheckItemCnt();
                     ChangeSprite();
-                    ItemCnt--;
                 }
             }
         }
@@ -110,48 +110,65 @@ public class Item : MonoBehaviour
         {
             if (cheat)
             {
-                if (MyItems[cheatSlot] == null)
-                {
-                    ItemCnt++;
-                }
                 MyItems[cheatSlot] = 1;
+                CheckItemCnt();
                 ChangeSprite();
                 cheat = false;
             }
             else
             {
-                if (MyItems[1] != null)
+                if (MyItems[1] != -1)
                 {
-                    useIndex = 1;
                     UseItem(MyItems[1].Value);
-                    MyItems[1] = null;
+                    MyItems[1] = -1;
+                    CheckItemCnt();
                     ChangeSprite();
-                    ItemCnt--;
                 }
             }
-           
         }
+        
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            MyItems[cheatSlot] = 2;
-            ChangeSprite();
-            cheat = false;
+            if (cheat)
+            {
+                MyItems[cheatSlot] = 2;
+                CheckItemCnt();
+                ChangeSprite();
+                cheat = false;
+            }
         }
+        
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            MyItems[cheatSlot] = 3;
-            ChangeSprite();
-            cheat = false;
+            if (cheat)
+            {
+                MyItems[cheatSlot] = 3;
+                CheckItemCnt();
+                ChangeSprite();
+                cheat = false;
+            }
         }
         
         if (isSlow)
         {
             slowTimer += Time.deltaTime;
-            if (slowTimer >= 20f)
+            if (slowTimer >= slowTime)
             {
                 isSlow = false;
                 rbScript.maxSpeed = orMaxSpeed;
                 slowTimer = 0f;
+            }
+        }
+    }
+
+    void CheckItemCnt()
+    {
+        ItemCnt = 0;
+        for (int i = 0; i < MyItems.Length; i++)
+        {
+            if (MyItems[i] != -1)
+            {
+                ItemCnt++;
             }
         }
     }
@@ -175,9 +192,9 @@ public class Item : MonoBehaviour
 
     private void ChangeSprite()
     {
-        for (int i = 0; i < ItemCnt; ++i)
+        for (int i = 0; i < MyItems.Length; ++i)
         {
-            if (MyItems[i] != null)
+            if (MyItems[i] != -1)
             {
                 Sprite select = sprites[MyItems[i].Value];
                 images[i].sprite = select;
@@ -193,17 +210,21 @@ public class Item : MonoBehaviour
     {
         switch (itemIndex)
         {
-            case 0:
+            case 0:         //시야차단
+                SoundManager.instance.PlaySE("Smoke_Item");
                 Fog();
                 break;
-            case 1:
+            case 1:         //시야차단
+                SoundManager.instance.PlaySE("Smoke_Item");
                 Fog();
                 break;
-            case 2:
+            case 2:         //슬로우
+                SoundManager.instance.PlaySE("Slow_Item");
                 rbScript.maxSpeed = orMaxSpeed / 2;
                 isSlow = true;
                 break;
-            case 3:
+            case 3:         //부스터
+                SoundManager.instance.PlaySE("Boost_Item");
                 nitrousScript.isBoosting = true;
                 break;
         }

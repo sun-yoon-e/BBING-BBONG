@@ -57,10 +57,12 @@ namespace Gadd420
         void Update()
         {
             ResetInput();
-            VerticalInput();
-            HZInput();
-            //GetLeanValue();
-            GetLeanBackValue();
+            if (PlayerCamera.instance.nowCam != 1)
+            {
+                VerticalInput();
+                HZInput();
+                GetLeanBackValue();
+            }
         }
 
         protected virtual void ResetInput()

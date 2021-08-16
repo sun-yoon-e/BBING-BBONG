@@ -47,13 +47,11 @@ public class NitrousManager : MonoBehaviour
         if (isBoosting)
         {
             vfx.SetActive(true);
-            nitrousSFX.Play();
             isBoosting = true;
         }
         else
         {
             vfx.SetActive(false);
-            nitrousSFX.Stop();
         }
     }
 }

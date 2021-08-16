@@ -28,6 +28,7 @@ public class FirePizza : MonoBehaviour
         {
             nextTimeToFire = Time.time + 20f / coolTime;
             animator.SetTrigger("FirePizza");
+            SoundManager.instance.PlaySE("FirePizza");
         }
     }
 
@@ -50,8 +51,7 @@ public class FirePizza : MonoBehaviour
             dir = targetPos.position - firePos.position;
         }
         pizzaObject.transform.forward = dir;
-
-        //Debug.Log("Fire");
+        
         gameClient.FirePizza(firePos.position, targetPos.position);
     }
 }

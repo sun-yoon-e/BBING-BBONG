@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerCamera : MonoBehaviour
 {
+    public static PlayerCamera instance;
+    
     public Camera FPSCam;
     public Camera TPSCam;
     public Image aim;
@@ -15,6 +17,8 @@ public class PlayerCamera : MonoBehaviour
 
     private void Start()
     {
+        instance = this;
+        
         nowCam = 3;
         aim.gameObject.SetActive(false);
         TPSCam.gameObject.SetActive(true);
