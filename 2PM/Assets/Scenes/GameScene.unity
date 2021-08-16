@@ -42835,8 +42835,9 @@ MonoBehaviour:
   cam: {fileID: 1885910705}
   cheat: 0
   cheatSlot: 0
-  isSlow: 0
-  slowTime: 0
+  isSlow: 1
+  slowTime: 10
+  orMaxSpeed: 0
 --- !u!114 &542957389623694209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44617,7 +44618,7 @@ MonoBehaviour:
   vfx: {fileID: 4639055574820331454}
   nitrousSFX: {fileID: 7685590908579224499}
   isBoosting: 0
-  boostTime: 0
+  boostTime: 10
 --- !u!1 &1613033672020071489
 GameObject:
   m_ObjectHideFlags: 0

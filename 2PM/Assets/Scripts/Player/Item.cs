@@ -33,7 +33,7 @@ public class Item : MonoBehaviour
     public bool isSlow;
     private float slowTimer;
     public float slowTime;
-    private float orMaxSpeed;
+    public float orMaxSpeed;
     
     private void Start()
     {

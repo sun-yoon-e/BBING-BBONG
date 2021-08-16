@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Gadd420;
+using UnityEngine;
 
 public class Car: MonoBehaviour
 {
@@ -24,6 +25,10 @@ public class Car: MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" /*|| collision.gameObject.tag == "mapBoxCollider"*/ )
         {
+            var item = collision.gameObject.GetComponent<Item>();
+            var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
+            rb_controller.maxSpeed = item.orMaxSpeed / 2;
+            item.isSlow = true;
             obstacle.GenerateCar();
 
             Destroy(transform.parent.gameObject);
