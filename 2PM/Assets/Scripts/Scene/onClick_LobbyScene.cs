@@ -35,7 +35,7 @@ public class onClick_LobbyScene: MonoBehaviour
 
     private void Update()
     {
-        gameClient.RequestRoomList(currentPage - 1);
+        //gameClient.RequestRoomList(currentPage - 1);
     }
 
     private void RoomListResult(object sender, RoomListMessageEventArgs e)

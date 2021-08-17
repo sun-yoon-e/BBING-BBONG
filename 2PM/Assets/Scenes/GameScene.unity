@@ -10122,9 +10122,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1.2
-  m_Text: "1\uB4F1 \uD50C\uB808\uC774\uC5B4 1 - 123\uC810\n2\uB4F1 \uD50C\uB808\uC774\uC5B4
-    2 - 123\uC810\n3\uB4F1 \uD50C\uB808\uC774\uC5B4 3 - 123\uC810 \n4\uB4F1 \uD50C\uB808\uC774\uC5B4
-    4 - 123\uC810"
+  m_Text: 
 --- !u!222 &448071194
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -41598,7 +41596,7 @@ MonoBehaviour:
   wheel: {fileID: 2100000, guid: 19cb9d9db0a7562468e7d2aaa7d5e5fb, type: 2}
   AIObject: {fileID: 2837713474543578133, guid: 278b49aaad5aa44438236f7f7e6da0ea,
     type: 3}
-  playerObject: {fileID: 919132149155446097, guid: a24cc896edcd49241aba0a3cbeb98c5e,
+  playerObject: {fileID: 8275352016137520506, guid: 80fa51386e9a3d5438369d9579d0e416,
     type: 3}
   currentPlayer: {fileID: 542957389623694204}
   scoreTable: {fileID: 1188905030}
@@ -50349,7 +50347,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cab26a887e8446d4abc66aa615cb79b3, type: 2}
+  - {fileID: 2100000, guid: ade8fca681f724cd89b5a568642f15ae, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

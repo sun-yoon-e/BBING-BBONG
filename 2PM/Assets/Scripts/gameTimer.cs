@@ -23,6 +23,7 @@ public class gameTimer : MonoBehaviour
         
         timerText.gameObject.SetActive(false);
         StartCoroutine (StartCount());
+        StartTimer();
     }
 
     IEnumerator StartCount()
@@ -50,7 +51,6 @@ public class gameTimer : MonoBehaviour
         countText.gameObject.SetActive(false);
 
         isStart = true;
-        StartTimer();
     }
     
     public void StartTimer()
@@ -75,6 +75,8 @@ public class gameTimer : MonoBehaviour
             //timerText.text = time.Minutes.ToString() + ":" + time.Seconds.ToString();
 
             timerText.text = $"{time.Minutes:00}:{time.Seconds:00}";//.{time.Milliseconds:000}";
+
+            if (time.Seconds == 0) stopTimer();
         }
     }
 }

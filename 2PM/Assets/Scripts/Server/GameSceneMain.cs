@@ -65,6 +65,7 @@ public class GameSceneMain : MonoBehaviour
             OnGameStateChanged(gameClient.isGameStarted);
         }
 
+        //players[1] = Instantiate(AIObject, new Vector3(500, 10, 500), new Quaternion(0, 0, 0, 0));
         scaleChange = new Vector3(2.0f, 2.0f, 2.0f);
     }
 
@@ -121,6 +122,7 @@ public class GameSceneMain : MonoBehaviour
         Debug.Log("decideMaterial() 03 : " + playerId);
         return material03;
     }
+
     public void AIFired(object sender, AIFireEventArgs args)
     {
         GameObject pizzaObject = Instantiate(pizza);
@@ -219,15 +221,16 @@ public class GameSceneMain : MonoBehaviour
 
             for (int i = 0; i < args.players; i++)
             {
-                if (gameClient.ai[i] == false)
-                {
-                    players[i] = Instantiate(playerObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
+                //if (gameClient.ai[i] == false)
+                //{
+                    //players[i] = Instantiate(playerObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
+                    players[i] = Instantiate(playerObject, args.position[i], new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 0));
                     var characterTransform = players[i].transform.Find("Box001");
                     if (characterTransform != null)
                     {
                         Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
                         characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
-                    }
+
                     var bike00 = players[i].transform.Find("pasted__pasted__pSphere8");
                     bike00.gameObject.GetComponent<Renderer>().material = body;
                     var bike01 = players[i].transform.Find("pasted__pasted__polySurface88");
@@ -270,7 +273,8 @@ public class GameSceneMain : MonoBehaviour
                     bike40.gameObject.GetComponent<Renderer>().material = mirror;
                     var bike41 = players[i].transform.Find("LeftMirror");
                     bike41.gameObject.GetComponent<Renderer>().material = mirror;
-                }
+                    }
+                //}
             }
         }
         else
@@ -279,28 +283,28 @@ public class GameSceneMain : MonoBehaviour
         }
 
         // 플레이어 크기 동일하게 조절
-        for (int i = 0; i < players.Length; i++)
-        {
-            Debug.Log("Player" + i + " Scale: " + players[i].transform.localScale);
-            if (gameClient.clientId == i)
-            {
-                players[i].SetActive(false);
-                continue;
-            }
-            players[i].transform.localScale = scaleChange;
+        //for (int i = 0; i < players.Length; i++)
+        //{
+        //    Debug.Log("Player" + i + " Scale: " + players[i].transform.localScale);
+        //    if (gameClient.clientId == i)
+        //    {
+        //        players[i].SetActive(false);
+        //        continue;
+        //    }
+        //    players[i].transform.localScale = scaleChange;
 
-            var eulerAngles = new Vector3(
-                args.rotation[i].x,
-                args.rotation[i].y,
-                args.rotation[i].z
-            );
+        //    var eulerAngles = new Vector3(
+        //        args.rotation[i].x,
+        //        args.rotation[i].y,
+        //        args.rotation[i].z
+        //    );
 
-            var rotation = new Quaternion();
-            rotation.eulerAngles = eulerAngles;
+        //    var rotation = new Quaternion();
+        //    rotation.eulerAngles = eulerAngles;
 
-            players[i].transform.position = args.position[i];
-            players[i].transform.rotation = rotation;
-        }
+        //    players[i].transform.position = args.position[i];
+        //    players[i].transform.rotation = rotation;
+        //}
     }
 
     void OnGameStateChanged(bool gameState)
@@ -312,7 +316,7 @@ public class GameSceneMain : MonoBehaviour
         else
         {
             gameOverPanel.SetActive(true);
-            timer.stopTimer();
+            //timer.stopTimer();
 
             if (scores != null)
             {
