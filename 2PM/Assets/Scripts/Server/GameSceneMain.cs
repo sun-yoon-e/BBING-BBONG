@@ -62,7 +62,7 @@ public class GameSceneMain : MonoBehaviour
 
         //players[1] = Instantiate(AIObject, new Vector3(500, 10, 500), new Quaternion(0, 0, 0, 0));
         scaleChange = new Vector3(2.0f, 2.0f, 2.0f);
-        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
+        //road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
     }
 
     public void OnDestroy()
@@ -175,21 +175,23 @@ public class GameSceneMain : MonoBehaviour
 
             for (int i = 0; i < args.players; i++)
             {
-                //if (gameClient.ai[i] == false)
-                //{
-                players[i] = Instantiate(playerObject, road.vertices[road.vertices.Length/2 + (road.xSize + 1) * i], new Quaternion(0, 0, 0, 0));
-                players[i].transform.position =
-                        new Vector3(args.position[i].x, args.position[i].y, args.position[i].z);
-                players[i].transform.rotation =
-                    Quaternion.Euler(new Vector3(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z));
-                //players[i] = Instantiate(playerObject, args.position[i], new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 0));
-                var characterTransform = players[i].transform.Find("Box001");
+                if (gameClient.clientId == i)
+                {
+                    players[i] = Instantiate(playerObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
+                    //if (gameClient.ai[i] == false)
+                    //{
+                    //players[i] = Instantiate(playerObject, args.position[i], new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 0));
+                    //players[i] = Instantiate(playerObject, road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i], new Quaternion(0, 0, 0, 0));
+                    //players[i].transform.position = new Vector3(args.position[i].x, args.position[i].y, args.position[i].z);
+                    //players[i].transform.rotation = Quaternion.Euler(new Vector3(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z));
+                    var characterTransform = players[i].transform.Find("Box001");
                     if (characterTransform != null)
                     {
                         Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
                         characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                     }
-                //}
+                    //}
+                }
             }
         }
         else
