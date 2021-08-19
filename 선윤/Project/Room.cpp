@@ -209,36 +209,47 @@ void Room::CheckGameFinish()
 #ifdef TEST
 	if (isGameStarted && (time(NULL) - gameStartedAt >= 20)) {
 #else
-	if (isGameStarted && (time(NULL) - gameStartedAt >= 100 + 3)) {	// gameTimer.cs + 3초 딜레이
+	if (isGameStarted && (time(NULL) - gameStartedAt >= 100 + 3)) {	// 3초 딜레이 추가 gameTimer.cs
 #endif
 		// 게임 종료 관련 추가 수정 필요함
 		cout << "-- END GAME --" << endl;
 		FinishGame();
 		gameFinishedAt = time(NULL);
 
-		Packet_GameState_SC* packet = new Packet_GameState_SC;
+		BYTE* buffer = new BYTE[OTHER_PACKET_SIZE_MAX];
+		Packet_GameState_SC* packet = new Packet_GameState_SC();
 		packet->state = 0;
-		SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(packet), sizeof(Packet_GameState_SC));
-		delete packet;
+
+		ZeroMemory(buffer, OTHER_PACKET_SIZE_MAX);
+		memcpy_s(buffer, OTHER_PACKET_SIZE_MAX, (char*)packet, sizeof(Packet_GameState_SC));
+
+		SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
+		delete[] buffer;
 		isCountdownStarted = true;
 	}
 }
 
 void Room::ToGameRoom()
 {
-	if (isCountdownStarted && (time(NULL) - gameFinishedAt >= 10))
+	if (isCountdownStarted && (time(NULL) - gameFinishedAt >= 5))
 	{
 		isCountdownStarted = false;
-		Packet_GameInit_SC* packet = new Packet_GameInit_SC;
+		BYTE* buffer = new BYTE[OTHER_PACKET_SIZE_MAX];
+		Packet_GameInit_SC* packet = new Packet_GameInit_SC();
 		packet->scene = 2;
-		SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(packet), sizeof(Packet_GameInit_SC));
+
+		ZeroMemory(buffer, OTHER_PACKET_SIZE_MAX);
+		memcpy_s(buffer, OTHER_PACKET_SIZE_MAX, (char*)packet, sizeof(Packet_GameState_SC));
+
+		SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		delete packet;
 
 		// 맵을 초기화 하려면 아래 주석 해제
-		InitVariables();
+		//InitVariables();
 		RemoveAiAll();
 	}
 }
+
 
 Client* Room::GetIndexedPlayer(int playerIndex)
 {
@@ -255,6 +266,7 @@ Client* Room::GetIndexedPlayer(int playerIndex)
 
 	return ptr;
 }
+
 
 int Room::AddAI()
 {

@@ -230,11 +230,10 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 
 			Packet_Score_SC* scPacket = new Packet_Score_SC;
 			scPacket->players = MAX_CLIENT;
-			memset(scPacket->scores, 0, sizeof(int) * scPacket->players);
+			memset(scPacket->scores, -1, sizeof(int32_t) * MAX_CLIENT);
 
 			for (int i = 0; i < clients.size(); i++) {
 				scPacket->scores[i] = clients[i]->GetScore();
-				cout << scPacket->scores[i] << endl;
 			}
 
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
@@ -270,6 +269,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		}
 	}
 	if (buffer[0] == CS_FIRE) {
+
 		auto* room = client->GetRoom();
 		Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
 		if (room && room->IsGameStarted())
@@ -323,9 +323,9 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			auto* packet = reinterpret_cast<sc_packet_bot_remove*>(buffer);
+			auto* packet = reinterpret_cast<cs_packet_bot_remove*>(buffer);
 			auto id = room->RemoveAI();
-			//packet->type = SC_AI_REMOVE;
+			packet->type = SC_AI_REMOVE;
 			packet->aiId = id;
 
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
@@ -572,7 +572,7 @@ void Server::ClientMain(Client* client)
 #endif
 					//SendTo(client->GetSocket(), (char*)scPacket, MAX_PACKET_SIZE);
 					room->SendMessageToOtherPlayers(nullptr, (char*)scPacket, MAX_PACKET_SIZE);
-					delete[](BYTE*)scPacket;
+					delete[](BYTE*)scPacket;	
 
 				}
 				else
@@ -665,7 +665,6 @@ void Server::ServerMain()
 
 		lobby->CheckGameFinish();
 		lobby->ToGameRoom();
-
 #if false
         // 게임종료 후 10초뒤에 로그인화면으로 이동
 		// To-Do 게임종료 후 방 별로 맵 초기화 하도록 코드 수정필요		
