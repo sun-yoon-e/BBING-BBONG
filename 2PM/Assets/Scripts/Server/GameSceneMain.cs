@@ -194,48 +194,48 @@ public class GameSceneMain : MonoBehaviour
                     }
                     //}
                 }
-                    var bike00 = players[i].transform.Find("pasted__pasted__pSphere8");
-                    bike00.gameObject.GetComponent<Renderer>().material = body;
-                    var bike01 = players[i].transform.Find("pasted__pasted__polySurface88");
-                    bike01.gameObject.GetComponent<Renderer>().material = body;
+                    //var bike00 = players[i].transform.Find("pasted__pasted__pSphere8");
+                    //bike00.gameObject.GetComponent<Renderer>().material = body;
+                    //var bike01 = players[i].transform.Find("pasted__pasted__polySurface88");
+                    //bike01.gameObject.GetComponent<Renderer>().material = body;
 
-                    var bike10 = players[i].transform.Find("pPlane1");
-                    bike10.gameObject.GetComponent<Renderer>().material = body3;
-                    var bike11 = players[i].transform.Find("pPlane2");
-                    bike11.gameObject.GetComponent<Renderer>().material = body3;
-                    var bike12 = players[i].transform.Find("pPlane3");
-                    bike12.gameObject.GetComponent<Renderer>().material = body3;
-                    var bike13 = players[i].transform.Find("pPlane4");
-                    bike13.gameObject.GetComponent<Renderer>().material = body3;
-                    var bike14 = players[i].transform.Find("pPlane5");
-                    bike14.gameObject.GetComponent<Renderer>().material = body3;
-                    var bike15 = players[i].transform.Find("pPlane6");
-                    bike15.gameObject.GetComponent<Renderer>().material = body3;
-                    var bike16 = players[i].transform.Find("pasted__pasted__polySurface81");
-                    bike16.gameObject.GetComponent<Renderer>().material = body3;
-                    var bike17 = players[i].transform.Find("pasted__pasted__polySurface82");
-                    bike17.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike10 = players[i].transform.Find("pPlane1");
+                    //bike10.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike11 = players[i].transform.Find("pPlane2");
+                    //bike11.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike12 = players[i].transform.Find("pPlane3");
+                    //bike12.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike13 = players[i].transform.Find("pPlane4");
+                    //bike13.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike14 = players[i].transform.Find("pPlane5");
+                    //bike14.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike15 = players[i].transform.Find("pPlane6");
+                    //bike15.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike16 = players[i].transform.Find("pasted__pasted__polySurface81");
+                    //bike16.gameObject.GetComponent<Renderer>().material = body3;
+                    //var bike17 = players[i].transform.Find("pasted__pasted__polySurface82");
+                    //bike17.gameObject.GetComponent<Renderer>().material = body3;
 
-                    var bike20 = players[i].transform.Find("pasted__pasted__pCube2");
-                    bike20.gameObject.GetComponent<Renderer>().material = wheel;
-                    var bike21 = players[i].transform.Find("BackWheel");
-                    bike21.gameObject.GetComponent<Renderer>().material = wheel;
-                    var bike22 = players[i].transform.Find("FrontWheel");
-                    bike22.gameObject.GetComponent<Renderer>().material = wheel;
+                    //var bike20 = players[i].transform.Find("pasted__pasted__pCube2");
+                    //bike20.gameObject.GetComponent<Renderer>().material = wheel;
+                    //var bike21 = players[i].transform.Find("BackWheel");
+                    //bike21.gameObject.GetComponent<Renderer>().material = wheel;
+                    //var bike22 = players[i].transform.Find("FrontWheel");
+                    //bike22.gameObject.GetComponent<Renderer>().material = wheel;
 
-                    var bike30 = players[i].transform.Find("Object002");
-                    bike30.gameObject.GetComponent<Renderer>().material = handle;
-                    var bike31 = players[i].transform.Find("pasted__pasted__pCylinder12");
-                    bike31.gameObject.GetComponent<Renderer>().material = handle;
-                    var bike32 = players[i].transform.Find("pasted__pasted__polySurface87");
-                    bike32.gameObject.GetComponent<Renderer>().material = handle;
-                    var bike33 = players[i].transform.Find("CenterMirror");
-                    bike33.gameObject.GetComponent<Renderer>().material = handle;
+                    //var bike30 = players[i].transform.Find("Object002");
+                    //bike30.gameObject.GetComponent<Renderer>().material = handle;
+                    //var bike31 = players[i].transform.Find("pasted__pasted__pCylinder12");
+                    //bike31.gameObject.GetComponent<Renderer>().material = handle;
+                    //var bike32 = players[i].transform.Find("pasted__pasted__polySurface87");
+                    //bike32.gameObject.GetComponent<Renderer>().material = handle;
+                    //var bike33 = players[i].transform.Find("CenterMirror");
+                    //bike33.gameObject.GetComponent<Renderer>().material = handle;
 
-                    var bike40 = players[i].transform.Find("RightMirror");
-                    bike40.gameObject.GetComponent<Renderer>().material = mirror;
-                    var bike41 = players[i].transform.Find("LeftMirror");
-                    bike41.gameObject.GetComponent<Renderer>().material = mirror;
+                    //var bike40 = players[i].transform.Find("RightMirror");
+                    //bike40.gameObject.GetComponent<Renderer>().material = mirror;
+                    //var bike41 = players[i].transform.Find("LeftMirror");
+                    //bike41.gameObject.GetComponent<Renderer>().material = mirror;
                 //}
             }
         }
