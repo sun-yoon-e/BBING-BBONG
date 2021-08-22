@@ -199,7 +199,7 @@ public class GameSceneMain : MonoBehaviour
                     var m = players[i].transform.Find("Rider/Box001");
                     if (m != null)
                     {
-                        Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
+                        //Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
                         m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                     }
                 }

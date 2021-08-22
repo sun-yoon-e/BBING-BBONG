@@ -31,6 +31,7 @@
 #define SC_AI_MOVE				24
 #define SC_AI_FIRE				25
 #define SC_MAKE_CAR				26
+#define SC_MOVE_CAR				31
 #define SC_DESTROY_CAR			27
 #define SC_AI_ADD				28
 #define SC_AI_REMOVE			29
@@ -69,6 +70,7 @@
 #define CS_AI_MOVE				24
 #define CS_AI_FIRE				25
 #define CS_MAKE_CAR				26
+#define CS_MOVE_CAR				31
 #define CS_DESTROY_CAR			27
 #define CS_AI_ADD				28
 #define CS_AI_REMOVE			29

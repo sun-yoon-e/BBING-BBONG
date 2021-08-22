@@ -31,7 +31,8 @@ public class Car: MonoBehaviour
             item.isSlow = true;
             obstacle.GenerateCar();
 
-            Destroy(transform.parent.gameObject);
+            //Destroy(transform.parent.gameObject);
+            obstacle.DestroyCar();
         }
     }
 

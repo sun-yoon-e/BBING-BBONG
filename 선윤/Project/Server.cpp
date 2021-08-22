@@ -185,7 +185,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			auto* packet = new BYTE[MAX_PACKET_SIZE];
 			Packet_Request_Road_SC* scPacket = reinterpret_cast<Packet_Request_Road_SC*>(packet);
 			scPacket->ready = room->Execute_Cs_Road(scPacket);
-			cout << "CS_ROAD: " << client->GetID() << " , " << scPacket->ready << endl;
+			cout << "CS_ROAD: " << client->GetID() << ", " << scPacket->ready << endl;
 			SendTo(client->GetSocket(), (char*)packet, MAX_PACKET_SIZE);
 			delete[] packet;
 		}
@@ -202,16 +202,20 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
+	if (buffer[0] == CS_MOVE_CAR) {
+		auto* room = client->GetRoom();
+		if (room)
+		{
+			buffer[1] = SC_MOVE_CAR;
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
+		}
+	}
 	if (buffer[0] == CS_DESTROY_CAR) {
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			auto* room = client->GetRoom();
-			if (room)
-			{
-				buffer[1] = SC_DESTROY_CAR;
-				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
-			}
+			buffer[1] = SC_DESTROY_CAR;
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
 	if (buffer[0] == CS_MAKE_TREE) {
@@ -555,7 +559,6 @@ void Server::ClientMain(Client* client)
 				auto* room = client->GetRoom();
 				if (room)
 				{
-
 					if (room->IsMeshReady()) {
 						cout << "CS_SET_MESH: continue " << client->GetID() << endl;
 						continue;

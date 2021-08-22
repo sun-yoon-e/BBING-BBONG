@@ -123,6 +123,12 @@ public class MakeCarMessageEventArgs : EventArgs
     public Vector3 Position;
 }
 
+public class MoveCarMessageEventArgs : EventArgs
+{
+    public int ID;
+    public Vector3 Position;
+}
+
 public class DestroyCarMessageEventArgs : EventArgs
 {
     public int ID;
@@ -170,6 +176,7 @@ public class GameClient
     public const byte SC_AI_FIRE = 25;
 
     public const byte SC_MAKE_CAR = 26;
+    public const byte SC_MOVE_CAR = 31;
     public const byte SC_DESTROY_CAR = 27;
 
     public const byte SC_AI_ADD = 28;
@@ -209,6 +216,7 @@ public class GameClient
     public const byte CS_AI_FIRE = 25;
 
     public const byte CS_MAKE_CAR = 26;
+    public const byte CS_MOVE_CAR = 31;
     public const byte CS_DESTROY_CAR = 27;
 
     public const byte CS_AI_ADD = 28;
@@ -274,6 +282,7 @@ public class GameClient
     public event EventHandler<ItemMessageEventArgs> OnUseItem;
 
     public event EventHandler<MakeCarMessageEventArgs> OnMakeCar;
+    public event EventHandler<MoveCarMessageEventArgs> OnMoveCar;
     public event EventHandler<DestroyCarMessageEventArgs> OnDestroyCar;
 
     public event EventHandler<MakeTreeMessageEventArgs> OnMakeTree;
@@ -862,6 +871,24 @@ public class GameClient
                 OnMakeCar(this, eventArgs);
             }
         }
+        else if (header == SC_MOVE_CAR)
+        {
+            int id = reader.ReadInt32();
+
+            Vector3 position = new Vector3();
+            position.x = reader.ReadSingle();
+            position.y = reader.ReadSingle();
+            position.z = reader.ReadSingle();
+
+            if (OnMoveCar != null)
+            {
+                var eventArgs = new MoveCarMessageEventArgs();
+                eventArgs.ID = id;
+                eventArgs.Position = position;
+
+                OnMoveCar(this, eventArgs);
+            }
+        }
         else if (header == SC_DESTROY_CAR)
         {
             int id = reader.ReadInt32();
@@ -1034,6 +1061,20 @@ public class GameClient
         socket.Send(buffer);
 
         //Debug.Log("sendCar");
+    }
+    public void MoveCar(int id, Vector3 pos)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_MOVE_CAR);
+
+        writer.Write(id);
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+
+        socket.Send(buffer);
     }
     public void DestroyCar(int id)
     {
