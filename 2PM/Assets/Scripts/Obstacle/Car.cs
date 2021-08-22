@@ -23,7 +23,7 @@ public class Car: MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" /*|| collision.gameObject.tag == "mapBoxCollider"*/ )
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "AI")
         {
             var item = collision.gameObject.GetComponent<Item>();
             var rb_controller = collision.gameObject.GetComponent<RB_Controller>();

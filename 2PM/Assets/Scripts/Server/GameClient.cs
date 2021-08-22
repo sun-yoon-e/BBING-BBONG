@@ -783,8 +783,7 @@ public class GameClient
         {
             isGameStarted = false;
             int scene = reader.ReadInt32();
-            Debug.Log("초기화");
-            //SceneManager.LoadScene("Scenes/LoginScene");
+            //Debug.Log("초기화");
 
             if (OnGameSceneChanged != null)
             {

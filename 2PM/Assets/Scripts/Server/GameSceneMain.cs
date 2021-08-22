@@ -229,7 +229,7 @@ public class GameSceneMain : MonoBehaviour
 
     void OnGameSceneChanged(int scene)
     {
-        Debug.Log("OnGameSceneChanged(): " + scene);
+        //Debug.Log("OnGameSceneChanged(): " + scene);
         //if (scene == 1)
         //{
         //    Debug.Log("SceneManager.LoadScene() Scenes/LoginScene");
@@ -239,7 +239,7 @@ public class GameSceneMain : MonoBehaviour
         //}
         if (scene == 2)
         {
-            Debug.Log("SceneManager.LoadScene() Scenes/Scenes/WaitingRoomScene");
+            //Debug.Log("SceneManager.LoadScene() Scenes/Scenes/WaitingRoomScene");
             gameOverPanel.SetActive(false);
             SceneManager.LoadScene("Scenes/WaitingRoomScene", LoadSceneMode.Single);
         }
