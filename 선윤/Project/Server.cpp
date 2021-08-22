@@ -238,7 +238,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)scPacket, sizeof(*scPacket));
-			room->SendMessageToOtherPlayers(client, (char*)sendBuffer, OTHER_PACKET_SIZE_MAX);
+			room->SendMessageToOtherPlayers(nullptr, (char*)sendBuffer, OTHER_PACKET_SIZE_MAX);
 
 			delete scPacket;
 		}
@@ -269,7 +269,6 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		}
 	}
 	if (buffer[0] == CS_FIRE) {
-
 		auto* room = client->GetRoom();
 		Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
 		if (room && room->IsGameStarted())
@@ -327,7 +326,6 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			auto id = room->RemoveAI();
 			packet->type = SC_AI_REMOVE;
 			packet->aiId = id;
-
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)packet, sizeof(sc_packet_bot_remove));
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(sendBuffer), sizeof(OTHER_PACKET_SIZE_MAX));
@@ -488,7 +486,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
-	if (buffer[1] == CS_REMOVE_ITEM) {
+	if (buffer[0] == CS_REMOVE_ITEM) {
 		buffer[0] = SC_REMOVE_ITEM;
 		auto* room = client->GetRoom();
 		if (room)
@@ -496,7 +494,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
-	if (buffer[1] == CS_USE_ITEM) {
+	if (buffer[0] == CS_USE_ITEM) {
 		auto* room = client->GetRoom();
 		if (room)
 		{
@@ -519,7 +517,6 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		}
 	}
 }
-
 void Server::ClientMain(Client* client) 
 {
 	SOCKET socket = client->GetSocket();
@@ -572,8 +569,7 @@ void Server::ClientMain(Client* client)
 #endif
 					//SendTo(client->GetSocket(), (char*)scPacket, MAX_PACKET_SIZE);
 					room->SendMessageToOtherPlayers(nullptr, (char*)scPacket, MAX_PACKET_SIZE);
-					delete[](BYTE*)scPacket;	
-
+					delete[](BYTE*)scPacket;
 				}
 				else
 				{
