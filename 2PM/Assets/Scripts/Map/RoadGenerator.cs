@@ -58,7 +58,7 @@ public class RoadGenerator : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("RoadGenerator Start!!");
+        //Debug.Log("RoadGenerator Start!!");
         vertices = new Vector3[map.vertices.Length];
 
         wayPoint = new GameObject[500];
@@ -80,14 +80,14 @@ public class RoadGenerator : MonoBehaviour
     {
         if (!args.ready)
         {
-            Debug.Log("SetRoadEvent() 처음!!");
+            //Debug.Log("SetRoadEvent() 처음!!");
             CreateShape();
             CreateTriangle();
             gameClient.SetRoad(vertices, triangles, isRoad, buildingState);
         }
         else
         {
-            Debug.Log("SetRoadEvent() 업뎃");
+            //Debug.Log("SetRoadEvent() 업뎃");
             vertices = args.vertices;
             triangles = args.triangles;
             isRoad = args.isRoad;

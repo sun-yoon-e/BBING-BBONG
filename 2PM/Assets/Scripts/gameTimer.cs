@@ -76,7 +76,7 @@ public class gameTimer : MonoBehaviour
 
             timerText.text = $"{time.Minutes:00}:{time.Seconds:00}";//.{time.Milliseconds:000}";
 
-            if (time.Seconds == 0) stopTimer();
+            //if (time.Seconds == 0) stopTimer();
         }
     }
 }

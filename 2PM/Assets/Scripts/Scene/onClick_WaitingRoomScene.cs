@@ -15,6 +15,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
     public GameObject[] PlayerObjs;
 
     private bool[] PlayerList = new bool[4];
+    private bool isGameStarted = false;
     private int maxPlayer = 4;
     
     private SoundManager soundManager;
@@ -23,7 +24,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
    
     private void Start()
     {
-        Debug.Log("waitingRoomScene.start()");
+        //Debug.Log("waitingRoomScene.start()");
         
         //배경음 전환
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
@@ -54,7 +55,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
 
     private void Update()
     {
-        gameClient.RoomInfo(-1);
+        //gameClient.RoomInfo(-1);
         for (int i = 0; i < PlayerList.Length; i++)
         {
             if (PlayerList[i])
@@ -158,8 +159,14 @@ public class onClick_WaitingRoomScene : MonoBehaviour
 
     private void GameStateChanged(object sender, GameStateChangedEventArgs e)
     {
-        if (e.gameState)
-            SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
+        if (!isGameStarted)
+        {
+            if (e.gameState)
+            {
+                SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
+                isGameStarted = true;
+            }
+        }
     }
 
     public void ExitRoom_Btn_Clicked()

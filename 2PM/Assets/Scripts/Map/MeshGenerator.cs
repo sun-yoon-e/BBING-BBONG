@@ -46,7 +46,7 @@ public class MeshGenerator : MonoBehaviour
     {
         if (!args.ready)
         {
-            Debug.Log("SetMeshEvent() 처음!!");
+            //Debug.Log("SetMeshEvent() 처음!!");
             CreateShape();
             CreateTriangle();
             //UpdateMesh();
@@ -55,12 +55,12 @@ public class MeshGenerator : MonoBehaviour
         }
         else/* if(!IsMapGenerated)
 */        {
-            Debug.Log("SetMeshEvent() 업뎃");
+            //Debug.Log("SetMeshEvent() 업뎃");
             vertices = args.vertices;
             triangles = args.triangles;
 
-            Debug.Log("Vertex size : " + vertices.Length);
-            Debug.Log("triangle size : " + triangles.Length);
+            //Debug.Log("Vertex size : " + vertices.Length);
+            //Debug.Log("triangle size : " + triangles.Length);
 
             UpdateMesh();
         }

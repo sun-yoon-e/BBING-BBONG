@@ -216,8 +216,7 @@ public class GameClient
 
     public const byte CS_MAKE_TREE = 30;
 
-    //public const string SERVER_IP = "127.0.0.1";
-    public const string SERVER_IP = "14.38.227.223";
+    public const string SERVER_IP = "182.222.45.229";
     public const int SERVER_PORT = 13531;
 
     // 싱글톤 패턴
@@ -326,7 +325,7 @@ public class GameClient
                 socket = tmpSocket;
                 recvThread = new Thread(new ThreadStart(() =>
                 {
-                    Debug.Log("recvThread started");
+                    //Debug.Log("recvThread started");
                     try
                     {
 
@@ -622,19 +621,19 @@ public class GameClient
         }
         else if (header == SC_SCORE)
         {
-            Debug.Log("SC_SCORE");
+            //Debug.Log("SC_SCORE");
             int players = reader.ReadInt32();
             int[] scores = new int[players];
 
             for (int i = 0; i < players; i++)
             {
                 scores[i] = reader.ReadInt32();
-                Debug.Log($"{i} : {scores[i]}");
+                //Debug.Log($"{i} : {scores[i]}");
             }
 
             if (OnScoreUpdated != null)
             {
-                Debug.Log("OnScore");
+                //Debug.Log("OnScore");
                 var eventArgs = new ScoreUpdateEventArgs();
                 eventArgs.scores = scores;
                 OnScoreUpdated(this, eventArgs);
@@ -644,7 +643,7 @@ public class GameClient
         {
             bool state = reader.ReadBoolean();
             isGameStarted = state;
-            Debug.Log("게임시작여부? " + state);
+            //Debug.Log("게임시작여부? " + state);
             if (OnGameStateChanged != null)
             {
                 var eventArgs = new GameStateChangedEventArgs();
@@ -1234,7 +1233,7 @@ public class GameClient
         writer.Write(CS_ROAD);
         socket.Send(buffer);
 
-        Debug.Log("Request to get road from server");
+        //Debug.Log("Request to get road from server");
     }
     public void SetRoad(Vector3[] vertices, int[] triangles, bool[] isRoad, int[] isBuildingPlace)
     {

@@ -29,8 +29,6 @@ public class GameSceneMain : MonoBehaviour
 
     private int[] scores = null;
     private GameObject[] players = null;
-    //private bool materialSet = false;
-    private Vector3 scaleChange;
     
     SoundManager soundManager;
     RoadGenerator road;
@@ -60,36 +58,41 @@ public class GameSceneMain : MonoBehaviour
             OnGameStateChanged(gameClient.isGameStarted);
         }
 
-        //players[1] = Instantiate(AIObject, new Vector3(500, 10, 500), new Quaternion(0, 0, 0, 0));
-        scaleChange = new Vector3(2.0f, 2.0f, 2.0f);
-        //road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
+        players = new GameObject[4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (gameClient.clientId == i)
+            {
+                var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+                m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+            }
+            else
+            {
+                players[i] = Instantiate(playerObject);
+                var m = players[i].transform.Find("Rider/Box001");
+                m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+            }
+        }
+
+        players[3] = Instantiate(AIObject);
+        players[3].transform.position = new Vector3(505, 10, 500);
+        players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
     }
 
     public void OnDestroy()
     {
         scores = null;
         players = null;
-        //materialSet = false;
         gameOverPanel = null;
     }
 
     void OnScoreUpdated(object caller, ScoreUpdateEventArgs args)
     {
-        Debug.Log("OnScoreUpdated()");
+        //Debug.Log("OnScoreUpdated()");
         scores = args.scores;
         string text = "점수표\n";
 
-        //for (int i = 0; i < scores.Length; i++)
-        //{
-        //    if (scores[i] == -1)
-        //    {
-        //        continue;
-        //    }
-
-        //    //text += $"플레이어 {i + 1}: {scores[i]}\n";
-        //}
-
-        //if (scores[0] != -1)
         text += $"{gameClient.client_nick1} : {scores[0]}\n";
         text += $"{gameClient.client_nick2} : {scores[1]}\n";
         text += $"{gameClient.client_nick3} : {scores[2]}\n";
@@ -102,171 +105,91 @@ public class GameSceneMain : MonoBehaviour
     {
         if (playerId % 4 == 0)
         {
-            Debug.Log("decideMaterial() 00 : " + playerId);
+            //Debug.Log("decideMaterial() 0, id :" + playerId);
             return material00;
         }
         if (playerId % 4 == 1)
         {
-            Debug.Log("decideMaterial() 01 : " + playerId);
+            //Debug.Log("decideMaterial() 1, id : " + playerId);
             return material01;
         }
         if (playerId % 4 == 2)
         {
-            Debug.Log("decideMaterial() 02 : " + playerId);
+            //Debug.Log("decideMaterial() 2, id : " + playerId);
             return material02;
         }
-        Debug.Log("decideMaterial() 03 : " + playerId);
+        //Debug.Log("decideMaterial() 3, id : " + playerId);
         return material03;
     }
 
     public void AIFired(object sender, AIFireEventArgs args)
     {
+        Debug.Log("AIFireUpdate");
+
         GameObject pizzaObject = Instantiate(pizza);
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
-
-        Debug.Log("AIFireUpdate");
-        //args.AIID;
     }
 
     public void AIPositionUpdated(object sender, AIPositionUpdateEventArgs args)
     {
-        AIObject.gameObject.SetActive(true);
-        Destroy(players[args.AIID - 1]);
+        Debug.Log("AIPositionUpdate");
 
-        players = new GameObject[args.AIID-1];
-        Debug.Log($"new player : + {args.AIID - 1}");
-
-        if (gameClient.ai[args.AIID] == true)
+        if (players != null)
         {
-            players[args.AIID - 1] = Instantiate(AIObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
-            var characterTransform = players[args.AIID - 1].transform.Find("Box001");
-            if (characterTransform != null)
-            {
-                characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(args.AIID - 1);
-            }
+            Destroy(players[args.AIID]);
         }
 
-        Debug.Log("AIPositionUpdate");
-        //args.AIID;
-        //args.position;
-        //args.rotation;
+       players[args.AIID] = Instantiate(playerObject);
+       players[args.AIID].transform.position = args.position;
+       players[args.AIID].transform.rotation = Quaternion.Euler(args.rotation);
+       //players[i].transform.rotation = new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 1);
+
+       var characterTransform = players[3].transform.Find("Rider/Box001");
+        if (characterTransform != null)
+        {
+            characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(3);
+        }
     }
 
     void OnPositionUpdated(object caller, PositionUpdateEventArgs args)
     {
-        Debug.Log("GameMain PositionUpdate");
+        //Debug.Log("GameMain PositionUpdate");
         if (!gameClient.isReadyToControl) return;
-        Debug.Log("OnPositionUpdated() args.player : " + args.players);
+        //Debug.Log("OnPositionUpdated() 플레이어 수 : " + args.players);
 
-        if (players == null || players.Length != 4)
+        if (players != null)
         {
-            if (players != null)
+            for (int i = 0; i < players.Length; i++)
             {
-                for (int i = 0; i < players.Length; i++)
-                {
-                    Destroy(players[i]);
-                }
+                Destroy(players[i]);
             }
+        }
 
-            players = new GameObject[4];
-            //Debug.Log("new player : " + args.players);
+        players = new GameObject[4];
+        //Debug.Log("new player : " + args.players);
 
-            for (int i = 0; i < args.players; i++)
+        for (int i = 0; i < args.players; i++)
+        {
+            if (gameClient.clientId != i)
             {
-                if (gameClient.clientId == i)
+                if (gameClient.ai[i] == false)
                 {
-                //if (gameClient.ai[i] == false)
-                //{
-                    players[i] = Instantiate(playerObject, Vector3.zero, new Quaternion(0, 0, 0, 0));
-                    //if (gameClient.ai[i] == false)
-                    //{
-                    //players[i] = Instantiate(playerObject, args.position[i], new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 0));
-                    //players[i] = Instantiate(playerObject, road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i], new Quaternion(0, 0, 0, 0));
-                    //players[i].transform.position = new Vector3(args.position[i].x, args.position[i].y, args.position[i].z);
-                    //players[i].transform.rotation = Quaternion.Euler(new Vector3(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z));
-                    var characterTransform = players[i].transform.Find("Box001");
+                    players[i] = Instantiate(playerObject);
+                    players[i].transform.position = args.position[i];
+                    players[i].transform.rotation = Quaternion.Euler(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z);
+                    //players[i].transform.rotation = new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 1);
+
+                    var characterTransform = players[i].transform.Find("Rider/Box001");
                     if (characterTransform != null)
                     {
                         Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
                         characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                     }
-                    //}
                 }
-                    //var bike00 = players[i].transform.Find("pasted__pasted__pSphere8");
-                    //bike00.gameObject.GetComponent<Renderer>().material = body;
-                    //var bike01 = players[i].transform.Find("pasted__pasted__polySurface88");
-                    //bike01.gameObject.GetComponent<Renderer>().material = body;
-
-                    //var bike10 = players[i].transform.Find("pPlane1");
-                    //bike10.gameObject.GetComponent<Renderer>().material = body3;
-                    //var bike11 = players[i].transform.Find("pPlane2");
-                    //bike11.gameObject.GetComponent<Renderer>().material = body3;
-                    //var bike12 = players[i].transform.Find("pPlane3");
-                    //bike12.gameObject.GetComponent<Renderer>().material = body3;
-                    //var bike13 = players[i].transform.Find("pPlane4");
-                    //bike13.gameObject.GetComponent<Renderer>().material = body3;
-                    //var bike14 = players[i].transform.Find("pPlane5");
-                    //bike14.gameObject.GetComponent<Renderer>().material = body3;
-                    //var bike15 = players[i].transform.Find("pPlane6");
-                    //bike15.gameObject.GetComponent<Renderer>().material = body3;
-                    //var bike16 = players[i].transform.Find("pasted__pasted__polySurface81");
-                    //bike16.gameObject.GetComponent<Renderer>().material = body3;
-                    //var bike17 = players[i].transform.Find("pasted__pasted__polySurface82");
-                    //bike17.gameObject.GetComponent<Renderer>().material = body3;
-
-                    //var bike20 = players[i].transform.Find("pasted__pasted__pCube2");
-                    //bike20.gameObject.GetComponent<Renderer>().material = wheel;
-                    //var bike21 = players[i].transform.Find("BackWheel");
-                    //bike21.gameObject.GetComponent<Renderer>().material = wheel;
-                    //var bike22 = players[i].transform.Find("FrontWheel");
-                    //bike22.gameObject.GetComponent<Renderer>().material = wheel;
-
-                    //var bike30 = players[i].transform.Find("Object002");
-                    //bike30.gameObject.GetComponent<Renderer>().material = handle;
-                    //var bike31 = players[i].transform.Find("pasted__pasted__pCylinder12");
-                    //bike31.gameObject.GetComponent<Renderer>().material = handle;
-                    //var bike32 = players[i].transform.Find("pasted__pasted__polySurface87");
-                    //bike32.gameObject.GetComponent<Renderer>().material = handle;
-                    //var bike33 = players[i].transform.Find("CenterMirror");
-                    //bike33.gameObject.GetComponent<Renderer>().material = handle;
-
-                    //var bike40 = players[i].transform.Find("RightMirror");
-                    //bike40.gameObject.GetComponent<Renderer>().material = mirror;
-                    //var bike41 = players[i].transform.Find("LeftMirror");
-                    //bike41.gameObject.GetComponent<Renderer>().material = mirror;
-                //}
             }
         }
-        else
-        {
-            Debug.Log("OnPositionUpdated() else : " + players.Length);
-        }
-
-        // 플레이어 크기 동일하게 조절
-        //for (int i = 0; i < players.Length; i++)
-        //{
-        //    Debug.Log("Player" + i + " Scale: " + players[i].transform.localScale);
-        //    if (gameClient.clientId == i)
-        //    {
-        //        players[i].SetActive(false);
-        //        continue;
-        //    }
-        //    players[i].transform.localScale = scaleChange;
-
-        //    var eulerAngles = new Vector3(
-        //        args.rotation[i].x,
-        //        args.rotation[i].y,
-        //        args.rotation[i].z
-        //    );
-
-        //    var rotation = new Quaternion();
-        //    rotation.eulerAngles = eulerAngles;
-
-        //    players[i].transform.position = args.position[i];
-        //    players[i].transform.rotation = rotation;
-        //}
     }
 
     void OnGameStateChanged(bool gameState)
@@ -278,16 +201,11 @@ public class GameSceneMain : MonoBehaviour
         else
         {
             gameOverPanel.SetActive(true);
-            //timer.stopTimer();
+            timer.stopTimer();
 
             if (scores != null)
             {
-                //var scoreMap = new Dictionary<int, int>();
                 var scoreMap = new Dictionary<string, int>();
-                //for (int i = 0; i < scores.Length; i++)
-                //{
-                //    //scoreMap.Add(i, scores[i]);
-                //}
                 scoreMap.Add(gameClient.client_nick1, scores[0]);
                 scoreMap.Add(gameClient.client_nick2, scores[1]);
                 scoreMap.Add(gameClient.client_nick3, scores[2]);
@@ -298,10 +216,8 @@ public class GameSceneMain : MonoBehaviour
 
                 foreach (var item in scoreMap.OrderBy(x => x.Value).Reverse())
                 {
-                    //text += $"{j++}등 플레이어 {item.Key + 1} - {item.Value}점\n";
-                    text += $"{j++}등 - {item.Key + 1} - {item.Value}점\n";
+                    text += $"{j++}등 : {item.Key + 1} - {item.Value}점\n";
                 }
-
                 gameOverScoreBoard.text = text;
             }
             else

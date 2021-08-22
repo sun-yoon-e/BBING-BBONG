@@ -45,7 +45,7 @@ public class PlacementBuilding : MonoBehaviour
     
     private void OnRoadReady(object sender, EventArgs args)
     {
-        Debug.Log("OnRoadReady() 동작");
+        //Debug.Log("OnRoadReady() 동작");
         
         buildingNum = 0;
         buildingObject = new GameObject[1000];
