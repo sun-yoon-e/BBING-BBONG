@@ -26,12 +26,12 @@ public class GameSceneMain : MonoBehaviour
     public gameTimer timer;
     
     public GameObject pizza;
-
-    private int[] scores = null;
     private GameObject[] players = null;
+    private int[] scores = null;
+
+    private bool isRenderAI = false;
     
     SoundManager soundManager;
-    RoadGenerator road;
 
     public void Start()
     {
@@ -75,9 +75,13 @@ public class GameSceneMain : MonoBehaviour
             }
         }
 
-        players[3] = Instantiate(AIObject);
-        players[3].transform.position = new Vector3(505, 10, 500);
-        players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
+        if (!isRenderAI)
+        {
+            players[3] = Instantiate(AIObject);
+            players[3].transform.position = new Vector3(505, 10, 500);
+            players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
+            isRenderAI = true;
+        }
     }
 
     public void OnDestroy()
@@ -136,20 +140,31 @@ public class GameSceneMain : MonoBehaviour
     {
         Debug.Log("AIPositionUpdate");
 
+        if (!isRenderAI)
+        {
+            players[args.AIID] = Instantiate(AIObject);
+            players[args.AIID].transform.position = new Vector3(505, 10, 500);
+            players[args.AIID].transform.rotation = Quaternion.Euler(0, 0, 0);
+            isRenderAI = true;
+        }
+
         if (players != null)
         {
             Destroy(players[args.AIID]);
         }
 
-       players[args.AIID] = Instantiate(playerObject);
-       players[args.AIID].transform.position = args.position;
-       players[args.AIID].transform.rotation = Quaternion.Euler(args.rotation);
-       //players[i].transform.rotation = new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 1);
-
-       var characterTransform = players[3].transform.Find("Rider/Box001");
-        if (characterTransform != null)
+        if (gameClient.ai_client[args.AIID] == false)
         {
-            characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(3);
+            players[args.AIID] = Instantiate(playerObject);
+            players[args.AIID].transform.position = args.position;
+            players[args.AIID].transform.rotation = Quaternion.Euler(args.rotation);
+            //players[i].transform.rotation = new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 1);
+
+            var m = players[args.AIID].transform.Find("Rider/Box001");
+            if (m != null)
+            {
+                m.gameObject.GetComponent<Renderer>().material = decideMaterial(args.AIID);
+            }
         }
     }
 
@@ -161,7 +176,7 @@ public class GameSceneMain : MonoBehaviour
 
         if (players != null)
         {
-            for (int i = 0; i < players.Length; i++)
+            for (int i = 0; i < args.players; i++)
             {
                 Destroy(players[i]);
             }
@@ -174,18 +189,18 @@ public class GameSceneMain : MonoBehaviour
         {
             if (gameClient.clientId != i)
             {
-                if (gameClient.ai[i] == false)
+                if (gameClient.ai_client[i] == false)
                 {
                     players[i] = Instantiate(playerObject);
                     players[i].transform.position = args.position[i];
                     players[i].transform.rotation = Quaternion.Euler(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z);
                     //players[i].transform.rotation = new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 1);
 
-                    var characterTransform = players[i].transform.Find("Rider/Box001");
-                    if (characterTransform != null)
+                    var m = players[i].transform.Find("Rider/Box001");
+                    if (m != null)
                     {
                         Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
-                        characterTransform.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                        m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                     }
                 }
             }

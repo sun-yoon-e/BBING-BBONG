@@ -288,7 +288,7 @@ public class GameClient
     public string client_nick3 = "";
     public string client_nick4 = "";
 
-    public bool[] ai = new bool[4];
+    public bool[] ai_client = new bool[4];
 
     public int client_roomNum = -1;
 

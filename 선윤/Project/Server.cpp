@@ -287,7 +287,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)p, sizeof(packet_ai_move));
-			room->SendMessageToOtherPlayers(client, (char*)sendBuffer, OTHER_PACKET_SIZE_MAX);
+			room->SendMessageToOtherPlayers(nullptr, (char*)sendBuffer, OTHER_PACKET_SIZE_MAX);
 		}
 	}
 	if (buffer[0] == CS_AI_FIRE) {
@@ -295,7 +295,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		if (room && room->IsGameStarted())
 		{
 			buffer[0] = SC_AI_FIRE;
-			room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
 	if (buffer[0] == CS_AI_ADD) {
@@ -517,6 +517,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		}
 	}
 }
+
 void Server::ClientMain(Client* client) 
 {
 	SOCKET socket = client->GetSocket();

@@ -245,7 +245,7 @@ void Room::ToGameRoom()
 		delete packet;
 
 		// 맵을 초기화 하려면 아래 주석 해제
-		//InitVariables();
+		InitVariables();
 		RemoveAiAll();
 	}
 }
