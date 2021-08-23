@@ -17,7 +17,6 @@ public class ItemBoxGenerator : MonoBehaviour
     public float itemScale;
 
     RoadGenerator road;
-    Quaternion rot;
 
     private void Awake()
     {

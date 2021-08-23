@@ -557,7 +557,7 @@ public class RoadGenerator : MonoBehaviour
         mesh.RecalculateNormals();
 
         middleRoadNum = 0;
-        for (int i = 0; i < isRoad.Length; ++i)
+        for (int i = 0; i < isItemPlace.Length; ++i)
         {
             if (isItemPlace[i] == true)
             {
@@ -566,7 +566,10 @@ public class RoadGenerator : MonoBehaviour
                 ++middleRoadNum;
             }
         }
+        print("isItemPlace Length" + isItemPlace.Length);
+        print("passibleItemPlace Length" + passibleItemPlace.Length);
     }
+
     public void RefreshRoadVertices()
     {
         vertices = map.vertices;
