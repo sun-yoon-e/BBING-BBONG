@@ -289,6 +289,9 @@ public class RoadGenerator : MonoBehaviour
         }
 
         makeNotBuildingPlace();
+
+        print("vertices");
+
     }
 
     void splitX(int minX, int minZ, int maxZ)
