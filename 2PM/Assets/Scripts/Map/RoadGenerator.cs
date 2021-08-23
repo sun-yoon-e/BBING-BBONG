@@ -93,7 +93,7 @@ public class RoadGenerator : MonoBehaviour
             isRoad = args.isRoad;
             buildingState = args.isBuildingPlace;
 
-            //UpdateMesh();
+            UpdateMesh();
             isRoadReady = true;
 
             if (OnRoadReady != null)

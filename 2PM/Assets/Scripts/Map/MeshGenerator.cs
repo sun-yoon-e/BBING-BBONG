@@ -63,7 +63,7 @@ public class MeshGenerator : MonoBehaviour
             //Debug.Log("triangle size : " + triangles.Length);
 
             //Draw에서 호출
-            //UpdateMesh();
+            UpdateMesh();
         }
     }
 
