@@ -152,9 +152,9 @@ public class onClick_LobbyScene: MonoBehaviour
     // 방 생성 확인 버튼 클릭
     public void Ok_btn_Clicked()
     {
+        gameClient.client_host = true;
         gameClient.MakeRoom(RoomName.text);
         SceneManager.LoadScene("Scenes/WaitingRoomScene", LoadSceneMode.Single);
-        gameClient.client_host = true;
         //RoomInfo tmp = new RoomInfo();
         //roomList.Add(tmp);
         //changeValue(roomList, roomList.Count - 1);

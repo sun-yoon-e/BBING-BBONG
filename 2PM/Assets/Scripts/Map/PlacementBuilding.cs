@@ -48,8 +48,8 @@ public class PlacementBuilding : MonoBehaviour
     {
         //Debug.Log("OnRoadReady() 동작");
         
-        buildingNum = 0;
-        buildingObject = new GameObject[1000];
+        //buildingNum = 0;
+        //buildingObject = new GameObject[1000];
 
         for (int i = 0; i < road.vertices.Length; ++i)
         {
@@ -90,14 +90,17 @@ public class PlacementBuilding : MonoBehaviour
             //else continue;
 
             makeNotBuildingPlace(i);
-            //makeObjectPlace(i);
+            ////makeObjectPlace(i);
 
-            buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
-            buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
-            ++buildingNum;
+            //buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
+            //buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
+            //++buildingNum;
 
 
-            GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
+            if (gameClient.client_host)
+            {
+                GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
+            }
         }
         map.UpdateMesh();
         road.vertices = map.vertices;
@@ -216,6 +219,9 @@ public class PlacementBuilding : MonoBehaviour
 
     public void OnMakeBuilding(object sender, MakeBuildingMessageEventArgs args)
     {
+        buildingNum = 0;
+        buildingObject = new GameObject[1000];
+
         if (args.dir == (int)buildingDirection.DOWN)
             buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity);
         else if (args.dir == (int)buildingDirection.UP)
@@ -225,6 +231,8 @@ public class PlacementBuilding : MonoBehaviour
         else if (args.dir == (int)buildingDirection.RIGHT)
             buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, -90, 0));
 
-        Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity, transform);
+        buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
+        buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
+        ++buildingNum;
     }
 }
