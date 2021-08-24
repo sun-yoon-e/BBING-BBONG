@@ -137,7 +137,6 @@ public class MakeTreeMessageEventArgs : EventArgs
 
 public class MakeBuildingMessageEventArgs : EventArgs
 {
-    public int ID;
     public byte Type;
     public Vector3 Position;
 }
@@ -184,6 +183,8 @@ public class GameClient
 
     public const byte SC_MAKE_TREE = 30;
 
+    public const byte SC_MAKE_BUILDING = 32;
+
     //------------------------------------------------------------
 
     public const byte CS_LOGIN  = 100;
@@ -222,7 +223,8 @@ public class GameClient
     public const byte CS_AI_REMOVE = 29;
 
     public const byte CS_MAKE_TREE = 30;
-    public const byte CS_MAKE_BUILDING = 31;
+
+    public const byte CS_MAKE_BUILDING = 32;
 
     public const string SERVER_IP = "182.222.45.229";
     public const int SERVER_PORT = 13531;
@@ -464,7 +466,7 @@ public class GameClient
             string str = System.Text.Encoding.UTF8.GetString(byteChatMessage).Trim('\0');
 
             if (OnReceivedMessage != null)
-            { 
+            {
                 var eventArgs = new ReceiveMessageEventArgs();
                 eventArgs.msg = $"{nickStr}:{str}";
                 OnReceivedMessage(this, eventArgs);
@@ -900,6 +902,25 @@ public class GameClient
                 eventArgs.Type = type;
                 eventArgs.Position = position;
                 OnMakeTree(this, eventArgs);
+            }
+        }
+        else if (header == SC_MAKE_BUILDING)
+        {
+            int id = reader.ReadInt32();
+            byte type = reader.ReadByte();
+
+            Vector3 position = new Vector3();
+            position.x = reader.ReadSingle();
+            position.y = reader.ReadSingle();
+            position.z = reader.ReadSingle();
+
+            if (OnMakeBuilding != null)
+            {
+                var eventArgs = new MakeBuildingMessageEventArgs();
+                eventArgs.ID = id;
+                eventArgs.Type = type;
+                eventArgs.Position = position;
+                OnMakeBuilding(this, eventArgs);
             }
         }
     }
