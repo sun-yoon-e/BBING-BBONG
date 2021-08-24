@@ -216,7 +216,7 @@ public class PlacementBuilding : MonoBehaviour
 
     public void OnMakeBuilding(object sender, MakeBuildingMessageEventArgs args)
     {
-        //Debug.Log($"{args.Type}, {args.Position}");
+        Debug.Log($"{args.Type}");
         Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity, transform);
     }
 }
