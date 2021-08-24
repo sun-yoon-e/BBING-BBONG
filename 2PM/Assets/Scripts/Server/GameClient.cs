@@ -137,6 +137,7 @@ public class MakeTreeMessageEventArgs : EventArgs
 
 public class MakeBuildingMessageEventArgs : EventArgs
 {
+    public int ID;
     public byte Type;
     public Vector3 Position;
 }
