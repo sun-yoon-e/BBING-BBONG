@@ -37,6 +37,7 @@ public class PlacementBuilding : MonoBehaviour
         {
             OnRoadReady(this, EventArgs.Empty);
         }
+        GameClient.Instance.OnMakeBuilding += OnMakeBuilding;
     }
 
     private void Start()
@@ -94,6 +95,9 @@ public class PlacementBuilding : MonoBehaviour
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
             ++buildingNum;
+
+
+            GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i]);
         }
         map.UpdateMesh();
         road.vertices = map.vertices;
@@ -209,4 +213,10 @@ public class PlacementBuilding : MonoBehaviour
         PIZZABUILDING,
         BUILDING,
     };
+
+    public void OnMakeBuilding(object sender, MakeBuildingMessageEventArgs args)
+    {
+        //Debug.Log($"{args.Type}, {args.Position}");
+        Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity, transform);
+    }
 }

@@ -135,6 +135,13 @@ public class MakeTreeMessageEventArgs : EventArgs
     public Vector3 Position;
 }
 
+public class MakeBuildingMessageEventArgs : EventArgs
+{
+    public int ID;
+    public byte Type;
+    public Vector3 Position;
+}
+
 public class AIMessageEventArgs : EventArgs
 {
     public int ID;
@@ -215,6 +222,7 @@ public class GameClient
     public const byte CS_AI_REMOVE = 29;
 
     public const byte CS_MAKE_TREE = 30;
+    public const byte CS_MAKE_BUILDING = 31;
 
     public const string SERVER_IP = "182.222.45.229";
     public const int SERVER_PORT = 13531;
@@ -280,6 +288,8 @@ public class GameClient
 
     public event EventHandler<AIMessageEventArgs> OnAddAI;
     public event EventHandler<AIMessageEventArgs> OnRemoveAI;
+
+    public event EventHandler<MakeBuildingMessageEventArgs> OnMakeBuilding;
 
     public int clientId { get; private set; } = -1;
 
@@ -1057,6 +1067,21 @@ public class GameClient
 
         writer.Write(0);
         writer.Write(treeType);
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+
+        socket.Send(buffer);
+    }
+    #endregion
+    #region 건물연동
+    public void MakeBuilding(byte buildingType, Vector3 pos)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_MAKE_BUILDING);
+        writer.Write(buildingType);
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);

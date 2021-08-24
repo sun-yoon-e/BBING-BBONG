@@ -566,8 +566,8 @@ public class RoadGenerator : MonoBehaviour
                 ++middleRoadNum;
             }
         }
-        print("isItemPlace Length" + isItemPlace.Length);
-        print("passibleItemPlace Length" + passibleItemPlace.Length);
+        //print("isItemPlace Length" + isItemPlace.Length);
+        //print("passibleItemPlace Length" + passibleItemPlace.Length);
     }
 
     public void RefreshRoadVertices()
