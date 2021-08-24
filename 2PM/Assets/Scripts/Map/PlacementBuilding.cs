@@ -75,19 +75,19 @@ public class PlacementBuilding : MonoBehaviour
                     road.buildingState[i + (road.xSize + 1) * j] = (int)buildingDirection.NOTBUILDINGPLACE;
             }
 
-            if (road.buildingState[i] == (int)buildingDirection.DOWN)
-                buildingObject[buildingNum] =
-                    Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
-            else if (road.buildingState[i] == (int)buildingDirection.UP)
-                buildingObject[buildingNum] =
-                    Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 180, 0));
-            else if (road.buildingState[i] == (int)buildingDirection.LEFT)
-                buildingObject[buildingNum] =
-                    Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 90, 0));
-            else if (road.buildingState[i] == (int)buildingDirection.RIGHT)
-                buildingObject[buildingNum] =
-                    Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, -90, 0));
-            else continue;
+            //if (road.buildingState[i] == (int)buildingDirection.DOWN)
+            //    buildingObject[buildingNum] =
+            //        Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.identity);
+            //else if (road.buildingState[i] == (int)buildingDirection.UP)
+            //    buildingObject[buildingNum] =
+            //        Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 180, 0));
+            //else if (road.buildingState[i] == (int)buildingDirection.LEFT)
+            //    buildingObject[buildingNum] =
+            //        Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, 90, 0));
+            //else if (road.buildingState[i] == (int)buildingDirection.RIGHT)
+            //    buildingObject[buildingNum] =
+            //        Instantiate(buildingPrefab[prefab], road.vertices[i], Quaternion.Euler(0, -90, 0));
+            //else continue;
 
             makeNotBuildingPlace(i);
             //makeObjectPlace(i);
@@ -97,7 +97,7 @@ public class PlacementBuilding : MonoBehaviour
             ++buildingNum;
 
 
-            GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i]);
+            GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
         }
         map.UpdateMesh();
         road.vertices = map.vertices;
@@ -216,7 +216,15 @@ public class PlacementBuilding : MonoBehaviour
 
     public void OnMakeBuilding(object sender, MakeBuildingMessageEventArgs args)
     {
-        Debug.Log($"{args.Type}");
+        if (args.dir == (int)buildingDirection.DOWN)
+            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity);
+        else if (args.dir == (int)buildingDirection.UP)
+            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, 180, 0));
+        else if (args.dir == (int)buildingDirection.LEFT)
+            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, 90, 0));
+        else if (args.dir == (int)buildingDirection.RIGHT)
+            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, -90, 0));
+
         Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity, transform);
     }
 }

@@ -138,6 +138,7 @@ public class MakeBuildingMessageEventArgs : EventArgs
 {
     public byte Type;
     public Vector3 Position;
+    public int dir;
 }
 
 public class AIMessageEventArgs : EventArgs
@@ -293,6 +294,7 @@ public class GameClient
     public event EventHandler<MakeBuildingMessageEventArgs> OnMakeBuilding;
 
     public int clientId { get; private set; } = -1;
+    public bool client_host = false;
 
     public string client_nick1 = "";
     public string client_nick2 = "";
@@ -911,11 +913,14 @@ public class GameClient
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
 
+            int dir = reader.ReadInt32();
+
             if (OnMakeBuilding != null)
             {
                 var eventArgs = new MakeBuildingMessageEventArgs();
                 eventArgs.Type = type;
                 eventArgs.Position = position;
+                eventArgs.dir = dir;
                 OnMakeBuilding(this, eventArgs);
             }
         }
@@ -1091,7 +1096,7 @@ public class GameClient
     }
     #endregion
     #region 건물연동
-    public void MakeBuilding(byte buildingType, Vector3 pos)
+    public void MakeBuilding(byte buildingType, Vector3 pos, int dir)
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
@@ -1101,6 +1106,7 @@ public class GameClient
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);
+        writer.Write(dir);
 
         socket.Send(buffer);
     }
