@@ -195,7 +195,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		}
 	}
 	if (buffer[0] == CS_MAKE_CAR) {
-		auto* room = client->GetRoom();
+		auto* room = client->GetRoom(); // 얘네 버퍼[1] 인거 수정하셈
 		if (room)
 		{
 			buffer[1] = SC_MAKE_CAR;
@@ -222,7 +222,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			buffer[1] = SC_MAKE_TREE;
+			buffer[0] = SC_MAKE_TREE;
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
@@ -326,13 +326,13 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			auto* packet = reinterpret_cast<cs_packet_bot_remove*>(buffer);
 			auto id = room->RemoveAI();
-			packet->type = SC_AI_REMOVE;
+			auto* packet = new sc_packet_bot_remove();
 			packet->aiId = id;
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)packet, sizeof(sc_packet_bot_remove));
-			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(sendBuffer), sizeof(OTHER_PACKET_SIZE_MAX));
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(sendBuffer), OTHER_PACKET_SIZE_MAX);
+			delete packet;
 
 			auto* scPacket = room->GetPlayerInfo();
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
@@ -518,6 +518,14 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			{
 				room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 			}
+		}
+	}
+	if (buffer[0] == CS_MAKE_BUILDING) {
+		auto* room = client->GetRoom();
+		if (room)
+		{
+			buffer[0] = SC_MAKE_BUILDING;
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
 }

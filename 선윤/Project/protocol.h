@@ -36,6 +36,7 @@
 #define SC_AI_ADD				28
 #define SC_AI_REMOVE			29
 #define SC_MAKE_TREE			30
+#define SC_MAKE_BUILDING		32
 
 // -----------------------------------
 
@@ -75,6 +76,7 @@
 #define CS_AI_ADD				28
 #define CS_AI_REMOVE			29
 #define CS_MAKE_TREE			30
+#define CS_MAKE_BUILDING		32
 
 #define PACKET_CMD_MAX		   200
 
@@ -402,7 +404,6 @@ struct cs_packet_bot_remove
 {
 	BYTE type;
 	// Áö¿ï bot ID
-	int aiId;
 };
 
 struct sc_packet_item {
