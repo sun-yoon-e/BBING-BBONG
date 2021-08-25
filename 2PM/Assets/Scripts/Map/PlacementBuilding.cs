@@ -35,58 +35,58 @@ public class PlacementBuilding : MonoBehaviour
         buildingNum = 0;
         buildingObject = new GameObject[1000];
 
-        GameClient.Instance.OnMakeBuilding += OnMakeBuilding;
 
         road.OnRoadReady2 += OnRoadReady;
         if (road.isRoadReady)
         {
             OnRoadReady(this, EventArgs.Empty);
         }
-        
+
+        GameClient.Instance.OnMakeBuilding += OnMakeBuilding;
+
     }
 
     private void Start()
     {
     }
-    
+
     private void OnRoadReady(object sender, EventArgs args)
     {
         //Debug.Log("OnRoadReady() 동작");
 
-        //if (gameClient.client_host)
-        //{
-            for (int i = 0; i < road.vertices.Length; ++i)
+        for (int i = 0; i < road.vertices.Length; ++i)
+        {
+            if (road.buildingState[i] == (int)buildingDirection.NOTBUILDINGPLACE
+                || road.buildingState[i] == (int)buildingDirection.BUILDING
+                || road.buildingState[i] == (int)buildingDirection.PIZZABUILDING)
+                continue;
+
+            int prefab = Random.Range(0, buildingPrefab.Length);
+
+            // 오른쪽 메쉬가 빌딩플레이스일 때 옆으로 간격 조정
+            if (road.buildingState[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
             {
-                if (road.buildingState[i] == (int)buildingDirection.NOTBUILDINGPLACE
-                    || road.buildingState[i] == (int)buildingDirection.BUILDING
-                    || road.buildingState[i] == (int)buildingDirection.PIZZABUILDING)
-                    continue;
-
-                int prefab = Random.Range(0, buildingPrefab.Length);
-
-                // 오른쪽 메쉬가 빌딩플레이스일 때 옆으로 간격 조정
-                if (road.buildingState[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
-                {
-                    i += interval;
-                }
-
-                // i(vertex)가 array를 넘어가지 않고 i 위의 메쉬가 빌딩플레이스일 때
-                if ((i + ((road.xSize + 1) * interval) < road.vertices.Length) &&
-                    road.buildingState[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
-                {
-                    // 위 간격 조정을 위한 notplace지정
-                    for (int j = 1; j <= interval; ++j)
-                        road.buildingState[i + (road.xSize + 1) * j] = (int)buildingDirection.NOTBUILDINGPLACE;
-                }
-
-                GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
-
-                makeNotBuildingPlace(i);
+                i += interval;
             }
-            map.UpdateMesh();
-            road.vertices = map.vertices;
-            road.UpdateMesh();
-        //}
+
+            // i(vertex)가 array를 넘어가지 않고 i 위의 메쉬가 빌딩플레이스일 때
+            if ((i + ((road.xSize + 1) * interval) < road.vertices.Length) &&
+                road.buildingState[i + road.xSize + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
+            {
+                // 위 간격 조정을 위한 notplace지정
+                for (int j = 1; j <= interval; ++j)
+                    road.buildingState[i + (road.xSize + 1) * j] = (int)buildingDirection.NOTBUILDINGPLACE;
+            }
+            if (gameClient.client_host)
+            {
+                GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
+            }
+            makeNotBuildingPlace(i);
+        }
+        map.UpdateMesh();
+        road.vertices = map.vertices;
+        road.UpdateMesh();
+
         isBuildingReady = true;
         gameClient.isReadyToControl = true;
 
