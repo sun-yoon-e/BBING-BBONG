@@ -13,7 +13,7 @@ public class PlacementPizzaStore : MonoBehaviour
     MeshGenerator map;
     PlacementBuilding building;
 
-    Quaternion rot;
+    public GameObject parent;
 
     private void Awake()
     {
@@ -70,6 +70,8 @@ public class PlacementPizzaStore : MonoBehaviour
         pizzaStore.tag = "PizzaStore";
 
         InitializeSprite(pizzaStore.transform.position);
+
+        pizzaStore.transform.SetParent(parent.transform);
     }
 
     void makeBuildingPlace(int place)
