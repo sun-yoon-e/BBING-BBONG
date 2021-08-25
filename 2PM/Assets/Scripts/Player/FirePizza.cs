@@ -51,7 +51,7 @@ public class FirePizza : MonoBehaviour
             dir = targetPos.position - firePos.position;
         }
         pizzaObject.transform.forward = dir;
-        
-        gameClient.FirePizza(firePos.position, targetPos.position);
+
+        gameClient.FirePizza(firePos.position, targetPos.position, gameClient.playerRoomNum);
     }
 }

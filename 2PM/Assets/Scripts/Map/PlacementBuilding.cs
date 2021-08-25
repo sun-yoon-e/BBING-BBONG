@@ -53,8 +53,8 @@ public class PlacementBuilding : MonoBehaviour
     {
         //Debug.Log("OnRoadReady() 동작");
 
-        if (gameClient.client_host)
-        {
+        //if (gameClient.client_host)
+        //{
             for (int i = 0; i < road.vertices.Length; ++i)
             {
                 if (road.buildingState[i] == (int)buildingDirection.NOTBUILDINGPLACE
@@ -86,7 +86,7 @@ public class PlacementBuilding : MonoBehaviour
             map.UpdateMesh();
             road.vertices = map.vertices;
             road.UpdateMesh();
-        }
+        //}
         isBuildingReady = true;
         gameClient.isReadyToControl = true;
 
@@ -200,6 +200,7 @@ public class PlacementBuilding : MonoBehaviour
 
     public void OnMakeBuilding(object sender, MakeBuildingMessageEventArgs args)
     {
+        Debug.Log(args.dir);
         if (args.dir == (int)buildingDirection.DOWN)
             buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity);
         else if (args.dir == (int)buildingDirection.UP)

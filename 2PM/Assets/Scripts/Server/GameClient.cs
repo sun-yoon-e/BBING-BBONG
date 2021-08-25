@@ -47,6 +47,7 @@ public class FireEventArgs : EventArgs
 {
     public Vector3 position;
     public Vector3 targetPosition;
+    public int playerIndex;
 }
 
 public class AIPositionUpdateEventArgs : EventArgs
@@ -295,6 +296,7 @@ public class GameClient
 
     public int clientId { get; private set; } = -1;
     public bool client_host = false;
+    public int playerRoomNum = -1;
 
     public string client_nick1 = "";
     public string client_nick2 = "";
@@ -713,11 +715,14 @@ public class GameClient
             targetPosition.y = reader.ReadSingle();
             targetPosition.z = reader.ReadSingle();
 
+            int index = reader.ReadInt32();
+
             if (OnFired != null)
             {
                 var eventArgs = new FireEventArgs();
                 eventArgs.position = position;
                 eventArgs.targetPosition = targetPosition;
+                eventArgs.playerIndex = index;
 
                 OnFired(this, eventArgs);
             }
@@ -906,6 +911,7 @@ public class GameClient
         }
         else if (header == SC_MAKE_BUILDING)
         {
+            Debug.Log("SC_MAKE_BUILDING");
             byte type = reader.ReadByte();
 
             Vector3 position = new Vector3();
@@ -1102,10 +1108,12 @@ public class GameClient
         var writer = new BinaryWriter(new MemoryStream(buffer));
 
         writer.Write(CS_MAKE_BUILDING);
+
         writer.Write(buildingType);
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);
+
         writer.Write(dir);
 
         socket.Send(buffer);
@@ -1129,7 +1137,7 @@ public class GameClient
 
         socket.Send(buffer);
     }
-    public void FirePizza(Vector3 pos, Vector3 targetPos)
+    public void FirePizza(Vector3 pos, Vector3 targetPos, int idx)
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
@@ -1139,10 +1147,11 @@ public class GameClient
         writer.Write(pos.y);
         writer.Write(pos.z);
 
-
         writer.Write(targetPos.x);
         writer.Write(targetPos.y);
         writer.Write(targetPos.z);
+
+        writer.Write(idx);
 
         socket.Send(buffer);
     }

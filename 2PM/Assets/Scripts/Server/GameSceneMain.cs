@@ -60,27 +60,55 @@ public class GameSceneMain : MonoBehaviour
 
         players = new GameObject[4];
 
-        for (int i = 0; i < 4; i++)
+        if (gameClient.client_nick == gameClient.client_nick1)
         {
-            if (gameClient.clientId == i)
-            {
-                var m = currentPlayer.transform.Find("Controller/Rider/Box001");
-                m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
-            }
-            else
-            {
-                players[i] = Instantiate(playerObject);
-                var m = players[i].transform.Find("Rider/Box001");
-                m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
-            }
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(0);
+            gameClient.playerRoomNum = 0;
+        }
+        else if (gameClient.client_nick == gameClient.client_nick2)
+        {
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(1);
+            gameClient.playerRoomNum = 1;
+        }
+        else if (gameClient.client_nick == gameClient.client_nick3)
+        {
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(2);
+            gameClient.playerRoomNum = 2;
+        }
+        else if (gameClient.client_nick == gameClient.client_nick4)
+        {
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(3);
+            gameClient.playerRoomNum = 3;
         }
 
-        if (!isRenderAI)
+        for (int i = 0; i < 3; i++)
         {
-            players[3] = Instantiate(AIObject);
+            if (gameClient.playerRoomNum == i)
+                continue;
+            players[i] = Instantiate(playerObject);
+            var m = players[i].transform.Find("Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+        }
+
+        if (gameClient.client_host)
+        {
+            if (!isRenderAI)
+            {
+                players[3] = Instantiate(AIObject);
+                players[3].transform.position = new Vector3(505, 10, 500);
+                players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
+                isRenderAI = true;
+            }
+        }
+        else
+        {
+            players[3] = Instantiate(playerObject);
             players[3].transform.position = new Vector3(505, 10, 500);
             players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
-            isRenderAI = true;
         }
     }
 
@@ -266,5 +294,7 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
+
+        //args.playerIndex 써서 애니메이션 넣음 됨다
     }
 }
