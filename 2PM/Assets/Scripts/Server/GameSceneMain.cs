@@ -294,7 +294,9 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
-
-        //args.playerIndex 써서 애니메이션 넣음 됨다
+        
+        var animator = players[args.playerIndex].GetComponent<Animator>();
+        animator.SetTrigger("FirePizza");
+        SoundManager.instance.PlaySE("FirePizza");
     }
 }

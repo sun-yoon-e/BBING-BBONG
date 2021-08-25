@@ -96,6 +96,7 @@ public class RoadGenerator : MonoBehaviour
             UpdateMesh();
             isRoadReady = true;
 
+            /*
             if (OnRoadReady != null)
             {
                 OnRoadReady(this, EventArgs.Empty);
@@ -104,6 +105,7 @@ public class RoadGenerator : MonoBehaviour
             {
                 Debug.Log("OnRoadReady() is null");
             }
+            */
 
             if (OnRoadReady2 != null)
             {

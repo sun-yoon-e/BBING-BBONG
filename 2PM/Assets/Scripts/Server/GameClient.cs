@@ -297,7 +297,7 @@ public class GameClient
     public int clientId { get; private set; } = -1;
     public bool client_host = false;
     public int playerRoomNum = -1;
-
+    public string client_nick = "";
     public string client_nick1 = "";
     public string client_nick2 = "";
     public string client_nick3 = "";
