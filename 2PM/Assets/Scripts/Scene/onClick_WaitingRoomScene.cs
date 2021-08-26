@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class onClick_WaitingRoomScene : MonoBehaviour
 {
     public int playerCnt = -1;
-    
+
     public Text roomName;
     public Text[] PlayerID;
     public Image[] AIImages;
@@ -17,24 +17,24 @@ public class onClick_WaitingRoomScene : MonoBehaviour
     private bool[] PlayerList = new bool[4];
     private bool isGameStarted = false;
     private int maxPlayer = 4;
-    
+
     private SoundManager soundManager;
-    
+
     private GameClient gameClient = GameClient.Instance;
-   
+
     private void Start()
     {
         //Debug.Log("waitingRoomScene.start()");
-        
+
         //배경음 전환
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         if (soundManager.reload)
         {
             soundManager.bgmNum = 0;
             soundManager.PlayeBGM();
-            soundManager.reload = false; 
+            soundManager.reload = false;
         }
-        
+
         gameClient.OnGameStateChanged += GameStateChanged;
         gameClient.OnRoomInfo += OnRoomInfo;
         gameClient.OnRoomNewPlayer += OnRoomNewPlayer;
@@ -49,7 +49,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         {
             obj.gameObject.SetActive(false);
         }
-        
+
         gameClient.RoomInfo(-1);
     }
 
@@ -102,7 +102,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                 PlayerID[1].text = e.nick2;
             }
         }
-        
+
         if (e.nick3 != null)
         {
             if (PlayerID[2] != null)
@@ -118,7 +118,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                 PlayerID[2].text = e.nick3;
             }
         }
-        
+
         if (e.nick4 != null)
         {
             if (PlayerID[3] != null)
@@ -156,7 +156,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         }
         //Debug.Log("roomCount : " + roomCount);
         //Debug.Log("roomName : " + roomName.text);
-        
+
         if (PlayerID[0] != null && PlayerID[0].text == "AI(1)")
             AIImages[0].gameObject.SetActive(true);
         if (PlayerID[1] != null && PlayerID[1].text == "AI(2)")
@@ -191,7 +191,6 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         {
             gameClient.StartGame();
         }
-        //SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
     }
 
     public void AddAI_Btn_Clicked()

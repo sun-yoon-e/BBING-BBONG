@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
-public class CarNavmeshAgent: MonoBehaviour
+public class CarNavmeshAgent : MonoBehaviour
 {
     NavMeshAgent agent;
     RoadGenerator road;
@@ -9,7 +9,6 @@ public class CarNavmeshAgent: MonoBehaviour
     private void Awake()
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
-        
         agent = GetComponent<NavMeshAgent>();
     }
 

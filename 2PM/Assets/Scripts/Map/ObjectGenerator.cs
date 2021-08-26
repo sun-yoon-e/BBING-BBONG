@@ -28,24 +28,27 @@ public class ObjectGenerator : MonoBehaviour
 
     private void CreateObjectPrefab(object sender, EventArgs args)
     {
-        int prefab = 0;
-        int isObject;
-
-        for (int i = 0; i < road.vertices.Length; ++i)
+        if (GameClient.Instance.client_host)
         {
-            if ((road.isObjectPlace[i] == false && road.buildingState[i] != 0) || road.isRoad[i] == true)
-                continue;
+            int prefab = 0;
+            int isObject;
 
-            isObject = Random.Range(0, 4);
-            if (isObject == 1)
+            for (int i = 0; i < road.vertices.Length; ++i)
             {
-                prefab = Random.Range(0, objectPrefab.Length);
-                GameClient.Instance.MakeTree((byte)prefab, road.vertices[i]);
+                if ((road.isObjectPlace[i] == false && road.buildingState[i] != 0) || road.isRoad[i] == true)
+                    continue;
 
-                //Instantiate(objectPrefab[prefab], road.vertices[i], Quaternion.identity, transform);
-                //prefab++;
-                //if (prefab >= objectPrefab.Length)
-                //    prefab = 0;
+                isObject = Random.Range(0, 4);
+                if (isObject == 1)
+                {
+                    prefab = Random.Range(0, objectPrefab.Length);
+                    GameClient.Instance.MakeTree((byte)prefab, road.vertices[i]);
+
+                    //Instantiate(objectPrefab[prefab], road.vertices[i], Quaternion.identity, transform);
+                    //prefab++;
+                    //if (prefab >= objectPrefab.Length)
+                    //    prefab = 0;
+                }
             }
         }
     }

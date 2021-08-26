@@ -12,9 +12,9 @@ public class onClick_LoginMenu : MonoBehaviour
     private const int POPUP_OK = 0;
     // 오류 상태. 팝업의 확인 버튼을 누르면 게임을 종료합니다. 
     private const int POPUP_ERROR = 1;
-    
+
     private GameClient gameClient = GameClient.Instance;
-    
+
     // 팝업 상태를 정의합니다. 오류가 발생해서 팝업이 뜬 거면 게임을 종료하도록 합니다. 
     private int popupStatus = 0;
 
@@ -27,7 +27,7 @@ public class onClick_LoginMenu : MonoBehaviour
     public InputField Signup_id;
     public InputField Signup_pw;
     public Text InformationText;
-    
+
     // 회원가입 버튼 클릭
     public void Signup_btn_Clicked()
     {
@@ -49,11 +49,11 @@ public class onClick_LoginMenu : MonoBehaviour
     // 게임종료 버튼 클릭
     public void ExitGame_btn_Clicked()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
             Application.Quit();
-        #endif
+#endif
     }
 
     public void Popup_btn_Clicked()
@@ -61,7 +61,8 @@ public class onClick_LoginMenu : MonoBehaviour
         if (popupStatus == POPUP_ERROR)
         {
             ExitGame_btn_Clicked();
-        } else if (popupStatus == POPUP_OK)
+        }
+        else if (popupStatus == POPUP_OK)
         {
             SignupPopup.SetActive(false);
         }
@@ -87,7 +88,7 @@ public class onClick_LoginMenu : MonoBehaviour
             SignupPopup.SetActive(true);
             return;
         }
-        
+
         gameClient.SignUp(Signup_id.text, Signup_pw.text);
     }
 
@@ -105,8 +106,9 @@ public class onClick_LoginMenu : MonoBehaviour
         gameClient.OnSocketError += SocketError;
         gameClient.OnLogin += LoginResult;
         gameClient.OnSignup += SignupResult;
-        if (!gameClient.IsConnect()) {
-            if(!File.Exists("NetworkAddress.txt"))
+        if (!gameClient.IsConnect())
+        {
+            if (!File.Exists("NetworkAddress.txt"))
             {
                 //string[] lines = { "127.0.0.1", "13531" };
                 string[] lines = { "14.38.227.223", "13531" };
@@ -124,13 +126,13 @@ public class onClick_LoginMenu : MonoBehaviour
     private void SocketError(object sender, EventArgs e)
     {
         InformationText.text = "서버에 접속할 수 없습니다";
-        
+
         // 팝업 활성화 후 "서버에 연결할 수 없습니다" 메시지를 띄웁니다.
         SignupPopup.SetActive(true);
         // 뒤에 있는건 전부 숨깁니다
         LoginMenu.SetActive(false);
         SignupMenu.SetActive(false);
-        
+
         // 팝업에서 '확인' 버튼을 누르면 종료하도록 합니다.
         popupStatus = POPUP_ERROR;
     }
@@ -145,7 +147,7 @@ public class onClick_LoginMenu : MonoBehaviour
             // TODO: 다음 scene으로 넘어감
             SceneManager.LoadScene("Scenes/LobbyScene", LoadSceneMode.Single);
         }
-        else if(InformationText!=null)
+        else if (InformationText != null)
         {
             InformationText.text = "로그인에 실패했습니다.";
             SignupPopup.SetActive(true);

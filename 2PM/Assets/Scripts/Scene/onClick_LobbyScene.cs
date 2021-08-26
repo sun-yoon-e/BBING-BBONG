@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class onClick_LobbyScene: MonoBehaviour
+public class onClick_LobbyScene : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
 
@@ -14,7 +14,7 @@ public class onClick_LobbyScene: MonoBehaviour
 
     public Button[] RoomBtn;
     public Button PreviosBtn, NextBtn;
-    
+
     public class RoomInfo
     {
         public int Num;
@@ -23,7 +23,7 @@ public class onClick_LobbyScene: MonoBehaviour
         public bool isPlaying;
     }
     List<RoomInfo> roomList = new List<RoomInfo>();
-    
+
     private int currentPage = 1, maxPage, multiple;
 
     private void Start()
@@ -41,7 +41,7 @@ public class onClick_LobbyScene: MonoBehaviour
     private void RoomListResult(object sender, RoomListMessageEventArgs e)
     {
         roomList.Clear();
-        foreach(var room in e.roomInfo)
+        foreach (var room in e.roomInfo)
         {
             RoomInfo tmp = new RoomInfo();
             tmp.Num = room.RoomID;
@@ -60,18 +60,18 @@ public class onClick_LobbyScene: MonoBehaviour
         --currentPage;
         RoomListrenewal();
     }
-    
+
     // 다음 리스트 버튼 클릭
     public void Next_btn_Clicked()
     {
         ++currentPage;
         RoomListrenewal();
     }
-    
+
     // 리스트 새로고침 버튼 클릭
     public void Refresh_btn_Clicked()
     {
-        gameClient.RequestRoomList(currentPage-1);
+        gameClient.RequestRoomList(currentPage - 1);
         //RoomListrenewal();
     }
 
@@ -82,11 +82,11 @@ public class onClick_LobbyScene: MonoBehaviour
         maxPage = (roomList.Count % RoomBtn.Length == 0)
             ? roomList.Count / RoomBtn.Length
             : roomList.Count / RoomBtn.Length + 1;
-        
+
         //이전, 다음 버튼
         PreviosBtn.interactable = (currentPage <= 1) ? false : true;
         NextBtn.interactable = (currentPage >= maxPage) ? false : true;
-        
+
         //페이지에 맞는 리스트 대입
         multiple = (currentPage - 1) * RoomBtn.Length;
         for (int i = 0; i < RoomBtn.Length; i++)
@@ -97,19 +97,19 @@ public class onClick_LobbyScene: MonoBehaviour
 
                 //방 번호 (두번째 코드는 임의 지정 번호 i+1, 오류 난다면 첫번째 코드로 할 것)
                 //RoomBtn[i].transform.GetChild(0).GetComponent<Text>().text = (multiple + i < roomList.Count) ? roomList[multiple + i].Num + "" : "";
-            
-                RoomBtn[i].transform.GetChild(0).GetComponent<Text>().text = (multiple + i < roomList.Count) ? $"{i+1}" : "";
+
+                RoomBtn[i].transform.GetChild(0).GetComponent<Text>().text = (multiple + i < roomList.Count) ? $"{i + 1}" : "";
 
                 //방 이름
                 RoomBtn[i].transform.GetChild(1).GetComponent<Text>().text = (multiple + i < roomList.Count) ? roomList[multiple + i].Name : "";
-            
+
                 //인원
                 RoomBtn[i].transform.GetChild(2).GetComponent<Text>().text = (multiple + i < roomList.Count) ? roomList[multiple + i].PlayerCount + "/4" : "";
             }
-            
+
         }
     }
-    
+
     // 방 생성 버튼 클릭
     public void CreateRoom_btn_Clicked()
     {
@@ -121,10 +121,10 @@ public class onClick_LobbyScene: MonoBehaviour
         RoomInfo tmp = inList[index];
         tmp.Num = index + 1;
         tmp.Name = RoomName.text;
-       //tmp.PlayerCount = 
+        //tmp.PlayerCount = 
         inList[index] = tmp;
     }
-    
+
     // 방 클릭(방 입장)
     public void RoomBtn_Clicked(Button button)
     {
@@ -148,7 +148,7 @@ public class onClick_LobbyScene: MonoBehaviour
         Application.Quit();
 #endif
     }
-    
+
     // 방 생성 확인 버튼 클릭
     public void Ok_btn_Clicked()
     {
