@@ -135,8 +135,6 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             }
         }
 
-        gameClient.RoomInfo(-1);
-
         if (gameClient.client_host)
         {
             for (int i = 0; i < 1000; ++i)
@@ -144,8 +142,10 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                 if (gameClient.BuildingInfo[i] != null)
                     gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
             }
+            gameClient.isRenderBuilding = true;
         }
-        gameClient.isRenderBuilding = true;
+
+        gameClient.RoomInfo(-1);
     }
 
     private void OnRoomInfo(object sender, RoomInfo e)
@@ -166,6 +166,8 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             AIImages[2].gameObject.SetActive(true);
         if (PlayerID[3] != null && PlayerID[3].text == "AI(4)")
             AIImages[3].gameObject.SetActive(true);
+
+        if (!gameClient.client_host) gameClient.isRenderBuilding = true;
     }
 
     private void GameStateChanged(object sender, GameStateChangedEventArgs e)
