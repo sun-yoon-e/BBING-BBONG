@@ -32,8 +32,8 @@ public class Car : MonoBehaviour
 
             //Destroy(transform.parent.gameObject);
             //obstacle.DestroyCar();
-            obstacle.c = obstacle.Cars.Find(p => p.Car == transform.parent.gameObject);
-            GameClient.Instance.DestroyCar(obstacle.c.ID);
+            //obstacle.c = obstacle.Cars.Find(p => p.Car == transform.parent.gameObject);
+            //GameClient.Instance.DestroyCar(obstacle.c.ID);
         }
     }
 

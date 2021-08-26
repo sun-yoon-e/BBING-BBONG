@@ -45,13 +45,13 @@ public class ObstacleGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (gameClient.client_host)
-        {
-            for (int i = 0; i < Cars.Count; i++)
-            {
-                GameClient.Instance.MoveCar(i, Cars[i].Car.transform.position);
-            }
-        }
+        //if (gameClient.client_host)
+        //{
+        //    for (int i = 0; i < Cars.Count; i++)
+        //    {
+        //        GameClient.Instance.MoveCar(i, Cars[i].Car.transform.position);
+        //    }
+        //}
     }
 
     void CreateCar(object sender, System.EventArgs args)
