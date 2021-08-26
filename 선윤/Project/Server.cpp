@@ -198,7 +198,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom(); // 얘네 버퍼[1] 인거 수정하셈
 		if (room)
 		{
-			buffer[1] = SC_MAKE_CAR;
+			buffer[0] = SC_MAKE_CAR;
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
@@ -206,7 +206,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			buffer[1] = SC_MOVE_CAR;
+			buffer[0] = SC_MOVE_CAR;
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
@@ -214,7 +214,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			buffer[1] = SC_DESTROY_CAR;
+			buffer[0] = SC_DESTROY_CAR;
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
@@ -277,7 +277,14 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
 		if (room && room->IsGameStarted())
 		{
-			packet->TYPE = SC_FIRE;
+			Packet_Fire_SC* scPacket = new Packet_Fire_SC;
+			scPacket->TYPE = SC_FIRE;
+			scPacket->position = packet->position;
+			scPacket->targetPosition = packet->targetPosition;
+			scPacket->playerIndex = packet->playerIndex;
+
+			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
+			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)scPacket, sizeof(*scPacket));
 			room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(packet), OTHER_PACKET_SIZE_MAX);
 		}
 	}
@@ -521,10 +528,10 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		}
 	}
 	if (buffer[0] == CS_MAKE_BUILDING) {
+		buffer[0] = SC_MAKE_BUILDING;
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			buffer[0] = SC_MAKE_BUILDING;
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}

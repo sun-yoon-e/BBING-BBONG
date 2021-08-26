@@ -202,12 +202,14 @@ struct Packet_Fire {
 	BYTE TYPE = CS_FIRE;
 	Vector3 position;
 	Vector3 targetPosition;
+	int playerIndex;
 };
 
 struct Packet_Fire_SC {
 	BYTE TYPE = SC_FIRE;
 	Vector3 position;
 	Vector3 targetPosition;
+	int playerIndex;
 };
 
 struct Packet_GameInit_SC {

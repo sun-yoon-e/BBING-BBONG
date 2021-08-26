@@ -45,6 +45,8 @@ public class AIMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.07f);
 
         CheckAIStop();
+
+        GameClient.Instance.UpdatePositionAI(4, transform.position, transform.rotation.eulerAngles);
     }
 
     void CreateNavMeshAgentObject()

@@ -181,7 +181,6 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         {
             gameClient.StartGame();
         }
-        //SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
     }
 
     public void AddAI_Btn_Clicked()

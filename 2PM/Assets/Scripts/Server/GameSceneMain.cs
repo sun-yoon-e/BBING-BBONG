@@ -23,7 +23,8 @@ public class GameSceneMain : MonoBehaviour
     public GameObject gameOverPanel;
     public Text gameOverScoreBoard;
 
-    public gameTimer timer;
+    //public gameTimer timer;
+    public Text timerText;
     
     public GameObject pizza;
     private GameObject[] players = null;
@@ -60,27 +61,58 @@ public class GameSceneMain : MonoBehaviour
 
         players = new GameObject[4];
 
+        if (gameClient.client_nick == gameClient.client_nick1)
+        {
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(0);
+            gameClient.playerRoomNum = 0;
+        }
+        else if (gameClient.client_nick == gameClient.client_nick2)
+        {
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(1);
+            gameClient.playerRoomNum = 1;
+        }
+        else if (gameClient.client_nick == gameClient.client_nick3)
+        {
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(2);
+            gameClient.playerRoomNum = 2;
+        }
+        else if (gameClient.client_nick == gameClient.client_nick4)
+        {
+            var m = currentPlayer.transform.Find("Controller/Rider/Box001");
+            m.gameObject.GetComponent<Renderer>().material = decideMaterial(3);
+            gameClient.playerRoomNum = 3;
+        }
+
         for (int i = 0; i < 4; i++)
         {
-            if (gameClient.clientId == i)
+            if (gameClient.client_host)
             {
-                var m = currentPlayer.transform.Find("Controller/Rider/Box001");
-                m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                if (gameClient.ai_client[i])
+                {
+                    players[i] = Instantiate(AIObject);
+                    players[i].transform.position = new Vector3(505, 10, 500);
+                    players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+                    var m = players[i].transform.Find("Rider/Box001");
+                    m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                }
+                else
+                {
+                    if (gameClient.playerRoomNum == i) continue;
+                    players[i] = Instantiate(playerObject);
+                    var m = players[i].transform.Find("Rider/Box001");
+                    m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                }
             }
             else
             {
+                if (gameClient.playerRoomNum == i) continue;
                 players[i] = Instantiate(playerObject);
                 var m = players[i].transform.Find("Rider/Box001");
                 m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
             }
-        }
-
-        if (!isRenderAI)
-        {
-            players[3] = Instantiate(AIObject);
-            players[3].transform.position = new Vector3(505, 10, 500);
-            players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
-            isRenderAI = true;
         }
     }
 
@@ -89,20 +121,6 @@ public class GameSceneMain : MonoBehaviour
         scores = null;
         players = null;
         gameOverPanel = null;
-    }
-
-    void OnScoreUpdated(object caller, ScoreUpdateEventArgs args)
-    {
-        //Debug.Log("OnScoreUpdated()");
-        scores = args.scores;
-        string text = "점수표\n";
-
-        text += $"{gameClient.client_nick1} : {scores[0]}\n";
-        text += $"{gameClient.client_nick2} : {scores[1]}\n";
-        text += $"{gameClient.client_nick3} : {scores[2]}\n";
-        text += $"{gameClient.client_nick4} : {scores[3]}\n";
-
-        scoreTable.text = text;
     }
 
     Material decideMaterial(int playerId)
@@ -126,6 +144,20 @@ public class GameSceneMain : MonoBehaviour
         return material03;
     }
 
+    void OnScoreUpdated(object caller, ScoreUpdateEventArgs args)
+    {
+        //Debug.Log("OnScoreUpdated()");
+        scores = args.scores;
+        string text = "점수표\n";
+
+        text += $"{gameClient.client_nick1} : {scores[0]}\n";
+        text += $"{gameClient.client_nick2} : {scores[1]}\n";
+        text += $"{gameClient.client_nick3} : {scores[2]}\n";
+        text += $"{gameClient.client_nick4} : {scores[3]}\n";
+
+        scoreTable.text = text;
+    }
+
     public void AIFired(object sender, AIFireEventArgs args)
     {
         Debug.Log("AIFireUpdate");
@@ -134,37 +166,25 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
+
+        string text = "점수표\n";
+
+        text += $"{gameClient.client_nick1} : {scores[0]}\n";
+        text += $"{gameClient.client_nick2} : {scores[1]}\n";
+        text += $"{gameClient.client_nick3} : {scores[2]}\n";
+        text += $"{gameClient.client_nick4} : {scores[3] + 50}\n";
+
+        scoreTable.text = text;
     }
 
     public void AIPositionUpdated(object sender, AIPositionUpdateEventArgs args)
     {
         Debug.Log("AIPositionUpdate");
 
-        if (!isRenderAI)
+        if (gameClient.ai_client[args.AIID - 1] == false)
         {
-            players[args.AIID] = Instantiate(AIObject);
-            players[args.AIID].transform.position = new Vector3(505, 10, 500);
-            players[args.AIID].transform.rotation = Quaternion.Euler(0, 0, 0);
-            isRenderAI = true;
-        }
-
-        if (players != null)
-        {
-            Destroy(players[args.AIID]);
-        }
-
-        if (gameClient.ai_client[args.AIID] == false)
-        {
-            players[args.AIID] = Instantiate(playerObject);
-            players[args.AIID].transform.position = args.position;
-            players[args.AIID].transform.rotation = Quaternion.Euler(args.rotation);
-            //players[i].transform.rotation = new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 1);
-
-            var m = players[args.AIID].transform.Find("Rider/Box001");
-            if (m != null)
-            {
-                m.gameObject.GetComponent<Renderer>().material = decideMaterial(args.AIID);
-            }
+            players[args.AIID - 1].transform.position = args.position;
+            players[args.AIID - 1].transform.rotation = Quaternion.Euler(args.rotation);
         }
     }
 
@@ -174,15 +194,15 @@ public class GameSceneMain : MonoBehaviour
         if (!gameClient.isReadyToControl) return;
         //Debug.Log("OnPositionUpdated() 플레이어 수 : " + args.players);
 
-        if (players != null)
-        {
-            for (int i = 0; i < args.players; i++)
-            {
-                Destroy(players[i]);
-            }
-        }
+        //if (players != null)
+        //{
+        //    for (int i = 0; i < args.players; i++)
+        //    {
+        //        Destroy(players[i]);
+        //    }
+        //}
 
-        players = new GameObject[4];
+        //players = new GameObject[4];
         //Debug.Log("new player : " + args.players);
 
         for (int i = 0; i < args.players; i++)
@@ -191,17 +211,17 @@ public class GameSceneMain : MonoBehaviour
             {
                 if (gameClient.ai_client[i] == false)
                 {
-                    players[i] = Instantiate(playerObject);
+                    //players[i] = Instantiate(playerObject);
                     players[i].transform.position = args.position[i];
                     players[i].transform.rotation = Quaternion.Euler(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z);
                     //players[i].transform.rotation = new Quaternion(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z, 1);
 
-                    var m = players[i].transform.Find("Rider/Box001");
-                    if (m != null)
-                    {
-                        //Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
-                        m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
-                    }
+                    //var m = players[i].transform.Find("Rider/Box001");
+                    //if (m != null)
+                    //{
+                    //    //Debug.Log("characterTransform() i = " + i + ", args.player : " + args.players);
+                    //    m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                    //}
                 }
             }
         }
@@ -216,7 +236,9 @@ public class GameSceneMain : MonoBehaviour
         else
         {
             gameOverPanel.SetActive(true);
-            timer.stopTimer();
+            gameOverScoreBoard.gameObject.SetActive(true);
+            //timer.stopTimer();
+            timerText.gameObject.SetActive(false);
 
             if (scores != null)
             {
@@ -229,7 +251,7 @@ public class GameSceneMain : MonoBehaviour
                 string text = "";
                 int j = 1;
 
-                foreach (var item in scoreMap.OrderBy(x => x.Value).Reverse())
+                foreach (var item in scoreMap.OrderByDescending(x => x.Value).ThenByDescending(y => y.Key))
                 {
                     text += $"{j++}등 : {item.Key + 1} - {item.Value}점\n";
                 }

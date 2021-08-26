@@ -18,7 +18,6 @@ public class Car: MonoBehaviour
         
         rb.constraints = RigidbodyConstraints.FreezePosition;
         rb.constraints = RigidbodyConstraints.FreezeRotationY;
-
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -29,10 +28,12 @@ public class Car: MonoBehaviour
             var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
             rb_controller.maxSpeed = item.orMaxSpeed / 2;
             item.isSlow = true;
-            obstacle.GenerateCar();
+            //obstacle.GenerateCar();
 
             //Destroy(transform.parent.gameObject);
-            obstacle.DestroyCar();
+            //obstacle.DestroyCar();
+            obstacle.c = obstacle.Cars.Find(p => p.Car == transform.parent.gameObject);
+            GameClient.Instance.DestroyCar(obstacle.c.ID);
         }
     }
 

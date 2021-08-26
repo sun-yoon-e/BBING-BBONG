@@ -47,6 +47,7 @@ public class FireEventArgs : EventArgs
 {
     public Vector3 position;
     public Vector3 targetPosition;
+
 }
 
 public class AIPositionUpdateEventArgs : EventArgs
@@ -291,11 +292,15 @@ public class GameClient
     public event EventHandler<AIMessageEventArgs> OnRemoveAI;
 
     public int clientId { get; private set; } = -1;
+    public bool client_host = false;
 
+    public string client_nick = "";
     public string client_nick1 = "";
     public string client_nick2 = "";
     public string client_nick3 = "";
     public string client_nick4 = "";
+
+    public int playerRoomNum = -1;
 
     public bool[] ai_client = new bool[4];
 
@@ -1150,12 +1155,11 @@ public class GameClient
 
         socket.Send(buffer);
     }
-    public void RemoveAI(/*int id*/)
+    public void RemoveAI()
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
         writer.Write(CS_AI_REMOVE);
-        //writer.Write(id);
 
         socket.Send(buffer);
     }

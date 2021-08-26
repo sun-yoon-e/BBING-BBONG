@@ -154,6 +154,7 @@ public class onClick_LobbyScene: MonoBehaviour
     {
         gameClient.MakeRoom(RoomName.text);
         SceneManager.LoadScene("Scenes/WaitingRoomScene", LoadSceneMode.Single);
+        gameClient.client_host = true;
         //RoomInfo tmp = new RoomInfo();
         //roomList.Add(tmp);
         //changeValue(roomList, roomList.Count - 1);

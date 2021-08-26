@@ -49,7 +49,8 @@ public class AIFirePizza : MonoBehaviour
             Quaternion pizzaRotation = Quaternion.LookRotation(vec);
             Vector3 pizzaPosition = firePos.position;
 
-            pizza = Instantiate(pizzaPrefab, pizzaPosition, pizzaRotation);
+            //pizza = Instantiate(pizzaPrefab, pizzaPosition, pizzaRotation);
+            GameClient.Instance.FirePizzaAI(4, pizzaPosition, col[0].transform.position);
 
             //print(col[0].transform.position);
             Destroy(col[0]);

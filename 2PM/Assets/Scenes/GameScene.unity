@@ -3000,6 +3000,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 666119545}
   gameOverScoreBoard: {fileID: 448071193}
   timer: {fileID: 0}
+  timerText: {fileID: 1246010499632793509}
   pizza: {fileID: 8660808437739804389, guid: f149a959c89c06045acdeead329d14dc, type: 3}
 --- !u!114 &2045076382
 MonoBehaviour:

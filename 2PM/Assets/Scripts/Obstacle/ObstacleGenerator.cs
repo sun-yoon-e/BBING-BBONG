@@ -13,6 +13,7 @@ public class ObstacleGenerator : MonoBehaviour
         public int ID;
         public GameObject Car;
     }
+    public CarObject c;
 
     public List<CarObject> Cars;
 
@@ -39,6 +40,17 @@ public class ObstacleGenerator : MonoBehaviour
         if (road.isRoadReady)
         {
             CreateCar(this, System.EventArgs.Empty);
+        }
+    }
+
+    private void Update()
+    {
+        if (gameClient.client_host)
+        {
+            for (int i = 0; i < Cars.Count; i++)
+            {
+                GameClient.Instance.MoveCar(i, Cars[i].Car.transform.position);
+            }
         }
     }
 
@@ -93,10 +105,10 @@ public class ObstacleGenerator : MonoBehaviour
     public void OnDestroyCar(object sender, DestroyCarMessageEventArgs args)
     {
         //Debug.Log("onCar");
-        CarObject car = Cars.Find(p => p.ID == args.ID);
+        CarObject car = Cars.Find(p => p.Car == Cars[args.ID].Car);
         if(car != null)
         {
-            Destroy(car.Car);
+            Destroy(Cars[args.ID].Car);
             GenerateCar();
 
             //Debug.Log("Destroy car");

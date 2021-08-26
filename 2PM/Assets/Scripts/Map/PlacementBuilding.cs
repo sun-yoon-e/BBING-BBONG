@@ -10,6 +10,7 @@ public class PlacementBuilding : MonoBehaviour
     RoadGenerator road;
     MeshGenerator map;
 
+    public int prefabNum = 0;
     public GameObject[] buildingPrefab;
     public GameObject buildingParent;
 
@@ -57,7 +58,9 @@ public class PlacementBuilding : MonoBehaviour
                 || road.buildingState[i] == (int)buildingDirection.PIZZABUILDING)
                 continue;
 
-            int prefab = Random.Range(0, buildingPrefab.Length);
+            //int prefab = Random.Range(0, buildingPrefab.Length);
+            int prefab = prefabNum++;
+            if (prefab == 21) prefabNum = 0;
 
             // 오른쪽 메쉬가 빌딩플레이스일 때 옆으로 간격 조정
             if (road.buildingState[i + 1] != (int)buildingDirection.NOTBUILDINGPLACE)
