@@ -79,8 +79,8 @@ public class PlacementBuilding : MonoBehaviour
 
             if (gameClient.client_host)
             {
+                //gameClient.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
                 gameClient.BuildingInfo[num] = new MakeBuildingMessageEventArgs();
-                //GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
                 gameClient.BuildingInfo[num].Type = (byte)prefab;
                 gameClient.BuildingInfo[num].Position = road.vertices[i];
                 gameClient.BuildingInfo[num].dir = road.buildingState[i];

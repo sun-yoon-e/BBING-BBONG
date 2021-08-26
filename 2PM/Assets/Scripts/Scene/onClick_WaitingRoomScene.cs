@@ -144,6 +144,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             }
             gameClient.isRenderBuilding = true;
         }
+        gameClient.isRenderBuilding = true;
 
         gameClient.RoomInfo(-1);
     }
@@ -166,8 +167,6 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             AIImages[2].gameObject.SetActive(true);
         if (PlayerID[3] != null && PlayerID[3].text == "AI(4)")
             AIImages[3].gameObject.SetActive(true);
-
-        if (!gameClient.client_host) gameClient.isRenderBuilding = true;
     }
 
     private void GameStateChanged(object sender, GameStateChangedEventArgs e)
