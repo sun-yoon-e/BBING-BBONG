@@ -163,36 +163,6 @@ public class PlacementBuilding : MonoBehaviour
         }
     }
 
-    //void makeObjectPlace(int place)
-    //{
-    //    // 건물 사이 
-    //    if (place + 3 * (road.xSize + 1) + 1 < road.vertices.Length && place - 2 * (road.xSize + 1) - 1 > 0)
-    //    {
-    //        road.isObjectPlace[place + 2 * (road.xSize + 1) + 1] = true;
-    //        road.isObjectPlace[place + 2 * (road.xSize + 1)] = true;
-    //        road.isObjectPlace[place + 2 * (road.xSize + 1) - 1] = true;
-
-    //        road.isObjectPlace[place - 2 * (road.xSize + 1) + 1] = true;
-    //        road.isObjectPlace[place - 2 * (road.xSize + 1)] = true;
-    //        road.isObjectPlace[place - 2 * (road.xSize + 1) - 1] = true;
-
-    //        road.isObjectPlace[place + road.xSize + 3] = true;
-    //        road.isObjectPlace[place + 2] = true;
-    //        road.isObjectPlace[place - road.xSize + 1] = true;
-
-    //        road.isObjectPlace[place + road.xSize - 1] = true;
-    //        road.isObjectPlace[place - 2] = true;
-    //        road.isObjectPlace[place - road.xSize - 3] = true;
-
-    //        if (road.buildingState[place] == (int)buildingDirection.DOWN)
-    //        {
-    //            road.isObjectPlace[place + 3 * (road.xSize + 1) + 1] = true;
-    //            road.isObjectPlace[place + 3 * (road.xSize + 1)] = true;
-    //            road.isObjectPlace[place + 3 * (road.xSize + 1) - 1] = true;
-    //        }
-    //    }
-    //}
-
     enum buildingDirection
     {
         NOTBUILDINGPLACE,
@@ -223,6 +193,8 @@ public class PlacementBuilding : MonoBehaviour
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
             ++buildingNum;
+
+            if (gameClient.BuildingInfo.Length == buildingNum) gameClient.isRenderBuilding = true;
         }
     }
 }
