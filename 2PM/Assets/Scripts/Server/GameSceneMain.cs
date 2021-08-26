@@ -90,10 +90,11 @@ public class GameSceneMain : MonoBehaviour
             {
                 if (gameClient.ai_client[i])
                 {
+                    Debug.Log(i);
                     players[i] = Instantiate(AIObject);
                     players[i].transform.position = new Vector3(505, 10, 500);
                     players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
-                    var m = players[i].transform.Find("Rider/Box001");
+                    var m = players[i].transform.Find("Controller/Rider/Box001");
                     m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                 }
                 else
@@ -111,6 +112,8 @@ public class GameSceneMain : MonoBehaviour
                 var m = players[i].transform.Find("Rider/Box001");
                 m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
             }
+
+            scores[i] = 0;
         }
     }
 
@@ -167,13 +170,18 @@ public class GameSceneMain : MonoBehaviour
         
         var animator = players[args.AIID].GetComponent<PizzaAnimator>();
         animator.isAnimated = true;
+        
+        for (int i = 0; i < 4; i++)
+        {
+            if (i == args.AIID) scores[i] += 50;
+        }
 
         string text = "점수표\n";
 
         text += $"{gameClient.client_nick1} : {scores[0]}\n";
         text += $"{gameClient.client_nick2} : {scores[1]}\n";
         text += $"{gameClient.client_nick3} : {scores[2]}\n";
-        text += $"{gameClient.client_nick4} : {scores[3] + 50}\n";
+        text += $"{gameClient.client_nick4} : {scores[3]}\n";
 
         scoreTable.text = text;
     }

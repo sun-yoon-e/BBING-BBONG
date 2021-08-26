@@ -97,15 +97,14 @@ public class RoadGenerator : MonoBehaviour
             isRoadReady = true;
 
             
-            if (OnRoadReady != null)
-            {
-                OnRoadReady(this, EventArgs.Empty);
-            }
-            else
-            {
-                Debug.Log("OnRoadReady() is null");
-            }
-            
+            //if (OnRoadReady != null)
+            //{
+            //    OnRoadReady(this, EventArgs.Empty);
+            //}
+            //else
+            //{
+            //    Debug.Log("OnRoadReady() is null");
+            //}
 
             if (OnRoadReady2 != null)
             {
@@ -116,23 +115,23 @@ public class RoadGenerator : MonoBehaviour
                 Debug.Log("OnRoadReady2() is null");
             }
 
-            if (OnRoadReady3 != null)
-            {
-                OnRoadReady3(this, EventArgs.Empty);
-            }
-            else
-            {
-                Debug.Log("OnRoadReady3() is null");
-            }
+            //if (OnRoadReady3 != null)
+            //{
+            //    OnRoadReady3(this, EventArgs.Empty);
+            //}
+            //else
+            //{
+            //    Debug.Log("OnRoadReady3() is null");
+            //}
 
-            if (OnRoadReady4 != null)
-            {
-                OnRoadReady4(this, EventArgs.Empty);
-            }
-            else
-            {
-                Debug.Log("OnRoadReady4() is null");
-            }
+            //if (OnRoadReady4 != null)
+            //{
+            //    OnRoadReady4(this, EventArgs.Empty);
+            //}
+            //else
+            //{
+            //    Debug.Log("OnRoadReady4() is null");
+            //}
         }
     }
 
