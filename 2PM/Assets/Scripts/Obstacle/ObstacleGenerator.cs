@@ -13,6 +13,7 @@ public class ObstacleGenerator : MonoBehaviour
         public int ID;
         public GameObject Car;
     }
+    public CarObject c;
 
     public List<CarObject> Cars;
 
@@ -26,18 +27,30 @@ public class ObstacleGenerator : MonoBehaviour
     private void Awake()
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
-        
+
         //car = new GameObject[road.wayPoint.Length];
         Cars = new List<CarObject>();
         CarNum = 0;
 
         gameClient.OnMakeCar += OnMakeCar;
         gameClient.OnDestroyCar += OnDestroyCar;
+        gameClient.OnMoveCar += OnMoveCar;
 
         road.OnRoadReady4 += CreateCar;
         if (road.isRoadReady)
         {
             CreateCar(this, System.EventArgs.Empty);
+        }
+    }
+
+    private void Update()
+    {
+        if (gameClient.client_host)
+        {
+            for (int i = 0; i < Cars.Count; i++)
+            {
+                GameClient.Instance.MoveCar(i, Cars[i].Car.transform.position);
+            }
         }
     }
 
@@ -66,6 +79,14 @@ public class ObstacleGenerator : MonoBehaviour
         //GenerateCar();
     }
 
+    public void OnMoveCar(object sender, MoveCarMessageEventArgs args)
+    {
+        for (int i = 0; i < Cars.Count; i++)
+        {
+            Cars[i].Car.transform.position = args.Position;
+        }
+    }
+
     public void OnMakeCar(object sender, MakeCarMessageEventArgs args)
     {
         CarObject car = new CarObject();
@@ -84,13 +105,22 @@ public class ObstacleGenerator : MonoBehaviour
     public void OnDestroyCar(object sender, DestroyCarMessageEventArgs args)
     {
         //Debug.Log("onCar");
-        CarObject car = Cars.Find(p => p.ID == args.ID);
-        if(car != null)
+        CarObject car = Cars.Find(p => p.Car == Cars[args.ID].Car);
+        if (car != null)
         {
+            Destroy(Cars[args.ID].Car);
             GenerateCar();
-            Destroy(car.Car);
 
             //Debug.Log("Destroy car");
+        }
+    }
+
+    public void DestroyCar()
+    {
+        for (int i = 0; i < Cars.Count; i++)
+        {
+            CarObject car = Cars.Find(p => p.ID == Cars[i].ID);
+            GameClient.Instance.DestroyCar(car.ID);
         }
     }
 

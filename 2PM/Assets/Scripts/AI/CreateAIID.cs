@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CreateAIID : MonoBehaviour
 {
-    public int idNum = 2;
+    public int idNum = -1;
     void Start()
     {
 
@@ -13,6 +13,6 @@ public class CreateAIID : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

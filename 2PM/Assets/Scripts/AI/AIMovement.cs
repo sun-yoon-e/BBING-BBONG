@@ -30,13 +30,13 @@ public class AIMovement : MonoBehaviour
     }
 
     bool isStop = false;
-    float stopStartTime =0f;
+    float stopStartTime = 0f;
     private void Update()
     {
         CalculateDirection();
         CheckIsSetDestination();
 
-        
+
         if (isArriveDestination)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
@@ -45,13 +45,15 @@ public class AIMovement : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.07f);
 
         CheckAIStop();
+
+        GameClient.Instance.UpdatePositionAI(4, transform.position, transform.rotation.eulerAngles);
     }
 
     void CreateNavMeshAgentObject()
     {
         navObject = new GameObject("AI NavMesh Agent");
         navObject.transform.position = transform.position;
-        
+
         agent = navObject.AddComponent<NavMeshAgent>();
 
         agent.speed = 20f;
@@ -72,7 +74,7 @@ public class AIMovement : MonoBehaviour
 
     void CheckIsSetDestination()
     {
-        if( agent.transform.position == agent.destination)
+        if (agent.transform.position == agent.destination)
         {
             isArriveDestination = true;
         }
@@ -82,7 +84,7 @@ public class AIMovement : MonoBehaviour
     {
         direction = agent.transform.position - transform.position;
         distance = Mathf.Sqrt(direction.x * direction.x + direction.z * direction.z);
-        
+
         if (distance > 7)
             agent.isStopped = true;
         else

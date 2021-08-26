@@ -1,7 +1,7 @@
 ﻿using Gadd420;
 using UnityEngine;
 
-public class Car: MonoBehaviour
+public class Car : MonoBehaviour
 {
     ObstacleGenerator obstacle;
     Rigidbody rb;
@@ -15,10 +15,9 @@ public class Car: MonoBehaviour
     {
         transform.localPosition = new Vector3(0, 0, 0);
         //transform.localRotation = Quaternion.Euler(0, 180.0f, 0);
-        
+
         rb.constraints = RigidbodyConstraints.FreezePosition;
         rb.constraints = RigidbodyConstraints.FreezeRotationY;
-
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -29,9 +28,12 @@ public class Car: MonoBehaviour
             var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
             rb_controller.maxSpeed = item.orMaxSpeed / 2;
             item.isSlow = true;
-            obstacle.GenerateCar();
+            //obstacle.GenerateCar();
 
-            Destroy(transform.parent.gameObject);
+            //Destroy(transform.parent.gameObject);
+            //obstacle.DestroyCar();
+            obstacle.c = obstacle.Cars.Find(p => p.Car == transform.parent.gameObject);
+            GameClient.Instance.DestroyCar(obstacle.c.ID);
         }
     }
 

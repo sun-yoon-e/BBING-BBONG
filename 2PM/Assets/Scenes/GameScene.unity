@@ -2864,6 +2864,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b21714e5522cc468680e0878e523b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefabNum: 0
   buildingPrefab:
   - {fileID: 100000, guid: 74978b6b36516b04b92f6ec6b3b0898d, type: 3}
   - {fileID: 100000, guid: 2d94dc6eeb30a8b4da06c6ac961039d0, type: 3}
@@ -2889,7 +2890,6 @@ MonoBehaviour:
   - {fileID: 100000, guid: a57f2a3f27562464e869aefe6954871b, type: 3}
   buildingParent: {fileID: 1982610958}
   buildingObject: []
-  num: 0
   buildingNum: 0
   buildingScale: 0.85
   isBuildingReady: 0
@@ -2909,7 +2909,6 @@ MonoBehaviour:
   pizzaStoreSprite: {fileID: 21300000, guid: a1d04cd1568b1a14f9623a17187bde3d, type: 3}
   pizzaStoreSpriteObject: {fileID: 0}
   pizzaStoreSpriteRenderer: {fileID: 0}
-  parent: {fileID: 0}
 --- !u!1 &1996803109
 GameObject:
   m_ObjectHideFlags: 0
@@ -3094,7 +3093,7 @@ MonoBehaviour:
   scoreTable: {fileID: 1188905030}
   gameOverPanel: {fileID: 666119545}
   gameOverScoreBoard: {fileID: 448071193}
-  timer: {fileID: 0}
+  timerText: {fileID: 1246010499632793509}
   pizza: {fileID: 8660808437739804389, guid: f149a959c89c06045acdeead329d14dc, type: 3}
 --- !u!114 &2045076382
 MonoBehaviour:
