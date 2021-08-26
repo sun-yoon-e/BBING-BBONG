@@ -297,6 +297,7 @@ public class GameClient
     public int clientId { get; private set; } = -1;
     public bool client_host = false;
     public int playerRoomNum = -1;
+
     public string client_nick = "";
     public string client_nick1 = "";
     public string client_nick2 = "";
@@ -309,6 +310,8 @@ public class GameClient
 
     public bool isGameStarted = false;
     public bool isReadyToControl = false;
+
+    public MakeBuildingMessageEventArgs[] BuildingInfo = new MakeBuildingMessageEventArgs[1000];
 
     private GameClient() 
     {
@@ -911,7 +914,7 @@ public class GameClient
         }
         else if (header == SC_MAKE_BUILDING)
         {
-            Debug.Log("SC_MAKE_BUILDING");
+            //Debug.Log("SC_MAKE_BUILDING");
             byte type = reader.ReadByte();
 
             Vector3 position = new Vector3();

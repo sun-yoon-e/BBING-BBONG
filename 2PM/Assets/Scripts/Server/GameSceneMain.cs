@@ -85,30 +85,33 @@ public class GameSceneMain : MonoBehaviour
             gameClient.playerRoomNum = 3;
         }
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if (gameClient.playerRoomNum == i)
-                continue;
-            players[i] = Instantiate(playerObject);
-            var m = players[i].transform.Find("Rider/Box001");
-            m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
-        }
-
-        if (gameClient.client_host)
-        {
-            if (!isRenderAI)
+            if (gameClient.client_host)
             {
-                players[3] = Instantiate(AIObject);
-                players[3].transform.position = new Vector3(505, 10, 500);
-                players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
-                isRenderAI = true;
+                if (gameClient.ai_client[i])
+                {
+                    players[i] = Instantiate(AIObject);
+                    players[i].transform.position = new Vector3(505, 10, 500);
+                    players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+                    var m = players[i].transform.Find("Rider/Box001");
+                    m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                }
+                else
+                {
+                    if (gameClient.playerRoomNum == i) continue;
+                    players[i] = Instantiate(playerObject);
+                    var m = players[i].transform.Find("Rider/Box001");
+                    m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+                }
             }
-        }
-        else
-        {
-            players[3] = Instantiate(playerObject);
-            players[3].transform.position = new Vector3(505, 10, 500);
-            players[3].transform.rotation = Quaternion.Euler(0, 0, 0);
+            else
+            {
+                if (gameClient.playerRoomNum == i) continue;
+                players[i] = Instantiate(playerObject);
+                var m = players[i].transform.Find("Rider/Box001");
+                m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
+            }
         }
     }
 
@@ -162,6 +165,11 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
+
+        Debug.Log("FirePizza:Animation?");
+        var animator = players[args.AIID].GetComponent<Animator>();
+        animator.SetTrigger("FirePizza");
+        SoundManager.instance.PlaySE("FirePizza");
     }
 
     public void AIPositionUpdated(object sender, AIPositionUpdateEventArgs args)
@@ -294,7 +302,8 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
-        
+
+        Debug.Log("FirePizza:Animation?");
         var animator = players[args.playerIndex].GetComponent<Animator>();
         animator.SetTrigger("FirePizza");
         SoundManager.instance.PlaySE("FirePizza");

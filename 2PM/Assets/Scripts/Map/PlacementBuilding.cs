@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class PlacementBuilding : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
-    
+
     RoadGenerator road;
     MeshGenerator map;
 
@@ -20,7 +20,7 @@ public class PlacementBuilding : MonoBehaviour
 
     // 건물간 간격 사이즈
     private int interval;
-    
+
     public event EventHandler OnBuildingReady;
     public event EventHandler OnBuildingReady2;
     public bool isBuildingReady = false;
@@ -35,13 +35,11 @@ public class PlacementBuilding : MonoBehaviour
         buildingNum = 0;
         buildingObject = new GameObject[1000];
 
-
         road.OnRoadReady2 += OnRoadReady;
         if (road.isRoadReady)
         {
             OnRoadReady(this, EventArgs.Empty);
         }
-
         GameClient.Instance.OnMakeBuilding += OnMakeBuilding;
 
     }
@@ -77,16 +75,21 @@ public class PlacementBuilding : MonoBehaviour
                 for (int j = 1; j <= interval; ++j)
                     road.buildingState[i + (road.xSize + 1) * j] = (int)buildingDirection.NOTBUILDINGPLACE;
             }
+
             if (gameClient.client_host)
             {
-                GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
+                //GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
+                gameClient.BuildingInfo[i].Type = (byte)prefab;
+                gameClient.BuildingInfo[i].Position = road.vertices[i];
+                gameClient.BuildingInfo[i].dir = road.buildingState[i];
             }
+
             makeNotBuildingPlace(i);
         }
         map.UpdateMesh();
         road.vertices = map.vertices;
         road.UpdateMesh();
-
+        
         isBuildingReady = true;
         gameClient.isReadyToControl = true;
 
@@ -200,7 +203,7 @@ public class PlacementBuilding : MonoBehaviour
 
     public void OnMakeBuilding(object sender, MakeBuildingMessageEventArgs args)
     {
-        Debug.Log(args.dir);
+        //Debug.Log(args.dir);
         if (args.dir == (int)buildingDirection.DOWN)
             buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity);
         else if (args.dir == (int)buildingDirection.UP)
