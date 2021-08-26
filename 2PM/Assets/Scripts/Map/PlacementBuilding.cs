@@ -206,20 +206,23 @@ public class PlacementBuilding : MonoBehaviour
 
     public void OnMakeBuilding(object sender, MakeBuildingMessageEventArgs args)
     {
-        //Debug.Log(args.dir);
-        if (args.dir == (int)buildingDirection.DOWN)
-            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity);
-        else if (args.dir == (int)buildingDirection.UP)
-            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, 180, 0));
-        else if (args.dir == (int)buildingDirection.LEFT)
-            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, 90, 0));
-        else if (args.dir == (int)buildingDirection.RIGHT)
-            buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, -90, 0));
-        else
-            return;
+        if (!gameClient.isRenderBuilding)
+        {
+            //Debug.Log(args.dir);
+            if (args.dir == (int)buildingDirection.DOWN)
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.identity);
+            else if (args.dir == (int)buildingDirection.UP)
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, 180, 0));
+            else if (args.dir == (int)buildingDirection.LEFT)
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, 90, 0));
+            else if (args.dir == (int)buildingDirection.RIGHT)
+                buildingObject[buildingNum] = Instantiate(buildingPrefab[args.Type], args.Position, Quaternion.Euler(0, -90, 0));
+            else
+                return;
 
-        buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
-        buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
-        ++buildingNum;
+            buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
+            buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
+            ++buildingNum;
+        }
     }
 }

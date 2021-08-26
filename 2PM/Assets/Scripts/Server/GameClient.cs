@@ -311,6 +311,7 @@ public class GameClient
     public bool isGameStarted = false;
     public bool isReadyToControl = false;
 
+    public bool isRenderBuilding = false;
     public MakeBuildingMessageEventArgs[] BuildingInfo = new MakeBuildingMessageEventArgs[1000];
 
     private GameClient() 

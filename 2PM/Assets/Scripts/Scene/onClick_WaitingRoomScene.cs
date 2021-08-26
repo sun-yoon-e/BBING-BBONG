@@ -145,6 +145,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                     gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
             }
         }
+        gameClient.isRenderBuilding = true;
     }
 
     private void OnRoomInfo(object sender, RoomInfo e)
