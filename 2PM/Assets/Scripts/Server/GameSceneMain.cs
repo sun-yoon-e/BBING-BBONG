@@ -302,8 +302,7 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
-
-        Debug.Log("FirePizza:Animation?");
+        
         var animator = players[args.playerIndex].GetComponent<Animator>();
         animator.SetTrigger("FirePizza");
         SoundManager.instance.PlaySE("FirePizza");
