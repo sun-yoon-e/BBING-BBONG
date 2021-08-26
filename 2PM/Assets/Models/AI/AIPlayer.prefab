@@ -7500,6 +7500,7 @@ GameObject:
   - component: {fileID: 3733114469338777254}
   - component: {fileID: 7534731858833328075}
   - component: {fileID: -9104062556040462515}
+  - component: {fileID: -8727805737809680687}
   m_Layer: 19
   m_Name: AIPlayer
   m_TagString: Player
@@ -7826,6 +7827,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idNum: 2
+--- !u!114 &-8727805737809680687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2837713474543578133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0aac071e0c3871f4c95d77b0205b660e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isAnimated: 0
 --- !u!1 &2837713474545755051
 GameObject:
   m_ObjectHideFlags: 0

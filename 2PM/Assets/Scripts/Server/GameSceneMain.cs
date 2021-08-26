@@ -164,11 +164,9 @@ public class GameSceneMain : MonoBehaviour
         pizzaObject.transform.position = args.position;
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
-
-        Debug.Log("FirePizza:Animation?");
-        var animator = players[args.AIID].GetComponent<Animator>();
-        animator.SetTrigger("FirePizza");
-        SoundManager.instance.PlaySE("FirePizza");
+        
+        var animator = players[args.AIID].GetComponent<PizzaAnimator>();
+        animator.isAnimated = true;
 
         string text = "점수표\n";
 
@@ -272,8 +270,7 @@ public class GameSceneMain : MonoBehaviour
         var dir = args.targetPosition - args.position;
         pizzaObject.transform.forward = dir;
         
-        var animator = players[args.playerIndex].GetComponent<Animator>();
-        animator.SetTrigger("FirePizza");
-        SoundManager.instance.PlaySE("FirePizza");
+        var animator = players[args.playerIndex].GetComponent<PizzaAnimator>();
+        animator.isAnimated = true;
     }
 }
