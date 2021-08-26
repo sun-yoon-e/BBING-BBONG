@@ -15,6 +15,7 @@ public class PlacementBuilding : MonoBehaviour
 
     public GameObject[] buildingObject;
 
+    public int num;
     public int buildingNum;
     public float buildingScale;
 
@@ -32,6 +33,7 @@ public class PlacementBuilding : MonoBehaviour
 
         interval = 2;
 
+        num = 0;
         buildingNum = 0;
         buildingObject = new GameObject[1000];
 
@@ -41,7 +43,6 @@ public class PlacementBuilding : MonoBehaviour
             OnRoadReady(this, EventArgs.Empty);
         }
         GameClient.Instance.OnMakeBuilding += OnMakeBuilding;
-
     }
 
     private void Start()
@@ -78,10 +79,12 @@ public class PlacementBuilding : MonoBehaviour
 
             if (gameClient.client_host)
             {
+                gameClient.BuildingInfo[num] = new MakeBuildingMessageEventArgs();
                 //GameClient.Instance.MakeBuilding((byte)prefab, road.vertices[i], road.buildingState[i]);
-                gameClient.BuildingInfo[i].Type = (byte)prefab;
-                gameClient.BuildingInfo[i].Position = road.vertices[i];
-                gameClient.BuildingInfo[i].dir = road.buildingState[i];
+                gameClient.BuildingInfo[num].Type = (byte)prefab;
+                gameClient.BuildingInfo[num].Position = road.vertices[i];
+                gameClient.BuildingInfo[num].dir = road.buildingState[i];
+                num++;
             }
 
             makeNotBuildingPlace(i);
