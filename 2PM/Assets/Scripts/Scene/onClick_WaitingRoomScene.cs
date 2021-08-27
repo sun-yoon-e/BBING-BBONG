@@ -135,27 +135,6 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             }
         }
 
-        if (gameClient.client_host)
-        {
-            for (int i = 0; i < 1000; ++i)
-            {
-                if (gameClient.BuildingInfo[i] != null)
-                    gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
-            }
-
-            for (int i = 0; i < 5000; ++i)
-            {
-                if (gameClient.TreeInfo[i] != null)
-                    gameClient.MakeTree(gameClient.TreeInfo[i].Type, gameClient.TreeInfo[i].Position);
-            }
-
-            for (int i = 0; i < 50; ++i)
-            {
-                if (gameClient.ItemInfo != null)
-                    gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
-            }
-        }
-
         gameClient.RoomInfo(-1);
     }
 
@@ -201,6 +180,27 @@ public class onClick_WaitingRoomScene : MonoBehaviour
     {
         if (playerCnt == maxPlayer)
         {
+            if (gameClient.client_host)
+            {
+                for (int i = 0; i < 1000; ++i)
+                {
+                    if (gameClient.BuildingInfo[i] != null)
+                        gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
+                }
+
+                for (int i = 0; i < 5000; ++i)
+                {
+                    if (gameClient.TreeInfo[i] != null)
+                        gameClient.MakeTree(gameClient.TreeInfo[i].Type, gameClient.TreeInfo[i].Position);
+                }
+
+                for (int i = 0; i < 50; ++i)
+                {
+                    if (gameClient.ItemInfo != null)
+                        gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
+                }
+            }
+
             gameClient.StartGame();
         }
         //SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);

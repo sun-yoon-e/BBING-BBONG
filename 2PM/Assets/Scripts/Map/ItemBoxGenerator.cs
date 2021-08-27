@@ -66,6 +66,7 @@ public class ItemBoxGenerator : MonoBehaviour
                     road.passibleItemPlace[itemBoxPlace[i]].z);
 
                 //gameClient.PlaceItemBox(i, itemPosition);
+                gameClient.ItemInfo[i] = new PlaceItemBoxMessageEventArgs();
                 gameClient.ItemInfo[i].ItemID = i;
                 gameClient.ItemInfo[i].Position = itemPosition;
                 num++;
@@ -96,7 +97,7 @@ public class ItemBoxGenerator : MonoBehaviour
             //Debug.Log("PlaceItem");
             ++itemNum;
 
-            if (gameClient.ItemInfo.Length == itemBoxNum) gameClient.isRenderItem = true;
+            if (gameClient.ItemInfo.Length == itemNum) gameClient.isRenderItem = true;
         }
     }
 
