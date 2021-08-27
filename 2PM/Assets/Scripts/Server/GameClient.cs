@@ -34,7 +34,8 @@ public class RoadEventArgs : EventArgs
 
 public class ScoreUpdateEventArgs : EventArgs
 {
-    public int[] scores;
+    public int id;
+    public int score;
 }
 
 public class PositionUpdateEventArgs : EventArgs
@@ -656,20 +657,15 @@ public class GameClient
         else if (header == SC_SCORE)
         {
             //Debug.Log("SC_SCORE");
-            int players = reader.ReadInt32();
-            int[] scores = new int[players];
-
-            for (int i = 0; i < players; i++)
-            {
-                scores[i] = reader.ReadInt32();
-                //Debug.Log($"{i} : {scores[i]}");
-            }
+            int id = reader.ReadInt32();
+            int score = reader.ReadInt32();
 
             if (OnScoreUpdated != null)
             {
                 //Debug.Log("OnScore");
                 var eventArgs = new ScoreUpdateEventArgs();
-                eventArgs.scores = scores;
+                eventArgs.id = id;
+                eventArgs.score = score;
                 OnScoreUpdated(this, eventArgs);
             }
         }
@@ -1083,11 +1079,13 @@ public class GameClient
 
         socket.Send(buffer);
     }
-    public void UpdateScore()
+    public void UpdateScore(int id)
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
         writer.Write(CS_SCORE);
+
+        writer.Write(id);
 
         socket.Send(buffer);
     }

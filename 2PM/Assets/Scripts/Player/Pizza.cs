@@ -46,7 +46,7 @@ public class Pizza : MonoBehaviour
                     destination.DestroyDestination += 1;
                     destination.destination[i] = 0;
 
-                    GameClient.Instance.UpdateScore();
+                    GameClient.Instance.UpdateScore(GameClient.Instance.playerRoomNum);
 
                     Destroy(gameObject);
                 }

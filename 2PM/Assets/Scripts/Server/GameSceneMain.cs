@@ -36,7 +36,6 @@ public class GameSceneMain : MonoBehaviour
     public void Start()
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
-        Debug.Log("road vertices length" + road.vertices.Length);
 
         Cursor.visible = false;
         scores = new int[4];
@@ -96,7 +95,7 @@ public class GameSceneMain : MonoBehaviour
             {
                 if (gameClient.ai_client[i])
                 {
-                    Debug.Log(i);
+                    //Debug.Log(i);
                     players[i] = Instantiate(AIObject);
                     players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                     players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -156,7 +155,11 @@ public class GameSceneMain : MonoBehaviour
     void OnScoreUpdated(object caller, ScoreUpdateEventArgs args)
     {
         //Debug.Log("OnScoreUpdated()");
-        scores = args.scores;
+        for (int i = 0; i < 4; i++)
+        {
+            if (args.id == i) scores[i] = args.score;
+        }
+
         string text = "점수표\n";
 
         text += $"{gameClient.client_nick1} : {scores[0]}\n";
@@ -169,7 +172,7 @@ public class GameSceneMain : MonoBehaviour
 
     public void AIFired(object sender, AIFireEventArgs args)
     {
-        Debug.Log("AIFireUpdate");
+        //Debug.Log("AIFireUpdate");
 
         GameObject pizzaObject = Instantiate(pizza);
         pizzaObject.transform.position = args.position;
@@ -218,7 +221,7 @@ public class GameSceneMain : MonoBehaviour
                 if (gameClient.ai_client[i] == false)
                 {
                     players[i].transform.position = args.position[i];
-                    players[i].transform.rotation = Quaternion.Euler(args.rotation[i].x, args.rotation[i].y, args.rotation[i].z);
+                    players[i].transform.rotation = Quaternion.Euler(args.rotation[i]);
                 }
             }
         }
@@ -234,7 +237,6 @@ public class GameSceneMain : MonoBehaviour
         {
             gameOverPanel.SetActive(true);
             gameOverScoreBoard.gameObject.SetActive(true);
-            //timer.stopTimer();
             timerText.gameObject.SetActive(false);
 
             if (scores != null)
@@ -250,7 +252,7 @@ public class GameSceneMain : MonoBehaviour
 
                 foreach (var item in scoreMap.OrderByDescending(x => x.Value).ThenByDescending(y => y.Key))
                 {
-                    text += $"{j++}등 : {item.Key + 1} - {item.Value}점\n";
+                    text += $"{j++}등 : {item.Key} - {item.Value}점\n";
                 }
                 gameOverScoreBoard.text = text;
             }
