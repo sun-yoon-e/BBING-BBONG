@@ -29,8 +29,8 @@ public class ObjectGenerator : MonoBehaviour
 
     private void CreateObjectPrefab(object sender, EventArgs args)
     {
-        if (GameClient.Instance.client_host)
-        {
+        //if (GameClient.Instance.client_host)
+        //{
             int prefab = 0;
             int isObject;
 
@@ -50,7 +50,7 @@ public class ObjectGenerator : MonoBehaviour
                     num++;
                 }
             }
-        }
+        //}
     }
 
     public void OnMakeTree(object sender, MakeTreeMessageEventArgs args)
