@@ -7,6 +7,7 @@ public class ObjectGenerator : MonoBehaviour
     PlacementBuilding building;
     RoadGenerator road;
     public GameObject[] objectPrefab;
+    int num, treeNum;
 
     private void Awake()
     {
@@ -42,12 +43,11 @@ public class ObjectGenerator : MonoBehaviour
                 if (isObject == 1)
                 {
                     prefab = Random.Range(0, objectPrefab.Length);
-                    GameClient.Instance.MakeTree((byte)prefab, road.vertices[i]);
-
-                    //Instantiate(objectPrefab[prefab], road.vertices[i], Quaternion.identity, transform);
-                    //prefab++;
-                    //if (prefab >= objectPrefab.Length)
-                    //    prefab = 0;
+                    //GameClient.Instance.MakeTree((byte)prefab, road.vertices[i]);
+                    GameClient.Instance.TreeInfo[num] = new MakeTreeMessageEventArgs();
+                    GameClient.Instance.TreeInfo[num].Type = (byte)prefab;
+                    GameClient.Instance.TreeInfo[num].Position = road.vertices[i];
+                    num++;
                 }
             }
         }
@@ -56,6 +56,12 @@ public class ObjectGenerator : MonoBehaviour
     public void OnMakeTree(object sender, MakeTreeMessageEventArgs args)
     {
         //Debug.Log($"{args.Type}, {args.Position}");
-        Instantiate(objectPrefab[args.Type], args.Position, Quaternion.identity, transform);
+        if (!GameClient.Instance.isRenderTree)
+        {
+            Instantiate(objectPrefab[args.Type], args.Position, Quaternion.identity, transform);
+            ++treeNum;
+
+            if (GameClient.Instance.TreeInfo.Length == treeNum) GameClient.Instance.isRenderTree = true;
+        }
     }
 }

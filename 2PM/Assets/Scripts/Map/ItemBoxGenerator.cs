@@ -4,6 +4,7 @@ public class ItemBoxGenerator : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
 
+    int num, itemNum;
     public int itemBoxNum;
     public GameObject itemBoxPrefab;
 
@@ -42,48 +43,61 @@ public class ItemBoxGenerator : MonoBehaviour
 
     void CreateItemBox(object sender, System.EventArgs args)
     {
-        bool isDuplicate;
-        for (int i = 0; i < itemBoxNum; ++i)
+        if (gameClient.client_host)
         {
-            itemBoxPlace[i] = Random.Range(1, road.middleRoadNum);
-
-            // 중복체크
-            isDuplicate = false;
-            for (int j = 0; j < i; ++j)
+            bool isDuplicate;
+            for (int i = 0; i < itemBoxNum; ++i)
             {
-                if (itemBoxPlace[j] == itemBoxPlace[i])
-                    isDuplicate = true;
+                itemBoxPlace[i] = Random.Range(1, road.middleRoadNum);
+
+                // 중복체크
+                isDuplicate = false;
+                for (int j = 0; j < i; ++j)
+                {
+                    if (itemBoxPlace[j] == itemBoxPlace[i])
+                        isDuplicate = true;
+                }
+                if (isDuplicate)
+                    continue;
+
+                Vector3 itemPosition =
+                    new Vector3(road.passibleItemPlace[itemBoxPlace[i]].x,
+                    road.passibleItemPlace[itemBoxPlace[i]].y + 1.5f,
+                    road.passibleItemPlace[itemBoxPlace[i]].z);
+
+                //gameClient.PlaceItemBox(i, itemPosition);
+                gameClient.ItemInfo[i].ItemID = i;
+                gameClient.ItemInfo[i].Position = itemPosition;
+                num++;
+
+                //Debug.Log(itemPosition);
+                //Debug.Log("OnRoadItem");
             }
-            if (isDuplicate)
-                continue;
-
-            Vector3 itemPosition =
-                new Vector3(road.passibleItemPlace[itemBoxPlace[i]].x,
-                road.passibleItemPlace[itemBoxPlace[i]].y + 1.5f,
-                road.passibleItemPlace[itemBoxPlace[i]].z);
-
-            gameClient.PlaceItemBox(i, itemPosition);
-            //Debug.Log(itemPosition);
-            //Debug.Log("OnRoadItem");
         }
     }
 
     public void PlaceItem(object sender, PlaceItemBoxMessageEventArgs args)
     {
-        itemBox[args.ItemID] = Instantiate(itemBoxPrefab, args.Position, Quaternion.identity, transform);
-        itemBox[args.ItemID].transform.localScale = new Vector3(itemScale, itemScale, itemScale);
-        itemBox[args.ItemID].tag = "ItemBox";
+        if (!gameClient.isRenderItem)
+        {
+            itemBox[args.ItemID] = Instantiate(itemBoxPrefab, args.Position, Quaternion.identity, transform);
+            itemBox[args.ItemID].transform.localScale = new Vector3(itemScale, itemScale, itemScale);
+            itemBox[args.ItemID].tag = "ItemBox";
 
-        itemSpriteObject[args.ItemID] = new GameObject("ItemSprite");
-        itemSpriteObject[args.ItemID].transform.position = new Vector3(args.Position.x, args.Position.y + 50, args.Position.z);
-        itemSpriteObject[args.ItemID].transform.rotation = Quaternion.Euler(90, 0, 0);
-        itemSpriteObject[args.ItemID].transform.localScale = new Vector3(2, 2, 2);
-        itemSpriteObject[args.ItemID].transform.SetParent(itemBox[args.ItemID].transform);
-        itemSpriteObject[args.ItemID].layer = 8;
+            itemSpriteObject[args.ItemID] = new GameObject("ItemSprite");
+            itemSpriteObject[args.ItemID].transform.position = new Vector3(args.Position.x, args.Position.y + 50, args.Position.z);
+            itemSpriteObject[args.ItemID].transform.rotation = Quaternion.Euler(90, 0, 0);
+            itemSpriteObject[args.ItemID].transform.localScale = new Vector3(2, 2, 2);
+            itemSpriteObject[args.ItemID].transform.SetParent(itemBox[args.ItemID].transform);
+            itemSpriteObject[args.ItemID].layer = 8;
 
-        itemSpriteRenderer[args.ItemID] = itemSpriteObject[args.ItemID].AddComponent<SpriteRenderer>();
-        itemSpriteRenderer[args.ItemID].sprite = itemSprite;
-        //Debug.Log("PlaceItem");
+            itemSpriteRenderer[args.ItemID] = itemSpriteObject[args.ItemID].AddComponent<SpriteRenderer>();
+            itemSpriteRenderer[args.ItemID].sprite = itemSprite;
+            //Debug.Log("PlaceItem");
+            ++itemNum;
+
+            if (gameClient.ItemInfo.Length == itemBoxNum) gameClient.isRenderItem = true;
+        }
     }
 
     public void RemoveItem(object sender, RemoveItemBoxMessageEventArgs args)

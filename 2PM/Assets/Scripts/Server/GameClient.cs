@@ -323,6 +323,12 @@ public class GameClient
     public bool isRenderBuilding = false;
     public MakeBuildingMessageEventArgs[] BuildingInfo = new MakeBuildingMessageEventArgs[1000];
 
+    public bool isRenderTree = false;
+    public MakeTreeMessageEventArgs[] TreeInfo = new MakeTreeMessageEventArgs[5000];
+
+    public bool isRenderItem = false;
+    public PlaceItemBoxMessageEventArgs[] ItemInfo = new PlaceItemBoxMessageEventArgs[50];
+
     private GameClient()
     {
 

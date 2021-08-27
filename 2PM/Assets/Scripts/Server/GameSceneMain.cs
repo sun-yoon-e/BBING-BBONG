@@ -31,10 +31,15 @@ public class GameSceneMain : MonoBehaviour
     private int[] scores = null;
 
     SoundManager soundManager;
+    RoadGenerator road;
 
     public void Start()
     {
+        road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
+        Debug.Log("road vertices length" + road.vertices.Length);
+
         Cursor.visible = false;
+        scores = new int[4];
 
         //배경음 전환
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
@@ -83,6 +88,7 @@ public class GameSceneMain : MonoBehaviour
             m.gameObject.GetComponent<Renderer>().material = decideMaterial(3);
             gameClient.playerRoomNum = 3;
         }
+        currentPlayer.transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * gameClient.playerRoomNum + 1];
 
         for (int i = 0; i < 4; i++)
         {
@@ -92,7 +98,7 @@ public class GameSceneMain : MonoBehaviour
                 {
                     Debug.Log(i);
                     players[i] = Instantiate(AIObject);
-                    players[i].transform.position = new Vector3(505, 10, 500);
+                    players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                     players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
                     var m = players[i].transform.Find("Controller/Rider/Box001");
                     m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
@@ -101,6 +107,7 @@ public class GameSceneMain : MonoBehaviour
                 {
                     if (gameClient.playerRoomNum == i) continue;
                     players[i] = Instantiate(playerObject);
+                    players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                     var m = players[i].transform.Find("Rider/Box001");
                     m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                 }
@@ -109,6 +116,7 @@ public class GameSceneMain : MonoBehaviour
             {
                 if (gameClient.playerRoomNum == i) continue;
                 players[i] = Instantiate(playerObject);
+                players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                 var m = players[i].transform.Find("Rider/Box001");
                 m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
             }
