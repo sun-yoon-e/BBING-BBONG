@@ -46,7 +46,7 @@ public class AIMovement : MonoBehaviour
 
         CheckAIStop();
 
-        GameClient.Instance.UpdatePositionAI(4, transform.position, transform.rotation.eulerAngles);
+        GameClient.Instance.UpdatePositionAI(3, transform.position, transform.rotation.eulerAngles);
     }
 
     void CreateNavMeshAgentObject()
