@@ -198,10 +198,10 @@ public class GameSceneMain : MonoBehaviour
     {
         //Debug.Log("AIPositionUpdate");
 
-        if (gameClient.ai_client[args.AIID - 1] == false)
+        if (gameClient.ai_client[args.AIID] == true)
         {
-            players[args.AIID - 1].transform.position = args.position;
-            players[args.AIID - 1].transform.rotation = Quaternion.Euler(args.rotation);
+            players[args.AIID].transform.position = args.position;
+            players[args.AIID].transform.rotation = Quaternion.Euler(args.rotation);
         }
     }
 
