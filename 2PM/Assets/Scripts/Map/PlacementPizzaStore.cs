@@ -43,7 +43,7 @@ public class PlacementPizzaStore : MonoBehaviour
             && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) + (road.xSize + 1) * 3 - 1] == false
             && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) - (road.xSize + 1) * 3 - 1] == false)
         {
-            storePosition = road.vertices[xSize * zSize / 2 + 5 + xSize];
+            storePosition = road.vertices[(xSize * zSize) / 2 + 5 + xSize];
             storeRotation = Quaternion.Euler(0, 0, 0);
 
             makeBuildingPlace((xSize * zSize) / 2 + 5 + xSize);
@@ -87,42 +87,46 @@ public class PlacementPizzaStore : MonoBehaviour
 
     void makeBuildingPlace(int place)
     {
-        road.buildingState[place + (road.xSize + 1)] = (int)buildingDirection.BUILDING;
         for (int i = 1; i < 4; ++i)
         {
+            road.buildingState[place + (road.xSize + 1) * i - 2] = (int)buildingDirection.BUILDING;
             road.buildingState[place + (road.xSize + 1) * i - 1] = (int)buildingDirection.BUILDING;
+            road.buildingState[place + (road.xSize + 1) * i] = (int)buildingDirection.BUILDING;
             road.buildingState[place + (road.xSize + 1) * i + 1] = (int)buildingDirection.BUILDING;
+            road.buildingState[place + (road.xSize + 1) * i + 2] = (int)buildingDirection.BUILDING;
         }
 
+        road.buildingState[place - 2] = (int)buildingDirection.BUILDING;
         road.buildingState[place - 1] = (int)buildingDirection.BUILDING;
         road.buildingState[place] = (int)buildingDirection.PIZZABUILDING;
         road.buildingState[place + 1] = (int)buildingDirection.BUILDING;
+        road.buildingState[place + 2] = (int)buildingDirection.BUILDING;
 
-        road.buildingState[place - (road.xSize + 1)] = (int)buildingDirection.BUILDING;
         for (int i = 1; i < 4; ++i)
         {
+            road.buildingState[place - (road.xSize + 1) * i - 2] = (int)buildingDirection.BUILDING;
             road.buildingState[place - (road.xSize + 1) * i - 1] = (int)buildingDirection.BUILDING;
+            road.buildingState[place - (road.xSize + 1) * i] = (int)buildingDirection.BUILDING;
             road.buildingState[place - (road.xSize + 1) * i + 1] = (int)buildingDirection.BUILDING;
+            road.buildingState[place - (road.xSize + 1) * i + 2] = (int)buildingDirection.BUILDING;
         }
 
-        map.vertices[place + (road.xSize + 1) * 2 - 1].y = map.vertices[place].y;
-        map.vertices[place + (road.xSize + 1) * 2].y = map.vertices[place].y;
-        map.vertices[place + (road.xSize + 1) * 2 + 1].y = map.vertices[place].y;
-
+        map.vertices[place + (road.xSize + 1) - 2].y = map.vertices[place].y;
         map.vertices[place + (road.xSize + 1) - 1].y = map.vertices[place].y;
         map.vertices[place + (road.xSize + 1)].y = map.vertices[place].y;
         map.vertices[place + (road.xSize + 1) + 1].y = map.vertices[place].y;
+        map.vertices[place + (road.xSize + 1) + 2].y = map.vertices[place].y;
 
+        map.vertices[place - 2].y = map.vertices[place].y;
         map.vertices[place - 1].y = map.vertices[place].y;
         map.vertices[place + 1].y = map.vertices[place].y;
+        map.vertices[place + 2].y = map.vertices[place].y;
 
+        map.vertices[place - (road.xSize + 1) - 2].y = map.vertices[place].y;
         map.vertices[place - (road.xSize + 1) - 1].y = map.vertices[place].y;
         map.vertices[place - (road.xSize + 1)].y = map.vertices[place].y;
         map.vertices[place - (road.xSize + 1) + 1].y = map.vertices[place].y;
-
-        map.vertices[place - (road.xSize + 1) * 2 - 1].y = map.vertices[place].y;
-        map.vertices[place - (road.xSize + 1) * 2].y = map.vertices[place].y;
-        map.vertices[place - (road.xSize + 1) * 2 + 1].y = map.vertices[place].y;
+        map.vertices[place - (road.xSize + 1) + 2].y = map.vertices[place].y;
     }
 
     void InitializeSprite(Vector3 pos)
