@@ -154,6 +154,13 @@ public class AIMessageEventArgs : EventArgs
     public int ID;
 }
 
+public class MakePizzaStoreMessageEventArgs : EventArgs
+{
+    public Vector3 Position;
+    public Quaternion Rotation;
+}
+
+
 public class GameClient
 {
     public const byte SC_LOGIN = 100;
@@ -193,6 +200,7 @@ public class GameClient
     public const byte SC_MAKE_TREE = 30;
 
     public const byte SC_MAKE_BUILDING = 32;
+    public const byte SC_MAKE_PIZZASTORE = 33;
 
     //------------------------------------------------------------
 
@@ -235,6 +243,7 @@ public class GameClient
     public const byte CS_MAKE_TREE = 30;
 
     public const byte CS_MAKE_BUILDING = 32;
+    public const byte CS_MAKE_PIZZASTORE = 33;
 
     public const string SERVER_IP = "182.222.45.229";
     public const int SERVER_PORT = 13531;
@@ -304,6 +313,7 @@ public class GameClient
     public event EventHandler<AIMessageEventArgs> OnRemoveAI;
 
     public event EventHandler<MakeBuildingMessageEventArgs> OnMakeBuilding;
+    public event EventHandler<MakePizzaStoreMessageEventArgs> OnMakePizzaStore;
 
     public int clientId { get; private set; } = -1;
     public bool client_host = false;
@@ -332,6 +342,9 @@ public class GameClient
 
     public bool isRenderCar = false;
     public MakeCarMessageEventArgs[] CarInfo = new MakeCarMessageEventArgs[50];
+
+    public bool isRenderPizzaStore = false;
+    public MakePizzaStoreMessageEventArgs StoreInfo = new MakePizzaStoreMessageEventArgs();
 
     private GameClient()
     {
@@ -966,6 +979,27 @@ public class GameClient
                 OnMakeBuilding(this, eventArgs);
             }
         }
+        else if (header == SC_MAKE_PIZZASTORE)
+        {
+            Vector3 position = new Vector3();
+            position.x = reader.ReadSingle();
+            position.y = reader.ReadSingle();
+            position.z = reader.ReadSingle();
+
+            Vector3 rotation = new Vector3();
+            rotation.x = reader.ReadSingle();
+            rotation.y = reader.ReadSingle();
+            rotation.z = reader.ReadSingle();
+
+            if (OnMakePizzaStore != null)
+            {
+                var eventArgs = new MakePizzaStoreMessageEventArgs();
+                eventArgs.Position = position;
+                eventArgs.Rotation = Quaternion.Euler(rotation);
+                OnMakePizzaStore(this, eventArgs);
+            }
+        }
+
     }
 
     #region LoginSceneMessage
@@ -1167,6 +1201,25 @@ public class GameClient
         writer.Write(pos.z);
 
         writer.Write(dir);
+
+        socket.Send(buffer);
+    }
+    #endregion
+    #region 피자가게 연동
+    public void MakePizzaStore(Vector3 pos, Vector3 rot)
+    {
+        var buffer = new byte[255];
+        var writer = new BinaryWriter(new MemoryStream(buffer));
+
+        writer.Write(CS_MAKE_PIZZASTORE);
+
+        writer.Write(pos.x);
+        writer.Write(pos.y);
+        writer.Write(pos.z);
+
+        writer.Write(rot.x);
+        writer.Write(rot.y);
+        writer.Write(rot.z);
 
         socket.Send(buffer);
     }

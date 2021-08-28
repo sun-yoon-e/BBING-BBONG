@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlacementPizzaStore : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     public GameObject pizzaStorePrefab;
     public Sprite pizzaStoreSprite;
 
@@ -26,44 +28,75 @@ public class PlacementPizzaStore : MonoBehaviour
         {
             OnRoadReady(this, EventArgs.Empty);
         }
+        GameClient.Instance.OnMakePizzaStore += OnMakePizzaStore;
     }
 
     private void Start()
     {
     }
-    
+
     private void OnRoadReady(object sender, EventArgs args)
     {
         int xSize = road.xSize;
         int zSize = road.zSize;
         GameObject pizzaStore = new GameObject();
 
+        Vector3 storePosition;
+        Quaternion storeRotation;
+
         if (road.isRoad[(xSize * zSize) / 2 + (5 + xSize)] == false
             && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) + (road.xSize + 1) * 3 - 1] == false
             && road.isRoad[(xSize * zSize) / 2 + (5 + xSize) - (road.xSize + 1) * 3 - 1] == false)
         {
-            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[xSize * zSize / 2 + 5 + xSize], Quaternion.Euler(0, 0, 0));
+            //pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[xSize * zSize / 2 + 5 + xSize], Quaternion.Euler(0, 0, 0));
+
+            storePosition = road.vertices[xSize * zSize / 2 + 5 + xSize];
+            storeRotation = Quaternion.Euler(0, 0, 0);
+
             makeBuildingPlace((xSize * zSize) / 2 + 5 + xSize);
         }
         else if (road.isRoad[(xSize * zSize) / 2 - 3 + xSize] == false)
         {
-            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 - 3 + xSize], Quaternion.Euler(0, 180, 0));
+            //pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 - 3 + xSize], Quaternion.Euler(0, 180, 0));
+
+            storePosition = road.vertices[(xSize * zSize) / 2 - 3 + xSize];
+            storeRotation = Quaternion.Euler(0, 180, 0);
+
             makeBuildingPlace((xSize * zSize) / 2 - 3 + xSize);
         }
         else if (road.isRoad[(xSize * zSize) / 2 + 4] == false)
         {
-            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 + 4], Quaternion.Euler(0, 0, 0));
+            //pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 + 4], Quaternion.Euler(0, 0, 0));
+
+            storePosition = road.vertices[(xSize * zSize) / 2 + 4];
+            storeRotation = Quaternion.Euler(0, 0, 0);
+
             makeBuildingPlace((xSize * zSize) / 2 + 4);
         }
         else if (road.isRoad[(xSize * zSize) / 2 - 4] == false)
         {
-            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 - 4], Quaternion.Euler(0, 180, 0));
+            //pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 - 4], Quaternion.Euler(0, 180, 0));
+
+            storePosition = road.vertices[(xSize * zSize) / 2 - 4];
+            storeRotation = Quaternion.Euler(0, 180, 0);
+
             makeBuildingPlace((xSize * zSize) / 2 - 4);
         }
         else
         {
-            pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 + 6 + (xSize * 2)], Quaternion.Euler(0, 0, 0));
+            //pizzaStore = Instantiate(pizzaStorePrefab, road.vertices[(xSize * zSize) / 2 + 6 + (xSize * 2)], Quaternion.Euler(0, 0, 0));
+
+            storePosition = road.vertices[(xSize * zSize) / 2 + 6 + (xSize * 2)];
+            storeRotation = Quaternion.Euler(0, 0, 0);
+
             makeBuildingPlace((xSize * zSize) / 2 + 6 + (xSize * 2));
+        }
+
+        if (gameClient.client_host)
+        {
+            gameClient.StoreInfo = new MakePizzaStoreMessageEventArgs();
+            gameClient.StoreInfo.Position = storePosition;
+            gameClient.StoreInfo.Rotation = storeRotation;
         }
 
         pizzaStore.transform.localScale = new Vector3(building.buildingScale, building.buildingScale, building.buildingScale);
@@ -119,11 +152,11 @@ public class PlacementPizzaStore : MonoBehaviour
         Quaternion SpriteRotation = Quaternion.Euler(90, 0, 0);
         Vector3 SpriteScale = new Vector3(25, 25, 25);
 
-        Vector3 destinationPosition =
+        Vector3 pizzaStorePosition =
             new Vector3(pos.x, pos.y + 20, pos.z);
 
-        pizzaStoreSpriteObject = new GameObject("DestinationSprite");
-        pizzaStoreSpriteObject.transform.position = destinationPosition;
+        pizzaStoreSpriteObject = new GameObject("PizzaSprite");
+        pizzaStoreSpriteObject.transform.position = pizzaStorePosition;
         pizzaStoreSpriteObject.transform.rotation = SpriteRotation;
         pizzaStoreSpriteObject.transform.localScale = SpriteScale;
 
@@ -143,4 +176,14 @@ public class PlacementPizzaStore : MonoBehaviour
         PIZZABUILDING,
         BUILDING,
     };
+
+    public void OnMakePizzaStore(object sender, MakePizzaStoreMessageEventArgs args)
+    {
+        if (!gameClient.isRenderPizzaStore)
+        {
+            Instantiate(pizzaStorePrefab, args.Position, args.Rotation);
+
+            gameClient.isRenderPizzaStore = true;
+        }
+    }
 }
