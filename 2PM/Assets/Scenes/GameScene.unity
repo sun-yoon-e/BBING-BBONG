@@ -1268,7 +1268,8 @@ MonoBehaviour:
   wayPointLayer:
     serializedVersion: 2
     m_Bits: 65536
-  CarNum: 0
+  num: 0
+  CARS: []
 --- !u!1 &931799649
 GameObject:
   m_ObjectHideFlags: 0
@@ -10970,14 +10971,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3728783369783814114}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1edad379959913c41bac2f3761ff0830, type: 3}
+  m_Script: {fileID: 11500000, guid: 175aff07162a35b4bb2143df2da0c15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 1885910701}
-  maxDis: 12
-  layers:
-    serializedVersion: 2
-    m_Bits: 2048
+  isAnimated: 0
 --- !u!4 &3728783369783814113
 Transform:
   m_ObjectHideFlags: 0

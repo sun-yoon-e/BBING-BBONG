@@ -984,6 +984,7 @@ public class GameClient
             position.x = reader.ReadSingle();
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
+
             Vector3 rotation = new Vector3();
             rotation.x = reader.ReadSingle();
             rotation.y = reader.ReadSingle();
@@ -992,7 +993,7 @@ public class GameClient
             {
                 var eventArgs = new MakePizzaStoreMessageEventArgs();
                 eventArgs.Position = position;
-                eventArgs.Rotation = Quaternion.Euler(rotation);
+                eventArgs.Rotation = rotation;
                 OnMakePizzaStore(this, eventArgs);
             }
         }

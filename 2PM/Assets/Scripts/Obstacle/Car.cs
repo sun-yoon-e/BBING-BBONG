@@ -29,13 +29,9 @@ public class Car : MonoBehaviour
             rb_controller.maxSpeed = item.orMaxSpeed / 2;
             item.isSlow = true;
             //obstacle.GenerateCar();
-
             //Destroy(transform.parent.gameObject);
-            //obstacle.DestroyCar();
-            //obstacle.c = obstacle.Cars.Find(p => p.Car == transform.parent.gameObject);
-            //GameClient.Instance.DestroyCar(obstacle.c.ID);
 
-            obstacle.DestroyCar(gameObject);
+            obstacle.DestroyCar(transform.parent.gameObject);
         }
     }
 }
