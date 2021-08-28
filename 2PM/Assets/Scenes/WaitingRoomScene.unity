@@ -1765,6 +1765,7 @@ MonoBehaviour:
   - {fileID: 100000, guid: a57f2a3f27562464e869aefe6954871b, type: 3}
   buildingParent: {fileID: 1017067069}
   buildingObject: []
+  num: 0
   buildingNum: 0
   buildingScale: 0.85
   isBuildingReady: 0
@@ -1953,7 +1954,8 @@ MonoBehaviour:
   wayPointLayer:
     serializedVersion: 2
     m_Bits: 65536
-  CarNum: 0
+  num: 0
+  CARS: []
 --- !u!1 &1101363003
 GameObject:
   m_ObjectHideFlags: 0
