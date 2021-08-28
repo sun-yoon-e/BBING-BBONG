@@ -22,12 +22,12 @@ public class Car : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezePosition;
         rb.constraints = RigidbodyConstraints.FreezeRotationY;
 
-        if (GameClient.Instance.isGameStarted && GameClient.Instance.client_host && (PrevPosition != gameObject.transform.position || PrevEulerAngles != gameObject.transform.rotation.eulerAngles))
+        if (GameClient.Instance.isGameStarted && GameClient.Instance.client_host/* && (PrevPosition != gameObject.transform.position || PrevEulerAngles != gameObject.transform.rotation.eulerAngles)*/)
         {
             if (gameObject != null)
-                obstacle.MoveCar(gameObject, gameObject.transform.position, gameObject.transform.rotation.eulerAngles);
-            PrevPosition = gameObject.transform.position;
-            PrevEulerAngles = gameObject.transform.rotation.eulerAngles;
+                obstacle.MoveCar(gameObject.transform.parent.gameObject, transform.parent.position, transform.rotation.eulerAngles);
+            //PrevPosition = gameObject.transform.position;
+            //PrevEulerAngles = gameObject.transform.rotation.eulerAngles;
         }
     }
 

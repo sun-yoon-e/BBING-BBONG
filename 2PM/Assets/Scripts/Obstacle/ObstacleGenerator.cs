@@ -79,6 +79,11 @@ public class ObstacleGenerator : MonoBehaviour
     {
         CARS[args.ID] = Instantiate(carPrefabs[args.CarType], args.Position, Quaternion.identity, transform);
         CARS[args.ID].GetComponent<NavMeshAgent>().avoidancePriority = 0;
+        if(!gameClient.client_host)
+        {
+            Destroy(CARS[args.ID].GetComponent<NavMeshAgent>());
+            Destroy(CARS[args.ID].GetComponent<CarNavmeshAgent>());
+        }
 
         if (args.ID > num)
             num = args.ID;
@@ -86,7 +91,7 @@ public class ObstacleGenerator : MonoBehaviour
     
     public void OnMoveCar(object sender, MoveCarMessageEventArgs args)
     {
-        if (CARS[args.ID] != null)
+        if (CARS[args.ID] != null && !gameClient.client_host)
         {
             CARS[args.ID].gameObject.transform.position = args.Position;
             CARS[args.ID].gameObject.transform.rotation = Quaternion.Euler(args.Rotation);
@@ -95,6 +100,7 @@ public class ObstacleGenerator : MonoBehaviour
 
     public void MoveCar(GameObject c, Vector3 pos, Vector3 rot)
     {
+        rot.y += 180f;
         for (int i = 0; i < CARS.Length; ++i)
         {
             if (CARS[i].gameObject == c)
