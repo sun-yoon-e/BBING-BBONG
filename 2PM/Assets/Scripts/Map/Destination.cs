@@ -4,6 +4,7 @@ using Random = UnityEngine.Random;
 
 public class Destination : MonoBehaviour
 {
+    public static Destination instance;
     PlacementBuilding building;
 
     public GameObject destinationPrefab;
@@ -27,6 +28,7 @@ public class Destination : MonoBehaviour
 
     private void Start()
     {
+        instance = this;
         building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
 
         building.OnBuildingReady += OnBuildingReady;

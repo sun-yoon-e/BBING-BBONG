@@ -5,6 +5,8 @@ using Random = UnityEngine.Random;
 
 public class PlacementBuilding : MonoBehaviour
 {
+    public static PlacementBuilding instance;
+    
     private GameClient gameClient = GameClient.Instance;
 
     RoadGenerator road;
@@ -28,6 +30,7 @@ public class PlacementBuilding : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
 

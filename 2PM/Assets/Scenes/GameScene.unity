@@ -2285,6 +2285,7 @@ GameObject:
   - component: {fileID: 1702232432}
   - component: {fileID: 1702232433}
   - component: {fileID: 1702232434}
+  - component: {fileID: 1702232435}
   m_Layer: 13
   m_Name: FPS Camera
   m_TagString: MainCamera
@@ -2410,6 +2411,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1702232435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1702232428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e950cacae63d61a4e821edb397a8cd95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectionMode: 1
+  OutlineType: 0
+  AlphaMode: 0
+  OutlineColor: {r: 1, g: 0.55, b: 0, a: 1}
+  OccludedColor: {r: 0.5, g: 0.9, b: 0.3, a: 1}
+  OutlineWidth: 0.2
+  OutlineHardness: 0.85
 --- !u!1 &1710524066
 GameObject:
   m_ObjectHideFlags: 0
@@ -2698,6 +2718,7 @@ GameObject:
   - component: {fileID: 1885910705}
   - component: {fileID: 1885910704}
   - component: {fileID: 1885910703}
+  - component: {fileID: 1885910706}
   m_Layer: 13
   m_Name: TPS Camera
   m_TagString: MainCamera
@@ -2787,6 +2808,25 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1885910706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1885910701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e950cacae63d61a4e821edb397a8cd95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectionMode: 1
+  OutlineType: 0
+  AlphaMode: 0
+  OutlineColor: {r: 1, g: 0.55, b: 0, a: 1}
+  OccludedColor: {r: 0.5, g: 0.9, b: 0.3, a: 1}
+  OutlineWidth: 0.3
+  OutlineHardness: 0.85
 --- !u!1 &1938965297
 GameObject:
   m_ObjectHideFlags: 0
