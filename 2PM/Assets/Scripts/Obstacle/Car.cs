@@ -6,6 +6,8 @@ public class Car : MonoBehaviour
     ObstacleGenerator obstacle;
     Rigidbody rb;
 
+    Vector3 myPrevPosition;
+
     private void Start()
     {
         obstacle = GameObject.Find("Obstacle Generator").GetComponent<ObstacleGenerator>();
@@ -18,6 +20,14 @@ public class Car : MonoBehaviour
 
         rb.constraints = RigidbodyConstraints.FreezePosition;
         rb.constraints = RigidbodyConstraints.FreezeRotationY;
+
+        if (GameClient.Instance.isGameStarted && GameClient.Instance.client_host && myPrevPosition != rb.position)// || myPrevEulerAngles != rb.rotation.eulerAngles)
+        {
+            if (gameObject != null)
+                obstacle.MoveCar(transform.parent.gameObject, transform.parent.gameObject.transform.position);//);
+            myPrevPosition = transform.parent.gameObject.transform.position;
+            //myPrevEulerAngles = rb.rotation.eulerAngles;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

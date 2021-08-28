@@ -50,8 +50,10 @@ public class AIFirePizza : MonoBehaviour
             Vector3 pizzaPosition = firePos.position;
 
             //pizza = Instantiate(pizzaPrefab, pizzaPosition, pizzaRotation);
-            GameClient.Instance.FirePizzaAI(3, pizzaPosition, col[0].transform.position);
-
+            if (GameClient.Instance.client_host)
+            {
+                GameClient.Instance.FirePizzaAI(3, pizzaPosition, col[0].transform.position);
+            }
             //print(col[0].transform.position);
             Destroy(col[0]);
         }
