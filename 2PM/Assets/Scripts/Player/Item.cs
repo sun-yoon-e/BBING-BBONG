@@ -23,6 +23,8 @@ public class Item : MonoBehaviour
     GameObject fpsCamera;
     GameObject tpsCamera;
     [SerializeField] GameObject fogParticle;
+
+    ItemBoxGenerator itemObject;
     
     public float range = 100f;
     public Camera cam;
@@ -47,6 +49,8 @@ public class Item : MonoBehaviour
         orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
         MyItems = new int?[2] { -1, -1 };
+
+        itemObject = GameObject.Find("Item Generator").GetComponent<ItemBoxGenerator>();
     }
 
     private void Update()
@@ -158,6 +162,16 @@ public class Item : MonoBehaviour
                 rbScript.maxSpeed = orMaxSpeed;
                 slowTimer = 0f;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //if(other.transform.parent.tag == "ItemBox")
+        if (other.gameObject.tag == "ItemBox")
+        {
+            //Destroy(other.gameObject);
+            itemObject.DestroyItem(other.gameObject);
         }
     }
 
