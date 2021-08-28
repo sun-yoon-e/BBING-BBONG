@@ -4,7 +4,7 @@ public class ItemBoxGenerator : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
 
-    int num, itemNum;
+    int itemNum;
     public int itemBoxNum;
     public GameObject itemBoxPrefab;
 
@@ -69,7 +69,6 @@ public class ItemBoxGenerator : MonoBehaviour
                 gameClient.ItemInfo[i] = new PlaceItemBoxMessageEventArgs();
                 gameClient.ItemInfo[i].ItemID = i;
                 gameClient.ItemInfo[i].Position = itemPosition;
-                num++;
 
                 //Debug.Log(itemPosition);
                 //Debug.Log("OnRoadItem");

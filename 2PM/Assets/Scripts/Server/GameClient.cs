@@ -330,6 +330,9 @@ public class GameClient
     public bool isRenderItem = false;
     public PlaceItemBoxMessageEventArgs[] ItemInfo = new PlaceItemBoxMessageEventArgs[50];
 
+    public bool isRenderCar = false;
+    public MakeCarMessageEventArgs[] CarInfo = new MakeCarMessageEventArgs[50];
+
     private GameClient()
     {
 
@@ -656,13 +659,13 @@ public class GameClient
         }
         else if (header == SC_SCORE)
         {
-            //Debug.Log("SC_SCORE");
             int id = reader.ReadInt32();
             int score = reader.ReadInt32();
+            Debug.Log("id : " + id);
+            Debug.Log("score : " + score);
 
             if (OnScoreUpdated != null)
             {
-                //Debug.Log("OnScore");
                 var eventArgs = new ScoreUpdateEventArgs();
                 eventArgs.id = id;
                 eventArgs.score = score;

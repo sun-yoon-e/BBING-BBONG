@@ -45,61 +45,65 @@ public class ObstacleGenerator : MonoBehaviour
 
     private void Update()
     {
-        //if (gameClient.client_host)
-        //{
-        //    for (int i = 0; i < Cars.Count; i++)
-        //    {
-        //        GameClient.Instance.MoveCar(i, Cars[i].Car.transform.position);
-        //    }
-        //}
+        if (gameClient.client_host)
+        {
+            for (int i = 0; i < Cars.Count; i++)
+            {
+                GameClient.Instance.MoveCar(i, Cars[i].Car.transform.position);
+            }
+        }
     }
 
     void CreateCar(object sender, System.EventArgs args)
     {
-        int rand;
-        Vector3 carPosition;
-        int carNum = 0;
-
-        for (int i = 1; i < road.vertices.Length; ++i)
+        if (gameClient.client_host)
         {
-            if (road.isWayPointPlace[i] == true)
-            {
-                rand = Random.Range(0, 2);
-                if (rand == 1)
-                {
-                    int carID = carNum++;
-                    int carType = Random.Range(0, carPrefabs.Length);
-                    carPosition = road.vertices[i + road.xSize + 1];
+            int rand;
+            Vector3 carPosition;
+            int carNum = 0;
 
-                    GameClient.Instance.MakeCar(carID, (byte)carType, carPosition);
-                    //Debug.Log("OnRoadCar");
+            for (int i = 1; i < road.vertices.Length; ++i)
+            {
+                if (road.isWayPointPlace[i] == true)
+                {
+                    rand = Random.Range(0, 2);
+                    if (rand == 1)
+                    {
+                        int carID = carNum++;
+                        int carType = Random.Range(0, carPrefabs.Length);
+                        carPosition = road.vertices[i + road.xSize + 1];
+
+                        //GameClient.Instance.MakeCar(carID, (byte)carType, carPosition);
+                        GameClient.Instance.CarInfo[i] = new MakeCarMessageEventArgs();
+                        GameClient.Instance.CarInfo[i].ID = carID;
+                        GameClient.Instance.CarInfo[i].CarType = (byte)carType;
+                        GameClient.Instance.CarInfo[i].Position = carPosition;
+
+                        //Debug.Log("OnRoadCar");
+                    }
                 }
             }
         }
-        //GenerateCar();
     }
 
     public void OnMoveCar(object sender, MoveCarMessageEventArgs args)
     {
-        for (int i = 0; i < Cars.Count; i++)
-        {
-            Cars[i].Car.transform.position = args.Position;
-        }
+        Cars[args.ID].Car.transform.position = args.Position;
     }
 
     public void OnMakeCar(object sender, MakeCarMessageEventArgs args)
     {
-        CarObject car = new CarObject();
-        car.ID = args.ID;
-        car.Car = Instantiate(carPrefabs[args.CarType], args.Position, Quaternion.identity, transform);
-        car.Car.GetComponent<NavMeshAgent>().avoidancePriority = 0;
+        //CarObject car = new CarObject();
+        //car.ID = args.ID;
+        //car.Car = Instantiate(carPrefabs[args.CarType], args.Position, Quaternion.identity, transform);
+        //car.Car.GetComponent<NavMeshAgent>().avoidancePriority = 0;
 
-        Cars.Add(car);
+        //Cars.Add(car);
 
-        if (args.ID > CarNum)
-            CarNum = args.ID;
+        //if (args.ID > CarNum)
+        //    CarNum = args.ID;
 
-        //Debug.Log("MakeCar");
+
     }
 
     public void OnDestroyCar(object sender, DestroyCarMessageEventArgs args)
@@ -109,18 +113,10 @@ public class ObstacleGenerator : MonoBehaviour
         if (car != null)
         {
             Destroy(Cars[args.ID].Car);
-            GenerateCar();
+            if (gameClient.client_host)
+                GenerateCar();
 
             //Debug.Log("Destroy car");
-        }
-    }
-
-    public void DestroyCar()
-    {
-        for (int i = 0; i < Cars.Count; i++)
-        {
-            CarObject car = Cars.Find(p => p.ID == Cars[i].ID);
-            GameClient.Instance.DestroyCar(car.ID);
         }
     }
 

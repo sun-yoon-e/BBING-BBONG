@@ -36,14 +36,4 @@ public class Car : MonoBehaviour
             //GameClient.Instance.DestroyCar(obstacle.c.ID);
         }
     }
-
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.gameObject.tag == "Player")
-    //    {
-    //        obstacle.GenerateCar(false);
-    //        Destroy(transform.parent.gameObject);
-    //    }
-    //}
 }
