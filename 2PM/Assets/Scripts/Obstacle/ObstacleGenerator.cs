@@ -89,7 +89,7 @@ public class ObstacleGenerator : MonoBehaviour
         if (CARS[args.ID] != null)
         {
             CARS[args.ID].gameObject.transform.position = args.Position;
-            //CARS[args.ID].gameObject.transform.rotation = Quaternion.Euler(args.Rotation);
+            CARS[args.ID].gameObject.transform.rotation = Quaternion.Euler(args.Rotation);
         }
     }
 
@@ -109,7 +109,7 @@ public class ObstacleGenerator : MonoBehaviour
     {
         if (CARS[args.ID] != null)
         {
-            Destroy(CARS[args.ID].gameObject);
+            Destroy(CARS[args.ID]);
             if (gameClient.client_host)
                 GenerateCar();
         }
