@@ -44,11 +44,6 @@ public class ObstacleGenerator : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        
-    }
-
     void CreateCar(object sender, System.EventArgs args)
     {
         if (gameClient.client_host)
@@ -88,20 +83,23 @@ public class ObstacleGenerator : MonoBehaviour
         if (args.ID > num)
             num = args.ID;
     }
-
+    
     public void OnMoveCar(object sender, MoveCarMessageEventArgs args)
     {
-       if (CARS[args.ID] != null)
-            CARS[args.ID].transform.parent.gameObject.transform.position = args.Position;
+        if (CARS[args.ID] != null)
+        {
+            CARS[args.ID].gameObject.transform.position = args.Position;
+            //CARS[args.ID].gameObject.transform.rotation = Quaternion.Euler(args.Rotation);
+        }
     }
 
-    public void MoveCar(GameObject c, Vector3 pos)
+    public void MoveCar(GameObject c, Vector3 pos, Vector3 rot)
     {
         for (int i = 0; i < CARS.Length; ++i)
         {
             if (CARS[i].gameObject == c)
             {
-                gameClient.MoveCar(i, pos);
+                gameClient.MoveCar(i, pos, rot);
                 //Debug.Log("MoveCAR : " + i);
             }
         }
@@ -109,9 +107,9 @@ public class ObstacleGenerator : MonoBehaviour
 
     public void OnDestroyCar(object sender, DestroyCarMessageEventArgs args)
     {
-       if (CARS[args.ID] != null)
+        if (CARS[args.ID] != null)
         {
-            Destroy(CARS[args.ID]);
+            Destroy(CARS[args.ID].gameObject);
             if (gameClient.client_host)
                 GenerateCar();
         }
@@ -124,7 +122,7 @@ public class ObstacleGenerator : MonoBehaviour
             if (CARS[i].gameObject == c)
             {
                 gameClient.DestroyCar(i);
-                Debug.Log("DestoryCAR : " + i);
+                //Debug.Log("DestoryCAR : " + i);
             }
         }
     }

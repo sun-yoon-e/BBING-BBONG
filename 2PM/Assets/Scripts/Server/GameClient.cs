@@ -129,6 +129,7 @@ public class MoveCarMessageEventArgs : EventArgs
 {
     public int ID;
     public Vector3 Position;
+    public Vector3 Rotation;
 }
 
 public class DestroyCarMessageEventArgs : EventArgs
@@ -919,11 +920,17 @@ public class GameClient
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
 
+            Vector3 rotation = new Vector3();
+            rotation.x = reader.ReadSingle();
+            rotation.y = reader.ReadSingle();
+            rotation.z = reader.ReadSingle();
+
             if (OnMoveCar != null)
             {
                 var eventArgs = new MoveCarMessageEventArgs();
                 eventArgs.ID = id;
                 eventArgs.Position = position;
+                eventArgs.Rotation = rotation;
 
                 OnMoveCar(this, eventArgs);
             }
@@ -1142,7 +1149,7 @@ public class GameClient
 
         //Debug.Log("sendCar");
     }
-    public void MoveCar(int id, Vector3 pos)
+    public void MoveCar(int id, Vector3 pos, Vector3 rot)
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
@@ -1150,9 +1157,14 @@ public class GameClient
         writer.Write(CS_MOVE_CAR);
 
         writer.Write(id);
+
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);
+
+        writer.Write(rot.x);
+        writer.Write(rot.y);
+        writer.Write(rot.z);
 
         socket.Send(buffer);
     }

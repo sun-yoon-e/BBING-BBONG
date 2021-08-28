@@ -183,14 +183,14 @@ public class onClick_WaitingRoomScene : MonoBehaviour
 
                     for (int i = 0; i < 50; ++i)
                     {
-                        if (gameClient.ItemInfo[i] != null)
-                            gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
+                        if (gameClient.CarInfo[i] != null)
+                            gameClient.MakeCar(gameClient.CarInfo[i].ID, gameClient.CarInfo[i].CarType, gameClient.CarInfo[i].Position);
                     }
 
                     for (int i = 0; i < 50; ++i)
                     {
-                        if (gameClient.CarInfo[i] != null)
-                            gameClient.MakeCar(gameClient.CarInfo[i].ID, gameClient.CarInfo[i].CarType, gameClient.CarInfo[i].Position);
+                        if (gameClient.ItemInfo[i] != null)
+                            gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
                     }
                 }
 

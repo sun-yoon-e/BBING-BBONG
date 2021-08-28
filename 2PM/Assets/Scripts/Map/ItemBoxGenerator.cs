@@ -107,14 +107,14 @@ public class ItemBoxGenerator : MonoBehaviour
             if (itemBox[i].gameObject == it)
             {
                 gameClient.RemoveItemBox(i);
-                Debug.Log("RemoveItem : " + i);
+                //Debug.Log("RemoveItem : " + i);
             }
         }
     }
 
     public void RemoveItem(object sender, RemoveItemBoxMessageEventArgs args)
     {
-        Debug.Log("Remove : " + args.ItemID);
+        //Debug.Log("Remove : " + args.ItemID);
         Destroy(itemBox[args.ItemID]);
         Destroy(itemSpriteObject[args.ItemID]);
         Destroy(itemSpriteRenderer[args.ItemID]);
