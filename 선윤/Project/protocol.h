@@ -31,10 +31,13 @@
 #define SC_AI_MOVE				24
 #define SC_AI_FIRE				25
 #define SC_MAKE_CAR				26
+#define SC_MOVE_CAR				31
 #define SC_DESTROY_CAR			27
 #define SC_AI_ADD				28
 #define SC_AI_REMOVE			29
 #define SC_MAKE_TREE			30
+#define SC_MAKE_BUILDING		32
+#define SC_MAKE_PIZZASTORE		33
 
 // -----------------------------------
 
@@ -69,10 +72,13 @@
 #define CS_AI_MOVE				24
 #define CS_AI_FIRE				25
 #define CS_MAKE_CAR				26
+#define CS_MOVE_CAR				31
 #define CS_DESTROY_CAR			27
 #define CS_AI_ADD				28
 #define CS_AI_REMOVE			29
 #define CS_MAKE_TREE			30
+#define CS_MAKE_BUILDING		32
+#define CS_MAKE_PIZZASTORE		33
 
 #define PACKET_CMD_MAX		   200
 
@@ -161,13 +167,19 @@ struct Packet_Set_Road_SC {
 
 struct Packet_Score {
 	BYTE type = CS_SCORE;
+	int id;
 };
 
 struct Packet_Score_SC {
 	BYTE type = SC_SCORE;
-	int32_t players;
-	int32_t scores[MAX_CLIENT];
+	int id;
+	int score;
 };
+//struct Packet_Score_SC {
+//	BYTE type = SC_SCORE;
+//	int32_t players;
+//	int32_t scores[MAX_CLIENT];
+//};
 
 struct Packet_Move {
 	BYTE type = CS_MOVE;
@@ -198,12 +210,14 @@ struct Packet_Fire {
 	BYTE TYPE = CS_FIRE;
 	Vector3 position;
 	Vector3 targetPosition;
+	int playerIndex;
 };
 
 struct Packet_Fire_SC {
 	BYTE TYPE = SC_FIRE;
 	Vector3 position;
 	Vector3 targetPosition;
+	int playerIndex;
 };
 
 struct Packet_GameInit_SC {
@@ -400,7 +414,6 @@ struct cs_packet_bot_remove
 {
 	BYTE type;
 	// Áö¿ï bot ID
-	int aiId;
 };
 
 struct sc_packet_item {

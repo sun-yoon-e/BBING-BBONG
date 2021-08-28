@@ -20,7 +20,7 @@ using namespace std;
 //#define TEST        
 
 #ifdef TEST
-#define SERVERIP		"0.0.0.0"
+#define SERVERIP		"127.0.0.1"
 #define SERVERPORT		13531
 #define ODBC_NAME       L"Pizza"
 #define DBUSER          L"Pizza"
@@ -33,7 +33,7 @@ using namespace std;
 #define MAX_ROOM_LIST_PER_PAGE 6			// 한 페이지에 표시하는 방 개수
 #define MAX_ROOM_NAME_SIZE 30				// 한 글자에 2바이트 해서 15글자, UTF-8로 하면 한 글자에 3바이트인데 그럼 10글자네?
 #else
-#define SERVERIP		"14.35.11.69"		// GameClient.cs 에 IP 복붙
+#define SERVERIP		""		// GameClient.cs 에 IP 복붙
 #define SERVERPORT		13531
 #define ODBC_NAME       L"Pizza"
 #define DBUSER          L"Pizza"
@@ -42,7 +42,7 @@ using namespace std;
 #define BUF_SIZE		1024
 #define MAX_BUF_SIZE	4096
 #define MAX_PACKET_SIZE 512000 * 4
-#define MAX_CLIENT		4					// 클라이언트 수
+#define MAX_CLIENT		10					// 클라이언트 수
 #define MAX_ROOM_LIST_PER_PAGE 6			// 한 페이지에 표시하는 방 개수
 #define MAX_ROOM_NAME_SIZE 30				// 한 글자에 2바이트 해서 15글자
 #endif

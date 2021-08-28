@@ -185,7 +185,7 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			auto* packet = new BYTE[MAX_PACKET_SIZE];
 			Packet_Request_Road_SC* scPacket = reinterpret_cast<Packet_Request_Road_SC*>(packet);
 			scPacket->ready = room->Execute_Cs_Road(scPacket);
-			cout << "CS_ROAD: " << client->GetID() << " , " << scPacket->ready << endl;
+			cout << "CS_ROAD: " << client->GetID() << ", " << scPacket->ready << endl;
 			SendTo(client->GetSocket(), (char*)packet, MAX_PACKET_SIZE);
 			delete[] packet;
 		}
@@ -195,10 +195,18 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		}
 	}
 	if (buffer[0] == CS_MAKE_CAR) {
+		auto* room = client->GetRoom(); // 얘네 버퍼[1] 인거 수정하셈
+		if (room)
+		{
+			buffer[0] = SC_MAKE_CAR;
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
+		}
+	}
+	if (buffer[0] == CS_MOVE_CAR) {
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			buffer[1] = SC_MAKE_CAR;
+			buffer[0] = SC_MOVE_CAR;
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
@@ -206,41 +214,33 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			auto* room = client->GetRoom();
-			if (room)
-			{
-				buffer[1] = SC_DESTROY_CAR;
-				room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
-			}
+			buffer[0] = SC_DESTROY_CAR;
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
 	if (buffer[0] == CS_MAKE_TREE) {
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			buffer[1] = SC_MAKE_TREE;
+			buffer[0] = SC_MAKE_TREE;
 			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
 		}
 	}
 	if (buffer[0] == CS_SCORE) {
 		auto* room = client->GetRoom();
+		Packet_Score* packet = reinterpret_cast<Packet_Score*>(buffer);
 		if (room && room->IsGameStarted())
 		{
 			client->SetScore(client->GetScore() + 50);
 
 			Packet_Score_SC* scPacket = new Packet_Score_SC;
-			scPacket->players = MAX_CLIENT;
-			memset(scPacket->scores, -1, sizeof(int32_t) * MAX_CLIENT);
-
-			for (int i = 0; i < clients.size(); i++) {
-				scPacket->scores[i] = clients[i]->GetScore();
-			}
+			scPacket->type = SC_SCORE;
+			scPacket->id = packet->id;
+			scPacket->score = client->GetScore();
 
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)scPacket, sizeof(*scPacket));
 			room->SendMessageToOtherPlayers(nullptr, (char*)sendBuffer, OTHER_PACKET_SIZE_MAX);
-
-			delete scPacket;
 		}
 	}
 	if (buffer[0] == CS_MOVE) {
@@ -273,7 +273,14 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		Packet_Fire* packet = reinterpret_cast<Packet_Fire*>(buffer);
 		if (room && room->IsGameStarted())
 		{
-			packet->TYPE = SC_FIRE;
+			Packet_Fire_SC* scPacket = new Packet_Fire_SC;
+			scPacket->TYPE = SC_FIRE;
+			scPacket->position = packet->position;
+			scPacket->targetPosition = packet->targetPosition;
+			scPacket->playerIndex = packet->playerIndex;
+
+			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
+			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)scPacket, sizeof(*scPacket));
 			room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(packet), OTHER_PACKET_SIZE_MAX);
 		}
 	}
@@ -322,13 +329,13 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 		auto* room = client->GetRoom();
 		if (room)
 		{
-			auto* packet = reinterpret_cast<cs_packet_bot_remove*>(buffer);
 			auto id = room->RemoveAI();
-			packet->type = SC_AI_REMOVE;
+			auto* packet = new sc_packet_bot_remove();
 			packet->aiId = id;
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)packet, sizeof(sc_packet_bot_remove));
-			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(sendBuffer), sizeof(OTHER_PACKET_SIZE_MAX));
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(sendBuffer), OTHER_PACKET_SIZE_MAX);
+			delete packet;
 
 			auto* scPacket = room->GetPlayerInfo();
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
@@ -516,6 +523,22 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			}
 		}
 	}
+	if (buffer[0] == CS_MAKE_BUILDING) {
+		buffer[0] = SC_MAKE_BUILDING;
+		auto* room = client->GetRoom();
+		if (room)
+		{
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
+		}
+	}
+	if (buffer[0] == CS_MAKE_PIZZASTORE) {
+		buffer[0] = SC_MAKE_PIZZASTORE;
+		auto* room = client->GetRoom();
+		if (room)
+		{
+			room->SendMessageToOtherPlayers(nullptr, reinterpret_cast<char*>(buffer), OTHER_PACKET_SIZE_MAX);
+		}
+	}
 }
 
 void Server::ClientMain(Client* client) 
@@ -555,7 +578,6 @@ void Server::ClientMain(Client* client)
 				auto* room = client->GetRoom();
 				if (room)
 				{
-
 					if (room->IsMeshReady()) {
 						cout << "CS_SET_MESH: continue " << client->GetID() << endl;
 						continue;
