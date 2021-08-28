@@ -149,17 +149,16 @@ public class MakeBuildingMessageEventArgs : EventArgs
     public int dir;
 }
 
+public class MakePizzaStoreMessageEventArgs : EventArgs
+{
+    public Vector3 Position;
+    public Vector3 Rotation;
+}
+
 public class AIMessageEventArgs : EventArgs
 {
     public int ID;
 }
-
-public class MakePizzaStoreMessageEventArgs : EventArgs
-{
-    public Vector3 Position;
-    public Quaternion Rotation;
-}
-
 
 public class GameClient
 {
@@ -334,6 +333,9 @@ public class GameClient
     public bool isRenderBuilding = false;
     public MakeBuildingMessageEventArgs[] BuildingInfo = new MakeBuildingMessageEventArgs[1000];
 
+    public bool isRenderPizzaStore = false;
+    public MakePizzaStoreMessageEventArgs StoreInfo = new MakePizzaStoreMessageEventArgs();
+
     public bool isRenderTree = false;
     public MakeTreeMessageEventArgs[] TreeInfo = new MakeTreeMessageEventArgs[5000];
 
@@ -342,9 +344,6 @@ public class GameClient
 
     public bool isRenderCar = false;
     public MakeCarMessageEventArgs[] CarInfo = new MakeCarMessageEventArgs[50];
-
-    public bool isRenderPizzaStore = false;
-    public MakePizzaStoreMessageEventArgs StoreInfo = new MakePizzaStoreMessageEventArgs();
 
     private GameClient()
     {
@@ -985,12 +984,10 @@ public class GameClient
             position.x = reader.ReadSingle();
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
-
             Vector3 rotation = new Vector3();
             rotation.x = reader.ReadSingle();
             rotation.y = reader.ReadSingle();
             rotation.z = reader.ReadSingle();
-
             if (OnMakePizzaStore != null)
             {
                 var eventArgs = new MakePizzaStoreMessageEventArgs();
@@ -999,7 +996,6 @@ public class GameClient
                 OnMakePizzaStore(this, eventArgs);
             }
         }
-
     }
 
     #region LoginSceneMessage
@@ -1204,15 +1200,12 @@ public class GameClient
 
         socket.Send(buffer);
     }
-    #endregion
-    #region 피자가게 연동
     public void MakePizzaStore(Vector3 pos, Vector3 rot)
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
 
         writer.Write(CS_MAKE_PIZZASTORE);
-
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);

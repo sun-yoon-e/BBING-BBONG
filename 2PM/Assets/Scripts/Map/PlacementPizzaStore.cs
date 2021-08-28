@@ -96,7 +96,7 @@ public class PlacementPizzaStore : MonoBehaviour
         {
             gameClient.StoreInfo = new MakePizzaStoreMessageEventArgs();
             gameClient.StoreInfo.Position = storePosition;
-            gameClient.StoreInfo.Rotation = storeRotation;
+            gameClient.StoreInfo.Rotation = storeRotation.eulerAngles;
         }
 
         pizzaStore.transform.localScale = new Vector3(building.buildingScale, building.buildingScale, building.buildingScale);
@@ -181,7 +181,7 @@ public class PlacementPizzaStore : MonoBehaviour
     {
         if (!gameClient.isRenderPizzaStore)
         {
-            Instantiate(pizzaStorePrefab, args.Position, args.Rotation);
+            Instantiate(pizzaStorePrefab, args.Position, Quaternion.Euler(args.Rotation));
 
             gameClient.isRenderPizzaStore = true;
         }

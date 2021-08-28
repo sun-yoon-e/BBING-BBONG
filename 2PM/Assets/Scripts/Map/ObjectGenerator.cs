@@ -7,7 +7,7 @@ public class ObjectGenerator : MonoBehaviour
     PlacementBuilding building;
     RoadGenerator road;
     public GameObject[] objectPrefab;
-    int num, treeNum;
+    int num = 0, treeNum = 0;
 
     private void Awake()
     {
