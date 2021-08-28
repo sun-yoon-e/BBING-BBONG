@@ -97,7 +97,7 @@ public class GameSceneMain : MonoBehaviour
                 {
                     //Debug.Log(i);
                     players[i] = Instantiate(AIObject);
-                    //players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
+                    players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                     //players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
                     var m = players[i].transform.Find("Controller/Rider/Box001");
                     m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
@@ -204,7 +204,7 @@ public class GameSceneMain : MonoBehaviour
     {
         //Debug.Log("AIPositionUpdate");
 
-        if (gameClient.ai_client[args.AIID] == true)
+        if (gameClient.ai_client[args.AIID] == true && !gameClient.client_host)
         {
             players[args.AIID].transform.position = args.position;
             players[args.AIID].transform.rotation = Quaternion.Euler(args.rotation);

@@ -241,6 +241,8 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)scPacket, sizeof(*scPacket));
 			room->SendMessageToOtherPlayers(nullptr, (char*)sendBuffer, OTHER_PACKET_SIZE_MAX);
+
+			delete scPacket;
 		}
 	}
 	if (buffer[0] == CS_MOVE) {
@@ -282,6 +284,8 @@ void Server::ParseOtherMessage(Client* client, BYTE* buffer, BYTE* sendBuffer)
 			ZeroMemory(sendBuffer, OTHER_PACKET_SIZE_MAX);
 			memcpy_s(sendBuffer, OTHER_PACKET_SIZE_MAX, (char*)scPacket, sizeof(*scPacket));
 			room->SendMessageToOtherPlayers(client, reinterpret_cast<char*>(packet), OTHER_PACKET_SIZE_MAX);
+
+			delete scPacket;
 		}
 	}
 	if (buffer[0] == CS_AI_MOVE) {

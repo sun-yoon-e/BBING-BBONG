@@ -6,9 +6,6 @@ public class Car : MonoBehaviour
     ObstacleGenerator obstacle;
     Rigidbody rb;
 
-    public Vector3 PrevPosition;
-    public Vector3 PrevEulerAngles;
-
     private void Start()
     {
         obstacle = GameObject.Find("Obstacle Generator").GetComponent<ObstacleGenerator>();
@@ -22,12 +19,10 @@ public class Car : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezePosition;
         rb.constraints = RigidbodyConstraints.FreezeRotationY;
 
-        if (GameClient.Instance.isGameStarted && GameClient.Instance.client_host/* && (PrevPosition != gameObject.transform.position || PrevEulerAngles != gameObject.transform.rotation.eulerAngles)*/)
+        if (GameClient.Instance.isGameStarted && GameClient.Instance.client_host)
         {
             if (gameObject != null)
                 obstacle.MoveCar(gameObject.transform.parent.gameObject, transform.parent.position, transform.rotation.eulerAngles);
-            //PrevPosition = gameObject.transform.position;
-            //PrevEulerAngles = gameObject.transform.rotation.eulerAngles;
         }
     }
 
@@ -39,6 +34,7 @@ public class Car : MonoBehaviour
             var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
             rb_controller.maxSpeed = item.orMaxSpeed / 2;
             item.isSlow = true;
+
             //obstacle.GenerateCar();
             //Destroy(transform.parent.gameObject);
 

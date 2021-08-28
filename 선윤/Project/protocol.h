@@ -178,7 +178,7 @@ struct Packet_Score_SC {
 //struct Packet_Score_SC {
 //	BYTE type = SC_SCORE;
 //	int32_t players;
-//	int32_t scores[MAX_CLIENT];
+//	int32_t scores[MAX_ROOM];
 //};
 
 struct Packet_Move {
@@ -190,8 +190,8 @@ struct Packet_Move {
 struct Packet_Move_SC {
 	BYTE type = SC_MOVE;
 	int32_t players;
-	Vector3 position[MAX_CLIENT];
-	Vector3 rotation[MAX_CLIENT];
+	Vector3 position[MAX_ROOM];
+	Vector3 rotation[MAX_ROOM];
 };
 
 struct Packet_GameState_SC {

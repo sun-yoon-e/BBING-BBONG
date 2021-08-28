@@ -84,9 +84,6 @@ public class ObstacleGenerator : MonoBehaviour
             Destroy(CARS[args.ID].GetComponent<NavMeshAgent>());
             Destroy(CARS[args.ID].GetComponent<CarNavmeshAgent>());
         }
-
-        if (args.ID > num)
-            num = args.ID;
     }
     
     public void OnMoveCar(object sender, MoveCarMessageEventArgs args)
@@ -100,13 +97,14 @@ public class ObstacleGenerator : MonoBehaviour
 
     public void MoveCar(GameObject c, Vector3 pos, Vector3 rot)
     {
+        //Debug.Log("MoveCar");
         rot.y += 180f;
         for (int i = 0; i < CARS.Length; ++i)
         {
             if (CARS[i].gameObject == c)
             {
-                gameClient.MoveCar(i, pos, rot);
                 //Debug.Log("MoveCAR : " + i);
+                gameClient.MoveCar(i, pos, rot);
             }
         }
     }
