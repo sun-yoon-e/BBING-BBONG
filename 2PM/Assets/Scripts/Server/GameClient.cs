@@ -1349,8 +1349,9 @@ public class GameClient
     }
     public void UseItem(int itemType, int playerID)
     {
-        //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
-        //나빼고 다 시야차단일 경우 playerID를 0으로 보내줄것
+        // 0: 나빼고 다 시야차단, 1: 한명만 시야차단, 2: 이속 저하
+        // 나빼고 다 시야차단일 경우 playerID를 0으로 보내줄것
+        // 한명에게만 보내주는 것은 대기실 순서대로 1, 2, 3, 4
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
 

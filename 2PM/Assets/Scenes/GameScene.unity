@@ -3708,6 +3708,7 @@ MonoBehaviour:
   isSlow: 1
   slowTime: 10
   orMaxSpeed: 0
+  targetID: 0
 --- !u!114 &542957389623694209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11000,7 +11001,7 @@ GameObject:
   - component: {fileID: 3728783369783814113}
   - component: {fileID: 3728783369783814112}
   m_Layer: 13
-  m_Name: GameObject
+  m_Name: FireAnimation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -209,7 +209,7 @@ void Room::CheckGameFinish()
 #ifdef TEST
 	if (isGameStarted && (time(NULL) - gameStartedAt >= 20)) {
 #else
-	if (isGameStarted && (time(NULL) - gameStartedAt >= 100 + 5)) {	// 3초 딜레이 추가 gameTimer.cs
+	if (isGameStarted && (time(NULL) - gameStartedAt >= 100 + 5)) {	// 딜레이 추가 gameTimer.cs
 #endif
 		// 게임 종료 관련 추가 수정 필요함
 		cout << "-- END GAME --" << endl;
@@ -231,7 +231,7 @@ void Room::CheckGameFinish()
 
 void Room::ToGameRoom()
 {
-	if (isCountdownStarted && (time(NULL) - gameFinishedAt >= 10))
+	if (isCountdownStarted && (time(NULL) - gameFinishedAt >= 10))	// 게임 종료 후 10초 대기시간
 	{
 		isCountdownStarted = false;
 		BYTE* buffer = new BYTE[OTHER_PACKET_SIZE_MAX];

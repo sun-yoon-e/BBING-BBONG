@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Item : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     NitrousManager nitrousScript;
     RB_Controller rbScript;
     
@@ -36,6 +38,8 @@ public class Item : MonoBehaviour
     private float slowTimer;
     public float slowTime;
     public float orMaxSpeed;
+
+    public int targetID;
     
     private void Start()
     {
@@ -51,6 +55,8 @@ public class Item : MonoBehaviour
         MyItems = new int?[2] { -1, -1 };
 
         itemObject = GameObject.Find("Item Generator").GetComponent<ItemBoxGenerator>();
+
+        gameClient.OnUseItem += UseItemToPlayer;
     }
 
     private void Update()
@@ -221,15 +227,17 @@ public class Item : MonoBehaviour
         }
     }
 
-    void UseItem(int itemIndex)
+    public void UseItemToPlayer(object sender, ItemMessageEventArgs args)
     {
-        switch (itemIndex)
+        // 대기실 순번대로 숫자에 해당하는 유저에게만 패킷 돌아옴
+        // 여기 들어왔다는 것은 내가 아이템 타겟으로 지목당했다는 것
+        switch (args.ItemType)
         {
-            case 0:         //시야차단
+            case 0:         //모두 시야차단
                 SoundManager.instance.PlaySE("Smoke_Item");
                 Fog();
                 break;
-            case 1:         //시야차단
+            case 1:         //한 명 시야차단
                 SoundManager.instance.PlaySE("Smoke_Item");
                 Fog();
                 break;
@@ -237,6 +245,28 @@ public class Item : MonoBehaviour
                 SoundManager.instance.PlaySE("Slow_Item");
                 rbScript.maxSpeed = orMaxSpeed / 2;
                 isSlow = true;
+                break;
+            case 3:         //부스터
+                // 얘는 밑에~
+                break;
+        }
+    }
+
+    void UseItem(int itemIndex)
+    {
+        // targetID는 1~4로 랜덤설정(?)
+        // 1~4는 대기실 순번임
+        // 나의 대기실 번호는 gameClient.playerRoomNum(0~3)
+        switch (itemIndex)
+        {
+            case 0:         //모두 시야차단
+                gameClient.UseItem(0, 0);
+                break;
+            case 1:         //한 명 시야차단
+                gameClient.UseItem(1, targetID);
+                break;
+            case 2:         //슬로우
+                gameClient.UseItem(2, targetID);
                 break;
             case 3:         //부스터
                 SoundManager.instance.PlaySE("Boost_Item");
