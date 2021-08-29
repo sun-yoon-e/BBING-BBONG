@@ -100,10 +100,10 @@ public class PlacementBuilding : MonoBehaviour
         isBuildingReady = true;
         gameClient.isReadyToControl = true;
 
-        //if (OnBuildingReady != null)
-        //{
-        //    OnBuildingReady(this, EventArgs.Empty);
-        //}
+        if (OnBuildingReady != null)
+        {
+            OnBuildingReady(this, EventArgs.Empty);
+        }
         if (OnBuildingReady2 != null)
         {
             OnBuildingReady2(this, EventArgs.Empty);

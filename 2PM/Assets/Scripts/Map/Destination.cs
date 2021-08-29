@@ -30,7 +30,12 @@ public class Destination : MonoBehaviour
     {
         instance = this;
         building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
+        
+        Invoke("CreateDestination", 1f);
+    }
 
+    void CreateDestination()
+    {
         building.OnBuildingReady += OnBuildingReady;
         if (building.isBuildingReady)
         {
