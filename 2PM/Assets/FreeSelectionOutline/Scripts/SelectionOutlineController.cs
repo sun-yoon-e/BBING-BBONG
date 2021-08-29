@@ -177,7 +177,7 @@ public class SelectionOutlineController : MonoBehaviour
             Debug.LogWarning("No renderer provided for outline.");
         }
     }
-    public void ClearTarget()
+    void ClearTarget()
     {
         Selected = false;
         cmd.ClearRenderTarget(true, true, Color.black);

@@ -14,13 +14,11 @@ public class Pizza : MonoBehaviour
 
     Destination destination;
     PlacementBuilding building;
-    GameObject buildingGenerator;
 
     void Start()
     {
         destination = GameObject.Find("Destination Generator").GetComponent<Destination>();
         building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
-        buildingGenerator = GameObject.Find("Building Generator");
 
         lifeTimer = lifeTime;
     }
@@ -46,9 +44,6 @@ public class Pizza : MonoBehaviour
                     Destroy(destination.pizzaSpriteRenderer[i]);
 
                     Destroy(destination.destinationObject[i]);
-
-                    building.buildingObject[destination.destination[i]].transform.parent = buildingGenerator.transform;
-                    SelectionOutlineController.instance.ClearTarget();
 
                     destination.DestroyDestination += 1;
                     destination.destination[i] = 0;
