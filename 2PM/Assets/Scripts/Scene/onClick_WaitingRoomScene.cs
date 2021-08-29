@@ -185,11 +185,11 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                             if (gameClient.ItemInfo[i] != null)
                                 gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
                         }
-
-                        SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
-                        isGameStarted = true;
                     }
                 }
+
+                SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
+                isGameStarted = true;
             }
         }
     }
