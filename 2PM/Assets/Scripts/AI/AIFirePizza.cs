@@ -23,7 +23,7 @@ public class AIFirePizza : MonoBehaviour
     void Start()
     {
         movementScript = GetComponent<AIMovement>();
-        ID = GameObject.Find("AIID").GetComponent<CreateAIID>();
+        ID = transform.Find("AIID").GetComponent<CreateAIID>();
 
         //rbController = GetComponent<AIRBController>();
         //rb = rbController.GetComponent<Rigidbody>();

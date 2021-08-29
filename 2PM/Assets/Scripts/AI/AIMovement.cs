@@ -51,7 +51,6 @@ public class AIMovement : MonoBehaviour
 
         if (GameClient.Instance.client_host)
         {
-            //Debug.Log(ID.idNum);
             GameClient.Instance.UpdatePositionAI(ID.idNum, transform.position, transform.rotation.eulerAngles);
         }
     }
