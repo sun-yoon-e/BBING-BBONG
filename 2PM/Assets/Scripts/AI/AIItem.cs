@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AIItem : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     AIRBController rbScript;
     
     private int?[] myItems;
