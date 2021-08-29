@@ -164,9 +164,9 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         {
             if (e.gameState)
             {
-                if (gameClient.client_host)
+                if (gameClient.isRenderBuilding)
                 {
-                    if (gameClient.isRenderBuilding)
+                    if (gameClient.client_host)
                     {
                         for (int i = 0; i < 5000; ++i)
                         {
@@ -186,10 +186,10 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                                 gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
                         }
                     }
-                }
 
                 SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
                 isGameStarted = true;
+                }
             }
         }
     }
