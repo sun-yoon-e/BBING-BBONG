@@ -88,7 +88,7 @@ public class AIItem : MonoBehaviour
                 playerID = 1;
             }
 
-            switch (myItems[0].Value)
+            switch (myItems[0].Value)   // System.Nullable`1[T].get_Value () ???
             {
                 case 0:         //모두 시야차단
                     gameClient.UseItem(0, 0, isAI, AIID);

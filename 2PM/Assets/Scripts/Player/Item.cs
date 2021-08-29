@@ -230,26 +230,29 @@ public class Item : MonoBehaviour
 
     public void UseItemToPlayer(object sender, ItemMessageEventArgs args)
     {
-        // 대기실 순번대로 숫자에 해당하는 유저에게만 패킷 돌아옴
-        // 여기 들어왔다는 것은 내가 아이템 타겟으로 지목당했다는 것
-        switch (args.ItemType)
+        if (!args.isAI)
         {
-            case 0:         //모두 시야차단
-                SoundManager.instance.PlaySE("Smoke_Item");
-                Fog();
-                break;
-            case 1:         //한 명 시야차단
-                SoundManager.instance.PlaySE("Smoke_Item");
-                Fog();
-                break;
-            case 2:         //슬로우
-                SoundManager.instance.PlaySE("Slow_Item");
-                rbScript.maxSpeed = orMaxSpeed / 2;
-                isSlow = true;
-                break;
-            case 3:         //부스터
-                // 얘는 밑에~
-                break;
+            // 대기실 순번대로 숫자에 해당하는 유저에게만 패킷 돌아옴
+            // 여기 들어왔다는 것은 내가 아이템 타겟으로 지목당했다는 것
+            switch (args.ItemType)
+            {
+                case 0:         //모두 시야차단
+                    SoundManager.instance.PlaySE("Smoke_Item");
+                    Fog();
+                    break;
+                case 1:         //한 명 시야차단
+                    SoundManager.instance.PlaySE("Smoke_Item");
+                    Fog();
+                    break;
+                case 2:         //슬로우
+                    SoundManager.instance.PlaySE("Slow_Item");
+                    rbScript.maxSpeed = orMaxSpeed / 2;
+                    isSlow = true;
+                    break;
+                case 3:         //부스터
+                                // 얘는 밑에~
+                    break;
+            }
         }
     }
 
@@ -258,8 +261,8 @@ public class Item : MonoBehaviour
         // targetID는 1~4로 랜덤설정(?)
         // 1~4는 대기실 순번임
         // 나의 대기실 번호는 gameClient.playerRoomNum(0~3)
-        // gameClient.ai_client[?]가 true이면 AI 플레이어
-        // 비교해서 AI이면 isAI를 true로, ?를 AIID로 넣어주면 됨
+        // gameClient.ai_client[targetID - 1]가 true이면 AI 플레이어
+        // 비교해서 AI이면 isAI를 true로, targetID - 1를 AIID로 넣어주면 됨
 
         // targetID = ?;
         // isAI = gameClient.ai_client[targetID - 1];
