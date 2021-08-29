@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class onClick_WaitingRoomScene : MonoBehaviour
 {
     public int playerCnt = -1;
-    
+
     public Text roomName;
     public Text[] PlayerID;
     public Image[] AIImages;
@@ -17,24 +17,24 @@ public class onClick_WaitingRoomScene : MonoBehaviour
     private bool[] PlayerList = new bool[4];
     private bool isGameStarted = false;
     private int maxPlayer = 4;
-    
+
     private SoundManager soundManager;
-    
+
     private GameClient gameClient = GameClient.Instance;
-   
+
     private void Start()
     {
         //Debug.Log("waitingRoomScene.start()");
-        
+
         //배경음 전환
         soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
         if (soundManager.reload)
         {
             soundManager.bgmNum = 0;
             soundManager.PlayeBGM();
-            soundManager.reload = false; 
+            soundManager.reload = false;
         }
-        
+
         gameClient.OnGameStateChanged += GameStateChanged;
         gameClient.OnRoomInfo += OnRoomInfo;
         gameClient.OnRoomNewPlayer += OnRoomNewPlayer;
@@ -49,7 +49,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         {
             obj.gameObject.SetActive(false);
         }
-        
+
         gameClient.RoomInfo(-1);
     }
 
@@ -102,7 +102,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                 PlayerID[1].text = e.nick2;
             }
         }
-        
+
         if (e.nick3 != null)
         {
             if (PlayerID[2] != null)
@@ -118,7 +118,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                 PlayerID[2].text = e.nick3;
             }
         }
-        
+
         if (e.nick4 != null)
         {
             if (PlayerID[3] != null)
@@ -147,7 +147,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         }
         //Debug.Log("roomCount : " + roomCount);
         //Debug.Log("roomName : " + roomName.text);
-        
+
         if (PlayerID[0] != null && PlayerID[0].text == "AI(1)")
             AIImages[0].gameObject.SetActive(true);
         if (PlayerID[1] != null && PlayerID[1].text == "AI(2)")
@@ -164,32 +164,41 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         {
             if (e.gameState)
             {
-                if (gameClient.isRenderBuilding)
+                if (gameClient.client_host)
                 {
-                    if (gameClient.client_host)
+                    if (gameClient.StoreInfo != null)
+                        gameClient.MakePizzaStore(gameClient.StoreInfo.Position, gameClient.StoreInfo.Rotation);
+
+                    for (int i = 0; i < 1000; ++i)
                     {
-                        for (int i = 0; i < 5000; ++i)
-                        {
-                            if (gameClient.TreeInfo[i] != null)
-                                gameClient.MakeTree(gameClient.TreeInfo[i].Type, gameClient.TreeInfo[i].Position);
-                        }
-
-                        for (int i = 0; i < 50; ++i)
-                        {
-                            if (gameClient.CarInfo[i] != null)
-                                gameClient.MakeCar(gameClient.CarInfo[i].ID, gameClient.CarInfo[i].CarType, gameClient.CarInfo[i].Position);
-                        }
-
-                        for (int i = 0; i < 50; ++i)
-                        {
-                            if (gameClient.ItemInfo[i] != null)
-                                gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
-                        }
+                        if (gameClient.BuildingInfo[i] != null)
+                            gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
                     }
 
+                    for (int i = 0; i < 5000; ++i)
+                    {
+                        if (gameClient.TreeInfo[i] != null)
+                            gameClient.MakeTree(gameClient.TreeInfo[i].Type, gameClient.TreeInfo[i].Position);
+                    }
+
+                    for (int i = 0; i < 50; ++i)
+                    {
+                        if (gameClient.CarInfo[i] != null)
+                            gameClient.MakeCar(gameClient.CarInfo[i].ID, gameClient.CarInfo[i].CarType, gameClient.CarInfo[i].Position);
+                    }
+
+                    for (int i = 0; i < 50; ++i)
+                    {
+                        if (gameClient.ItemInfo[i] != null)
+                            gameClient.PlaceItemBox(gameClient.ItemInfo[i].ItemID, gameClient.ItemInfo[i].Position);
+                    }
+                }
+
+                //if (gameClient.isRenderBuilding && gameClient.isRenderTree && gameClient.isRenderItem && gameClient.isRenderCar)
+                //{
                 SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
                 isGameStarted = true;
-                }
+                //}
             }
         }
     }
@@ -202,22 +211,9 @@ public class onClick_WaitingRoomScene : MonoBehaviour
 
     public void GameStart_Btn_Clicked()
     {
-        if (gameClient.client_host)
+        if (playerCnt == maxPlayer)
         {
-            if (playerCnt == maxPlayer)
-            {
-                if (gameClient.StoreInfo != null)
-                    gameClient.MakePizzaStore(gameClient.StoreInfo.Position, gameClient.StoreInfo.Rotation);
-
-                for (int i = 0; i < 1000; ++i)
-                {
-                    if (gameClient.BuildingInfo[i] != null)
-                        gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
-                }
-
-                if (gameClient.isRenderBuilding)
-                    gameClient.StartGame();
-            }
+            gameClient.StartGame();
         }
         //SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
     }
