@@ -74,10 +74,18 @@ public class AIItem : MonoBehaviour
 
     void UseItem()
     {
-        if (gameClient.client_host && myItems[0] != null)
+        if (gameClient.client_host && myItems[0] != -1)
         {
             gameClient.UseItem(myItems[0].Value, Random.Range(1, 5), false, 0);
-            myItems[0] = myItems[1];
+            if (myItems[1] != -1)
+            {
+                myItems[0] = myItems[1];
+                myItems[1] = -1;
+            }
+            else
+            {
+                myItems[0] = -1;
+            }
         }
 
     }
