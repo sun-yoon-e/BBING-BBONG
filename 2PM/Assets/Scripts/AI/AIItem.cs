@@ -81,7 +81,7 @@ public class AIItem : MonoBehaviour
     {
         if (GameClient.Instance.client_host && args.isAI)
         {
-            if (args.AIID == ID)
+            if (args.AIID == ID.idNum)
             {
                 SoundManager.instance.PlaySE("Slow_Item");
                 rbScript.maxSpeed = orMaxSpeed / 2;
