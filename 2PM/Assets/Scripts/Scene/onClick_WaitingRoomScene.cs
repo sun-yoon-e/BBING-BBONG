@@ -175,8 +175,6 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                     if (gameClient.StoreInfo != null)
                         gameClient.MakePizzaStore(gameClient.StoreInfo.Position, gameClient.StoreInfo.Rotation);
 
-                    
-
                     for (int i = 0; i < 5000; ++i)
                     {
                         if (gameClient.TreeInfo[i] != null)
