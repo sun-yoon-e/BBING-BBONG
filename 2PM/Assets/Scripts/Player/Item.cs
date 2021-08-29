@@ -172,6 +172,7 @@ public class Item : MonoBehaviour
         {
             //Destroy(other.gameObject);
             itemObject.DestroyItem(other.gameObject);
+            ItemCol = true;
         }
     }
 

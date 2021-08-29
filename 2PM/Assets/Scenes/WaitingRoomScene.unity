@@ -1671,14 +1671,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f988b0bc7221550438015e4b925a39da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemBoxNum: 50
+  itemBoxNum: 500
   itemBoxPrefab: {fileID: 6291887316783688596, guid: 425b4e6301ed0064bac2fd1d87804a17,
     type: 3}
   itemSprite: {fileID: 21300000, guid: b5f06d786ea4e1a41a6c10e563fa7ceb, type: 3}
   itemBox: []
   itemSpriteObject: []
   itemSpriteRenderer: []
-  itemScale: 1
+  itemScale: 3
 --- !u!1 &1017067069
 GameObject:
   m_ObjectHideFlags: 0
