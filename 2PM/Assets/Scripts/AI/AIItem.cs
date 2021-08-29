@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class AIItem : MonoBehaviour
 {
+    AIRBController rbScript;
+    
     private int?[] myItems;
     int itemCnt;
     bool isItemCol;
+
+    public bool isSlow;
+    private float slowTimer;
+    public float slowTime;
+    public float orMaxSpeed;
 
     void Start()
     {
@@ -28,6 +35,17 @@ public class AIItem : MonoBehaviour
 
         if (itemCnt > 0)
             UseItem();
+
+        if (isSlow)
+        {
+            slowTimer += Time.deltaTime;
+            if (slowTimer >= slowTime)
+            {
+                isSlow = false;
+                rbScript.maxSpeed = orMaxSpeed;
+                slowTimer = 0f;
+            }
+        }
     }
 
     private void RandomItem()

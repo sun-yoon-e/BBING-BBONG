@@ -28,15 +28,21 @@ public class Car : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "AI")
+        if (collision.gameObject.tag == "Player")
         {
             var item = collision.gameObject.GetComponent<Item>();
             var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
             rb_controller.maxSpeed = item.orMaxSpeed / 2;
             item.isSlow = true;
 
-            //obstacle.GenerateCar();
-            //Destroy(transform.parent.gameObject);
+            obstacle.DestroyCar(transform.parent.gameObject);
+        }
+        if (collision.gameObject.tag == "AI")
+        {
+            //var item = collision.gameObject.GetComponent<AIItem>();
+            //var rb_controller = collision.gameObject.GetComponent<AIRBController>();
+            //rb_controller.maxSpeed = item.orMaxSpeed / 2;
+            //item.isSlow = true;
 
             obstacle.DestroyCar(transform.parent.gameObject);
         }
