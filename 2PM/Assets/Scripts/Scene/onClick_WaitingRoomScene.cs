@@ -135,6 +135,12 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             }
         }
 
+        for (int i = 0; i < 1000; ++i)
+        {
+            if (gameClient.BuildingInfo[i] != null)
+                gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
+        }
+
         gameClient.RoomInfo(-1);
     }
 
@@ -169,11 +175,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                     if (gameClient.StoreInfo != null)
                         gameClient.MakePizzaStore(gameClient.StoreInfo.Position, gameClient.StoreInfo.Rotation);
 
-                    for (int i = 0; i < 1000; ++i)
-                    {
-                        if (gameClient.BuildingInfo[i] != null)
-                            gameClient.MakeBuilding(gameClient.BuildingInfo[i].Type, gameClient.BuildingInfo[i].Position, gameClient.BuildingInfo[i].dir);
-                    }
+                    
 
                     for (int i = 0; i < 5000; ++i)
                     {
