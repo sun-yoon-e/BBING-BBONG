@@ -373,6 +373,8 @@ struct packet_use_item
 	BYTE type;
 	int itemType;
 	int targetPlayerId;
+	bool isAI;
+	int AIID;
 };
 
 struct packet_ai_move

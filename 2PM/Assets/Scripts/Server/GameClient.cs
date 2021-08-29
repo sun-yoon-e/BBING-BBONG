@@ -116,6 +116,8 @@ public class ItemMessageEventArgs : EventArgs
 {
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
     public byte ItemType;
+    public bool isAI;
+    public int AIID;
 }
 
 public class MakeCarMessageEventArgs : EventArgs
@@ -882,10 +884,15 @@ public class GameClient
             //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
             //Event를 받는 쪽에서 아이템종류에 맞춰 처리
             byte itemType = reader.ReadByte();
+            bool isAI = reader.ReadBoolean();
+            int AIID = reader.ReadInt32();
+
             if (OnUseItem != null)
             {
                 var eventArgs = new ItemMessageEventArgs();
                 eventArgs.ItemType = itemType;
+                eventArgs.isAI = isAI;
+                eventArgs.AIID = AIID;
                 OnUseItem(this, eventArgs);
             }
         }
@@ -1347,7 +1354,7 @@ public class GameClient
 
         socket.Send(buffer);
     }
-    public void UseItem(int itemType, int playerID)
+    public void UseItem(int itemType, int playerID, bool isAI, int AIID)
     {
         // 0: 나빼고 다 시야차단, 1: 한명만 시야차단, 2: 이속 저하
         // 나빼고 다 시야차단일 경우 playerID를 0으로 보내줄것
@@ -1358,6 +1365,8 @@ public class GameClient
         writer.Write(CS_USE_ITEM);
         writer.Write((byte)itemType);
         writer.Write(playerID);
+        writer.Write(isAI);
+        writer.Write(AIID);
 
         socket.Send(buffer);
     }

@@ -40,6 +40,8 @@ public class Item : MonoBehaviour
     public float orMaxSpeed;
 
     public int targetID;
+    public bool isAI;
+    public int AIID;
     
     private void Start()
     {
@@ -257,16 +259,23 @@ public class Item : MonoBehaviour
         // targetID는 1~4로 랜덤설정(?)
         // 1~4는 대기실 순번임
         // 나의 대기실 번호는 gameClient.playerRoomNum(0~3)
+        // gameClient.ai_client[?]가 true이면 AI 플레이어
+        // 비교해서 AI이면 isAI를 true로, ?를 AIID로 넣어주면 됨
+
+        // targetID = ?;
+        // isAI = gameClient.ai_client[targetID - 1];
+        // AIID = targetID - 1
+
         switch (itemIndex)
         {
             case 0:         //모두 시야차단
-                gameClient.UseItem(0, 0);
+                gameClient.UseItem(0, 0, isAI, AIID);
                 break;
             case 1:         //한 명 시야차단
-                gameClient.UseItem(1, targetID);
+                gameClient.UseItem(1, targetID, isAI, AIID);
                 break;
             case 2:         //슬로우
-                gameClient.UseItem(2, targetID);
+                gameClient.UseItem(2, targetID, isAI, AIID);
                 break;
             case 3:         //부스터
                 SoundManager.instance.PlaySE("Boost_Item");

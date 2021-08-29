@@ -15,6 +15,8 @@ public class AIItem : MonoBehaviour
     public float slowTime;
     public float orMaxSpeed;
 
+    CreateAIID ID;
+
     void Start()
     {
         myItems = new int?[2] { null, null };
@@ -22,6 +24,9 @@ public class AIItem : MonoBehaviour
         isItemCol = false;
 
         //itemType = new int[4];
+
+        ID = transform.Find("AIID").GetComponent<CreateAIID>();
+        gameClient.OnUseItem += UseItemToPlayer;
     }
 
     void Update()
@@ -68,6 +73,19 @@ public class AIItem : MonoBehaviour
     void UseItem()
     {
         
+    }
+
+    public void UseItemToPlayer(object sender, ItemMessageEventArgs args)
+    {
+        if (GameClient.Instance.client_host && args.isAI)
+        {
+            if (args.AIID == ID)
+            {
+                SoundManager.instance.PlaySE("Slow_Item");
+                rbScript.maxSpeed = orMaxSpeed / 2;
+                isSlow = true;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
