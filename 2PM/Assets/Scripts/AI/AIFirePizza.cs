@@ -5,6 +5,8 @@ using System;
 
 public class AIFirePizza : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     AIMovement movementScript;
     AIRBController rbController;
     Rigidbody rb;
@@ -53,9 +55,9 @@ public class AIFirePizza : MonoBehaviour
             Vector3 pizzaPosition = firePos.position;
 
             //pizza = Instantiate(pizzaPrefab, pizzaPosition, pizzaRotation);
-            if (GameClient.Instance.client_host)
+            if (gameClient.client_host)
             {
-                GameClient.Instance.FirePizzaAI(ID.idNum, pizzaPosition, col[0].transform.position);
+                gameClient.FirePizzaAI(ID.idNum, pizzaPosition, col[0].transform.position);
             }
             //print(col[0].transform.position);
             Destroy(col[0]);

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Car : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     ObstacleGenerator obstacle;
     Rigidbody rb;
 
@@ -19,7 +21,7 @@ public class Car : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezePosition;
         rb.constraints = RigidbodyConstraints.FreezeRotationY;
 
-        if (GameClient.Instance.isGameStarted && GameClient.Instance.client_host)
+        if (gameClient.isGameStarted && gameClient.client_host)
         {
             if (gameObject != null)
                 obstacle.MoveCar(gameObject.transform.parent.gameObject, transform.parent.position, transform.rotation.eulerAngles);

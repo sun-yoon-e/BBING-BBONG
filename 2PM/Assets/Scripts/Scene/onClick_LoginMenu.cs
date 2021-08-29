@@ -141,7 +141,7 @@ public class onClick_LoginMenu : MonoBehaviour
         //Debug.Log(e.success);
         if (e.success)
         {
-            GameClient.Instance.client_nick = Login_id.text;
+            gameClient.client_nick = Login_id.text;
             // TODO: 다음 scene으로 넘어감
             SceneManager.LoadScene("Scenes/LobbyScene", LoadSceneMode.Single);
         }

@@ -45,7 +45,7 @@ public class PlacementBuilding : MonoBehaviour
         {
             OnRoadReady(this, EventArgs.Empty);
         }
-        GameClient.Instance.OnMakeBuilding += OnMakeBuilding;
+        gameClient.OnMakeBuilding += OnMakeBuilding;
     }
 
     private void Start()

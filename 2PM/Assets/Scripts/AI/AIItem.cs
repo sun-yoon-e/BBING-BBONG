@@ -74,12 +74,17 @@ public class AIItem : MonoBehaviour
 
     void UseItem()
     {
-        
+        if (gameClient.client_host && myItems[0] != null)
+        {
+            gameClient.UseItem(myItems[0].Value, Random.Range(1, 5), false, 0);
+            myItems[0] = myItems[1];
+        }
+
     }
 
     public void UseItemToPlayer(object sender, ItemMessageEventArgs args)
     {
-        if (GameClient.Instance.client_host && args.isAI)
+        if (gameClient.client_host && args.isAI)
         {
             if (args.AIID == ID.idNum)
             {

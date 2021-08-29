@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Pizza : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     public float speed = 20f;
     public float lifeTime = 10f;
 
@@ -46,7 +48,7 @@ public class Pizza : MonoBehaviour
                     destination.DestroyDestination += 1;
                     destination.destination[i] = 0;
 
-                    GameClient.Instance.UpdateScore(GameClient.Instance.playerRoomNum);
+                    gameClient.UpdateScore(gameClient.playerRoomNum);
 
                     Destroy(gameObject);
                 }

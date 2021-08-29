@@ -25,7 +25,7 @@ public class Chat : MonoBehaviour
 
     void Start()
     {
-        GameClient.Instance.OnReceivedMessage += ReceiveMsgResult;
+        gameClient.OnReceivedMessage += ReceiveMsgResult;
     }
 
     void Update()
@@ -35,7 +35,7 @@ public class Chat : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 string msg = chatBox.text;
-                GameClient.Instance.SendMessage(msg);
+                gameClient.SendMessage(msg);
                 //SendMessgeToChat(msg, Message.MessageType.playerMessge);
                 chatBox.text = "";
             }

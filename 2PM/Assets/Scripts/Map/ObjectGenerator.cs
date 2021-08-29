@@ -4,6 +4,8 @@ using Random = UnityEngine.Random;
 
 public class ObjectGenerator : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     PlacementBuilding building;
     RoadGenerator road;
     public GameObject[] objectPrefab;
@@ -19,7 +21,7 @@ public class ObjectGenerator : MonoBehaviour
             CreateObjectPrefab(this, EventArgs.Empty);
         }
 
-        GameClient.Instance.OnMakeTree += OnMakeTree;
+        gameClient.OnMakeTree += OnMakeTree;
     }
 
     private void Start()
@@ -29,7 +31,7 @@ public class ObjectGenerator : MonoBehaviour
 
     private void CreateObjectPrefab(object sender, EventArgs args)
     {
-        if (GameClient.Instance.client_host)
+        if (gameClient.client_host)
         {
             int prefab = 0;
             int isObject;
@@ -43,10 +45,10 @@ public class ObjectGenerator : MonoBehaviour
                 if (isObject == 1)
                 {
                     prefab = Random.Range(0, objectPrefab.Length);
-                    //GameClient.Instance.MakeTree((byte)prefab, road.vertices[i]);
-                    GameClient.Instance.TreeInfo[num] = new MakeTreeMessageEventArgs();
-                    GameClient.Instance.TreeInfo[num].Type = (byte)prefab;
-                    GameClient.Instance.TreeInfo[num].Position = road.vertices[i];
+                    //gameClient.MakeTree((byte)prefab, road.vertices[i]);
+                    gameClient.TreeInfo[num] = new MakeTreeMessageEventArgs();
+                    gameClient.TreeInfo[num].Type = (byte)prefab;
+                    gameClient.TreeInfo[num].Position = road.vertices[i];
                     num++;
                 }
             }
@@ -56,12 +58,12 @@ public class ObjectGenerator : MonoBehaviour
     public void OnMakeTree(object sender, MakeTreeMessageEventArgs args)
     {
         //Debug.Log($"{args.Type}, {args.Position}");
-        if (!GameClient.Instance.isRenderTree)
+        if (!gameClient.isRenderTree)
         {
             Instantiate(objectPrefab[args.Type], args.Position, Quaternion.identity, transform);
             ++treeNum;
 
-            if (GameClient.Instance.TreeInfo.Length == treeNum) GameClient.Instance.isRenderTree = true;
+            if (gameClient.TreeInfo.Length == treeNum) gameClient.isRenderTree = true;
         }
     }
 }

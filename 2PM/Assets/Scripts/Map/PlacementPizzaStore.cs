@@ -28,7 +28,7 @@ public class PlacementPizzaStore : MonoBehaviour
         {
             OnRoadReady(this, EventArgs.Empty);
         }
-        GameClient.Instance.OnMakePizzaStore += OnMakePizzaStore;
+        gameClient.OnMakePizzaStore += OnMakePizzaStore;
     }
 
     private void OnRoadReady(object sender, EventArgs args)

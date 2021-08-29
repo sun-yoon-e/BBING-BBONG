@@ -69,7 +69,6 @@ public class Item : MonoBehaviour
             CheckItemCnt();
             ChangeSprite();
             ItemCol = false;
-            //GameClient.Instance.RemoveItemBox();
         }
 
         //아이템 치트키

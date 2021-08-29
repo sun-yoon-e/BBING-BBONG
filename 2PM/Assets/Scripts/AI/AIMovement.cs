@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class AIMovement : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+
     RoadGenerator road;
     public Rigidbody rb;
 
@@ -49,9 +51,9 @@ public class AIMovement : MonoBehaviour
 
         CheckAIStop();
 
-        if (GameClient.Instance.client_host)
+        if (gameClient.client_host)
         {
-            GameClient.Instance.UpdatePositionAI(ID.idNum, transform.position, transform.rotation.eulerAngles);
+            gameClient.UpdatePositionAI(ID.idNum, transform.position, transform.rotation.eulerAngles);
         }
     }
 
