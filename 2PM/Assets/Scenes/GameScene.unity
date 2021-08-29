@@ -3694,7 +3694,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d8e53c2c96c34484aba6808c329c6c3b, type: 3}
   - {fileID: 21300000, guid: 4b0c128cc0540f447b33827ea0d13d03, type: 3}
   - {fileID: 21300000, guid: dcf12a87386b9954fbc6a182adea9821, type: 3}
-  - {fileID: 21300000, guid: a8ad61d8529c09441ae5af20e8e09e2e, type: 3}
   images:
   - {fileID: 5618960221759066338}
   - {fileID: 5618960221988427918}

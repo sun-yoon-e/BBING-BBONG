@@ -13,7 +13,7 @@ public class gameTimer : MonoBehaviour
     
     private bool timerActive = false;
     private float gameTime;
-    private float limitTime = 100;//60 * 1;       //제한시간 600초(10분)
+    private float limitTime = 300;//60 * 1;       //제한시간 600초(10분)
 
     public static gameTimer instance;
     
