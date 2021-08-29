@@ -16,11 +16,14 @@ public class AIFirePizza : MonoBehaviour
     public Transform firePos;
     GameObject pizza;
 
+    CreateAIID ID;
+
     public float sight;
 
     void Start()
     {
         movementScript = GetComponent<AIMovement>();
+        ID = GameObject.Find("AIID").GetComponent<CreateAIID>();
 
         //rbController = GetComponent<AIRBController>();
         //rb = rbController.GetComponent<Rigidbody>();
@@ -52,7 +55,7 @@ public class AIFirePizza : MonoBehaviour
             //pizza = Instantiate(pizzaPrefab, pizzaPosition, pizzaRotation);
             if (GameClient.Instance.client_host)
             {
-                GameClient.Instance.FirePizzaAI(3, pizzaPosition, col[0].transform.position);
+                GameClient.Instance.FirePizzaAI(ID.idNum, pizzaPosition, col[0].transform.position);
             }
             //print(col[0].transform.position);
             Destroy(col[0]);

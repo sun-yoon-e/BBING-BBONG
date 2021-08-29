@@ -32,6 +32,7 @@ public class GameSceneMain : MonoBehaviour
 
     SoundManager soundManager;
     RoadGenerator road;
+    CreateAIID AIID;
 
     public void Start()
     {
@@ -99,6 +100,11 @@ public class GameSceneMain : MonoBehaviour
                     players[i] = Instantiate(AIObject);
                     players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                     //players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
+
+                    AIID = players[i].transform.Find("AIID").GetComponent<CreateAIID>();
+                    AIID.idNum = i;
+                    //Debug.Log(AIID.idNum);
+
                     var m = players[i].transform.Find("Controller/Rider/Box001");
                     m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
                 }
@@ -203,7 +209,7 @@ public class GameSceneMain : MonoBehaviour
     public void AIPositionUpdated(object sender, AIPositionUpdateEventArgs args)
     {
         //Debug.Log("AIPositionUpdate");
-
+        //Debug.Log(args.AIID);
         if (gameClient.ai_client[args.AIID] == true && !gameClient.client_host)
         {
             players[args.AIID].transform.position = args.position;

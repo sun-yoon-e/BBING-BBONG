@@ -21,10 +21,13 @@ public class AIMovement : MonoBehaviour
     Vector3 stopPosition;
     public bool isStopPosition;
 
+    CreateAIID ID;
+
     void Start()
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         rb = GetComponent<Rigidbody>();
+        ID = transform.Find("AIID").GetComponent<CreateAIID>();
 
         CreateNavMeshAgentObject();
     }
@@ -48,7 +51,8 @@ public class AIMovement : MonoBehaviour
 
         if (GameClient.Instance.client_host)
         {
-            GameClient.Instance.UpdatePositionAI(3, transform.position, transform.rotation.eulerAngles);
+            //Debug.Log(ID.idNum);
+            GameClient.Instance.UpdatePositionAI(ID.idNum, transform.position, transform.rotation.eulerAngles);
         }
     }
 

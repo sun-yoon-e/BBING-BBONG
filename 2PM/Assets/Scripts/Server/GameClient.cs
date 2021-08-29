@@ -801,6 +801,7 @@ public class GameClient
                 eventArgs.position = position;
                 eventArgs.rotation = rotation;
 
+                ///Debug.Log(aiID + " / " + position + " / " + rotation);
                 OnAIPositionUpdated(this, eventArgs);
             }
         }
