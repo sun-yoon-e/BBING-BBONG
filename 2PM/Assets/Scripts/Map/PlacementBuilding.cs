@@ -25,6 +25,7 @@ public class PlacementBuilding : MonoBehaviour
     private int interval;
 
     public event EventHandler OnBuildingReady;
+    public event EventHandler OnBuildingReady2;
     public bool isBuildingReady = false;
 
     private void Awake()
@@ -96,12 +97,16 @@ public class PlacementBuilding : MonoBehaviour
         road.vertices = map.vertices;
         road.UpdateMesh();
         
-        //isBuildingReady = true;
+        isBuildingReady = true;
         gameClient.isReadyToControl = true;
 
-        if (OnBuildingReady != null)
+        //if (OnBuildingReady != null)
+        //{
+        //    OnBuildingReady(this, EventArgs.Empty);
+        //}
+        if (OnBuildingReady2 != null)
         {
-            OnBuildingReady(this, EventArgs.Empty);
+            OnBuildingReady2(this, EventArgs.Empty);
         }
     }
 
@@ -196,7 +201,7 @@ public class PlacementBuilding : MonoBehaviour
             if (gameClient.BuildingNum == buildingNum)
             {
                 gameClient.isRenderBuilding = true;
-                isBuildingReady = true;
+                //isBuildingReady = true;
             }
         }
     }
