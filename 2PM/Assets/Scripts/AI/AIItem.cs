@@ -17,6 +17,10 @@ public class AIItem : MonoBehaviour
     public float slowTime;
     public float orMaxSpeed;
 
+    public int playerID;
+    public bool isAI;
+    public int AIID;
+
     CreateAIID ID;
 
     void Start()
@@ -76,7 +80,29 @@ public class AIItem : MonoBehaviour
     {
         if (gameClient.client_host && myItems[0] != -1)
         {
-            gameClient.UseItem(myItems[0].Value, Random.Range(1, 5), false, 0);
+            playerID = Random.Range(1, 5);
+            if (gameClient.ai_client[playerID - 1])
+            {
+                AIID = playerID - 1;
+                isAI = true;
+                playerID = 1;
+            }
+
+            switch (myItems[0].Value)
+            {
+                case 0:         //모두 시야차단
+                    gameClient.UseItem(0, 0, isAI, AIID);
+                    break;
+                case 1:         //한 명 시야차단
+                    gameClient.UseItem(1, playerID, isAI, AIID);
+                    break;
+                case 2:         //슬로우
+                    gameClient.UseItem(2, playerID, isAI, AIID);
+                    break;
+                case 3:         //부스터
+                    break;
+            }
+
             if (myItems[1] != -1)
             {
                 myItems[0] = myItems[1];

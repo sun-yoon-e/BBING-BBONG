@@ -25,7 +25,6 @@ public class PlacementBuilding : MonoBehaviour
     private int interval;
 
     public event EventHandler OnBuildingReady;
-    public event EventHandler OnBuildingReady2;
     public bool isBuildingReady = false;
 
     private void Awake()
@@ -102,10 +101,6 @@ public class PlacementBuilding : MonoBehaviour
         if (OnBuildingReady != null)
         {
             OnBuildingReady(this, EventArgs.Empty);
-        }
-        if (OnBuildingReady2 != null)
-        {
-            OnBuildingReady2(this, EventArgs.Empty);
         }
     }
 

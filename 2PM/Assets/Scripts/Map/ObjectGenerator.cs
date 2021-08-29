@@ -15,7 +15,7 @@ public class ObjectGenerator : MonoBehaviour
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
-        building.OnBuildingReady2 += CreateObjectPrefab;
+        building.OnBuildingReady += CreateObjectPrefab;
         if (building.isBuildingReady)
         {
             CreateObjectPrefab(this, EventArgs.Empty);
