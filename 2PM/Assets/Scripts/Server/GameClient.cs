@@ -333,18 +333,22 @@ public class GameClient
     public bool isGameStarted = false;
     public bool isReadyToControl = false;
 
+    public int BuildingNum = 0;
     public bool isRenderBuilding = false;
     public MakeBuildingMessageEventArgs[] BuildingInfo = new MakeBuildingMessageEventArgs[1000];
 
     public bool isRenderPizzaStore = false;
     public MakePizzaStoreMessageEventArgs StoreInfo = new MakePizzaStoreMessageEventArgs();
 
+    public int TreeNum = 0;
     public bool isRenderTree = false;
     public MakeTreeMessageEventArgs[] TreeInfo = new MakeTreeMessageEventArgs[5000];
 
+    public int ItemNum = 0;
     public bool isRenderItem = false;
     public PlaceItemBoxMessageEventArgs[] ItemInfo = new PlaceItemBoxMessageEventArgs[50];
 
+    public int CarNum = 0;
     public bool isRenderCar = false;
     public MakeCarMessageEventArgs[] CarInfo = new MakeCarMessageEventArgs[50];
 

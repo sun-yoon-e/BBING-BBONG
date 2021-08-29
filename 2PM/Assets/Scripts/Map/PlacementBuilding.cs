@@ -86,6 +86,7 @@ public class PlacementBuilding : MonoBehaviour
                 gameClient.BuildingInfo[num].Type = (byte)prefab;
                 gameClient.BuildingInfo[num].Position = road.vertices[i];
                 gameClient.BuildingInfo[num].dir = road.buildingState[i];
+                gameClient.BuildingNum = num;
                 num++;
             }
 
@@ -190,9 +191,9 @@ public class PlacementBuilding : MonoBehaviour
 
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
-            ++buildingNum;
+            buildingNum++;
 
-            if (gameClient.BuildingInfo.Length == buildingNum) gameClient.isRenderBuilding = true;
+            if (gameClient.BuildingNum == buildingNum) gameClient.isRenderBuilding = true;
         }
     }
 }

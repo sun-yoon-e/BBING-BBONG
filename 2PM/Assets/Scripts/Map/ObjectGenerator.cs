@@ -49,6 +49,7 @@ public class ObjectGenerator : MonoBehaviour
                     gameClient.TreeInfo[num] = new MakeTreeMessageEventArgs();
                     gameClient.TreeInfo[num].Type = (byte)prefab;
                     gameClient.TreeInfo[num].Position = road.vertices[i];
+                    gameClient.TreeNum = num;
                     num++;
                 }
             }
@@ -63,7 +64,7 @@ public class ObjectGenerator : MonoBehaviour
             Instantiate(objectPrefab[args.Type], args.Position, Quaternion.identity, transform);
             ++treeNum;
 
-            if (gameClient.TreeInfo.Length == treeNum) gameClient.isRenderTree = true;
+            if (gameClient.TreeNum == treeNum) gameClient.isRenderTree = true;
         }
     }
 }

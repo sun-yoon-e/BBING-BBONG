@@ -4,7 +4,7 @@ public class ItemBoxGenerator : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
 
-    int itemNum;
+    int num = 0, itemNum = 0;
     public int itemBoxNum;
     public GameObject itemBoxPrefab;
 
@@ -66,9 +66,11 @@ public class ItemBoxGenerator : MonoBehaviour
                     road.passibleItemPlace[itemBoxPlace[i]].z);
 
                 //gameClient.PlaceItemBox(i, itemPosition);
-                gameClient.ItemInfo[i] = new PlaceItemBoxMessageEventArgs();
-                gameClient.ItemInfo[i].ItemID = i;
-                gameClient.ItemInfo[i].Position = itemPosition;
+                gameClient.ItemInfo[num] = new PlaceItemBoxMessageEventArgs();
+                gameClient.ItemInfo[num].ItemID = i;
+                gameClient.ItemInfo[num].Position = itemPosition;
+                gameClient.ItemNum = num;
+                num++;
 
                 //Debug.Log(itemPosition);
                 //Debug.Log("OnRoadItem");
@@ -96,7 +98,7 @@ public class ItemBoxGenerator : MonoBehaviour
             //Debug.Log("PlaceItem");
             ++itemNum;
 
-            if (gameClient.ItemInfo.Length == itemNum) gameClient.isRenderItem = true;
+            if (gameClient.ItemNum == itemNum) gameClient.isRenderItem = true;
         }
     }
 

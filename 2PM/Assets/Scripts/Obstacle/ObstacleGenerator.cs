@@ -66,6 +66,7 @@ public class ObstacleGenerator : MonoBehaviour
                         gameClient.CarInfo[num].ID = num;
                         gameClient.CarInfo[num].CarType = (byte)carType;
                         gameClient.CarInfo[num].Position = carPosition;
+                        gameClient.CarNum = num;
                         num++;
 
                         //Debug.Log("OnRoadCar");
