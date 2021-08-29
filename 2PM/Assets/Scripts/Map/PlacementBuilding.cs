@@ -96,7 +96,7 @@ public class PlacementBuilding : MonoBehaviour
         road.vertices = map.vertices;
         road.UpdateMesh();
         
-        isBuildingReady = true;
+        //isBuildingReady = true;
         gameClient.isReadyToControl = true;
 
         if (OnBuildingReady != null)
@@ -193,7 +193,11 @@ public class PlacementBuilding : MonoBehaviour
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
             buildingNum++;
 
-            if (gameClient.BuildingNum == buildingNum) gameClient.isRenderBuilding = true;
+            if (gameClient.BuildingNum == buildingNum)
+            {
+                gameClient.isRenderBuilding = true;
+                isBuildingReady = true;
+            }
         }
     }
 }
