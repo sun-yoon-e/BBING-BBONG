@@ -680,8 +680,6 @@ public class GameClient
         {
             int id = reader.ReadInt32();
             int score = reader.ReadInt32();
-            Debug.Log("id : " + id);
-            Debug.Log("score : " + score);
 
             if (OnScoreUpdated != null)
             {

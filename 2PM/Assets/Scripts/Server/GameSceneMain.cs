@@ -160,11 +160,11 @@ public class GameSceneMain : MonoBehaviour
 
     void OnScoreUpdated(object caller, ScoreUpdateEventArgs args)
     {
-        Debug.Log("OnScoreUpdated()");
+        //Debug.Log("OnScoreUpdated()");
         for (int i = 0; i < 4; i++)
         {
             if (args.id == i) scores[i] = args.score;
-            Debug.Log(i + "'s score : " + scores[i]);
+            //Debug.Log(i + "'s score : " + scores[i]);
         }
 
         string text = "점수표\n";
