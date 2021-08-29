@@ -30,6 +30,9 @@ public class SelectionOutlineController : MonoBehaviour
         OnlyVisible=2
     }
 
+    public static SelectionOutlineController instance;
+    public GameObject target;
+    
     private Material OutlineMat;
     private Shader OutlineShader,TargetShader;
     private RenderTexture Mask, Outline;
@@ -49,6 +52,11 @@ public class SelectionOutlineController : MonoBehaviour
     public float OutlineWidth=0.2f;
     [Range(0, 1)]
     public float OutlineHardness = 0.85f;
+
+    private void Start()
+    {
+        instance = this;
+    }
 
     void OnEnale()
     {
@@ -177,56 +185,10 @@ public class SelectionOutlineController : MonoBehaviour
         Graphics.ExecuteCommandBuffer(cmd);
         cmd.Clear();
     }
-    // Update is called once per frame
-    /*
+
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                
-                TargetRenderer = hit.transform.GetComponent<Renderer>();
-                if (lastTarget == null) lastTarget = TargetRenderer;
-                if(SelectionMode==SelMode.AndChildren)
-                {
-                    if (ChildrenRenderers != null)
-                    {
-                        Array.Clear(ChildrenRenderers,0,ChildrenRenderers.Length);
-                    }
-                    ChildrenRenderers = hit.transform.GetComponentsInChildren<Renderer>();
-                }
-
-
-                if (TargetRenderer != lastTarget||!Selected)
-                {
-                    SetTarget();
-                }
-                //Debug.DrawRay(transform.position, hit.point - transform.position, Color.blue);
-                lastTarget = TargetRenderer;
-            }
-            else
-            {
-                TargetRenderer = null;
-                lastTarget = null;
-                if (Selected)
-                {
-                    ClearTarget();
-                }
-            }
-            //cmd.Blit(OutlineRT,)
-        }
-        if (Input.GetMouseButtonUp(0) && Selected)
-        {
-            ClearTarget();
-        }
-    }
-    */
-    void Update()
-    {
-        TargetRenderer = PlacementBuilding.instance.buildingObject[Destination.instance.destination[0]].transform.GetComponent<Renderer>();
+        TargetRenderer = target.transform.GetComponent<Renderer>();
         if (lastTarget == null) lastTarget = TargetRenderer;
         if (SelectionMode == SelMode.AndChildren)
         {
@@ -235,7 +197,7 @@ public class SelectionOutlineController : MonoBehaviour
                 Array.Clear(ChildrenRenderers, 0, ChildrenRenderers.Length);
             }
 
-            ChildrenRenderers = Destination.instance.destinationObject[0].transform.GetComponentsInChildren<Renderer>();
+            ChildrenRenderers = target.transform.GetComponentsInChildren<Renderer>();
         }
 
         if (TargetRenderer != lastTarget || !Selected)

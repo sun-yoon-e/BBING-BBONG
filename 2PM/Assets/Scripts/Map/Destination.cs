@@ -101,6 +101,7 @@ public class Destination : MonoBehaviour
             destinationObject[i] = Instantiate(destinationPrefab, destinationPosition,
                 Quaternion.Euler(0, 0, 0), parent);
             destinationObject[i].layer = 9;
+            destinationObject[i].transform.parent = SelectionOutlineController.instance.target.transform;
 
             destinationSpriteObject[i] = new GameObject("DestinationSprite");
             destinationSpriteObject[i].transform.position = destinationPosition;
