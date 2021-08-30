@@ -40,9 +40,8 @@ public class AIMovement : MonoBehaviour
     {
         CalculateDirection();
         CheckIsSetDestination();
-
-
-        if (isArriveDestination)
+        
+        if (!gameTimer.instance.isStart || isArriveDestination)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
         }
