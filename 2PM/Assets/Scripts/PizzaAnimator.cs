@@ -12,7 +12,7 @@ public class PizzaAnimator : MonoBehaviour
         if (isAnimated)
         {
             GetComponent<Animator>().SetTrigger("FirePizza");
-            SoundManager.instance.PlaySE("FirePizza");
+            //SoundManager.instance.PlaySE("FirePizza");
             isAnimated = false;
         }
     }
