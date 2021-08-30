@@ -264,9 +264,13 @@ public class Item : MonoBehaviour
         // gameClient.ai_client[targetID - 1]가 true이면 AI 플레이어
         // 비교해서 AI이면 isAI를 true로, targetID - 1를 AIID로 넣어주면 됨
 
-        // targetID = ?;
-        // isAI = gameClient.ai_client[targetID - 1];
-        // AIID = targetID - 1
+        targetID = Random.Range(1, 5);
+        if (gameClient.ai_client[targetID - 1])
+        {
+            AIID = targetID - 1;
+            isAI = true;
+            targetID = 1;
+        }
 
         switch (itemIndex)
         {
