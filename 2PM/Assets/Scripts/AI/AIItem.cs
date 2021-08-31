@@ -6,11 +6,13 @@ public class AIItem : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
 
+    NitrousManager nitrousScript;
     AIRBController rbScript;
     
-    private int?[] myItems;
-    int itemCnt;
-    bool isItemCol;
+    public static int ItemCnt;
+    public static bool ItemCol;
+    private int?[] MyItems;
+    //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터
 
     public bool isSlow;
     private float slowTimer;
@@ -25,11 +27,12 @@ public class AIItem : MonoBehaviour
 
     void Start()
     {
-        myItems = new int?[2] { null, null };
-        itemCnt = 0;
-        isItemCol = false;
-
-        //itemType = new int[4];
+        nitrousScript = GetComponent<NitrousManager>();
+        rbScript = GetComponent<AIRBController>();
+        
+        orMaxSpeed = rbScript.maxSpeed;
+        ItemCnt = 0;
+        MyItems = new int?[2] {-1, -1};
 
         ID = transform.Find("AIID").GetComponent<CreateAIID>();
         gameClient.OnUseItem += UseItemToPlayer;
@@ -37,15 +40,19 @@ public class AIItem : MonoBehaviour
 
     void Update()
     {
-        if (isItemCol)
+        if (ItemCol)
         {
             RandomItem();
-            itemCnt++;
-            isItemCol = false;
+            CheckItemCnt();
+            ItemCol = false;
+            Debug.Log("AI" + AIID + ":" + MyItems[0] + MyItems[1]);
         }
 
-        if (itemCnt > 0)
-            UseItem();
+        if (ItemCnt > 0)
+        {
+            UseItem(MyItems[0].Value);
+            CheckItemCnt();
+        }
 
         if (isSlow)
         {
@@ -58,62 +65,34 @@ public class AIItem : MonoBehaviour
             }
         }
     }
+    
+    void CheckItemCnt()
+    {
+        ItemCnt = 0;
+        for (int i = 0; i < MyItems.Length; i++)
+        {
+            if (MyItems[i] != -1)
+            {
+                ItemCnt++;
+            }
+        }
+    }
 
     private void RandomItem()
     {
         int index = Random.Range(0, 4);
         //MyItems배열 체크
-        switch (itemCnt)        //보유 아이템 개수
+        switch (ItemCnt)        //보유 아이템 개수
         {
             case 0:
-                myItems[0] = index;
+                MyItems[0] = index;
                 break;
             case 1:
-                myItems[1] = index;
+                MyItems[1] = index;
                 break;
             default:
                 break;
         }
-    }
-
-    void UseItem()
-    {
-        if (gameClient.client_host && myItems[0] != -1)
-        {
-            playerID = Random.Range(1, 5);
-            if (gameClient.ai_client[playerID - 1])
-            {
-                AIID = playerID - 1;
-                isAI = true;
-                playerID = 1;
-            }
-
-            switch (myItems[0].Value)   // System.Nullable`1[T].get_Value () ???
-            {
-                case 0:         //모두 시야차단
-                    gameClient.UseItem(0, 0, isAI, AIID);
-                    break;
-                case 1:         //한 명 시야차단
-                    gameClient.UseItem(1, playerID, isAI, AIID);
-                    break;
-                case 2:         //슬로우
-                    gameClient.UseItem(2, playerID, isAI, AIID);
-                    break;
-                case 3:         //부스터
-                    break;
-            }
-
-            if (myItems[1] != -1)
-            {
-                myItems[0] = myItems[1];
-                myItems[1] = -1;
-            }
-            else
-            {
-                myItems[0] = -1;
-            }
-        }
-
     }
 
     public void UseItemToPlayer(object sender, ItemMessageEventArgs args)
@@ -128,24 +107,48 @@ public class AIItem : MonoBehaviour
             }
         }
     }
-
-    private void OnTriggerEnter(Collider other)
+    
+    void UseItem(int itemIndex)
     {
-        if (other.transform.tag == "ItemBox")
+        if (gameClient.client_host && MyItems[0] != -1)
         {
-            if (itemCnt < 2)
+            playerID = Random.Range(1, 5);
+            if (gameClient.ai_client[playerID - 1])
             {
-                Destroy(other.gameObject);
-                isItemCol = true;
+                AIID = playerID - 1;
+                isAI = true;
+                playerID = 1;
             }
-        }
-    }
 
-    enum ItemType
-    {
-        blind,
-        cloud,
-        can,
-        rocket,
+            switch (itemIndex)   // System.Nullable`1[T].get_Value () ???
+            {
+                case 0:         //모두 시야차단
+                    Debug.Log("AI" + AIID + ": 0 사용");
+                    gameClient.UseItem(0, 0, isAI, AIID);
+                    break;
+                case 1:         //한 명 시야차단
+                    Debug.Log("AI" + AIID + ": 1 사용");
+                    gameClient.UseItem(1, playerID, isAI, AIID);
+                    break;
+                case 2:         //슬로우
+                    Debug.Log("AI" + AIID + ": 2 사용");
+                    gameClient.UseItem(2, playerID, isAI, AIID);
+                    break;
+                case 3:         //부스터
+                    Debug.Log("AI" + AIID + ": 3 사용");
+                    break;
+            }
+
+            if (MyItems[1] != -1)
+            {
+                MyItems[0] = MyItems[1];
+                MyItems[1] = -1;
+            }
+            else
+            {
+                MyItems[0] = -1;
+            }
+            Debug.Log("AI" + AIID + ":" + MyItems[0] + MyItems[1]);
+        }
     }
 }

@@ -10,6 +10,7 @@ public class PlayerCamera : MonoBehaviour
 
     public Camera FPSCam;
     public Camera TPSCam;
+    public Camera AICam;
     public GameObject fullMap;
     public Image aim;
     public Rigidbody rb;
@@ -19,10 +20,10 @@ public class PlayerCamera : MonoBehaviour
     private void Start()
     {
         instance = this;
+
+        AICam = GameObject.Find("AIPlayer(Clone)").transform.Find("AICamera").GetComponent<Camera>();
         
         nowCam = 3;
-        TPSCam.gameObject.SetActive(true);
-        FPSCam.gameObject.SetActive(false);
         fullMap.SetActive(false);
     }
 
@@ -34,16 +35,27 @@ public class PlayerCamera : MonoBehaviour
             {
                 nowCam = 3;
                 aim.gameObject.SetActive(false);
-                TPSCam.gameObject.SetActive(true);
                 FPSCam.gameObject.SetActive(false);
+                AICam.gameObject.SetActive(false);
+                TPSCam.gameObject.SetActive(true);
             }
             else
             {
                 nowCam = 1;
-                aim.gameObject.SetActive(true);
+                aim.gameObject.SetActive(false);
                 TPSCam.gameObject.SetActive(false);
+                AICam.gameObject.SetActive(false);
                 FPSCam.gameObject.SetActive(true);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            nowCam = 2;
+            aim.gameObject.SetActive(false);
+            TPSCam.gameObject.SetActive(false);
+            FPSCam.gameObject.SetActive(false);
+            AICam.gameObject.SetActive(true);
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))

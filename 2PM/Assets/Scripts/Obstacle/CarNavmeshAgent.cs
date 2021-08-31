@@ -6,6 +6,8 @@ public class CarNavmeshAgent: MonoBehaviour
     NavMeshAgent agent;
     RoadGenerator road;
 
+    int stopTime = 0;
+
     private void Awake()
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
@@ -26,6 +28,16 @@ public class CarNavmeshAgent: MonoBehaviour
         {
             int randWayPoint = Random.Range(0, road.wayPointNum);
             agent.SetDestination(road.wayPoint[randWayPoint].transform.position);
+        }
+
+        if (agent.isStopped)
+        {
+            ++stopTime;
+            if (stopTime > 200)
+            {
+                agent.isStopped = false;
+                stopTime = 0;
+            }
         }
     }
 }

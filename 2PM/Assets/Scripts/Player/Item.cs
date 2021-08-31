@@ -19,17 +19,11 @@ public class Item : MonoBehaviour
     public static bool ItemCol;
     private int?[] MyItems;
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터
-
-    GameObject player;
+    
     GameObject miniCamera;
     GameObject fpsCamera;
     GameObject tpsCamera;
     [SerializeField] GameObject fogParticle;
-
-    ItemBoxGenerator itemObject;
-    
-    public float range = 100f;
-    public Camera cam;
 
     public bool cheat;
     public int cheatSlot;
@@ -47,16 +41,13 @@ public class Item : MonoBehaviour
     {
         fpsCamera = GameObject.Find("FPS Camera");
         tpsCamera = GameObject.Find("TPS Camera");
-        player = GameObject.Find("Player");
         miniCamera = GameObject.Find("Minimap Camera");
         nitrousScript = GetComponent<NitrousManager>();
         rbScript = GetComponent<RB_Controller>();
 
         orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
-        MyItems = new int?[2] { -1, -1 };
-
-        itemObject = GameObject.Find("Item Generator").GetComponent<ItemBoxGenerator>();
+        MyItems = new int?[2] {-1, -1};
 
         gameClient.OnUseItem += UseItemToPlayer;
     }
@@ -169,17 +160,6 @@ public class Item : MonoBehaviour
                 rbScript.maxSpeed = orMaxSpeed;
                 slowTimer = 0f;
             }
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //if(other.transform.parent.tag == "ItemBox")
-        if (other.gameObject.tag == "ItemBox")
-        {
-            //Destroy(other.gameObject);
-            itemObject.DestroyItem(other.gameObject);
-            ItemCol = true;
         }
     }
 

@@ -1,17 +1,18 @@
 ﻿using Gadd420;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Car : MonoBehaviour
 {
     private GameClient gameClient = GameClient.Instance;
 
     ObstacleGenerator obstacle;
-    Rigidbody rb;
+    NavMeshAgent agent;
 
     private void Start()
     {
         obstacle = GameObject.Find("Obstacle Generator").GetComponent<ObstacleGenerator>();
-        rb = gameObject.GetComponent<Rigidbody>();
+        agent = transform.parent.GetComponent<NavMeshAgent>();
     }
 
     private void Update()
@@ -28,23 +29,29 @@ public class Car : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "AI")
         {
-            var item = collision.gameObject.GetComponent<Item>();
-            var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
-            rb_controller.maxSpeed = item.orMaxSpeed / 2;
-            item.isSlow = true;
+            agent.isStopped = true;
 
-            obstacle.DestroyCar(transform.parent.gameObject);
-        }
-        if (collision.gameObject.tag == "AI")
-        {
-            //var item = collision.gameObject.GetComponent<AIItem>();
-            //var rb_controller = collision.gameObject.GetComponent<AIRBController>();
-            //rb_controller.maxSpeed = item.orMaxSpeed / 2;
-            //item.isSlow = true;
+            if (collision.gameObject.tag == "Player")
+            {
+                var item = collision.gameObject.GetComponent<Item>();
+                var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
+                rb_controller.maxSpeed = item.orMaxSpeed / 2;
+                item.isSlow = true;
 
-            obstacle.DestroyCar(transform.parent.gameObject);
+                //obstacle.DestroyCar(transform.parent.gameObject);
+            }
+            if (collision.gameObject.tag == "AI")
+            {
+                //var item = collision.gameObject.GetComponent<AIItem>();
+                //var rb_controller = collision.gameObject.GetComponent<AIRBController>();
+                //rb_controller.maxSpeed = item.orMaxSpeed / 2;
+                //item.isSlow = true;
+
+                //obstacle.DestroyCar(transform.parent.gameObject);
+            }
         }
+        
     }
 }
