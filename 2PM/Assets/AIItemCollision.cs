@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemCollision : MonoBehaviour
+public class AIItemCollision : MonoBehaviour
 {
     ItemBoxGenerator itemObject;
 
@@ -16,10 +16,10 @@ public class ItemCollision : MonoBehaviour
     {
         if (col.gameObject.CompareTag("ItemBox"))
         {
-            if (Item.ItemCnt < 2)
+            if (AIItem.ItemCnt < 2)
             {
                 itemObject.DestroyItem(col.gameObject);
-                Item.ItemCol = true;
+                AIItem.ItemCol = true;
             }
         }
     }

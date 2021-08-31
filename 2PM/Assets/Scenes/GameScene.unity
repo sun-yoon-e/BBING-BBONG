@@ -3744,12 +3744,12 @@ GameObject:
   - component: {fileID: 542957389623694198}
   - component: {fileID: 542957389623694193}
   - component: {fileID: 542957389623694192}
+  - component: {fileID: 542957389623694209}
   - component: {fileID: 542957389623694208}
   - component: {fileID: 542957389623694195}
   - component: {fileID: 542957389623694205}
   - component: {fileID: 1455669022989614455}
   - component: {fileID: 6260656473857590819}
-  - component: {fileID: 542957389623694209}
   - component: {fileID: 542957389623694194}
   m_Layer: 13
   m_Name: Player

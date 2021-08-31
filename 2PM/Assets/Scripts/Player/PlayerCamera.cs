@@ -21,7 +21,8 @@ public class PlayerCamera : MonoBehaviour
     {
         instance = this;
 
-        AICam = GameObject.Find("AIPlayer(Clone)").transform.Find("AICamera").GetComponent<Camera>();
+        if (GameClient.Instance.client_host)
+            AICam = GameObject.Find("AIPlayer(Clone)").transform.Find("AICamera").GetComponent<Camera>();
         
         nowCam = 3;
         fullMap.SetActive(false);
@@ -36,7 +37,8 @@ public class PlayerCamera : MonoBehaviour
                 nowCam = 3;
                 aim.gameObject.SetActive(false);
                 FPSCam.gameObject.SetActive(false);
-                AICam.gameObject.SetActive(false);
+                if (GameClient.Instance.client_host)
+                    AICam.gameObject.SetActive(false);
                 TPSCam.gameObject.SetActive(true);
             }
             else
@@ -44,7 +46,8 @@ public class PlayerCamera : MonoBehaviour
                 nowCam = 1;
                 aim.gameObject.SetActive(false);
                 TPSCam.gameObject.SetActive(false);
-                AICam.gameObject.SetActive(false);
+                if (GameClient.Instance.client_host)
+                    AICam.gameObject.SetActive(false);
                 FPSCam.gameObject.SetActive(true);
             }
         }
@@ -55,7 +58,8 @@ public class PlayerCamera : MonoBehaviour
             aim.gameObject.SetActive(false);
             TPSCam.gameObject.SetActive(false);
             FPSCam.gameObject.SetActive(false);
-            AICam.gameObject.SetActive(true);
+            if (GameClient.Instance.client_host)
+                AICam.gameObject.SetActive(true);
         }
 
         if (Input.GetKeyDown(KeyCode.Tab))

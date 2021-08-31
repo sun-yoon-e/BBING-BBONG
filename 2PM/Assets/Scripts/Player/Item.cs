@@ -36,7 +36,9 @@ public class Item : MonoBehaviour
     public int targetID;
     public bool isAI;
     public int AIID;
-    
+
+    GameObject fog;
+
     private void Start()
     {
         fpsCamera = GameObject.Find("FPS Camera");
@@ -56,6 +58,7 @@ public class Item : MonoBehaviour
     {
         if (ItemCol)
         {
+            Debug.Log("아이템 충돌");
             RandomItem();
             CheckItemCnt();
             ChangeSprite();
@@ -108,6 +111,7 @@ public class Item : MonoBehaviour
                 }
             }
         }
+        
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             if (cheat)
@@ -159,6 +163,18 @@ public class Item : MonoBehaviour
                 isSlow = false;
                 rbScript.maxSpeed = orMaxSpeed;
                 slowTimer = 0f;
+            }
+        }
+
+        if (fog != null)
+        {
+            if (PlayerCamera.instance.nowCam == 1)
+            {
+                fog.transform.position = fpsCamera.transform.position;
+            }
+            else if (PlayerCamera.instance.nowCam == 3)
+            {
+                fog.transform.position = tpsCamera.transform.position;
             }
         }
     }
@@ -274,20 +290,28 @@ public class Item : MonoBehaviour
     {
         //Vector3 fogPosition = new Vector3(0, 0, 0);
 
-        GameObject fog;
-        if (fpsCamera.activeSelf)
-        {
-            fog = Instantiate(fogParticle, fpsCamera.transform.position, fpsCamera.transform.rotation, fpsCamera.transform);
+        fog = Instantiate(fogParticle, transform.position, transform.rotation, transform);
 
-            Destroy(fog, 20f);
-        }
-        else if (tpsCamera.activeSelf)
-        {
+        Destroy(fog, 20f);
+        //if (fpsCamera.activeSelf)
+        //{
+        //    fog = Instantiate(fogParticle, fpsCamera.transform.position, fpsCamera.transform.rotation, fpsCamera.transform);
 
-            fog = Instantiate(fogParticle, tpsCamera.transform.position, tpsCamera.transform.rotation, tpsCamera.transform);
+        //    Destroy(fog, 20f);
+        //}
+        //else if (tpsCamera.activeSelf)
+        //{
 
-            Destroy(fog, 20f);
-        }
+        //    fog = Instantiate(fogParticle, tpsCamera.transform.position, tpsCamera.transform.rotation, tpsCamera.transform);
+
+        //    Destroy(fog, 20f);
+        //}
+        //else
+        //{
+        //    fog = Instantiate(fogParticle, tpsCamera.transform.position, tpsCamera.transform.rotation, tpsCamera.transform);
+
+        //    Destroy(fog, 20f);
+        //}
 
         Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
             miniCamera.transform.position.y - 14,
