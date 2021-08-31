@@ -64,7 +64,12 @@ public class ObjectGenerator : MonoBehaviour
             Instantiate(objectPrefab[args.Type], args.Position, Quaternion.identity, transform);
             ++treeNum;
 
-            if (gameClient.TreeNum == treeNum) gameClient.isRenderTree = true;
+            if (num == treeNum)
+            {
+                gameClient.isRenderTree = true;
+                num = 0;
+                treeNum = 0;
+            }
         }
     }
 }

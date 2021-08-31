@@ -198,10 +198,11 @@ public class PlacementBuilding : MonoBehaviour
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
             buildingNum++;
 
-            if (gameClient.BuildingNum == buildingNum)
+            if (num == buildingNum)
             {
                 gameClient.isRenderBuilding = true;
-                //isBuildingReady = true;
+                num = 0;
+                buildingNum = 0;
             }
         }
     }

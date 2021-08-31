@@ -98,7 +98,12 @@ public class ItemBoxGenerator : MonoBehaviour
             //Debug.Log("PlaceItem");
             ++itemNum;
 
-            if (gameClient.ItemNum == itemNum) gameClient.isRenderItem = true;
+            if (num == itemNum)
+            {
+                gameClient.isRenderItem = true;
+                num = 0;
+                itemNum = 0;
+            }
         }
     }
 

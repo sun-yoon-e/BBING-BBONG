@@ -10,7 +10,7 @@ public class Item : MonoBehaviour
 
     NitrousManager nitrousScript;
     RB_Controller rbScript;
-    
+
     public Sprite[] sprites = new Sprite[4];
     public Image[] images = new Image[2];
     public Sprite nullSprite;
@@ -19,7 +19,7 @@ public class Item : MonoBehaviour
     public static bool ItemCol;
     private int?[] MyItems;
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터
-    
+
     GameObject miniCamera;
     GameObject fpsCamera;
     GameObject tpsCamera;
@@ -27,7 +27,7 @@ public class Item : MonoBehaviour
 
     public bool cheat;
     public int cheatSlot;
-    
+
     public bool isSlow;
     private float slowTimer;
     public float slowTime;
@@ -49,7 +49,7 @@ public class Item : MonoBehaviour
 
         orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
-        MyItems = new int?[2] {-1, -1};
+        MyItems = new int?[2] { -1, -1 };
 
         gameClient.OnUseItem += UseItemToPlayer;
     }
@@ -95,7 +95,7 @@ public class Item : MonoBehaviour
                 if (MyItems[0] != -1)
                 {
                     UseItem(MyItems[0].Value);
-                
+
                     if (MyItems[1] != -1)
                     {
                         MyItems[0] = MyItems[1];
@@ -111,7 +111,7 @@ public class Item : MonoBehaviour
                 }
             }
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             if (cheat)
@@ -132,7 +132,7 @@ public class Item : MonoBehaviour
                 }
             }
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             if (cheat)
@@ -143,7 +143,7 @@ public class Item : MonoBehaviour
                 cheat = false;
             }
         }
-        
+
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             if (cheat)
@@ -154,7 +154,7 @@ public class Item : MonoBehaviour
                 cheat = false;
             }
         }
-        
+
         if (isSlow)
         {
             slowTimer += Time.deltaTime;

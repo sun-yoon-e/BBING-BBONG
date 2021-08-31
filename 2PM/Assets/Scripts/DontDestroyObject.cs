@@ -8,4 +8,18 @@ public class DontDestroyObject : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
     }
+
+    //private void Awake()
+    //{
+    //    var obj = FindObjectsOfType<DontDestroyObject>();
+    //    if (obj.Length == 1)
+    //    {
+    //        DontDestroyOnLoad(gameObject);
+    //    }
+    //    else
+    //    {
+    //        //if (gameObject != GameObject.Find("UnityMainThreadDispatcher"))
+    //        Destroy(gameObject);
+    //    }
+    //}
 }
