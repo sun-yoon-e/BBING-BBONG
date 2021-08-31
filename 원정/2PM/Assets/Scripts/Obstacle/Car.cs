@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
-public class Car: MonoBehaviour
+public class Car : MonoBehaviour
 {
     ObstacleGenerator obstacle;
     Rigidbody rb;
@@ -15,9 +16,7 @@ public class Car: MonoBehaviour
     private void Update()
     {
         transform.localPosition = new Vector3(0, 0, 0);
-
-        rb.constraints = RigidbodyConstraints.FreezePosition;
-        rb.constraints = RigidbodyConstraints.FreezeRotationY;
+        transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, 180.0f, transform.eulerAngles.z);
     }
 
     private void OnCollisionEnter(Collision collision)
