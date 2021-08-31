@@ -13,13 +13,11 @@ public class Car : MonoBehaviour
         obstacle = GameObject.Find("Obstacle Generator").GetComponent<ObstacleGenerator>();
         rb = gameObject.GetComponent<Rigidbody>();
     }
+
     private void Update()
     {
         transform.localPosition = new Vector3(0, 0, 0);
-        //transform.localRotation = Quaternion.Euler(0, 180.0f, 0);
-
-        rb.constraints = RigidbodyConstraints.FreezePosition;
-        rb.constraints = RigidbodyConstraints.FreezeRotationY;
+        transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, 180.0f, transform.eulerAngles.z);
 
         if (gameClient.isGameStarted && gameClient.client_host)
         {
