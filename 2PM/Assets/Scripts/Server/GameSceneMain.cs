@@ -257,7 +257,7 @@ public class GameSceneMain : MonoBehaviour
                 string text = "";
                 int j = 1;
 
-                foreach (var item in scoreMap.OrderByDescending(x => x.Value).ThenByDescending(y => y.Key))
+                foreach (var item in scoreMap.OrderByDescending(x => x.Value).ThenBy(y => y.Key))
                 {
                     text += $"{j++}등 : {item.Key} - {item.Value}점\n";
                 }

@@ -126,6 +126,7 @@ public class MakeCarMessageEventArgs : EventArgs
     public int ID;
     public byte CarType;
     public Vector3 Position;
+    public Vector3 Rotation;
 }
 
 public class MoveCarMessageEventArgs : EventArgs
@@ -912,12 +913,18 @@ public class GameClient
             position.y = reader.ReadSingle();
             position.z = reader.ReadSingle();
 
+            Vector3 rotation = new Vector3();
+            rotation.x = reader.ReadSingle();
+            rotation.y = reader.ReadSingle();
+            rotation.z = reader.ReadSingle();
+
             if (OnMakeCar != null)
             {
                 var eventArgs = new MakeCarMessageEventArgs();
                 eventArgs.ID = id;
                 eventArgs.CarType = carType;
                 eventArgs.Position = position;
+                eventArgs.Rotation = rotation;
 
                 //Debug.Log("eventCar");
                 OnMakeCar(this, eventArgs);
@@ -1144,7 +1151,7 @@ public class GameClient
     }
 
     #region 자동차생성삭제연동
-    public void MakeCar(int id, byte carType, Vector3 pos)
+    public void MakeCar(int id, byte carType, Vector3 pos, Vector3 rot)
     {
         var buffer = new byte[255];
         var writer = new BinaryWriter(new MemoryStream(buffer));
@@ -1156,6 +1163,9 @@ public class GameClient
         writer.Write(pos.x);
         writer.Write(pos.y);
         writer.Write(pos.z);
+        writer.Write(rot.x);
+        writer.Write(rot.y);
+        writer.Write(rot.z);
 
         socket.Send(buffer);
 

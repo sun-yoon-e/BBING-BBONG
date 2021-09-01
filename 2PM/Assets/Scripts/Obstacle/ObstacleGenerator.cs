@@ -66,6 +66,7 @@ public class ObstacleGenerator : MonoBehaviour
                         gameClient.CarInfo[num].ID = num;
                         gameClient.CarInfo[num].CarType = (byte)carType;
                         gameClient.CarInfo[num].Position = carPosition;
+                        gameClient.CarInfo[num].Rotation = Quaternion.identity.eulerAngles;
                         gameClient.CarNum = num;
                         num++;
 
@@ -78,7 +79,7 @@ public class ObstacleGenerator : MonoBehaviour
 
     public void OnMakeCar(object sender, MakeCarMessageEventArgs args)
     {
-        CARS[args.ID] = Instantiate(carPrefabs[args.CarType], args.Position, Quaternion.identity, transform);
+        CARS[args.ID] = Instantiate(carPrefabs[args.CarType], args.Position, Quaternion.Euler(args.Rotation), transform);
         CARS[args.ID].GetComponent<NavMeshAgent>().avoidancePriority = 0;
         if(!gameClient.client_host)
         {
@@ -148,7 +149,7 @@ public class ObstacleGenerator : MonoBehaviour
                     int carID = num;
                     int carType = Random.Range(0, carPrefabs.Length);
                     carPosition = road.vertices[i + road.xSize + 1];
-                    gameClient.MakeCar(carID, (byte)carType, carPosition);
+                    gameClient.MakeCar(carID, (byte)carType, carPosition, Quaternion.identity.eulerAngles);
                     num++;
                     break;
                 }
