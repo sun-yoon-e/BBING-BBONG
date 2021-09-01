@@ -115,6 +115,8 @@ public class AIMovement : MonoBehaviour
                 stopStartTime = 0f;
 
                 rb.constraints = RigidbodyConstraints.FreezeAll;
+
+                agent.isStopped = false;
             }
         }
         else

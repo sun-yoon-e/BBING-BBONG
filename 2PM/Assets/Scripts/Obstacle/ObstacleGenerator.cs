@@ -84,6 +84,7 @@ public class ObstacleGenerator : MonoBehaviour
         {
             Destroy(CARS[args.ID].GetComponent<NavMeshAgent>());
             Destroy(CARS[args.ID].GetComponent<CarNavmeshAgent>());
+            Destroy(CARS[args.ID].GetComponentInChildren<Car>());
         }
     }
     
