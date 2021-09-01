@@ -51,6 +51,10 @@ public class Item : MonoBehaviour
         ItemCnt = 0;
         MyItems = new int?[2] { -1, -1 };
 
+        targetID = 0;
+        isAI = false;
+        AIID = 0;
+
         gameClient.OnUseItem += UseItemToPlayer;
     }
 
@@ -266,6 +270,11 @@ public class Item : MonoBehaviour
             AIID = targetID - 1;
             isAI = true;
             targetID = 1;
+        }
+        else
+        {
+            isAI = false;
+            AIID = 0;
         }
 
         switch (itemIndex)

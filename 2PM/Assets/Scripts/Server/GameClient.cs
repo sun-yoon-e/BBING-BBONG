@@ -116,6 +116,7 @@ public class ItemMessageEventArgs : EventArgs
 {
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
     public byte ItemType;
+    public int targetID;
     public bool isAI;
     public int AIID;
 }
@@ -886,6 +887,7 @@ public class GameClient
             //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
             //Event를 받는 쪽에서 아이템종류에 맞춰 처리
             byte itemType = reader.ReadByte();
+            int targetID = reader.ReadInt32();
             bool isAI = reader.ReadBoolean();
             int AIID = reader.ReadInt32();
 
@@ -893,6 +895,7 @@ public class GameClient
             {
                 var eventArgs = new ItemMessageEventArgs();
                 eventArgs.ItemType = itemType;
+                eventArgs.targetID = targetID;
                 eventArgs.isAI = isAI;
                 eventArgs.AIID = AIID;
                 OnUseItem(this, eventArgs);
@@ -1365,7 +1368,7 @@ public class GameClient
         var writer = new BinaryWriter(new MemoryStream(buffer));
 
         writer.Write(CS_USE_ITEM);
-        writer.Write((byte)itemType);
+        writer.Write(itemType);
         writer.Write(playerID);
         writer.Write(isAI);
         writer.Write(AIID);
