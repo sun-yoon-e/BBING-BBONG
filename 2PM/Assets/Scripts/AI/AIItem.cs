@@ -123,19 +123,19 @@ public class AIItem : MonoBehaviour
             switch (itemIndex)   // System.Nullable`1[T].get_Value () ???
             {
                 case 0:         //모두 시야차단
-                    Debug.Log("AI" + AIID + ": 0 사용");
+                    Debug.Log("AI" + AIID + ": 모두 시야차단 사용");
                     gameClient.UseItem(0, 0, isAI, AIID);
                     break;
                 case 1:         //한 명 시야차단
-                    Debug.Log("AI" + AIID + ": 1 사용");
+                    Debug.Log("AI" + AIID + ": 한명 시야차단 사용");
                     gameClient.UseItem(1, playerID, isAI, AIID);
                     break;
                 case 2:         //슬로우
-                    Debug.Log("AI" + AIID + ": 2 사용");
+                    Debug.Log("AI" + AIID + ": 슬로우 사용");
                     gameClient.UseItem(2, playerID, isAI, AIID);
                     break;
                 case 3:         //부스터
-                    Debug.Log("AI" + AIID + ": 3 사용");
+                    Debug.Log("AI" + AIID + ": 부스터 사용");
                     break;
             }
 

@@ -284,7 +284,9 @@ public class GameSceneMain : MonoBehaviour
         {
             //Debug.Log("SceneManager.LoadScene() Scenes/Scenes/WaitingRoomScene");
             gameOverPanel.SetActive(false);
-            SceneManager.LoadScene("Scenes/WaitingRoomScene", LoadSceneMode.Single);
+            //SceneManager.LoadScene("Scenes/WaitingRoomScene", LoadSceneMode.Single);
+            gameClient.ExitRoom();
+            DontDestroyObject.instance.SceneChange();
         }
     }
 
