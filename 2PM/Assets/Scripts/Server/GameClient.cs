@@ -892,8 +892,6 @@ public class GameClient
             bool isAI = reader.ReadBoolean();
             int AIID = reader.ReadInt32();
 
-            Debug.Log($"3 / targetID : " + targetID + $" isAI : " + isAI + $" type : " + itemType + $" AIID : " + AIID);
-
             if (OnUseItem != null)
             {
                 var eventArgs = new ItemMessageEventArgs();
@@ -1384,7 +1382,7 @@ public class GameClient
         writer.Write(playerID);
         writer.Write(isAI);
         writer.Write(AIID);
-        Debug.Log($"2 / targetID : " + playerID + $" isAI : " + isAI + $" type : " + itemType + $" AIID : " + AIID);
+
         socket.Send(buffer);
     }
     #endregion
