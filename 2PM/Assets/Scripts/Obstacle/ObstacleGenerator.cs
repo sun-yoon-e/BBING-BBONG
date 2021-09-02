@@ -94,7 +94,10 @@ public class ObstacleGenerator : MonoBehaviour
         if (CARS[args.ID] != null && !gameClient.client_host)
         {
             CARS[args.ID].gameObject.transform.position = args.Position;
+            //Vector3 rot = new Vector3(args.Rotation.x, 180f, args.Rotation.z);
+            //Debug.Log(rot.x + "," +rot.y + "," +rot.z);
             CARS[args.ID].gameObject.transform.rotation = Quaternion.Euler(args.Rotation);
+            //CARS[args.ID].gameObject.transform.GetChild(0).transform.rotation = Quaternion.Euler(rot);
         }
     }
 
