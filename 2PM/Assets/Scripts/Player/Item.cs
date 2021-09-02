@@ -1,4 +1,5 @@
-﻿using Gadd420;
+﻿using System.Linq;
+using Gadd420;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class Item : MonoBehaviour
 
     public static int ItemCnt;
     public static bool ItemCol;
+
     private int?[] MyItems;
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하, 3: 부스터
 
@@ -49,7 +51,7 @@ public class Item : MonoBehaviour
 
         orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
-        MyItems = new int?[2] { -1, -1 };
+        MyItems = new int?[2] {-1, -1};
 
         targetID = 0;
         isAI = false;
@@ -199,7 +201,7 @@ public class Item : MonoBehaviour
     {
         int index = Random.Range(0, sprites.Length);
         //MyItems배열 체크
-        switch (ItemCnt)        //보유 아이템 개수
+        switch (ItemCnt) //보유 아이템 개수
         {
             case 0:
                 MyItems[0] = index;
@@ -236,21 +238,21 @@ public class Item : MonoBehaviour
             // 여기 들어왔다는 것은 내가 아이템 타겟으로 지목당했다는 것
             switch (args.ItemType)
             {
-                case 0:         //모두 시야차단
+                case 0: //모두 시야차단
                     SoundManager.instance.PlaySE("Smoke_Item");
                     Fog();
                     break;
-                case 1:         //한 명 시야차단
+                case 1: //한 명 시야차단
                     SoundManager.instance.PlaySE("Smoke_Item");
                     Fog();
                     break;
-                case 2:         //슬로우
+                case 2: //슬로우
                     SoundManager.instance.PlaySE("Slow_Item");
                     rbScript.maxSpeed = orMaxSpeed / 2;
                     isSlow = true;
                     break;
-                case 3:         //부스터
-                                // 얘는 밑에~
+                case 3: //부스터
+                    // 얘는 밑에~
                     break;
             }
         }
@@ -264,7 +266,9 @@ public class Item : MonoBehaviour
         // gameClient.ai_client[targetID - 1]가 true이면 AI 플레이어
         // 비교해서 AI이면 isAI를 true로, targetID - 1를 AIID로 넣어주면 됨
 
-        targetID = Random.Range(1, 5);
+        //targetID = Random.Range(1, 5);
+        targetID = FindNearestPlayer();
+
         if (gameClient.ai_client[targetID - 1])
         {
             AIID = targetID - 1;
@@ -279,20 +283,48 @@ public class Item : MonoBehaviour
 
         switch (itemIndex)
         {
-            case 0:         //모두 시야차단
+            case 0: //모두 시야차단
                 gameClient.UseItem(0, 0, isAI, AIID);
                 break;
-            case 1:         //한 명 시야차단
+            case 1: //한 명 시야차단
                 gameClient.UseItem(1, targetID, isAI, AIID);
                 break;
-            case 2:         //슬로우
+            case 2: //슬로우
                 gameClient.UseItem(2, targetID, isAI, AIID);
                 break;
-            case 3:         //부스터
+            case 3: //부스터
                 SoundManager.instance.PlaySE("Boost_Item");
                 nitrousScript.isBoosting = true;
                 break;
         }
+    }
+    
+    int FindNearestPlayer()
+    {
+        int index = 0;
+        int target = 0;
+        float dis = Mathf.Infinity;
+        Vector3 position = transform.position;
+
+        foreach (GameObject player in GameSceneMain.instacne.players)
+        {
+            if (player != null)
+            {
+                index++;
+                if (index != gameClient.playerRoomNum + 1)
+                {
+                    Vector3 diff = player.transform.position - position;
+                    float curDis = diff.sqrMagnitude;
+                    if (curDis < dis)
+                    {
+                        target = index;
+                        dis = curDis;
+                    }
+                }
+            }
+        }
+        
+        return target;
     }
 
     void Fog()

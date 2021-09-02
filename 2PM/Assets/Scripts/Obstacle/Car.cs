@@ -55,7 +55,7 @@ public class Car : MonoBehaviour
             Rigidbody targetRB = collision.gameObject.GetComponent<Rigidbody>();
 
             float cal = collision.relativeVelocity.x + collision.relativeVelocity.y + collision.relativeVelocity.z;
-            print(cal);
+            //print(cal);
 
             Vector3 inNormal = Vector3.Normalize(transform.position - collision.gameObject.transform.position);
             Vector3 bounceVector = Vector3.Reflect(collision.relativeVelocity, inNormal);

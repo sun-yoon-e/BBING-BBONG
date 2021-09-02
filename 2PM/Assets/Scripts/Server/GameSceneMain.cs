@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class GameSceneMain : MonoBehaviour
 {
+    public static GameSceneMain instacne;
     private GameClient gameClient = GameClient.Instance;
 
     public Material material00;
@@ -27,7 +28,7 @@ public class GameSceneMain : MonoBehaviour
     public Text timerText;
 
     public GameObject pizza;
-    private GameObject[] players = null;
+    public GameObject[] players = null;
     private int[] scores = null;
 
     SoundManager soundManager;
@@ -36,6 +37,7 @@ public class GameSceneMain : MonoBehaviour
 
     public void Start()
     {
+        instacne = this;
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
 
         Cursor.visible = false;
