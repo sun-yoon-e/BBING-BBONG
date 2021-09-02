@@ -115,7 +115,7 @@ public class RemoveItemBoxMessageEventArgs : EventArgs
 public class ItemMessageEventArgs : EventArgs
 {
     //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
-    public byte ItemType;
+    public int ItemType;
     public int targetID;
     public bool isAI;
     public int AIID;
@@ -887,10 +887,12 @@ public class GameClient
         {
             //0: 한명만 시야차단, 1: 나빼고 다 시야차단, 2: 이속 저하
             //Event를 받는 쪽에서 아이템종류에 맞춰 처리
-            byte itemType = reader.ReadByte();
+            int itemType = reader.ReadInt32();
             int targetID = reader.ReadInt32();
             bool isAI = reader.ReadBoolean();
             int AIID = reader.ReadInt32();
+
+            Debug.Log($"3 / targetID : " + targetID + $" isAI : " + isAI + $" type : " + itemType + $" AIID : " + AIID);
 
             if (OnUseItem != null)
             {
@@ -1382,7 +1384,7 @@ public class GameClient
         writer.Write(playerID);
         writer.Write(isAI);
         writer.Write(AIID);
-
+        Debug.Log($"2 / targetID : " + playerID + $" isAI : " + isAI + $" type : " + itemType + $" AIID : " + AIID);
         socket.Send(buffer);
     }
     #endregion
