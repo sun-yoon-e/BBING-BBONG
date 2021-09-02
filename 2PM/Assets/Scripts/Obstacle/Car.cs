@@ -12,13 +12,18 @@ public class Car : MonoBehaviour
     private void Start()
     {
         //obstacle = GameObject.Find("Obstacle Generator").GetComponent<ObstacleGenerator>();
-        agent = transform.parent.GetComponent<NavMeshAgent>();
+        if (gameClient.client_host)
+            agent = transform.parent.GetComponent<NavMeshAgent>();
     }
 
     private void Update()
     {
         transform.localPosition = new Vector3(0, 0, 0);
-        transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, 180.0f, transform.eulerAngles.z);
+        if (gameClient.client_host)
+            transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, 180.0f, transform.eulerAngles.z);
+        else
+            transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, 0, transform.eulerAngles.z);
+
 
         //if (gameClient.isGameStarted && gameClient.client_host)
         //{
@@ -31,7 +36,8 @@ public class Car : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "AI")
         {
-            agent.isStopped = true;
+            if (gameClient.client_host)
+                agent.isStopped = true;
 
             if (collision.gameObject.tag == "Player")
             {
