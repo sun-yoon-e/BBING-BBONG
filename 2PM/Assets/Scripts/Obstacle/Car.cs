@@ -51,7 +51,16 @@ public class Car : MonoBehaviour
 
                 //obstacle.DestroyCar(transform.parent.gameObject);
             }
+
+            Rigidbody targetRB = collision.gameObject.GetComponent<Rigidbody>();
+
+            float cal = collision.relativeVelocity.x + collision.relativeVelocity.y + collision.relativeVelocity.z;
+            print(cal);
+
+            Vector3 inNormal = Vector3.Normalize(transform.position - collision.gameObject.transform.position);
+            Vector3 bounceVector = Vector3.Reflect(collision.relativeVelocity, inNormal);
+
+            targetRB.AddForce(bounceVector, ForceMode.VelocityChange);
         }
-        
     }
 }
