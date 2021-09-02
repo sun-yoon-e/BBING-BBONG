@@ -59,6 +59,7 @@ public class Car : MonoBehaviour
 
             Vector3 inNormal = Vector3.Normalize(transform.position - collision.gameObject.transform.position);
             Vector3 bounceVector = Vector3.Reflect(collision.relativeVelocity, inNormal);
+            bounceVector.y = 0;
 
             targetRB.AddForce(bounceVector, ForceMode.VelocityChange);
         }
