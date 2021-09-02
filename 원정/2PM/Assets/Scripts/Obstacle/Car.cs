@@ -23,9 +23,21 @@ public class Car : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" /*|| collision.gameObject.tag == "mapBoxCollider"*/ )
         {
-            obstacle.GenerateCar(false);
+            //obstacle.GenerateCar(false);
+            //Destroy(transform.parent.gameObject);
 
-            Destroy(transform.parent.gameObject);
+            Rigidbody targetRB = collision.gameObject.GetComponent<Rigidbody>();
+
+            //targetRB.velocity = new Vector3(0, 0, 0);
+
+            float cal = collision.relativeVelocity.x + collision.relativeVelocity.y + collision.relativeVelocity.z;
+            print(cal);
+
+            Vector3 inNormal = Vector3.Normalize(transform.position - collision.gameObject.transform.position);
+            Vector3 bounceVector = Vector3.Reflect(collision.relativeVelocity, inNormal);
+
+            targetRB.AddForce(bounceVector, ForceMode.VelocityChange);
+
         }
     }
 }
