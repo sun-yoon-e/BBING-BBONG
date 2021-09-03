@@ -196,7 +196,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
 
                 //if (gameClient.isRenderBuilding && gameClient.isRenderTree && gameClient.isRenderItem && gameClient.isRenderCar)
                 //{
-                SceneManager.LoadScene("Scenes/GameScene", LoadSceneMode.Single);
+                SceneManager.LoadSceneAsync("Scenes/GameScene", LoadSceneMode.Single);
                 isGameStarted = true;
                 //}
             }

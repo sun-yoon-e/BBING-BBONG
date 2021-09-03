@@ -45,7 +45,7 @@ public class AIItem : MonoBehaviour
             RandomItem();
             CheckItemCnt();
             ItemCol = false;
-            Debug.Log("AI" + AIID + ":" + MyItems[0] + MyItems[1]);
+            //Debug.Log("AI" + AIID + ":" + MyItems[0] + MyItems[1]);
         }
 
         if (ItemCnt > 0)
@@ -107,35 +107,70 @@ public class AIItem : MonoBehaviour
             }
         }
     }
-    
+
+    int FindNearestPlayer()
+    {
+        int index = 0;
+        int target = 0;
+        float dis = Mathf.Infinity;
+        Vector3 position = transform.position;
+
+        foreach (GameObject player in GameSceneMain.instacne.players)
+        {
+            if (player != null)
+            {
+                index++;
+                if (index != gameClient.playerRoomNum + 1)
+                {
+                    Vector3 diff = player.transform.position - position;
+                    float curDis = diff.sqrMagnitude;
+                    if (curDis < dis)
+                    {
+                        target = index;
+                        dis = curDis;
+                    }
+                }
+            }
+        }
+
+        return target;
+    }
+
     void UseItem(int itemIndex)
     {
         if (gameClient.client_host && MyItems[0] != -1)
         {
-            playerID = Random.Range(1, 5);
+            //playerID = Random.Range(1, 5);
+            playerID = FindNearestPlayer();
+
             if (gameClient.ai_client[playerID - 1])
             {
                 AIID = playerID - 1;
                 isAI = true;
                 playerID = 1;
             }
+            else
+            {
+                isAI = false;
+                AIID = 0;
+            }
 
-            switch (itemIndex)   // System.Nullable`1[T].get_Value () ???
+            switch (itemIndex)
             {
                 case 0:         //모두 시야차단
-                    Debug.Log("AI" + AIID + ": 모두 시야차단 사용");
+                    //Debug.Log("AI" + AIID + ": 모두 시야차단 사용");
                     gameClient.UseItem(0, 0, isAI, AIID);
                     break;
                 case 1:         //한 명 시야차단
-                    Debug.Log("AI" + AIID + ": 한명 시야차단 사용");
+                    //Debug.Log("AI" + AIID + ": 한명 시야차단 사용");
                     gameClient.UseItem(1, playerID, isAI, AIID);
                     break;
                 case 2:         //슬로우
-                    Debug.Log("AI" + AIID + ": 슬로우 사용");
+                    //Debug.Log("AI" + AIID + ": 슬로우 사용");
                     gameClient.UseItem(2, playerID, isAI, AIID);
                     break;
                 case 3:         //부스터
-                    Debug.Log("AI" + AIID + ": 부스터 사용");
+                    //Debug.Log("AI" + AIID + ": 부스터 사용");
                     break;
             }
 
@@ -148,7 +183,7 @@ public class AIItem : MonoBehaviour
             {
                 MyItems[0] = -1;
             }
-            Debug.Log("AI" + AIID + ":" + MyItems[0] + MyItems[1]);
+            //Debug.Log("AI" + AIID + ":" + MyItems[0] + MyItems[1]);
         }
     }
 }
