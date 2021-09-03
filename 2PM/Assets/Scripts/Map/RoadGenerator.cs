@@ -577,10 +577,18 @@ public class RoadGenerator : MonoBehaviour
 
     void GenerateWayPoint(Vector3 position)
     {
-        Transform parent = GameObject.Find("WayPoint").transform;
-        wayPoint[wayPointNum] = Instantiate(wayPointPrefab, position, Quaternion.identity, parent);
-        wayPoint[wayPointNum].layer = 16;
-        ++wayPointNum;
+        bool isCarPlace = true;
+        for (int i = -7; i < 7; ++i)
+            if (position == vertices[vertices.Length / 2 + 1 + i * (xSize +1)])
+                isCarPlace = false;
+
+        if (isCarPlace)
+        {
+            Transform parent = GameObject.Find("WayPoint").transform;
+            wayPoint[wayPointNum] = Instantiate(wayPointPrefab, position, Quaternion.identity, parent);
+            wayPoint[wayPointNum].layer = 16;
+            ++wayPointNum;
+        }
     }
 
     enum buildingDirection
