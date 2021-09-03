@@ -244,6 +244,7 @@ public class GameSceneMain : MonoBehaviour
         }
         else
         {
+            gameTimer.instance.isStart = false;
             gameOverPanel.SetActive(true);
             gameOverScoreBoard.gameObject.SetActive(true);
             timerText.gameObject.SetActive(false);

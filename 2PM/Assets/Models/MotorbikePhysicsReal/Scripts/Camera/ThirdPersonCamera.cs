@@ -25,12 +25,15 @@ namespace Gadd420
 
         private void Update()
         {
-            //Gets Mouse input
-            currentX += Input.GetAxis("Mouse X");
-            currentY -= Input.GetAxis("Mouse Y");
+            if (gameTimer.instance.isStart)
+            {
+                //Gets Mouse input
+                currentX += Input.GetAxis("Mouse X");
+                currentY -= Input.GetAxis("Mouse Y");
 
-            //Clamp Rotation Values
-            currentY = Mathf.Clamp(currentY, minYAngle, MaxYAngle);
+                //Clamp Rotation Values
+                currentY = Mathf.Clamp(currentY, minYAngle, MaxYAngle);
+            }
         }
 
         private void LateUpdate()

@@ -578,7 +578,7 @@ public class RoadGenerator : MonoBehaviour
     void GenerateWayPoint(Vector3 position)
     {
         bool isCarPlace = true;
-        for (int i = -7; i < 7; ++i)
+        for (int i = -15; i < 15; ++i)
             if (position == vertices[vertices.Length / 2 + 1 + i * (xSize +1)])
                 isCarPlace = false;
 

@@ -141,10 +141,13 @@ public class LowPolyClouds : MonoBehaviour {
 	//We need to generate our noise
     //We update our offsets to the noise 'rolls' through the cloud objects
 	private void Update() {
-        MakeNoise();
-        offsetX += Time.deltaTime * timeScale;
-        offsetY += Time.deltaTime * timeScale;
-    }
+		if (gameTimer.instance.isStart)
+		{
+			MakeNoise();
+			offsetX += Time.deltaTime * timeScale;
+			offsetY += Time.deltaTime * timeScale;
+		}
+	}
 
 	//This method updates our noise/clouds
     //First we check to see if the camera has moved

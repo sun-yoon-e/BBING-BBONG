@@ -28,6 +28,15 @@ public class CarNavmeshAgent: MonoBehaviour
 
     private void Update()
     {
+        if (!gameTimer.instance.isStart)
+        {
+            agent.isStopped = true;
+        }
+        else
+        {
+            agent.isStopped = false;
+        }
+        
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
             int carPlace = Random.Range(1, road.middleRoadNum);

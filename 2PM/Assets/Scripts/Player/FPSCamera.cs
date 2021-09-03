@@ -14,7 +14,10 @@ public class FPSCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CameraRotate();
+        if (gameTimer.instance.isStart)
+        {
+            CameraRotate();
+        }
     }
     
     void CameraRotate()
