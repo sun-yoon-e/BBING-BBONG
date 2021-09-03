@@ -2546,7 +2546,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1702232428}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e950cacae63d61a4e821edb397a8cd95, type: 3}
   m_Name: 
@@ -2944,7 +2944,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885910701}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e950cacae63d61a4e821edb397a8cd95, type: 3}
   m_Name: 
@@ -2955,7 +2955,7 @@ MonoBehaviour:
   AlphaMode: 0
   OutlineColor: {r: 1, g: 0.55, b: 0, a: 1}
   OccludedColor: {r: 0.5, g: 0.9, b: 0.3, a: 1}
-  OutlineWidth: 0.3
+  OutlineWidth: 0.2
   OutlineHardness: 0.85
 --- !u!1 &1938965297
 GameObject:
@@ -3266,6 +3266,7 @@ MonoBehaviour:
   gameOverScoreBoard: {fileID: 448071193}
   timerText: {fileID: 1246010499632793509}
   pizza: {fileID: 8660808437739804389, guid: f149a959c89c06045acdeead329d14dc, type: 3}
+  players: []
 --- !u!114 &2045076382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5253,7 +5254,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1246010500683297325
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5483,7 +5484,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c183f35bf782b614d94fab277d2f4ceb, type: 2}
+  - {fileID: 2100000, guid: 4216f3c60b85b234383571203dd1ba12, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6300,7 +6301,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c183f35bf782b614d94fab277d2f4ceb, type: 2}
+  - {fileID: 2100000, guid: 4216f3c60b85b234383571203dd1ba12, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

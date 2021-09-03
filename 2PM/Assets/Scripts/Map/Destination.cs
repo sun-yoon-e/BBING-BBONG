@@ -100,13 +100,15 @@ public class Destination : MonoBehaviour
         {
             Vector3 destinationPosition =
                 new Vector3(building.buildingObject[destination[i]].transform.position.x,
-                building.buildingObject[destination[i]].transform.position.y + 20,
-                building.buildingObject[destination[i]].transform.position.z);
+                    building.buildingObject[destination[i]].transform.position.y + 20,
+                    building.buildingObject[destination[i]].transform.position.z);
 
             destinationObject[i] = Instantiate(destinationPrefab, destinationPosition,
                 Quaternion.Euler(0, 0, 0), parent);
             destinationObject[i].layer = 9;
             //destinationObject[i].transform.parent = SelectionOutlineController.instance.target.transform;
+            building.buildingObject[destination[i]].transform.parent =
+                SelectionOutlineController.instance.target.transform;
 
             destinationSpriteObject[i] = new GameObject("DestinationSprite");
             destinationSpriteObject[i].transform.position = destinationPosition;
@@ -119,5 +121,6 @@ public class Destination : MonoBehaviour
 
             destinationSpriteObject[i].layer = 8;
         }
+        SelectionOutlineController.instance.ClearTarget();
     }
 }

@@ -34,15 +34,19 @@ public class PlayerCamera : MonoBehaviour
         {
             if (nowCam == 1)
             {
+                SelectionOutlineController.instance.ClearTarget();
                 nowCam = 3;
                 aim.gameObject.SetActive(false);
                 FPSCam.gameObject.SetActive(false);
                 if (GameClient.Instance.client_host)
                     AICam.gameObject.SetActive(false);
                 TPSCam.gameObject.SetActive(true);
+                
+                
             }
             else
             {
+                SelectionOutlineController.instance.ClearTarget();
                 nowCam = 1;
                 aim.gameObject.SetActive(false);
                 TPSCam.gameObject.SetActive(false);
