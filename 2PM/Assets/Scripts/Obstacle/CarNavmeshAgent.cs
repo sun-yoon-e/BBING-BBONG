@@ -21,8 +21,8 @@ public class CarNavmeshAgent: MonoBehaviour
 
     private void Start()
     {
-        int randWayPoint = Random.Range(0, road.wayPointNum);
-        agent.SetDestination(road.wayPoint[randWayPoint].transform.position);
+        int carPlace = Random.Range(1, road.middleRoadNum);
+        agent.SetDestination(road.passibleItemPlace[carPlace]);
         tag = "Car";
     }
 
@@ -30,8 +30,8 @@ public class CarNavmeshAgent: MonoBehaviour
     {
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            int randWayPoint = Random.Range(0, road.wayPointNum);
-            agent.SetDestination(road.wayPoint[randWayPoint].transform.position);
+            int carPlace = Random.Range(1, road.middleRoadNum);
+            agent.SetDestination(road.passibleItemPlace[carPlace]);
         }
 
         if (agent.isStopped)
