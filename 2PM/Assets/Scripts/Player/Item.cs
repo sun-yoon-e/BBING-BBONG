@@ -183,9 +183,6 @@ public class Item : MonoBehaviour
         {
             if (PlayerCamera.instance.nowCam == 1)
             {
-                print("fpsCamera position" + fpsCamera.transform.position);
-                print("fpsCamera rotation" + fpsCamera.transform.rotation);
-
                 fog.transform.position = fpsCamera.transform.position;
                 fog.transform.rotation = fpsCamera.transform.rotation;
             }
