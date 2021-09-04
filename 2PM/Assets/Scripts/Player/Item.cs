@@ -51,7 +51,7 @@ public class Item : MonoBehaviour
 
         orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
-        MyItems = new int?[2] {-1, -1};
+        MyItems = new int?[2] { -1, -1 };
 
         targetID = 0;
         isAI = false;
@@ -171,16 +171,24 @@ public class Item : MonoBehaviour
                 slowTimer = 0f;
             }
         }
+    }
 
+    private void LateUpdate()
+    {
         if (fog != null)
         {
             if (PlayerCamera.instance.nowCam == 1)
             {
+                print("fpsCamera position" + fpsCamera.transform.position);
+                print("fpsCamera rotation" + fpsCamera.transform.rotation);
+
                 fog.transform.position = fpsCamera.transform.position;
+                fog.transform.rotation = fpsCamera.transform.rotation;
             }
             else if (PlayerCamera.instance.nowCam == 3)
             {
                 fog.transform.position = tpsCamera.transform.position;
+                fog.transform.rotation = tpsCamera.transform.rotation;
             }
         }
     }
@@ -298,7 +306,7 @@ public class Item : MonoBehaviour
                 break;
         }
     }
-    
+
     int FindNearestPlayer()
     {
         int index = 0;
@@ -323,7 +331,7 @@ public class Item : MonoBehaviour
                 }
             }
         }
-        
+
         return target;
     }
 

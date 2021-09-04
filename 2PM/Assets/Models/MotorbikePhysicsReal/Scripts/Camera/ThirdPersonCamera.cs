@@ -29,7 +29,7 @@ namespace Gadd420
             //Clamp Rotation Values
             currentY = Mathf.Clamp(currentY, minYAngle, MaxYAngle);
 
-            currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(currentY, currentX), ref rotationSmoothVelocity, 0.05f);
+            currentRotation = Vector3.SmoothDamp(currentRotation, new Vector3(currentY, currentX), ref rotationSmoothVelocity, 0f);
             transform.eulerAngles = currentRotation;
 
             //Vector3 increaseYPosition = new Vector3(0, 2f, 0);

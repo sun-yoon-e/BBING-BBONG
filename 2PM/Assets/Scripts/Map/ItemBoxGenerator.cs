@@ -45,24 +45,23 @@ public class ItemBoxGenerator : MonoBehaviour
     {
         if (gameClient.client_host)
         {
-            bool isDuplicate;
+            bool isContinue;
             for (int i = 0; i < itemBoxNum; ++i)
             {
                 itemBoxPlace[i] = Random.Range(1, road.middleRoadNum);
 
+                isContinue = false;
                 // 중복체크
-                isDuplicate = false;
                 for (int j = 0; j < i; ++j)
-                {
                     if (itemBoxPlace[j] == itemBoxPlace[i])
-                        isDuplicate = true;
-                }
-                // 플레이어와 겹치는 것 방지
-                for (int j = -3; j < 3; ++j)
-                    if (road.passibleItemPlace[itemBoxPlace[i]] == road.vertices[road.vertices.Length / 2 + 1 + i * (road.xSize + 1)])
-                        isDuplicate = true;
+                        isContinue = true;
 
-                if (isDuplicate)
+                // 플레이어와 겹치는 것 방지
+                for (int j = -5; j < 5; ++j)
+                    if (road.passibleItemPlace[itemBoxPlace[i]] == road.vertices[road.vertices.Length / 2 + 1 + j * (road.xSize + 1)])
+                        isContinue = true;
+
+                if (isContinue)
                     continue;
 
                 Vector3 itemPosition =
