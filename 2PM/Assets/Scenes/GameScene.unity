@@ -2930,7 +2930,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minYAngle: 0
   MaxYAngle: 89
-  lookAt: {fileID: 946430834}
+  lookAt: {fileID: 1031480062}
   distance: 12
   mouseSens: 1
 --- !u!81 &1885910704
