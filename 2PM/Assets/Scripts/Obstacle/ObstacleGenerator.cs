@@ -31,7 +31,7 @@ public class ObstacleGenerator : MonoBehaviour
 
         //car = new GameObject[road.wayPoint.Length];
         Cars = new List<CarObject>();
-        CARS = new GameObject[50];
+        CARS = new GameObject[70];
 
         gameClient.OnMakeCar += OnMakeCar;
         gameClient.OnMoveCar += OnMoveCar;

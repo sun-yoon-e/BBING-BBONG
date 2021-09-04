@@ -181,7 +181,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                             gameClient.MakeTree(gameClient.TreeInfo[i].Type, gameClient.TreeInfo[i].Position);
                     }
 
-                    for (int i = 0; i < 50; ++i)
+                    for (int i = 0; i < 70; ++i)
                     {
                         if (gameClient.CarInfo[i] != null)
                             gameClient.MakeCar(gameClient.CarInfo[i].ID, gameClient.CarInfo[i].CarType, gameClient.CarInfo[i].Position, gameClient.CarInfo[i].Rotation);

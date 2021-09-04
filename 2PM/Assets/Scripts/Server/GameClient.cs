@@ -352,7 +352,7 @@ public class GameClient
 
     public int CarNum = 0;
     public bool isRenderCar = false;
-    public MakeCarMessageEventArgs[] CarInfo = new MakeCarMessageEventArgs[50];
+    public MakeCarMessageEventArgs[] CarInfo = new MakeCarMessageEventArgs[70];
 
     private GameClient()
     {
