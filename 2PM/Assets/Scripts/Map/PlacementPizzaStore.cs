@@ -171,6 +171,8 @@ public class PlacementPizzaStore : MonoBehaviour
             pizzaStore.transform.SetParent(parent.transform);
 
             InitializeSprite(pizzaStore.transform.position);
+            pizzaStore.AddComponent<BoxCollider>();
+            pizzaStore.layer = 12;
 
             gameClient.isRenderPizzaStore = true;
         }

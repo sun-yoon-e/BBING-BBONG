@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class PlacementBuilding : MonoBehaviour
 {
     public static PlacementBuilding instance;
-    
+
     private GameClient gameClient = GameClient.Instance;
 
     RoadGenerator road;
@@ -96,7 +96,7 @@ public class PlacementBuilding : MonoBehaviour
         map.UpdateMesh();
         road.vertices = map.vertices;
         road.UpdateMesh();
-        
+
         isBuildingReady = true;
         gameClient.isReadyToControl = true;
 
@@ -196,7 +196,11 @@ public class PlacementBuilding : MonoBehaviour
 
             buildingObject[buildingNum].transform.SetParent(buildingParent.transform);
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
+            buildingObject[buildingNum].layer = 12;
+            buildingObject[buildingNum].AddComponent<BoxCollider>();
+
             buildingNum++;
+
 
             if (num == buildingNum)
             {

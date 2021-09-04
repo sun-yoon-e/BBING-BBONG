@@ -11,6 +11,8 @@ public class Car : MonoBehaviour
 
     private void Start()
     {
+        gameObject.layer = 20;
+
         //obstacle = GameObject.Find("Obstacle Generator").GetComponent<ObstacleGenerator>();
         if (gameClient.client_host)
             agent = transform.parent.GetComponent<NavMeshAgent>();
