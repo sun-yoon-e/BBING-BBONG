@@ -41,6 +41,7 @@ public class Item : MonoBehaviour
     public int AIID;
 
     GameObject fog;
+    GameObject miniFog;
 
     private void Start()
     {
@@ -191,6 +192,11 @@ public class Item : MonoBehaviour
                 fog.transform.position = tpsCamera.transform.position;
                 fog.transform.rotation = tpsCamera.transform.rotation;
             }
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                Destroy(fog);
+                Destroy(miniFog);
+            }
         }
     }
 
@@ -338,36 +344,14 @@ public class Item : MonoBehaviour
 
     void Fog()
     {
-        //Vector3 fogPosition = new Vector3(0, 0, 0);
-
         fog = Instantiate(fogParticle, transform.position, transform.rotation, transform);
-
         Destroy(fog, 20f);
-        //if (fpsCamera.activeSelf)
-        //{
-        //    fog = Instantiate(fogParticle, fpsCamera.transform.position, fpsCamera.transform.rotation, fpsCamera.transform);
-
-        //    Destroy(fog, 20f);
-        //}
-        //else if (tpsCamera.activeSelf)
-        //{
-
-        //    fog = Instantiate(fogParticle, tpsCamera.transform.position, tpsCamera.transform.rotation, tpsCamera.transform);
-
-        //    Destroy(fog, 20f);
-        //}
-        //else
-        //{
-        //    fog = Instantiate(fogParticle, tpsCamera.transform.position, tpsCamera.transform.rotation, tpsCamera.transform);
-
-        //    Destroy(fog, 20f);
-        //}
 
         Vector3 miniFogPosition = new Vector3(miniCamera.transform.position.x,
             miniCamera.transform.position.y - 14,
             miniCamera.transform.position.z);
 
-        GameObject miniFog = Instantiate(fogParticle, miniFogPosition, miniCamera.transform.rotation, miniCamera.transform);
+        miniFog = Instantiate(fogParticle, miniFogPosition, miniCamera.transform.rotation, miniCamera.transform);
         miniFog.layer = 18;
         Destroy(miniFog, 20f);
     }
