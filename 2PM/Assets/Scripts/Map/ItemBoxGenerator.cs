@@ -61,7 +61,7 @@ public class ItemBoxGenerator : MonoBehaviour
                     continue;
 
                 for (int j = -3; j < 3; ++j)
-                    if (road.passibleItemPlace[itemBoxPlace[i]] == road.vertices[road.vertices.Length / 2 + i * (road.xSize + 1)])
+                    if (road.passibleItemPlace[itemBoxPlace[i]] == road.vertices[road.vertices.Length / 2 + 1 + i * (road.xSize + 1)])
                         continue;
 
                 Vector3 itemPosition =
