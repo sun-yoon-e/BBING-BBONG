@@ -451,6 +451,7 @@ MonoBehaviour:
   destinationSpriteObject: []
   pizzaSpriteRenderer: []
   DestroyDestination: 0
+  effect: {fileID: 1615337546}
 --- !u!1 &448071191
 GameObject:
   m_ObjectHideFlags: 0
@@ -2595,16 +2596,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1702232428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e950cacae63d61a4e821edb397a8cd95, type: 3}
+  m_Script: {fileID: 11500000, guid: e8daa59a9799f7142b4f45b471742c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1615337546}
+  effect: {fileID: 1615337546}
   SelectionMode: 1
   OutlineType: 0
   AlphaMode: 0
   OutlineColor: {r: 1, g: 0.55, b: 0, a: 1}
   OccludedColor: {r: 0.5, g: 0.9, b: 0.3, a: 1}
-  OutlineWidth: 0.3
+  OutlineWidth: 0.2
   OutlineHardness: 0.85
 --- !u!1 &1710524066
 GameObject:
@@ -2996,7 +2997,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e950cacae63d61a4e821edb397a8cd95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1615337546}
+  effect: {fileID: 1615337546}
   SelectionMode: 1
   OutlineType: 0
   AlphaMode: 0

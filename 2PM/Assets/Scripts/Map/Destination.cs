@@ -23,6 +23,7 @@ public class Destination : MonoBehaviour
     public int DestroyDestination;
     
     private bool isReady = false;
+    public GameObject effect;
 
     private void Start()
     {
@@ -104,8 +105,7 @@ public class Destination : MonoBehaviour
             //    Quaternion.Euler(0, 0, 0), parent);
             //destinationObject[i].layer = 9;
             //destinationObject[i].transform.parent = SelectionOutlineController.instance.target.transform;
-            building.buildingObject[destination[i]].transform.parent =
-                SelectionOutlineController.instance.target.transform;
+            building.buildingObject[destination[i]].transform.parent = effect.transform;
 
             destinationSpriteObject[i] = new GameObject("DestinationSprite");
             destinationSpriteObject[i].transform.position = destinationPosition;
@@ -118,6 +118,7 @@ public class Destination : MonoBehaviour
 
             destinationSpriteObject[i].layer = 8;
         }
-        SelectionOutlineController.instance.ClearTarget();
+        if (PlayerCamera.instance.nowCam == 1) FPSOutline.instance.ClearTarget();
+        if (PlayerCamera.instance.nowCam == 3) SelectionOutlineController.instance.ClearTarget();
     }
 }

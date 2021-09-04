@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -11,7 +11,7 @@ using UnityEngine.Rendering;
 */
 //[ExecuteInEditMode]
 [RequireComponent(typeof(Camera))]
-public class SelectionOutlineController : MonoBehaviour
+public class FPSOutline : MonoBehaviour
 {
     public enum SelMode : int
     {
@@ -30,7 +30,7 @@ public class SelectionOutlineController : MonoBehaviour
         OnlyVisible=2
     }
 
-    public static SelectionOutlineController instance;
+    public static FPSOutline instance;
     public GameObject effect;
     
     private Material OutlineMat;

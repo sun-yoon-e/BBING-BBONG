@@ -48,7 +48,8 @@ public class Pizza : MonoBehaviour
                     Destroy(destination.destinationObject[i]);
                     
                     building.buildingObject[destination.destination[i]].transform.parent = buildingGenerator.transform;
-                    SelectionOutlineController.instance.ClearTarget();
+                    if (PlayerCamera.instance.nowCam == 1) FPSOutline.instance.ClearTarget();
+                    if (PlayerCamera.instance.nowCam == 3) SelectionOutlineController.instance.ClearTarget();
 
                     destination.DestroyDestination += 1;
                     destination.destination[i] = 0;
