@@ -105,8 +105,11 @@ public class Destination : MonoBehaviour
             //    Quaternion.Euler(0, 0, 0), parent);
             //destinationObject[i].layer = 9;
             //destinationObject[i].transform.parent = SelectionOutlineController.instance.target.transform;
-            building.buildingObject[destination[i]].transform.parent = effect.transform;
-
+            //building.buildingObject[destination[i]].transform.parent = effect.transform;
+            
+            Outline outline = building.buildingObject[destination[i]].gameObject.GetComponent<Outline>();
+            outline.enabled = true;
+            
             destinationSpriteObject[i] = new GameObject("DestinationSprite");
             destinationSpriteObject[i].transform.position = destinationPosition;
             destinationSpriteObject[i].transform.rotation = SpriteRotation;
@@ -118,7 +121,7 @@ public class Destination : MonoBehaviour
 
             destinationSpriteObject[i].layer = 8;
         }
-        if (PlayerCamera.instance.nowCam == 1) FPSOutline.instance.ClearTarget();
-        if (PlayerCamera.instance.nowCam == 3) SelectionOutlineController.instance.ClearTarget();
+        //if (PlayerCamera.instance.nowCam == 1) FPSOutline.instance.ClearTarget();
+        //if (PlayerCamera.instance.nowCam == 3) SelectionOutlineController.instance.ClearTarget();
     }
 }

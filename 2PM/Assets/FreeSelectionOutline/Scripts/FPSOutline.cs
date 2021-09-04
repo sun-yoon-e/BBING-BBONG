@@ -32,9 +32,10 @@ public class FPSOutline : MonoBehaviour
 
     public static FPSOutline instance;
     public GameObject effect;
+    public Material OutlineMaterial,TargetMaterial;
     
     private Material OutlineMat;
-    private Shader OutlineShader,TargetShader;
+    //private Shader OutlineShader,TargetShader;
     private RenderTexture Mask, Outline;
     private Camera cam;
     private CommandBuffer cmd;
@@ -60,32 +61,34 @@ public class FPSOutline : MonoBehaviour
 
     void OnEnale()
     {
-        Inital();
+        //Inital();
     }
     
     void Inital()
     {
-        OutlineShader = Shader.Find("Outline/PostprocessOutline");
-        TargetShader = Shader.Find("Outline/Target");
+        //OutlineShader = Shader.Find("Outline/PostprocessOutline");
+        //TargetShader = Shader.Find("Outline/Target");
         cam = GetComponent<Camera>();
         cam.depthTextureMode = OutlineType>0 ? DepthTextureMode.None: DepthTextureMode.Depth;
-        OutlineMat = new Material(OutlineShader);
+        OutlineMat = new Material(OutlineMaterial);
         
         if (OutlineType > 0)
         {
-            Shader.EnableKeyword("_COLORIZE");
+            //Shader.EnableKeyword("_COLORIZE");
             Mask = new RenderTexture(cam.pixelWidth, cam.pixelHeight, 0, RenderTextureFormat.RFloat);
             Outline = new RenderTexture(cam.pixelWidth, cam.pixelHeight, 0, RenderTextureFormat.RG16);
+            /*
             if (OutlineType== OutlineMode.OnlyVisible)
                 Shader.EnableKeyword("_OCCLUDED");
             else
                 Shader.DisableKeyword("_OCCLUDED");
+            */
 
         }
         else
         {
-            Shader.DisableKeyword("_OCCLUDED");
-            Shader.DisableKeyword("_COLORIZE");
+            //Shader.DisableKeyword("_OCCLUDED");
+            //Shader.DisableKeyword("_COLORIZE");
             Mask = new RenderTexture(cam.pixelWidth, cam.pixelHeight, 0, RenderTextureFormat.R8);
             Outline = new RenderTexture(cam.pixelWidth, cam.pixelHeight, 0, RenderTextureFormat.R8);
         }
@@ -104,18 +107,20 @@ public class FPSOutline : MonoBehaviour
         cam.depthTextureMode = OutlineType > 0 ? DepthTextureMode.Depth:DepthTextureMode.None;
         if (OutlineType > 0)
         {
-            Shader.EnableKeyword("_COLORIZE");
+            //Shader.EnableKeyword("_COLORIZE");
 
+            /*
             if (OutlineType == OutlineMode.OnlyVisible)
                 Shader.EnableKeyword("_OCCLUDED");
             else
                 Shader.DisableKeyword("_OCCLUDED");
+                */
 
         }
         else
         {
-            Shader.DisableKeyword("_OCCLUDED");
-            Shader.DisableKeyword("_COLORIZE");
+            //Shader.DisableKeyword("_OCCLUDED");
+            //Shader.DisableKeyword("_COLORIZE");
         }
     }
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -135,7 +140,7 @@ public class FPSOutline : MonoBehaviour
     }
     void RenderTarget(Renderer target)
     {
-        Material TargetMat = new Material(TargetShader);
+        Material TargetMat = new Material(TargetMaterial);
         bool MainTexFlag = false;
         string[] attrs = target.sharedMaterial.GetTexturePropertyNames();
         foreach (var c in attrs)

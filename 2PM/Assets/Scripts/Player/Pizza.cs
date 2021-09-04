@@ -45,11 +45,14 @@ public class Pizza : MonoBehaviour
                     Destroy(destination.destinationSpriteObject[i]);
                     Destroy(destination.pizzaSpriteRenderer[i]);
 
+                    //Outline outline = building.buildingObject[destination.destination[i]].gameObject.GetComponent<Outline>();
+                    //outline.enabled = false;
+
                     Destroy(destination.destinationObject[i]);
-                    
-                    building.buildingObject[destination.destination[i]].transform.parent = buildingGenerator.transform;
-                    if (PlayerCamera.instance.nowCam == 1) FPSOutline.instance.ClearTarget();
-                    if (PlayerCamera.instance.nowCam == 3) SelectionOutlineController.instance.ClearTarget();
+
+                    //building.buildingObject[destination.destination[i]].transform.parent = buildingGenerator.transform;
+                    //if (PlayerCamera.instance.nowCam == 1) FPSOutline.instance.ClearTarget();
+                    //if (PlayerCamera.instance.nowCam == 3) SelectionOutlineController.instance.ClearTarget();
 
                     destination.DestroyDestination += 1;
                     destination.destination[i] = 0;

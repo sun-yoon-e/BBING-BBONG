@@ -51,8 +51,8 @@ public class PlayerCamera : MonoBehaviour
                 FPSCam.gameObject.SetActive(true);
             }
             
-            if (FPSOutline.instance != null) FPSOutline.instance.ClearTarget();
-            if (SelectionOutlineController.instance != null) SelectionOutlineController.instance.ClearTarget();
+            //if (FPSOutline.instance != null) FPSOutline.instance.ClearTarget();
+            //if (SelectionOutlineController.instance != null) SelectionOutlineController.instance.ClearTarget();
         }
 
         if (Input.GetKeyDown(KeyCode.F12))
