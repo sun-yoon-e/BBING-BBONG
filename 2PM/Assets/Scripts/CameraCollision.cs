@@ -17,8 +17,6 @@ public class CameraCollision : MonoBehaviour
         {
             float dis = Vector3.Distance(transform.position, hit.point);
             Camera.GetComponent<Gadd420.ThirdPersonCamera>().distance = dis;
-
-            print(layers.ToString());
         }
         else
             Camera.GetComponent<Gadd420.ThirdPersonCamera>().distance = maxDis;

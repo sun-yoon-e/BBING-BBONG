@@ -53,7 +53,35 @@ public class Car : MonoBehaviour
 
             Vector3 inNormal = Vector3.Normalize(transform.position - collision.gameObject.transform.position);
             Vector3 bounceVector = Vector3.Reflect(collision.relativeVelocity, inNormal);
+
+            int bounceScale = 3;
+
             bounceVector.y = 0;
+            
+            if(bounceVector.x > 0 && bounceVector.x < bounceScale)
+                bounceVector.x = bounceScale;
+            else if(bounceVector.x > -bounceScale && bounceVector.x < 0)
+                bounceVector.x = -bounceScale;
+
+            if(bounceVector.x > bounceScale + 3)
+                bounceVector.x = bounceScale + 3;
+            else if (bounceVector.x < -bounceScale - 3)
+                bounceVector.x = -bounceScale - 3;
+
+            //if (bounceVector.y < 0)
+            //    bounceVector.y = 0;
+            //else if (bounceVector.y > 3)
+            //    bounceVector.y = 3;
+
+            if (bounceVector.z > 0 && bounceVector.z < bounceScale)
+                bounceVector.z = bounceScale;
+            else if (bounceVector.z > -bounceScale && bounceVector.z < 0)
+                bounceVector.z = -bounceScale;
+
+            if(bounceVector.z > bounceScale + 3)
+                bounceVector.z = bounceScale + 3;
+            else if (bounceVector.z < -bounceScale - 3)
+                bounceVector.z = -bounceScale - 3;
 
             targetRB.AddForce(bounceVector, ForceMode.VelocityChange);
         }
