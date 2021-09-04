@@ -60,6 +60,10 @@ public class ItemBoxGenerator : MonoBehaviour
                 if (isDuplicate)
                     continue;
 
+                for (int j = -3; j < 3; ++j)
+                    if (road.passibleItemPlace[itemBoxPlace[i]] == road.vertices[road.vertices.Length / 2 + i * (road.xSize + 1)])
+                        continue;
+
                 Vector3 itemPosition =
                     new Vector3(road.passibleItemPlace[itemBoxPlace[i]].x,
                     road.passibleItemPlace[itemBoxPlace[i]].y + 1.5f,
@@ -71,9 +75,6 @@ public class ItemBoxGenerator : MonoBehaviour
                 gameClient.ItemInfo[num].Position = itemPosition;
                 gameClient.ItemNum = num;
                 num++;
-
-                //Debug.Log(itemPosition);
-                //Debug.Log("OnRoadItem");
             }
         }
     }
@@ -95,7 +96,6 @@ public class ItemBoxGenerator : MonoBehaviour
 
             itemSpriteRenderer[args.ItemID] = itemSpriteObject[args.ItemID].AddComponent<SpriteRenderer>();
             itemSpriteRenderer[args.ItemID].sprite = itemSprite;
-            //Debug.Log("PlaceItem");
             ++itemNum;
 
             if (num == itemNum)

@@ -357,8 +357,7 @@ public class RoadGenerator : MonoBehaviour
             isItemPlace[v + 1] = true;
             if (!isWayPoint)
             {
-                GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
-                isWayPointPlace[v + 1 + (xSize + 1)] = true;
+                GenerateWayPoint(vertices[v + 1 + (xSize + 1)], v + 1 + (xSize + 1));
                 isWayPoint = true;
             }
 
@@ -371,7 +370,7 @@ public class RoadGenerator : MonoBehaviour
             t += 12;
         }
         if (v + 1 + (xSize + 1) < xSize * zSize)
-            GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
+            GenerateWayPoint(vertices[v + 1 + (xSize + 1)], v + 1 + (xSize + 1));
     }
     void downSplitX(int minX, int maxX, int minZ, int maxZ, int num)
     {
@@ -408,8 +407,7 @@ public class RoadGenerator : MonoBehaviour
             isItemPlace[v + 1] = true;
             if (!isWayPoint)
             {
-                GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
-                isWayPointPlace[v + 1 + (xSize + 1)] = true;
+                GenerateWayPoint(vertices[v + 1 + (xSize + 1)], v + 1 + (xSize + 1));
                 isWayPoint = true;
             }
 
@@ -422,7 +420,7 @@ public class RoadGenerator : MonoBehaviour
             v += xSize + 1;
             t += 12;
         }
-        GenerateWayPoint(vertices[v + 1 + (xSize + 1)]);
+        GenerateWayPoint(vertices[v + 1 + (xSize + 1)], v + 1 + (xSize + 1));
     }
     void leftSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
     {
@@ -456,8 +454,7 @@ public class RoadGenerator : MonoBehaviour
                 isItemPlace[v + xSize + 1] = true;
                 if (!isWayPoint)
                 {
-                    GenerateWayPoint(vertices[v + xSize + 1 + 1]);
-                    isWayPointPlace[v + xSize + 1 + 1] = true;
+                    GenerateWayPoint(vertices[v + xSize + 1 + 1], v + xSize + 1 + 1);
                     isWayPoint = true;
                 }
             }
@@ -473,7 +470,7 @@ public class RoadGenerator : MonoBehaviour
             v++;
             t += 12;
         }
-        GenerateWayPoint(vertices[v + 1 + xSize + 1]);
+        GenerateWayPoint(vertices[v + 1 + xSize + 1], v + 1 + xSize + 1);
     }
     void rightSplitZ(int minZ, int maxZ, int minX, int maxX, int num)
     {
@@ -509,8 +506,7 @@ public class RoadGenerator : MonoBehaviour
 
                 if (!isWayPoint)
                 {
-                    GenerateWayPoint(vertices[v + xSize + 1 + 1]);
-                    isWayPointPlace[v + xSize + 1 + 1] = true;
+                    GenerateWayPoint(vertices[v + xSize + 1 + 1], v + xSize + 1 + 1);
                     isWayPoint = true;
                 }
             }
@@ -526,7 +522,7 @@ public class RoadGenerator : MonoBehaviour
             t += 12;
         }
         if (v + xSize + 1 < xSize * zSize)
-            GenerateWayPoint(new Vector3(vertices[v + xSize + 1].x + 5, vertices[v + xSize + 1].y, vertices[v + xSize + 1].z));
+            GenerateWayPoint(new Vector3(vertices[v + xSize + 1].x + 5, vertices[v + xSize + 1].y, vertices[v + xSize + 1].z), v + xSize + 1);
     }
 
     void makeNotBuildingPlace()
@@ -573,15 +569,19 @@ public class RoadGenerator : MonoBehaviour
         vertices = map.vertices;
     }
 
-    void GenerateWayPoint(Vector3 position)
+    void GenerateWayPoint(Vector3 position, int place)
     {
         bool isCarPlace = true;
+
         for (int i = -15; i < 15; ++i)
-            if (position == vertices[vertices.Length / 2 + 1 + i * (xSize +1)])
+            if (position == vertices[vertices.Length / 2 + i * (xSize + 1)]
+                || position == vertices[vertices.Length / 2 + 1 + i * (xSize + 1)]
+                || position == vertices[vertices.Length / 2 + 2 + i * (xSize + 1)])
                 isCarPlace = false;
 
         if (isCarPlace)
         {
+            isWayPointPlace[place] = true;
             Transform parent = GameObject.Find("WayPoint").transform;
             wayPoint[wayPointNum] = Instantiate(wayPointPrefab, position, Quaternion.identity, parent);
             wayPoint[wayPointNum].layer = 16;
