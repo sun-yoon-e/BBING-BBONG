@@ -11,6 +11,7 @@ public class Item : MonoBehaviour
 
     NitrousManager nitrousScript;
     RB_Controller rbScript;
+    PlayerCamera playerCam;
 
     public Sprite[] sprites = new Sprite[4];
     public Image[] images = new Image[2];
@@ -43,11 +44,14 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
-        fpsCamera = GameObject.Find("FPS Camera");
-        tpsCamera = GameObject.Find("TPS Camera");
-        miniCamera = GameObject.Find("Minimap Camera");
         nitrousScript = GetComponent<NitrousManager>();
         rbScript = GetComponent<RB_Controller>();
+        playerCam = GetComponent<PlayerCamera>();
+
+        fpsCamera = playerCam.FPSCam.gameObject;
+        tpsCamera = playerCam.TPSCam.gameObject;
+
+        miniCamera = GameObject.Find("Minimap Camera");
 
         orMaxSpeed = rbScript.maxSpeed;
         ItemCnt = 0;
