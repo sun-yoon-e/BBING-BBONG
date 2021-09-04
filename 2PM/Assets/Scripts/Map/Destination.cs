@@ -7,7 +7,7 @@ public class Destination : MonoBehaviour
     public static Destination instance;
     PlacementBuilding building;
 
-    public GameObject destinationPrefab;
+    //public GameObject destinationPrefab;
     public Sprite destinationSprite;
     public Transform parent;
 
@@ -21,8 +21,6 @@ public class Destination : MonoBehaviour
     public SpriteRenderer[] pizzaSpriteRenderer;
 
     public int DestroyDestination;
-
-    Quaternion rot;
     
     private bool isReady = false;
 
@@ -69,7 +67,6 @@ public class Destination : MonoBehaviour
             DrawDestination();
             ApplyDestinationToBuilding();
         }
-        
     }
 
     public void DrawDestination()
@@ -103,9 +100,9 @@ public class Destination : MonoBehaviour
                     building.buildingObject[destination[i]].transform.position.y + 20,
                     building.buildingObject[destination[i]].transform.position.z);
 
-            destinationObject[i] = Instantiate(destinationPrefab, destinationPosition,
-                Quaternion.Euler(0, 0, 0), parent);
-            destinationObject[i].layer = 9;
+            //destinationObject[i] = Instantiate(destinationPrefab, destinationPosition,
+            //    Quaternion.Euler(0, 0, 0), parent);
+            //destinationObject[i].layer = 9;
             //destinationObject[i].transform.parent = SelectionOutlineController.instance.target.transform;
             building.buildingObject[destination[i]].transform.parent =
                 SelectionOutlineController.instance.target.transform;

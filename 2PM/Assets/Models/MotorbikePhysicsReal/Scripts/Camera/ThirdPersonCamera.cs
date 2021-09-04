@@ -40,18 +40,6 @@ namespace Gadd420
 
             //Vector3 increaseYPosition = new Vector3(0, 2f, 0);
             transform.position = lookAt.position - transform.forward * distance + transform.right * 0f;
-
-            //transform.position = Vector3.MoveTowards(transform.position, lookAt.position, 0.5f);
-
-            //if (lookAt)
-            //{
-            //    //Set Rotation and Postion
-            //    Vector3 dir = new Vector3(0, 0, -distance);
-            //    Quaternion rotation = Quaternion.Euler(currentY * mouseSens, currentX * mouseSens, 0 * Time.deltaTime);
-
-            //    camTransform.position = lookAt.position + rotation * dir;
-            //    camTransform.LookAt(lookAt.position);
-            //}
         }
     }
 }

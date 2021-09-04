@@ -25,13 +25,6 @@ public class Car : MonoBehaviour
             transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, 180.0f, transform.eulerAngles.z);
         else
             transform.localRotation = Quaternion.Euler(transform.eulerAngles.x, 0, transform.eulerAngles.z);
-
-
-        //if (gameClient.isGameStarted && gameClient.client_host)
-        //{
-        //    if (gameObject != null)
-        //        obstacle.MoveCar(gameObject.transform.parent.gameObject, transform.parent.position, transform.rotation.eulerAngles);
-        //}
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -47,8 +40,6 @@ public class Car : MonoBehaviour
                 var rb_controller = collision.gameObject.GetComponent<RB_Controller>();
                 rb_controller.maxSpeed = item.orMaxSpeed / 2;
                 item.isSlow = true;
-
-                //obstacle.DestroyCar(transform.parent.gameObject);
             }
             if (collision.gameObject.tag == "AI")
             {
@@ -56,8 +47,6 @@ public class Car : MonoBehaviour
                 //var rb_controller = collision.gameObject.GetComponent<AIRBController>();
                 //rb_controller.maxSpeed = item.orMaxSpeed / 2;
                 //item.isSlow = true;
-
-                //obstacle.DestroyCar(transform.parent.gameObject);
             }
 
             Rigidbody targetRB = collision.gameObject.GetComponent<Rigidbody>();
