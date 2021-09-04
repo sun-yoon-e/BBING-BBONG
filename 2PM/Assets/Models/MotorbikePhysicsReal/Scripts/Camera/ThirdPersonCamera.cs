@@ -11,7 +11,6 @@ namespace Gadd420
         public float MaxYAngle;
 
         public Transform lookAt;
-        Transform camTransform;
         public float distance;
 
         private float currentX = 0.0f;
@@ -19,12 +18,7 @@ namespace Gadd420
         public float mouseSens;
 
         Vector3 currentRotation;
-        Vector3 rotationSmoothVelocity = Vector3.zero;
-
-        private void Start()
-        {
-            camTransform = transform;
-        }
+        Vector3 rotationSmoothVelocity;
 
         private void LateUpdate()
         {
