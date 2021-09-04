@@ -57,12 +57,13 @@ public class ItemBoxGenerator : MonoBehaviour
                     if (itemBoxPlace[j] == itemBoxPlace[i])
                         isDuplicate = true;
                 }
-                if (isDuplicate)
-                    continue;
-
+                // 플레이어와 겹치는 것 방지
                 for (int j = -3; j < 3; ++j)
                     if (road.passibleItemPlace[itemBoxPlace[i]] == road.vertices[road.vertices.Length / 2 + 1 + i * (road.xSize + 1)])
-                        continue;
+                        isDuplicate = true;
+
+                if (isDuplicate)
+                    continue;
 
                 Vector3 itemPosition =
                     new Vector3(road.passibleItemPlace[itemBoxPlace[i]].x,
