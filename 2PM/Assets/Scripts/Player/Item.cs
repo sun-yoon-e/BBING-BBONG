@@ -263,7 +263,7 @@ public class Item : MonoBehaviour
                     break;
                 case 2: //슬로우
                     SoundManager.instance.PlaySE("Slow_Item");
-                    rbScript.maxSpeed = orMaxSpeed / 2;
+                    rbScript.maxSpeed = orMaxSpeed / 3;
                     isSlow = true;
                     break;
                 case 3: //부스터
