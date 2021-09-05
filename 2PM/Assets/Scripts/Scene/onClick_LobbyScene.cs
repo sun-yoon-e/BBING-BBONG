@@ -15,6 +15,8 @@ public class onClick_LobbyScene: MonoBehaviour
     public Button[] RoomBtn;
     public Button PreviosBtn, NextBtn;
     
+    private SoundManager soundManager;
+    
     public class RoomInfo
     {
         public int Num;
@@ -28,6 +30,18 @@ public class onClick_LobbyScene: MonoBehaviour
 
     private void Start()
     {
+        soundManager = GameObject.Find("SoundManager").GetComponent<SoundManager>();
+        
+        if (soundManager.reload)
+        {
+            soundManager.bgmNum = 0;
+            soundManager.PlayeBGM();
+            soundManager.reload = false;
+        }
+        
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+        
         gameClient.OnRoomList += RoomListResult;
         //RoomListrenewal();
         Refresh_btn_Clicked();
