@@ -188,8 +188,8 @@ namespace Gadd420
                 if (crashScript &&crashScript.isCrashed)
                 {
                     //When Crashed the Z rotation is turned off so the bike can crash more realisticly
-                    rb.constraints = RigidbodyConstraints.None;
-                    transform.localRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
+                    //rb.constraints = RigidbodyConstraints.None;
+                    //transform.localRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
                     crashScript.isCrashed = false;
                 }
                 else

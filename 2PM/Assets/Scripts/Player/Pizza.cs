@@ -46,8 +46,8 @@ public class Pizza : MonoBehaviour
                     Destroy(destination.destinationSpriteObject[i]);
                     Destroy(destination.pizzaSpriteRenderer[i]);
 
-                    //Outline outline = building.buildingObject[destination.destination[i]].gameObject.GetComponent<Outline>();
-                    //outline.enabled = false;
+                    Outline outline = building.buildingObject[destination.destination[i]].gameObject.GetComponent<Outline>();
+                    outline.enabled = false;
 
                     Destroy(destination.destinationObject[i]);
 

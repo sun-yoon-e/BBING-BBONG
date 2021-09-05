@@ -3784,8 +3784,8 @@ MonoBehaviour:
   firstGearTorque: 1000
   topGearTorque: 1000
   isAutomatic: 0
-  maxSpeed: 50
-  maxReverseSpeed: 3
+  maxSpeed: 40
+  maxReverseSpeed: 10
   currentSpeed: 0
   numGears: 6
   currentGear: 1

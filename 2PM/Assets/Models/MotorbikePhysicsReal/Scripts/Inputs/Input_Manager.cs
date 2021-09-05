@@ -69,7 +69,8 @@ namespace Gadd420
         {
             if (Input.GetKey(KeyCode.R))
             {
-                transform.localRotation = Quaternion.identity;
+                transform.localRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
+                //transform.localRotation = Quaternion.identity;
                 crashScript.isCrashed = false;
             }
             if (Input.GetKey(KeyCode.P))
