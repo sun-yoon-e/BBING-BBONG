@@ -7863,7 +7863,6 @@ MonoBehaviour:
   distance: 0
   isLookAgent: 0
   isArriveDestination: 0
-  isStopPosition: 0
 --- !u!114 &3733114469338777254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7879,6 +7878,9 @@ MonoBehaviour:
   whatIsDoor:
     serializedVersion: 2
     m_Bits: 524288
+  whatIsRoad:
+    serializedVersion: 2
+    m_Bits: 1024
   pizzaPrefab: {fileID: 8660808437739804389, guid: f149a959c89c06045acdeead329d14dc,
     type: 3}
   firePos: {fileID: 2837713474855798015}

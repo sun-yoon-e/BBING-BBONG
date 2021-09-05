@@ -20,9 +20,6 @@ public class AIMovement : MonoBehaviour
     public bool isLookAgent = false;
     public bool isArriveDestination = false;
 
-    Vector3 stopPosition;
-    public bool isStopPosition;
-
     CreateAIID ID;
 
     void Start()
@@ -40,7 +37,7 @@ public class AIMovement : MonoBehaviour
     {
         CalculateDirection();
         CheckIsSetDestination();
-        
+
         if (!gameTimer.instance.isStart || isArriveDestination)
         {
             rb.constraints = RigidbodyConstraints.FreezeAll;
