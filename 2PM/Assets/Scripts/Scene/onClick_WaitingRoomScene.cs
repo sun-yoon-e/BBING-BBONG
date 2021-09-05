@@ -34,6 +34,8 @@ public class onClick_WaitingRoomScene : MonoBehaviour
             soundManager.PlayeBGM();
             soundManager.reload = false;
         }
+        
+        Cursor.visible = true;
 
         gameClient.OnGameStateChanged += GameStateChanged;
         gameClient.OnRoomInfo += OnRoomInfo;
