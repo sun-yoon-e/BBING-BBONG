@@ -21,6 +21,7 @@ public class Pizza : MonoBehaviour
         destination = GameObject.Find("Destination Generator").GetComponent<Destination>();
         building = GameObject.Find("Building Generator").GetComponent<PlacementBuilding>();
         buildingGenerator = GameObject.Find("Building Generator");
+        tag = "Pizza";
 
         lifeTimer = lifeTime;
     }
