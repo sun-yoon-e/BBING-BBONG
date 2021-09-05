@@ -111,7 +111,7 @@ public class AIMovement : MonoBehaviour
             if (Time.time - stopStartTime > 15f)
             {
                 gameObject.transform.position = road.vertices[road.vertices.Length / 2 + 1];
-                agent.transform.position = road.vertices[road.vertices.Length / 2 + 1];
+                agent.transform.position = road.vertices[road.vertices.Length / 2 + 1 + road.xSize + 1];
                 stopStartTime = 0f;
 
                 rb.constraints = RigidbodyConstraints.FreezeAll;
