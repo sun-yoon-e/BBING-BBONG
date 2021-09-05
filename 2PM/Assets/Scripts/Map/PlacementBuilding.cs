@@ -198,6 +198,7 @@ public class PlacementBuilding : MonoBehaviour
             buildingObject[buildingNum].transform.localScale = new Vector3(buildingScale, buildingScale, buildingScale);
             buildingObject[buildingNum].layer = 12;
             buildingObject[buildingNum].AddComponent<BoxCollider>();
+            buildingObject[buildingNum].GetComponent<BoxCollider>().tag = "buildingBoxCollider";
 
             buildingNum++;
 

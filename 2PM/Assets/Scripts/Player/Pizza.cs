@@ -58,10 +58,9 @@ public class Pizza : MonoBehaviour
 
                     gameClient.UpdateScore(gameClient.playerRoomNum);
 
-                    Destroy(gameObject);
                 }
-
             }
+            Destroy(gameObject);
         }
     }
 
