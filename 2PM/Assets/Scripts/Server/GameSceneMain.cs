@@ -112,7 +112,7 @@ public class GameSceneMain : MonoBehaviour
                 {
                     if (gameClient.playerRoomNum == i) continue;
                     players[i] = Instantiate(playerObject);
-                    //players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
+                    players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                     //players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
                     var m = players[i].transform.Find("Rider/Box001");
                     m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);
@@ -122,7 +122,7 @@ public class GameSceneMain : MonoBehaviour
             {
                 if (gameClient.playerRoomNum == i) continue;
                 players[i] = Instantiate(playerObject);
-                //players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
+                players[i].transform.position = road.vertices[road.vertices.Length / 2 + (road.xSize + 1) * i + 1];
                 //players[i].transform.rotation = Quaternion.Euler(0, 0, 0);
                 var m = players[i].transform.Find("Rider/Box001");
                 m.gameObject.GetComponent<Renderer>().material = decideMaterial(i);

@@ -153,6 +153,8 @@ public class onClick_WaitingRoomScene : MonoBehaviour
         {
             if (e.gameState)
             {
+                SceneManager.LoadSceneAsync("Scenes/GameScene", LoadSceneMode.Single);
+
                 if (gameClient.client_host)
                 {
                     if (gameClient.StoreInfo != null)
@@ -183,11 +185,7 @@ public class onClick_WaitingRoomScene : MonoBehaviour
                     }
                 }
 
-                //if (gameClient.isRenderBuilding && gameClient.isRenderTree && gameClient.isRenderItem && gameClient.isRenderCar)
-                //{
-                SceneManager.LoadSceneAsync("Scenes/GameScene", LoadSceneMode.Single);
                 isGameStarted = true;
-                //}
             }
         }
     }
