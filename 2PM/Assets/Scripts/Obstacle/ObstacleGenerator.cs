@@ -55,7 +55,7 @@ public class ObstacleGenerator : MonoBehaviour
             {
                 if (road.isWayPointPlace[i] == true)
                 {
-                    rand = Random.Range(0, 2);
+                    rand = Random.Range(0, 3);
                     if (rand == 1)
                     {
                         int carType = Random.Range(0, carPrefabs.Length);
@@ -146,7 +146,7 @@ public class ObstacleGenerator : MonoBehaviour
         {
             if (road.isWayPointPlace[i] == true)
             {
-                rand = Random.Range(0, 2);
+                rand = Random.Range(0, 3);
                 if (rand == 1)
                 {
                     int carID = num;
