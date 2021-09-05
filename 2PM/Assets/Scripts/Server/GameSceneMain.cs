@@ -130,6 +130,15 @@ public class GameSceneMain : MonoBehaviour
 
             scores[i] = 0;
         }
+
+        string text = "점수표\n";
+
+        text += $"{gameClient.client_nick1} : {scores[0]}\n";
+        text += $"{gameClient.client_nick2} : {scores[1]}\n";
+        text += $"{gameClient.client_nick3} : {scores[2]}\n";
+        text += $"{gameClient.client_nick4} : {scores[3]}\n";
+
+        scoreTable.text = text;
     }
 
     public void OnDestroy()
@@ -169,14 +178,21 @@ public class GameSceneMain : MonoBehaviour
             //Debug.Log(i + "'s score : " + scores[i]);
         }
 
-        string text = "점수표\n";
+        if (scores != null)
+        {
+            string text = "점수표\n";
+            var scoreMap = new Dictionary<string, int>();
+            scoreMap.Add(gameClient.client_nick1, scores[0]);
+            scoreMap.Add(gameClient.client_nick2, scores[1]);
+            scoreMap.Add(gameClient.client_nick3, scores[2]);
+            scoreMap.Add(gameClient.client_nick4, scores[3]);
 
-        text += $"{gameClient.client_nick1} : {scores[0]}\n";
-        text += $"{gameClient.client_nick2} : {scores[1]}\n";
-        text += $"{gameClient.client_nick3} : {scores[2]}\n";
-        text += $"{gameClient.client_nick4} : {scores[3]}\n";
-
-        scoreTable.text = text;
+            foreach (var item in scoreMap.OrderByDescending(x => x.Value).ThenBy(y => y.Key))
+            {
+                text += $"{item.Key} : {item.Value}\n";
+            }
+            scoreTable.text = text;
+        }
     }
 
     public void AIFired(object sender, AIFireEventArgs args)
@@ -196,14 +212,21 @@ public class GameSceneMain : MonoBehaviour
             if (i == args.AIID) scores[i] += 50;
         }
 
-        string text = "점수표\n";
+        if (scores != null)
+        {
+            string text = "점수표\n";
+            var scoreMap = new Dictionary<string, int>();
+            scoreMap.Add(gameClient.client_nick1, scores[0]);
+            scoreMap.Add(gameClient.client_nick2, scores[1]);
+            scoreMap.Add(gameClient.client_nick3, scores[2]);
+            scoreMap.Add(gameClient.client_nick4, scores[3]);
 
-        text += $"{gameClient.client_nick1} : {scores[0]}\n";
-        text += $"{gameClient.client_nick2} : {scores[1]}\n";
-        text += $"{gameClient.client_nick3} : {scores[2]}\n";
-        text += $"{gameClient.client_nick4} : {scores[3]}\n";
-
-        scoreTable.text = text;
+            foreach (var item in scoreMap.OrderByDescending(x => x.Value).ThenBy(y => y.Key))
+            {
+                text += $"{item.Key} : {item.Value}\n";
+            }
+            scoreTable.text = text;
+        }
     }
 
     public void AIPositionUpdated(object sender, AIPositionUpdateEventArgs args)
