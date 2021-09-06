@@ -285,7 +285,7 @@ public class GameSceneMain : MonoBehaviour
 
                 foreach (var item in scoreMap.OrderByDescending(x => x.Value).ThenBy(y => y.Key))
                 {
-                    text += $"{j++}등 : {item.Key} - {item.Value}점\n";
+                    text += $"<color=#ffd700>{j++}등</color> {item.Key} : {item.Value}점\n";
                 }
                 gameOverScoreBoard.text = text;
             }
