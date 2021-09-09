@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlacementBuilding : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+    
     RoadGenerator road;
     MeshGenerator map;
 
@@ -15,17 +19,34 @@ public class PlacementBuilding : MonoBehaviour
 
     // 건물간 간격 사이즈
     private int interval;
+    
+    public event EventHandler OnBuildingReady;
+    public event EventHandler OnBuildingReady2;
+    public bool isBuildingReady = false;
 
     private void Awake()
+    {
+        
+    }
+
+    private void Start()
     {
         road = GameObject.Find("Road Generator").GetComponent<RoadGenerator>();
         map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
 
         interval = 2;
+        
+        road.OnRoadReady += OnRoadReady;
+        if (road.isRoadReady)
+        {
+            OnRoadReady(this, EventArgs.Empty);
+        }
     }
-
-    private void Start()
+    
+    private void OnRoadReady(object sender, EventArgs args)
     {
+        Debug.Log("OnRoadReady() 동작");
+        
         buildingNum = 0;
         buildingObject = new GameObject[1000];
 
@@ -77,6 +98,17 @@ public class PlacementBuilding : MonoBehaviour
         map.UpdateMesh();
         road.vertices = map.vertices;
         road.UpdateMesh();
+        
+        isBuildingReady = true;
+        gameClient.isReadyToControl = true;
+        if (OnBuildingReady != null)
+        {
+            OnBuildingReady(this, EventArgs.Empty);
+        }
+        if (OnBuildingReady2 != null)
+        {
+            OnBuildingReady2(this, EventArgs.Empty);
+        }
     }
 
     void makeNotBuildingPlace(int place)

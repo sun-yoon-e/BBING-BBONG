@@ -4,6 +4,8 @@
 [RequireComponent(typeof(MeshCollider))]
 public class MeshGenerator : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+    
     Mesh mesh;
 
     public Vector3[] vertices;
@@ -18,17 +20,50 @@ public class MeshGenerator : MonoBehaviour
 
     private void Awake()
     {
+        gameClient.OnMeshChanged += SetMeshEvent;
+
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
-
         vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+
+        gameClient.GetMesh();
     }
 
     void Start()
     {
-        CreateShape();
-        CreateTriangle();
-        UpdateMesh();
+        //gameClient.OnMeshChanged += SetMeshEvent;
+        
+        //mesh = new Mesh();
+        //GetComponent<MeshFilter>().mesh = mesh;
+        //vertices = new Vector3[(xSize + 1) * (zSize + 1)];
+
+        //gameClient.GetMesh();
+    }
+
+    private bool IsMapGenerated = false;
+    
+    public void SetMeshEvent(object sender, MeshEventArgs args)
+    {
+        if (!args.ready)
+        {
+            Debug.Log("SetMeshEvent() 처음!!");
+            CreateShape();
+            CreateTriangle();
+            UpdateMesh();
+            IsMapGenerated = true;
+            gameClient.SetMesh(vertices, triangles);
+        }
+        else if(!IsMapGenerated)
+        {
+            Debug.Log("SetMeshEvent() 업뎃");
+            vertices = args.vertices;
+            triangles = args.triangles;
+
+            Debug.Log("Vertex size : " + vertices.Length);
+            Debug.Log("triangle size : " + triangles.Length);
+
+            UpdateMesh();
+        }
     }
 
     public void CreateShape()

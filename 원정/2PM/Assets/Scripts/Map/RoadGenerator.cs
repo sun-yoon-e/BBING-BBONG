@@ -1,8 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using System.IO;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(MeshFilter))]
 public class RoadGenerator : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+    
     Mesh mesh;
     MeshGenerator map;
 
@@ -34,9 +39,15 @@ public class RoadGenerator : MonoBehaviour
     public int[] triangles;
 
     public int roadInterval;
+    
+    public event EventHandler OnRoadReady;
+    public event EventHandler OnRoadReady2;
+    public bool isRoadReady = false;
 
     private void Awake()
     {
+        gameClient.OnRoadChanged += SetRoadEvent;
+        
         map = GameObject.Find("Terrain Generator").GetComponent<MeshGenerator>();
 
         mesh = new Mesh();
@@ -45,6 +56,7 @@ public class RoadGenerator : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("RoadGenerator Start!!");
         vertices = new Vector3[map.vertices.Length];
 
         wayPoint = new GameObject[500];
@@ -56,9 +68,50 @@ public class RoadGenerator : MonoBehaviour
         xSize = map.xSize;
         zSize = map.zSize;
 
-        CreateShape();
-        CreateTriangle();
-        UpdateMesh();
+        gameClient.GetRoad();
+        //CreateShape();
+        //CreateTriangle();
+        //UpdateMesh();
+    }
+
+    public void SetRoadEvent(object sender, RoadEventArgs args)
+    {
+        if (!args.ready)
+        {
+            Debug.Log("SetRoadEvent() 처음!!");
+            CreateShape();
+            CreateTriangle();
+            gameClient.SetRoad(vertices, triangles, isRoad, buildingState);
+        }
+        else
+        {
+            Debug.Log("SetRoadEvent() 업뎃");
+            vertices = args.vertices;
+            triangles = args.triangles;
+            isRoad = args.isRoad;
+            buildingState = args.isBuildingPlace;
+
+            UpdateMesh();
+            isRoadReady = true;
+
+            if (OnRoadReady != null)
+            {
+                OnRoadReady(this, EventArgs.Empty);
+            }
+            else
+            {
+                Debug.Log("OnRoadReady() is null");
+            }
+
+            if (OnRoadReady2 != null)
+            {
+                OnRoadReady2(this, EventArgs.Empty);
+            }
+            else
+            {
+                Debug.Log("OnRoadReady2() is null");
+            }
+        }
     }
 
     public void CreateShape()

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class FirePizza : MonoBehaviour
 {
+    private GameClient gameClient = GameClient.Instance;
+    
     public Transform firePos;
     public Transform targetPos;
     public GameObject pizza;
@@ -49,5 +51,6 @@ public class FirePizza : MonoBehaviour
         }
         pizzaObject.transform.forward = dir;
         
+        gameClient.FirePizza(firePos.position, targetPos.position);
     }
 }

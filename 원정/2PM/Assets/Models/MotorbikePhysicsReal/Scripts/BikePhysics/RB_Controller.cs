@@ -12,6 +12,11 @@ namespace Gadd420
     [RequireComponent(typeof(GroundAngle))]
     public class RB_Controller : MonoBehaviour
     {
+        private GameClient gameClient = GameClient.Instance;
+        
+        public Vector3 myPrevPosition;
+        public Vector3 myPrevEulerAngles;
+        
         public WheelRotationAxis wheelRotationAxis;
         
 
@@ -218,6 +223,15 @@ namespace Gadd420
             {
                 firstGearTorque = 0;
                 AddTorque();
+            }
+            
+            if (gameClient.isGameStarted == false) return;
+
+            if (myPrevPosition != rb.position || myPrevEulerAngles != rb.rotation.eulerAngles)
+            {
+                gameClient.UpdatePosition(rb.position, rb.rotation.eulerAngles);
+                myPrevPosition = rb.position;
+                myPrevEulerAngles = rb.rotation.eulerAngles;
             }
         }
         #endregion
