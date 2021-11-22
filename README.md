@@ -3,7 +3,7 @@
 #### 대표 영상 <https://youtu.be/tZIH2ycE08M>
 - - -
 + ### 다운로드
-  ##### 1. Code
+  ##### 1. <span style="color:green">Code</span>
   ##### 2. Download ZIP
 - - -
 + ### 실행방법
