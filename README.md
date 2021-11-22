@@ -7,7 +7,8 @@
   ##### 2. Download ZIP
 - - -
 + ### 실행방법
-  ##### 1. Server 폴더 -> 서버 구동
+  ##### 1. Server 폴더 -> `Project.exe` 실행
   ##### 2. Client 폴더에 NetworkAddress.txt 파일 생성
   ##### 3. 첫번째 줄에 `IP`, 두번째 줄에 `Port`
-  ##### 4. 2PM.exe 실행
+  ##### 4. `2PM.exe` 실행
+  ##### 5. Let's Play ~!
