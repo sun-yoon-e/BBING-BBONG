@@ -1,5 +1,5 @@
 # BBING-BBONG
-- - -
+
 ### 대표 영상 <https://youtu.be/tZIH2ycE08M>
 - - -
 ### 다운로드
