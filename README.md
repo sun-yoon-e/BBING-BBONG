@@ -1,4 +1,4 @@
-# BBING-BBONG
+# 2PM (2'o clock Pizza Man)
 
 #### 대표 영상 <https://youtu.be/tZIH2ycE08M>
 - - -
