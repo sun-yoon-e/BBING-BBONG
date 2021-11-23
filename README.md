@@ -4,8 +4,8 @@
 #### 소개 영상 : <https://youtu.be/tZIH2ycE08M>
 - - -
 + ### 다운로드 (choose one)
-  ##### 1. <span style="color:green">Code</span> -> Download ZIP
-  ##### 2. 2PM_Setup Download
+  ##### 1. 2PM_Setup.exe Download (!recommend!)
+  ##### 2. Code -> Download ZIP
 - - -
 + ### 실행방법
   ##### 1. Server 폴더 -> `Server.exe` 실행 (서버 구동)
