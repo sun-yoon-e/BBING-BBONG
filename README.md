@@ -14,4 +14,4 @@
   ##### 4. `2PM.exe` 실행                              (클라이언트 구동)
   ##### 5. Let's Play ~!                               (게임 즐기기)
 - - -
-![.](https://i9.ytimg.com/vi/tZIH2ycE08M/maxresdefault.jpg?time=1637587200000&sqp=CICy7owG&rs=AOn4CLBhI0A3Bhgrvd3fI1qozniaeT7n6Q)
+![.](https://github.com/sun-yoon-e/BBING-BBONG/blob/master/2pm.jpg?raw=true)
